@@ -1,0 +1,91 @@
+{
+    IBClasses = (
+        {CLASS = BlobVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
+        {
+            ACTIONS = {randomSeed = id; }; 
+            CLASS = EnvironmentController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {seedTextField = NSTextField; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = Fan2Variation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                changePaletteAndHidePaletteWindow = id; 
+                setCurrentFlame = id; 
+                showFlameWindow = id; 
+                showXFormWindow = id; 
+                test = id; 
+            }; 
+            CLASS = FlameController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                flameValues = NSTableView; 
+                flameWindow = NSWindow; 
+                flames = NSTableView; 
+                paletteController = PaletteController; 
+                paletteWithHue = NSImageView; 
+                xFormController = XFormController; 
+                xformWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                changePaletteAndHidePaletteWindow = id; 
+                openFile = id; 
+                previewCurrentFlame = id; 
+                renderAnimation = id; 
+                renderStill = id; 
+            }; 
+            CLASS = FractalFlameModel; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                environment = EnvironmentController; 
+                flameImages = NSTableView; 
+                flames = FlameController; 
+                palette = PaletteController; 
+                symmetry = SymmetryController; 
+                xForm = XFormController; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = Genome; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = MyGenome; LANGUAGE = ObjC; SUPERCLASS = Genome; }, 
+        {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {CLASS = PDJVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
+        {
+            ACTIONS = {
+                hidePaletteWindow = id; 
+                setEnabled = id; 
+                setNumber = id; 
+                showPaletteList = id; 
+            }; 
+            CLASS = PaletteController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                colourTable = NSTableView; 
+                palatteTable = NSTableView; 
+                palatteWindow = NSWindow; 
+                paletteList = NSArrayController; 
+                pickPalette = NSButton; 
+                textField = NSTextField; 
+                usePalette = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = Ring2Variation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
+        {CLASS = SymmetryController; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = Variation; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {setCurrentVariation = id; showXFormWindow = id; }; 
+            CLASS = XFormController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {xformWindow = NSWindow; xforms = NSTableView; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
