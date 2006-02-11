@@ -66,7 +66,7 @@
 -(NSArray *)getFlames;
 
 
-- (void) setHue:(double)newHew;
+- (void) setHue:(double)newHue;
 - (double) hue;
 
 @end

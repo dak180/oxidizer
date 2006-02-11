@@ -231,7 +231,7 @@
 }
 
 
-+(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSMutableArray *)colours {
++(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSMutableArray *)colours forHeight:(int)height {
 
 		NSMutableArray *finalColours;
 		NSMutableDictionary *colour;
@@ -254,7 +254,7 @@
 			colour = [finalColours objectAtIndex:j];
 			
 			
-			*paletteData = (unsigned char)(255.0*[[colour objectForKey:@"red"] doubleValue]);
+			*paletteData = (unsigned char)(255.0*[[colour objectForKey:@"red"] intValue]);
 			paletteData++;
 			*paletteData = (unsigned char)(255.0*[[colour objectForKey:@"green"] doubleValue]);
 			paletteData++;
@@ -265,7 +265,7 @@
 		
 		paletteData = [paletteRep bitmapData];
 		
-		for(j=1; j<20; j++) {
+		for(j=1; j<height; j++) {
 			memcpy(paletteData+(256*j*3), paletteData, 256*3);
 		}
 

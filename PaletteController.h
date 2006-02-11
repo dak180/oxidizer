@@ -42,7 +42,7 @@
 - (IBAction)showPaletteList:(id)sender;
 
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue;
-+ (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSMutableArray *)colours;
++ (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSMutableArray *)colours  forHeight:(int)height;
 + (NSMutableArray *) extrapolateArray:(NSMutableArray *)colours;
 
 - (void) setPalette:(unsigned int )palette colourArray:(NSArray *)colours  usePalette:(BOOL)useThePaletteNumber;

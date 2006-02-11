@@ -30,6 +30,10 @@
 	if (self = [super init]) {
 		_flameRecords = [[NSMutableArray alloc] init];
 		_currentFlame = [[NSMutableDictionary alloc] init];
+		
+		/* we need a value for use_palette due to the way it's been used */
+		[_currentFlame setObject:[NSNumber numberWithBool:YES] forKey:@"use_palette"];
+		  
 		_xforms = [[NSMutableArray alloc] init];
 		
 
@@ -194,12 +198,18 @@
 	
 	paletteNumber = [[_currentFlame objectForKey:@"palette"] intValue];
 	
-	[paletteController setPalette:paletteNumber colourArray:nil usePalette:YES];
+	if(paletteNumber >= 0) {
+	
+		[paletteController setPalette:paletteNumber colourArray:nil usePalette:YES];
 
-	[PaletteController fillBitmapRep:_paletteWithHueRep 
-	                   withPalette:paletteNumber 
-					   usingHue:[[_currentFlame objectForKey:@"hue"] doubleValue]]; 
-					   
+		[PaletteController fillBitmapRep:_paletteWithHueRep 
+						   withPalette:paletteNumber 
+						   usingHue:[[_currentFlame objectForKey:@"hue"] doubleValue]]; 
+	} else {
+	 /* use colour array to fill bitmap */
+		[PaletteController fillBitmapRep:_paletteWithHueRep withColours:[_currentFlame objectForKey:@"cmap"] forHeight:10];
+	}	
+				   
 	[paletteWithHue setNeedsDisplay:YES];
 					   
 	_currentFlameIndex = newIndex;
@@ -282,12 +292,15 @@
 
 - (void) setHue:(double)newHue {
 
-	[_currentFlame setObject:[NSNumber numberWithDouble:newHue]  forKey:@"hue"];
-		[PaletteController fillBitmapRep:_paletteWithHueRep 
-	                   withPalette:[[_currentFlame objectForKey:@"palette"] intValue] 
-					   usingHue:newHue]; 
-					   
-	[paletteWithHue setNeedsDisplay:YES];
+	if([[_currentFlame objectForKey:@"use_palette"] boolValue]) {
+
+		[_currentFlame setObject:[NSNumber numberWithDouble:newHue]  forKey:@"hue"];
+			[PaletteController fillBitmapRep:_paletteWithHueRep 
+						   withPalette:[[_currentFlame objectForKey:@"palette"] intValue] 
+						   usingHue:newHue]; 
+						   
+		[paletteWithHue setNeedsDisplay:YES];
+	}
 
 }
 

@@ -23,7 +23,12 @@
 
 + (NSMutableDictionary *)makeDictionaryFrom:(flam3_genome *)genome withImage:(NSImage *)image {
 
+	NSMutableArray *colours;
+
 	NSMutableDictionary *genomeDictionary; 
+	NSMutableDictionary *newColour;
+	
+	int i;
 
 	genomeDictionary = [[NSMutableDictionary alloc] init];
 
@@ -61,7 +66,25 @@
 	
 	[genomeDictionary setObject:[Genome createXformArrayFromCGenome:genome] forKey:@"xforms"];
 
-
+    if(genome->palette_index < 0) {
+		[genomeDictionary setObject:[NSNumber numberWithBool:NO] forKey:@"use_palette"];
+		/* use the cmap */
+		colours = [[NSMutableArray alloc] initWithCapacity:256];
+		for(i=0; i<256; i++) {
+		
+			newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
+			[newColour setObject:[NSNumber numberWithInt:i] forKey:@"index"];
+			[newColour setObject:[NSNumber numberWithInt:(int)(genome->palette[i][0] * 255.0)] forKey:@"red"];
+			[newColour setObject:[NSNumber numberWithInt:(int)(genome->palette[i][1] * 255.0)] forKey:@"green"];
+			[newColour setObject:[NSNumber numberWithInt:(int)(genome->palette[i][2] * 255.0)] forKey:@"blue"];
+			[colours addObject:newColour];
+			[newColour release];
+		}
+	
+		[genomeDictionary setObject:colours forKey:@"cmap"];
+	} else {
+		[genomeDictionary setObject:[NSNumber numberWithBool:YES] forKey:@"use_palette"];
+	}
 
 	[genomeDictionary autorelease];
 
@@ -72,6 +95,8 @@
 
 + (void)populateCGenome:(flam3_genome *)newGenome From:(NSMutableDictionary *)genomeDictionary {
 
+	NSMutableArray *cmap;		
+	NSDictionary *colour;
 	NSArray *xforms; 
 	float red, green, blue;
 	int i;
@@ -114,7 +139,20 @@
 	newGenome->symmetry = [Genome getIntSymmetry:[genomeDictionary objectForKey:@"symmetry"]];
 	newGenome->edits = NULL;
 	
-	flam3_get_palette(newGenome->palette_index, newGenome->palette, newGenome->hue_rotation);
+	if(newGenome->palette_index < 0) {
+		/* use the cmap */
+		cmap = [genomeDictionary objectForKey:@"cmap"]; 
+		for(i=0; i<256; i++) {
+		
+			colour = [cmap objectAtIndex:i];
+			newGenome->palette[i][0] = [[colour objectForKey:@"red"]   doubleValue] / 255.0;
+			newGenome->palette[i][1] = [[colour objectForKey:@"green"] doubleValue] / 255.0;
+			newGenome->palette[i][2] = [[colour objectForKey:@"blue"]  doubleValue] / 255.0;	
+
+		}
+	} else {
+		flam3_get_palette(newGenome->palette_index, newGenome->palette, newGenome->hue_rotation);
+	}
 	
 	
 	/* xforms */
@@ -390,11 +428,7 @@ return TRUE;
 		[record setObject:[NSNumber numberWithDouble:xform->post[2][0]] forKey:@"post_2_0"];
 		[record setObject:[NSNumber numberWithDouble:xform->post[2][1]] forKey:@"post_2_1"];
 
-		if(xform->symmetry > 0.0) {
-			[record setObject:[NSNumber numberWithBool:YES] forKey:@"symmetry"];
-		} else {
-			[record setObject:[NSNumber numberWithBool:NO] forKey:@"symmetry"];
-		}
+		[record setObject:[NSNumber numberWithDouble:xform->symmetry] forKey:@"symmetry"];
 
 		if(xform->post_flag == 1) {
 			[record setObject:[NSNumber numberWithBool:YES] forKey:@"post_flag"];
