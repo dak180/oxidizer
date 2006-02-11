@@ -273,8 +273,17 @@ if (mDataHandlerRef)
 
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count {
 
+	char *utf8Filename;
+
+	NSLog(@"Entering loadFlam3\n");
+
+	NSLog(@"Filename is %@\n", filename);
+	NSLog(@"Filename as C string is %s\n", [filename cStringUsingEncoding:NSUTF8StringEncoding]);
+
 	
-	char *utf8Filename = strdup([filename cStringUsingEncoding:NSUTF8StringEncoding]);
+	utf8Filename = strdup([filename cStringUsingEncoding:NSUTF8StringEncoding]);
+
+	NSLog(@"Copied Filename is %s\n", utf8Filename);
 
 	
 	FILE *flam3;
@@ -395,10 +404,15 @@ if (mDataHandlerRef)
 	/* display the NSOpenPanel */
 	runResult = [op runModal];
 	/* if successful, save file under designated name */
-	boolResult = [self loadFlam3File:[op filename] intoCGenomes:&genomes returningCountInto:&genomeCount ];
-	[self generateAllThumbnailsForGenome:genomes withCount:genomeCount];
-	[flames setCurrentFlameForIndex:0];
-
+	if(runResult == NSOKButton && [op filename] != nil) {
+		boolResult = [self loadFlam3File:[op filename] intoCGenomes:&genomes returningCountInto:&genomeCount ];
+		if(boolResult == YES) {
+			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount];
+			[flames setCurrentFlameForIndex:0];
+		}
+	} 
+	
+	return;
 }
 
 - (void)rebuildflame:(flam3_genome *)cps count:(int)ncps {
