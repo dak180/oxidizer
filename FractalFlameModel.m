@@ -22,6 +22,8 @@
 #import "Genome.h"
 #import "QuickTime/QuickTime.h"
 
+int printProgress(void *filePtr, double progress) ;
+
 @implementation FractalFlameModel
 
 - init
@@ -51,8 +53,19 @@
 
 	flam3_print(stderr , genome, NULL);	
 
+	progress = 0.0;
+	[progressIndicator setDoubleValue:0.0];
+	
+	[frameIndicator setMaxValue:1];
+	[frameIndicator setIntValue:1];
+	
+	[progressWindow makeKeyAndOrderFront:self];
 	
 	flameRep = [self renderSingleFrame:&frame withGemone:genome];
+	
+	[progressWindow setIsVisible:FALSE];
+
+	
 	[self saveToFile:flameRep];	
 //	[[flameRep representationUsingType:NSPNGFileType properties:nil] writeToFile:@"testOutput.png" atomically:YES];								 
 	[flameRep release];
@@ -242,7 +255,7 @@ if (mDataHandlerRef)
 
 - (BOOL)EnvironmentInit:(flam3_frame *)f {
 
-	verbose = 1;
+	verbose = 0;
 	transparency = 1;
 	qs = environment->qualityScale;
 	ss = environment->sizeScale;
@@ -320,8 +333,17 @@ if (mDataHandlerRef)
 	[flames removeFlameData];
 	[thumbnails removeAllObjects];
 	
-
+	progress = 0.0;
+	[progressIndicator setDoubleValue:0.0];
+	
+	[frameIndicator setMaxValue:ncps];
+	
+	[progressWindow makeKeyAndOrderFront:self];
+	
 	for (i = 0; i < ncps; i++) {
+
+		[frameIndicator setIntValue:i+1];	
+		[frameIndicator displayIfNeeded];
 	
 		flameRep = [self renderThumbnail:cps+i];
 		flameImage = [[NSImage alloc] init];
@@ -344,9 +366,11 @@ if (mDataHandlerRef)
 
 	
 	[flameImages reloadData];
+	[progressWindow setIsVisible:FALSE];
 	
 	free(cps);
-	
+
+
 	return TRUE;
 
 }
@@ -378,8 +402,18 @@ if (mDataHandlerRef)
 	frame.time = 0.0;
 	frame.temporal_filter_radius = 0.0;
 	frame.ngenomes = 1;
+	
+	progress = 0.0;
+	[progressIndicator setDoubleValue:0.0];
+	
+	[frameIndicator setMaxValue:1];
+	[frameIndicator setIntValue:1];
+	
+	[progressWindow makeKeyAndOrderFront:self];
+	
 	flameRep = [self renderSingleFrame:&frame withGemone:cps];
 	
+	[progressWindow setIsVisible:FALSE];
 	
 	cps->height = realHeight;
 	cps->width = realWidth;
@@ -527,8 +561,9 @@ int calc_nstrips(flam3_frame *spec) {
 	f->verbose = verbose;
 	f->bits = bits;
 	f->pixel_aspect_ratio = pixel_aspect;
-	f->progress = 0;
+	f->progress = printProgress;
 
+	f->progress_parameter = progressIndicator;
 	
 	if (nstrips > cps->height) {
 		fprintf(stderr, "cannot have more strips than rows but %d>%d.\n",
@@ -716,3 +751,15 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	
 @end
+
+int printProgress(void *nslPtr, double progress) {
+	
+	NSLevelIndicator *nsl = nslPtr;
+
+	[nsl setDoubleValue:progress * 100.0];
+	[nsl displayIfNeeded];
+		
+	fprintf(stderr, "Progress value: %f\n", progress); 
+	
+	return 0;
+}

@@ -45,7 +45,10 @@
                 environment = EnvironmentController; 
                 flameImages = NSTableView; 
                 flames = FlameController; 
+                frameIndicator = NSLevelIndicator; 
                 palette = PaletteController; 
+                progressIndicator = NSLevelIndicator; 
+                progressWindow = NSWindow; 
                 symmetry = SymmetryController; 
                 xForm = XFormController; 
             }; 
@@ -54,6 +57,7 @@
         {CLASS = Genome; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = MyGenome; LANGUAGE = ObjC; SUPERCLASS = Genome; }, 
         {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {CLASS = PDJVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
         {

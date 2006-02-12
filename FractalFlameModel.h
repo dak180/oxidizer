@@ -37,6 +37,9 @@
     IBOutlet SymmetryController *symmetry;
     IBOutlet XFormController *xForm;
     IBOutlet NSTableView *flameImages;
+    IBOutlet NSWindow *progressWindow;
+    IBOutlet NSLevelIndicator *frameIndicator;
+    IBOutlet NSLevelIndicator *progressIndicator;
 	
 
 	NSMutableArray *thumbnails;
@@ -56,6 +59,12 @@
 	int last_frame;
 	int frame_time;
 	int dtime;
+
+@public
+
+	double progress;
+	int flameCount;
+	int flameProgress;
 
 }
 
