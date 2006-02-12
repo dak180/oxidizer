@@ -17,13 +17,12 @@
 			8D1107260486CEB800E47090 /* oxidizer */,
 		);
 		breakpoints = (
-			A4F5AF5B099967B400673C46 /* PaletteController.m:244 */,
-			A4C91885099D03680073C5C5 /* FlameController.m:297 */,
-			A4C9188D099D048D0073C5C5 /* FlameController.m:203 */,
-			A4C918B4099D2E870073C5C5 /* Genome.m:160 */,
-			A4C918C2099D316D0073C5C5 /* Genome.m:172 */,
-			A4C918C4099D32270073C5C5 /* flam3.c:2175 */,
-			A4C918D9099D3B090073C5C5 /* Genome.m:431 */,
+			A4C918B4099D2E870073C5C5 /* Genome.m:162 */,
+			A4C918C2099D316D0073C5C5 /* Genome.m:175 */,
+			A4DD0D0B099FD939007E84DB /* Genome.m:62 */,
+			A4DD0D19099FD9AA007E84DB /* Genome.m:33 */,
+			A4DD0D55099FEC84007E84DB /* FractalFlameModel.m:311 */,
+			A4DD0D61099FEDDE007E84DB /* FractalFlameModel.m:553 */,
 		);
 		breakpointsGroup = A4D605090965AC610001CD1D /* XCBreakpointsBucket */;
 		codeSenseManager = A4D604A809657B5D0001CD1D /* Code sense */;
@@ -228,6 +227,7 @@
 			A4DA86BD0966FEAE00FFCF4D = A4DA86BD0966FEAE00FFCF4D /* PBXTextBookmark */;
 			A4DA86BE0966FEAE00FFCF4D = A4DA86BE0966FEAE00FFCF4D /* PBXTextBookmark */;
 			A4DA87160967122A00FFCF4D = A4DA87160967122A00FFCF4D /* PBXTextBookmark */;
+			A4DD0B5B099F7501007E84DB /* PBXTextBookmark */ = A4DD0B5B099F7501007E84DB /* PBXTextBookmark */;
 			A4DD0C4B099F958C007E84DB /* PBXTextBookmark */ = A4DD0C4B099F958C007E84DB /* PBXTextBookmark */;
 			A4DD0C4C099F958C007E84DB /* PBXTextBookmark */ = A4DD0C4C099F958C007E84DB /* PBXTextBookmark */;
 			A4DD0C4D099F958C007E84DB /* PBXTextBookmark */ = A4DD0C4D099F958C007E84DB /* PBXTextBookmark */;
@@ -314,6 +314,78 @@
 			A4DD0CE2099FB048007E84DB /* PBXTextBookmark */ = A4DD0CE2099FB048007E84DB /* PBXTextBookmark */;
 			A4DD0CE3099FB049007E84DB /* PBXTextBookmark */ = A4DD0CE3099FB049007E84DB /* PBXTextBookmark */;
 			A4DD0CE4099FB049007E84DB /* PBXTextBookmark */ = A4DD0CE4099FB049007E84DB /* PBXTextBookmark */;
+			A4DD0CE5099FD0A1007E84DB /* PBXTextBookmark */ = A4DD0CE5099FD0A1007E84DB /* PBXTextBookmark */;
+			A4DD0CE6099FD0A1007E84DB /* PBXTextBookmark */ = A4DD0CE6099FD0A1007E84DB /* PBXTextBookmark */;
+			A4DD0CE7099FD0A1007E84DB /* PBXTextBookmark */ = A4DD0CE7099FD0A1007E84DB /* PBXTextBookmark */;
+			A4DD0CE8099FD0A1007E84DB /* PBXTextBookmark */ = A4DD0CE8099FD0A1007E84DB /* PBXTextBookmark */;
+			A4DD0CE9099FD0A1007E84DB /* PBXTextBookmark */ = A4DD0CE9099FD0A1007E84DB /* PBXTextBookmark */;
+			A4DD0CEA099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CEA099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CEB099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CEB099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CED099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CED099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CEE099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CEE099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CF0099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CF0099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CF1099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CF1099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CF2099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CF2099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CF3099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CF3099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CF4099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CF4099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CF5099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CF5099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CF6099FD0A3007E84DB /* PBXTextBookmark */ = A4DD0CF6099FD0A3007E84DB /* PBXTextBookmark */;
+			A4DD0CFB099FD503007E84DB /* PBXTextBookmark */ = A4DD0CFB099FD503007E84DB /* PBXTextBookmark */;
+			A4DD0CFC099FD503007E84DB /* PBXTextBookmark */ = A4DD0CFC099FD503007E84DB /* PBXTextBookmark */;
+			A4DD0CFD099FD503007E84DB /* PBXTextBookmark */ = A4DD0CFD099FD503007E84DB /* PBXTextBookmark */;
+			A4DD0CFE099FD503007E84DB /* PBXTextBookmark */ = A4DD0CFE099FD503007E84DB /* PBXTextBookmark */;
+			A4DD0D02099FD53E007E84DB /* PBXTextBookmark */ = A4DD0D02099FD53E007E84DB /* PBXTextBookmark */;
+			A4DD0D03099FD53E007E84DB /* PBXTextBookmark */ = A4DD0D03099FD53E007E84DB /* PBXTextBookmark */;
+			A4DD0D0D099FD954007E84DB /* PBXTextBookmark */ = A4DD0D0D099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D0E099FD954007E84DB /* PBXTextBookmark */ = A4DD0D0E099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D0F099FD954007E84DB /* PBXTextBookmark */ = A4DD0D0F099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D10099FD954007E84DB /* PBXTextBookmark */ = A4DD0D10099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D11099FD954007E84DB /* PBXTextBookmark */ = A4DD0D11099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D12099FD954007E84DB /* PBXTextBookmark */ = A4DD0D12099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D13099FD954007E84DB /* PBXTextBookmark */ = A4DD0D13099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D14099FD954007E84DB /* PBXTextBookmark */ = A4DD0D14099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D15099FD954007E84DB /* PBXTextBookmark */ = A4DD0D15099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D16099FD954007E84DB /* PBXTextBookmark */ = A4DD0D16099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D17099FD954007E84DB /* PBXTextBookmark */ = A4DD0D17099FD954007E84DB /* PBXTextBookmark */;
+			A4DD0D1A099FD9AD007E84DB /* PBXTextBookmark */ = A4DD0D1A099FD9AD007E84DB /* PBXTextBookmark */;
+			A4DD0D1B099FD9AD007E84DB /* PBXTextBookmark */ = A4DD0D1B099FD9AD007E84DB /* PBXTextBookmark */;
+			A4DD0D1F099FD9E7007E84DB /* PBXTextBookmark */ = A4DD0D1F099FD9E7007E84DB /* PBXTextBookmark */;
+			A4DD0D20099FD9E7007E84DB /* PBXTextBookmark */ = A4DD0D20099FD9E7007E84DB /* PBXTextBookmark */;
+			A4DD0D21099FD9E7007E84DB /* PBXTextBookmark */ = A4DD0D21099FD9E7007E84DB /* PBXTextBookmark */;
+			A4DD0D22099FD9E7007E84DB /* PBXTextBookmark */ = A4DD0D22099FD9E7007E84DB /* PBXTextBookmark */;
+			A4DD0D23099FD9E7007E84DB /* PBXTextBookmark */ = A4DD0D23099FD9E7007E84DB /* PBXTextBookmark */;
+			A4DD0D24099FD9E7007E84DB /* PBXTextBookmark */ = A4DD0D24099FD9E7007E84DB /* PBXTextBookmark */;
+			A4DD0D2A099FDB04007E84DB /* PBXTextBookmark */ = A4DD0D2A099FDB04007E84DB /* PBXTextBookmark */;
+			A4DD0D2B099FDB04007E84DB /* PBXTextBookmark */ = A4DD0D2B099FDB04007E84DB /* PBXTextBookmark */;
+			A4DD0D30099FDD69007E84DB /* PBXTextBookmark */ = A4DD0D30099FDD69007E84DB /* PBXTextBookmark */;
+			A4DD0D31099FDD69007E84DB /* PBXTextBookmark */ = A4DD0D31099FDD69007E84DB /* PBXTextBookmark */;
+			A4DD0D32099FDD69007E84DB /* PBXTextBookmark */ = A4DD0D32099FDD69007E84DB /* PBXTextBookmark */;
+			A4DD0D33099FDD69007E84DB /* PBXTextBookmark */ = A4DD0D33099FDD69007E84DB /* PBXTextBookmark */;
+			A4DD0D34099FDD69007E84DB /* PBXTextBookmark */ = A4DD0D34099FDD69007E84DB /* PBXTextBookmark */;
+			A4DD0D36099FDD69007E84DB /* XDModelBookmark */ = A4DD0D36099FDD69007E84DB /* XDModelBookmark */;
+			A4DD0D38099FDD69007E84DB /* XDModelBookmark */ = A4DD0D38099FDD69007E84DB /* XDModelBookmark */;
+			A4DD0D3A099FDD69007E84DB /* XDSCDebuggingWindowBookmark */ = A4DD0D3A099FDD69007E84DB /* XDSCDebuggingWindowBookmark */;
+			A4DD0D3C099FDD69007E84DB /* XDModelBookmark */ = A4DD0D3C099FDD69007E84DB /* XDModelBookmark */;
+			A4DD0D3E099FDD69007E84DB /* XDModelBookmark */ = A4DD0D3E099FDD69007E84DB /* XDModelBookmark */;
+			A4DD0D40099FDD69007E84DB /* XDModelBookmark */ = A4DD0D40099FDD69007E84DB /* XDModelBookmark */;
+			A4DD0D42099FDD6E007E84DB /* PBXTextBookmark */ = A4DD0D42099FDD6E007E84DB /* PBXTextBookmark */;
+			A4DD0D43099FDD6E007E84DB /* PBXTextBookmark */ = A4DD0D43099FDD6E007E84DB /* PBXTextBookmark */;
+			A4DD0D47099FDEC9007E84DB /* PBXTextBookmark */ = A4DD0D47099FDEC9007E84DB /* PBXTextBookmark */;
+			A4DD0D48099FDEC9007E84DB /* PBXTextBookmark */ = A4DD0D48099FDEC9007E84DB /* PBXTextBookmark */;
+			A4DD0D49099FDEC9007E84DB /* PBXTextBookmark */ = A4DD0D49099FDEC9007E84DB /* PBXTextBookmark */;
+			A4DD0D4A099FDEC9007E84DB /* PBXTextBookmark */ = A4DD0D4A099FDEC9007E84DB /* PBXTextBookmark */;
+			A4DD0D4B099FDEC9007E84DB /* PBXTextBookmark */ = A4DD0D4B099FDEC9007E84DB /* PBXTextBookmark */;
+			A4DD0D59099FECBA007E84DB /* PBXTextBookmark */ = A4DD0D59099FECBA007E84DB /* PBXTextBookmark */;
+			A4DD0D5A099FECBA007E84DB /* PBXTextBookmark */ = A4DD0D5A099FECBA007E84DB /* PBXTextBookmark */;
+			A4DD0D5B099FECBA007E84DB /* PBXTextBookmark */ = A4DD0D5B099FECBA007E84DB /* PBXTextBookmark */;
+			A4DD0D5C099FECBA007E84DB /* PBXTextBookmark */ = A4DD0D5C099FECBA007E84DB /* PBXTextBookmark */;
+			A4DD0D5D099FECBA007E84DB /* PBXTextBookmark */ = A4DD0D5D099FECBA007E84DB /* PBXTextBookmark */;
+			A4DD0D5E099FECBA007E84DB /* PBXTextBookmark */ = A4DD0D5E099FECBA007E84DB /* PBXTextBookmark */;
+			A4DD0D5F099FECBA007E84DB /* PBXTextBookmark */ = A4DD0D5F099FECBA007E84DB /* PBXTextBookmark */;
+			A4DD0D69099FF166007E84DB /* PBXTextBookmark */ = A4DD0D69099FF166007E84DB /* PBXTextBookmark */;
+			A4DD0D6A099FF166007E84DB /* PBXTextBookmark */ = A4DD0D6A099FF166007E84DB /* PBXTextBookmark */;
+			A4DD0D6B099FF166007E84DB /* PBXTextBookmark */ = A4DD0D6B099FF166007E84DB /* PBXTextBookmark */;
+			A4DD0D6C099FF166007E84DB /* PBXTextBookmark */ = A4DD0D6C099FF166007E84DB /* PBXTextBookmark */;
 			A4E130280978421400A69DA0 = A4E130280978421400A69DA0 /* PBXTextBookmark */;
 			A4E1306409784CD100A69DA0 = A4E1306409784CD100A69DA0 /* PBXTextBookmark */;
 			A4EF326F098BDDCC00FCF533 = A4EF326F098BDDCC00FCF533 /* PBXTextBookmark */;
@@ -442,8 +514,8 @@
 	A42D470509996C5A00A7296E /* flam3.c */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1039, 39788}}";
-			sepNavSelRange = "{57556, 16}";
-			sepNavVisRect = "{{0, 26320}, {1039, 275}}";
+			sepNavSelRange = "{44366, 10}";
+			sepNavVisRect = "{{0, 21836}, {1039, 275}}";
 			sepNavWindowFrame = "{{53, 203}, {785, 670}}";
 		};
 	};
@@ -584,19 +656,6 @@
 		vrLen = 1105;
 		vrLoc = 569;
 	};
-	A4C91885099D03680073C5C5 /* FlameController.m:297 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		continueAfterActions = 0;
-		delayBeforeContinue = 0;
-		fileReference = A4DA871C096712CA00FFCF4D /* FlameController.m */;
-		functionName = "-setHue:";
-		hitCount = 1;
-		lineNumber = 297;
-		modificationTime = 161453429.184095;
-		state = 1;
-	};
 	A4C91886099D042F0073C5C5 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = A4DA871B096712CA00FFCF4D /* FlameController.h */;
@@ -606,19 +665,6 @@
 		rType = 0;
 		vrLen = 1044;
 		vrLoc = 1057;
-	};
-	A4C9188D099D048D0073C5C5 /* FlameController.m:203 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		continueAfterActions = 0;
-		delayBeforeContinue = 0;
-		fileReference = A4DA871C096712CA00FFCF4D /* FlameController.m */;
-		functionName = "-setCurrentFlameForIndex:";
-		hitCount = 1;
-		lineNumber = 203;
-		modificationTime = 161453429.184133;
-		state = 1;
 	};
 	A4C9189F099D06710073C5C5 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
@@ -640,7 +686,7 @@
 		vrLen = 681;
 		vrLoc = 4800;
 	};
-	A4C918B4099D2E870073C5C5 /* Genome.m:160 */ = {
+	A4C918B4099D2E870073C5C5 /* Genome.m:162 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -649,11 +695,11 @@
 		fileReference = A4F333A1096C813B00230854 /* Genome.m */;
 		functionName = "+populateCGenome:From:";
 		hitCount = 1;
-		lineNumber = 160;
-		modificationTime = 161453429.184149;
+		lineNumber = 162;
+		modificationTime = 161476235.217655;
 		state = 1;
 	};
-	A4C918C2099D316D0073C5C5 /* Genome.m:172 */ = {
+	A4C918C2099D316D0073C5C5 /* Genome.m:175 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -662,24 +708,11 @@
 		fileReference = A4F333A1096C813B00230854 /* Genome.m */;
 		functionName = "+populateCGenome:From:";
 		hitCount = 1;
-		lineNumber = 172;
-		modificationTime = 161453429.184164;
+		lineNumber = 175;
+		modificationTime = 161475759.247983;
 		state = 1;
 	};
-	A4C918C4099D32270073C5C5 /* flam3.c:2175 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		continueAfterActions = 0;
-		delayBeforeContinue = 0;
-		fileReference = A42D470509996C5A00A7296E /* flam3.c */;
-		functionName = "flam3_print()";
-		hitCount = 1;
-		lineNumber = 2175;
-		modificationTime = 161453429.184179;
-		state = 1;
-	};
-	A4C918D9099D3B090073C5C5 /* Genome.m:431 */ = {
+	A4C918D9099D3B090073C5C5 /* Genome.m:434 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -688,8 +721,8 @@
 		fileReference = A4F333A1096C813B00230854 /* Genome.m */;
 		functionName = "+createXformArrayFromCGenome:";
 		hitCount = 1;
-		lineNumber = 431;
-		modificationTime = 161453429.184193;
+		lineNumber = 434;
+		modificationTime = 161470740.467227;
 		state = 1;
 	};
 	A4C918EF099D51080073C5C5 /* PBXTextBookmark */ = {
@@ -697,7 +730,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "Genome.m: 432";
 		rLen = 0;
-		rLoc = 16491;
+		rLoc = 16602;
 		rType = 0;
 		vrLen = 931;
 		vrLoc = 15970;
@@ -737,7 +770,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "[record setObject:[NSNumber numberWithDouble:xform->symmetry] forKey:@\"symmetry\"];";
 		rLen = 85;
-		rLoc = 16406;
+		rLoc = 16517;
 		rType = 0;
 		vrLen = 1098;
 		vrLoc = 15710;
@@ -787,7 +820,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "xforms = [genomeDictionary objectForKey:@\"xforms\"];";
 		rLen = 53;
-		rLoc = 8492;
+		rLoc = 8564;
 		rType = 0;
 		vrLen = 537;
 		vrLoc = 8277;
@@ -807,7 +840,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "[record setObject:[NSNumber numberWithDouble:xform->symmetry] forKey:@\"symmetry\"];";
 		rLen = 85;
-		rLoc = 16406;
+		rLoc = 16517;
 		rType = 0;
 		vrLen = 1016;
 		vrLoc = 15795;
@@ -836,8 +869,8 @@
 		isa = PBXTextBookmark;
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "flam3_add_symmetry(newGenome, newGenome->symmetry);";
-		rLen = 53;
-		rLoc = 8816;
+		rLen = 54;
+		rLoc = 8920;
 		rType = 0;
 		vrLen = 456;
 		vrLoc = 8547;
@@ -857,7 +890,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "[record setObject:[NSNumber numberWithDouble:xform->symmetry] forKey:@\"symmetry\"];";
 		rLen = 85;
-		rLoc = 16406;
+		rLoc = 16517;
 		rType = 0;
 		vrLen = 1098;
 		vrLoc = 15710;
@@ -867,7 +900,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 291";
 		rLen = 0;
-		rLoc = 7515;
+		rLoc = 7517;
 		rType = 0;
 		vrLen = 555;
 		vrLoc = 6780;
@@ -877,7 +910,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "Genome.m: 427";
 		rLen = 0;
-		rLoc = 16230;
+		rLoc = 16341;
 		rType = 0;
 		vrLen = 931;
 		vrLoc = 15970;
@@ -887,7 +920,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 291";
 		rLen = 0;
-		rLoc = 7515;
+		rLoc = 7517;
 		rType = 0;
 		vrLen = 555;
 		vrLoc = 6780;
@@ -997,8 +1030,8 @@
 	A4D604AA09658A6C0001CD1D /* PaletteController.m */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1039, 5292}}";
-			sepNavSelRange = "{4642, 37}";
-			sepNavVisRect = "{{0, 2462}, {1039, 275}}";
+			sepNavSelRange = "{5841, 1}";
+			sepNavVisRect = "{{0, 3273}, {1039, 273}}";
 			sepNavWindowFrame = "{{208, 208}, {785, 670}}";
 		};
 	};
@@ -1006,13 +1039,13 @@
 		isa = XCBreakpointsBucket;
 		name = "Project Breakpoints";
 		objects = (
-			A4F5AF5B099967B400673C46 /* PaletteController.m:244 */,
-			A4C91885099D03680073C5C5 /* FlameController.m:297 */,
-			A4C9188D099D048D0073C5C5 /* FlameController.m:203 */,
-			A4C918B4099D2E870073C5C5 /* Genome.m:160 */,
-			A4C918C2099D316D0073C5C5 /* Genome.m:172 */,
-			A4C918C4099D32270073C5C5 /* flam3.c:2175 */,
-			A4C918D9099D3B090073C5C5 /* Genome.m:431 */,
+			A4C918B4099D2E870073C5C5 /* Genome.m:162 */,
+			A4C918C2099D316D0073C5C5 /* Genome.m:175 */,
+			A4C918D9099D3B090073C5C5 /* Genome.m:434 */,
+			A4DD0D0B099FD939007E84DB /* Genome.m:62 */,
+			A4DD0D19099FD9AA007E84DB /* Genome.m:33 */,
+			A4DD0D55099FEC84007E84DB /* FractalFlameModel.m:311 */,
+			A4DD0D61099FEDDE007E84DB /* FractalFlameModel.m:553 */,
 		);
 	};
 	A4D6C7D0096EEEAF00846C1F /* PBXTextBookmark */ = {
@@ -1103,9 +1136,9 @@
 	};
 	A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {956, 10724}}";
-			sepNavSelRange = "{1332, 0}";
-			sepNavVisRect = "{{0, 485}, {843, 448}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1039, 10794}}";
+			sepNavSelRange = "{10223, 0}";
+			sepNavVisRect = "{{0, 6062}, {1039, 275}}";
 			sepNavWindowFrame = "{{164, 35}, {1215, 774}}";
 		};
 	};
@@ -1225,6 +1258,14 @@
 			sepNavWindowFrame = "{{238, 109}, {1017, 678}}";
 		};
 	};
+	A4DD0B5B099F7501007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "flam3_print()";
+		rLen = 1;
+		rLoc = 2174;
+		rType = 1;
+	};
 	A4DD0C4B099F958C007E84DB /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = A42D470609996C5A00A7296E /* flam3.h */;
@@ -1240,7 +1281,7 @@
 		comments = "error: 'filePtr' undeclared (first use in this function)";
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		rLen = 1;
-		rLoc = 756;
+		rLoc = 761;
 		rType = 1;
 	};
 	A4DD0C4D099F958C007E84DB /* PBXTextBookmark */ = {
@@ -1248,7 +1289,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "f->progress = printProgress;";
 		rLen = 30;
-		rLoc = 13003;
+		rLoc = 13089;
 		rType = 0;
 		vrLen = 589;
 		vrLoc = 11929;
@@ -1268,7 +1309,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 731";
 		rLen = 0;
-		rLoc = 17735;
+		rLoc = 17821;
 		rType = 0;
 		vrLen = 399;
 		vrLoc = 16731;
@@ -1278,7 +1319,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "Genome.m: 427";
 		rLen = 0;
-		rLoc = 16230;
+		rLoc = 16341;
 		rType = 0;
 		vrLen = 931;
 		vrLoc = 15970;
@@ -1338,7 +1379,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 245";
 		rLen = 0;
-		rLoc = 6598;
+		rLoc = 6600;
 		rType = 0;
 		vrLen = 378;
 		vrLoc = 6272;
@@ -1348,7 +1389,7 @@
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = "Genome.m: 427";
 		rLen = 0;
-		rLoc = 16230;
+		rLoc = 16341;
 		rType = 0;
 		vrLen = 931;
 		vrLoc = 15970;
@@ -1408,7 +1449,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 245";
 		rLen = 0;
-		rLoc = 6598;
+		rLoc = 6600;
 		rType = 0;
 		vrLen = 378;
 		vrLoc = 6272;
@@ -1428,7 +1469,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 330";
 		rLen = 0;
-		rLoc = 8352;
+		rLoc = 8397;
 		rType = 0;
 		vrLen = 500;
 		vrLoc = 7801;
@@ -1438,7 +1479,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 729";
 		rLen = 0;
-		rLoc = 17803;
+		rLoc = 17889;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 16763;
@@ -1458,7 +1499,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 729";
 		rLen = 0;
-		rLoc = 17803;
+		rLoc = 17889;
 		rType = 0;
 		vrLen = 265;
 		vrLoc = 16763;
@@ -1488,7 +1529,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 330";
 		rLen = 0;
-		rLoc = 8347;
+		rLoc = 8392;
 		rType = 0;
 		vrLen = 458;
 		vrLoc = 7801;
@@ -1498,7 +1539,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 330";
 		rLen = 0;
-		rLoc = 8347;
+		rLoc = 8392;
 		rType = 0;
 		vrLen = 458;
 		vrLoc = 7801;
@@ -1518,7 +1559,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 357";
 		rLen = 0;
-		rLoc = 9033;
+		rLoc = 9078;
 		rType = 0;
 		vrLen = 303;
 		vrLoc = 8496;
@@ -1548,7 +1589,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 737";
 		rLen = 0;
-		rLoc = 17803;
+		rLoc = 17889;
 		rType = 0;
 		vrLen = 229;
 		vrLoc = 16763;
@@ -1578,7 +1619,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 739";
 		rLen = 0;
-		rLoc = 17803;
+		rLoc = 17889;
 		rType = 0;
 		vrLen = 278;
 		vrLoc = 16745;
@@ -1588,7 +1629,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 737";
 		rLen = 0;
-		rLoc = 17735;
+		rLoc = 17821;
 		rType = 0;
 		vrLen = 296;
 		vrLoc = 17015;
@@ -1598,7 +1639,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 722";
 		rLen = 0;
-		rLoc = 17569;
+		rLoc = 17655;
 		rType = 0;
 		vrLen = 278;
 		vrLoc = 16745;
@@ -1608,7 +1649,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 737";
 		rLen = 0;
-		rLoc = 17735;
+		rLoc = 17821;
 		rType = 0;
 		vrLen = 296;
 		vrLoc = 17015;
@@ -1648,8 +1689,8 @@
 		sourceTree = "<absolute>";
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1039, 12768}}";
-			sepNavSelRange = "{32328, 0}";
-			sepNavVisRect = "{{0, 12493}, {1039, 275}}";
+			sepNavSelRange = "{16837, 0}";
+			sepNavVisRect = "{{0, 6426}, {1039, 273}}";
 		};
 	};
 	A4DD0C92099F9A75007E84DB /* PBXTextBookmark */ = {
@@ -1657,7 +1698,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 737";
 		rLen = 0;
-		rLoc = 17735;
+		rLoc = 17821;
 		rType = 0;
 		vrLen = 296;
 		vrLoc = 17015;
@@ -1713,7 +1754,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 332";
 		rLen = 0;
-		rLoc = 8352;
+		rLoc = 8397;
 		rType = 0;
 		vrLen = 439;
 		vrLoc = 7792;
@@ -1733,7 +1774,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 332";
 		rLen = 0;
-		rLoc = 8352;
+		rLoc = 8397;
 		rType = 0;
 		vrLen = 439;
 		vrLoc = 7792;
@@ -1753,7 +1794,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 328";
 		rLen = 0;
-		rLoc = 8269;
+		rLoc = 8314;
 		rType = 0;
 		vrLen = 489;
 		vrLoc = 7792;
@@ -1793,7 +1834,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 328";
 		rLen = 0;
-		rLoc = 8269;
+		rLoc = 8314;
 		rType = 0;
 		vrLen = 489;
 		vrLoc = 7792;
@@ -1803,7 +1844,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 328";
 		rLen = 0;
-		rLoc = 8269;
+		rLoc = 8314;
 		rType = 0;
 		vrLen = 489;
 		vrLoc = 7792;
@@ -1833,7 +1874,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 337";
 		rLen = 0;
-		rLoc = 8423;
+		rLoc = 8468;
 		rType = 0;
 		vrLen = 608;
 		vrLoc = 7894;
@@ -1883,7 +1924,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 546";
 		rLen = 0;
-		rLoc = 13076;
+		rLoc = 13162;
 		rType = 0;
 		vrLen = 509;
 		vrLoc = 12531;
@@ -1903,7 +1944,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 740";
 		rLen = 0;
-		rLoc = 17716;
+		rLoc = 17802;
 		rType = 0;
 		vrLen = 236;
 		vrLoc = 17247;
@@ -1913,7 +1954,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 735";
 		rLen = 0;
-		rLoc = 17735;
+		rLoc = 17821;
 		rType = 0;
 		vrLen = 396;
 		vrLoc = 16722;
@@ -1931,7 +1972,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 735";
 		rLen = 0;
-		rLoc = 17735;
+		rLoc = 17821;
 		rType = 0;
 		vrLen = 396;
 		vrLoc = 16722;
@@ -1988,7 +2029,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "[progressWindow setIsVisible:FALSE];";
 		rLen = 38;
-		rLoc = 8993;
+		rLoc = 9038;
 		rType = 0;
 		vrLen = 435;
 		vrLoc = 8612;
@@ -1998,7 +2039,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 66";
 		rLen = 0;
-		rLoc = 1751;
+		rLoc = 1753;
 		rType = 0;
 		vrLen = 499;
 		vrLoc = 1472;
@@ -2008,7 +2049,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "[progressWindow setIsVisible:FALSE];";
 		rLen = 36;
-		rLoc = 1752;
+		rLoc = 1754;
 		rType = 0;
 		vrLen = 499;
 		vrLoc = 1471;
@@ -2018,7 +2059,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 416";
 		rLen = 0;
-		rLoc = 9920;
+		rLoc = 9973;
 		rType = 0;
 		vrLen = 447;
 		vrLoc = 9586;
@@ -2047,7 +2088,7 @@
 		isa = PBXTextBookmark;
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		rLen = 17;
-		rLoc = 9839;
+		rLoc = 9892;
 		rType = 0;
 	};
 	A4DD0CE1099FB048007E84DB /* PBXTextBookmark */ = {
@@ -2075,7 +2116,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "[progressWindow setIsVisible:FALSE];";
 		rLen = 36;
-		rLoc = 1752;
+		rLoc = 1754;
 		rType = 0;
 		vrLen = 499;
 		vrLoc = 1471;
@@ -2085,10 +2126,1467 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 416";
 		rLen = 0;
-		rLoc = 9920;
+		rLoc = 9973;
 		rType = 0;
 		vrLen = 447;
 		vrLoc = 9586;
+	};
+	A4DD0CE5099FD0A1007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470609996C5A00A7296E /* flam3.h */;
+		name = "static char *flam3_h_id =";
+		rLen = 26;
+		rLoc = 912;
+		rType = 0;
+		vrLen = 690;
+		vrLoc = 616;
+	};
+	A4DD0CE6099FD0A1007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 46";
+		rLen = 0;
+		rLoc = 1332;
+		rType = 0;
+		vrLen = 669;
+		vrLoc = 1121;
+	};
+	A4DD0CE7099FD0A1007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		rLen = 4;
+		rLoc = 55657;
+		rType = 0;
+	};
+	A4DD0CE8099FD0A1007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 46";
+		rLen = 0;
+		rLoc = 1332;
+		rType = 0;
+		vrLen = 669;
+		vrLoc = 1121;
+	};
+	A4DD0CE9099FD0A1007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = chld_node;
+		rLen = 9;
+		rLoc = 55622;
+		rType = 0;
+		vrLen = 1094;
+		vrLoc = 1016;
+	};
+	A4DD0CEA099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "";
+		rLen = 1;
+		rLoc = 1750;
+		rType = 0;
+		vrLen = 499;
+		vrLoc = 1471;
+	};
+	A4DD0CEB099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0CEC099FD0A3007E84DB /* flam3-genome.c */;
+		rLen = 0;
+		rLoc = 2147483647;
+		rType = 0;
+	};
+	A4DD0CEC099FD0A3007E84DB /* flam3-genome.c */ = {
+		isa = PBXFileReference;
+		lastKnownFileType = sourcecode.c.c;
+		name = "flam3-genome.c";
+		path = "/Users/vargol/Source/flam3-2.7b4_/flam3-genome.c";
+		sourceTree = "<absolute>";
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1039, 16044}}";
+			sepNavSelRange = "{2704, 1}";
+			sepNavVisRect = "{{0, 2549}, {1039, 275}}";
+		};
+	};
+	A4DD0CED099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "";
+		rLen = 1;
+		rLoc = 1750;
+		rType = 0;
+		vrLen = 499;
+		vrLoc = 1471;
+	};
+	A4DD0CEE099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0CEF099FD0A3007E84DB /* flam3-genome.c */;
+		name = t;
+		rLen = 1;
+		rLoc = 2704;
+		rType = 0;
+		vrLen = 664;
+		vrLoc = 6142;
+	};
+	A4DD0CEF099FD0A3007E84DB /* flam3-genome.c */ = {
+		isa = PBXFileReference;
+		name = "flam3-genome.c";
+		path = "/Users/vargol/Source/flam3-2.7b4_/flam3-genome.c";
+		sourceTree = "<absolute>";
+	};
+	A4DD0CF0099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 416";
+		rLen = 0;
+		rLoc = 9973;
+		rType = 0;
+		vrLen = 447;
+		vrLoc = 9586;
+	};
+	A4DD0CF1099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0C91099F9A75007E84DB /* rect.c */;
+		name = "rect.c: 473";
+		rLen = 0;
+		rLoc = 16837;
+		rType = 0;
+		vrLen = 717;
+		vrLoc = 16396;
+	};
+	A4DD0CF2099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;";
+		rLen = 74;
+		rLoc = 66569;
+		rType = 0;
+		vrLen = 921;
+		vrLoc = 66103;
+	};
+	A4DD0CF3099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 416";
+		rLen = 0;
+		rLoc = 9973;
+		rType = 0;
+		vrLen = 447;
+		vrLoc = 9586;
+	};
+	A4DD0CF4099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;";
+		rLen = 74;
+		rLoc = 66569;
+		rType = 0;
+		vrLen = 861;
+		vrLoc = 66163;
+	};
+	A4DD0CF5099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0C91099F9A75007E84DB /* rect.c */;
+		name = "rect.c: 473";
+		rLen = 0;
+		rLoc = 16837;
+		rType = 0;
+		vrLen = 717;
+		vrLoc = 16396;
+	};
+	A4DD0CF6099FD0A3007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;";
+		rLen = 74;
+		rLoc = 66569;
+		rType = 0;
+		vrLen = 920;
+		vrLoc = 66103;
+	};
+	A4DD0CFB099FD503007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0CEC099FD0A3007E84DB /* flam3-genome.c */;
+		name = t;
+		rLen = 1;
+		rLoc = 2704;
+		rType = 0;
+		vrLen = 664;
+		vrLoc = 6142;
+	};
+	A4DD0CFC099FD503007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "flam3.c: 2170";
+		rLen = 0;
+		rLoc = 66435;
+		rType = 0;
+		vrLen = 920;
+		vrLoc = 66103;
+	};
+	A4DD0CFD099FD503007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "flam3.c: 2170";
+		rLen = 0;
+		rLoc = 66435;
+		rType = 0;
+		vrLen = 920;
+		vrLoc = 66103;
+	};
+	A4DD0CFE099FD503007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 315";
+		rLen = 0;
+		rLoc = 7739;
+		rType = 0;
+		vrLen = 387;
+		vrLoc = 7488;
+	};
+	A4DD0D02099FD53E007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0CEC099FD0A3007E84DB /* flam3-genome.c */;
+		name = t;
+		rLen = 1;
+		rLoc = 2704;
+		rType = 0;
+		vrLen = 664;
+		vrLoc = 6142;
+	};
+	A4DD0D03099FD53E007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 315";
+		rLen = 0;
+		rLoc = 7739;
+		rType = 0;
+		vrLen = 388;
+		vrLoc = 7488;
+	};
+	A4DD0D0B099FD939007E84DB /* Genome.m:62 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		continueAfterActions = 0;
+		delayBeforeContinue = 0;
+		fileReference = A4F333A1096C813B00230854 /* Genome.m */;
+		functionName = "+makeDictionaryFrom:withImage:";
+		hitCount = 1;
+		lineNumber = 62;
+		modificationTime = 161476211.548239;
+		state = 1;
+	};
+	A4DD0D0D099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0CEC099FD0A3007E84DB /* flam3-genome.c */;
+		name = t;
+		rLen = 1;
+		rLoc = 2704;
+		rType = 0;
+		vrLen = 664;
+		vrLoc = 6142;
+	};
+	A4DD0D0E099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DD0CEC099FD0A3007E84DB /* flam3-genome.c */;
+		name = t;
+		rLen = 1;
+		rLoc = 2704;
+		rType = 0;
+		vrLen = 664;
+		vrLoc = 6142;
+	};
+	A4DD0D0F099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (void)populateCGenome:(flam3_genome *)newGenome From:(NSMutableDictionary *)genomeDictionary";
+		rLen = 95;
+		rLoc = 4992;
+		rType = 0;
+		vrLen = 742;
+		vrLoc = 7734;
+	};
+	A4DD0D10099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = xmlStrcmp;
+		rLen = 9;
+		rLoc = 49822;
+		rType = 0;
+		vrLen = 653;
+		vrLoc = 49698;
+	};
+	A4DD0D11099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 315";
+		rLen = 0;
+		rLoc = 7739;
+		rType = 0;
+		vrLen = 386;
+		vrLoc = 7490;
+	};
+	A4DD0D12099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "[record setObject:[NSNumber numberWithDouble:xform->symmetry] forKey:@\"symmetry\"];";
+		rLen = 85;
+		rLoc = 16517;
+		rType = 0;
+		vrLen = 1057;
+		vrLoc = 15710;
+	};
+	A4DD0D13099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 315";
+		rLen = 0;
+		rLoc = 7739;
+		rType = 0;
+		vrLen = 388;
+		vrLoc = 7488;
+	};
+	A4DD0D14099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "[record setObject:[NSNumber numberWithDouble:xform->symmetry] forKey:@\"symmetry\"];";
+		rLen = 85;
+		rLoc = 16517;
+		rType = 0;
+		vrLen = 1057;
+		vrLoc = 15710;
+	};
+	A4DD0D15099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = xmlStrcmp;
+		rLen = 9;
+		rLoc = 49822;
+		rType = 0;
+		vrLen = 653;
+		vrLoc = 49698;
+	};
+	A4DD0D16099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 315";
+		rLen = 0;
+		rLoc = 7739;
+		rType = 0;
+		vrLen = 386;
+		vrLoc = 7490;
+	};
+	A4DD0D17099FD954007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "Genome.m: 62";
+		rLen = 0;
+		rLoc = 3852;
+		rType = 0;
+		vrLen = 1560;
+		vrLoc = 2627;
+	};
+	A4DD0D19099FD9AA007E84DB /* Genome.m:33 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		continueAfterActions = 0;
+		delayBeforeContinue = 0;
+		fileReference = A4F333A1096C813B00230854 /* Genome.m */;
+		functionName = "+makeDictionaryFrom:withImage:";
+		hitCount = 1;
+		lineNumber = 33;
+		modificationTime = 161476196.016516;
+		state = 1;
+	};
+	A4DD0D1A099FD9AD007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (void)populateCGenome:(flam3_genome *)newGenome From:(NSMutableDictionary *)genomeDictionary";
+		rLen = 95;
+		rLoc = 4992;
+		rType = 0;
+		vrLen = 742;
+		vrLoc = 7734;
+	};
+	A4DD0D1B099FD9AD007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (NSMutableDictionary *)makeDictionaryFrom:(flam3_genome *)genome withImage:(NSImage *)image";
+		rLen = 94;
+		rLoc = 863;
+		rType = 0;
+		vrLen = 1263;
+		vrLoc = 863;
+	};
+	A4DD0D1F099FD9E7007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (void)populateCGenome:(flam3_genome *)newGenome From:(NSMutableDictionary *)genomeDictionary";
+		rLen = 95;
+		rLoc = 4992;
+		rType = 0;
+		vrLen = 742;
+		vrLoc = 7734;
+	};
+	A4DD0D20099FD9E7007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (NSMutableDictionary *)makeDictionaryFrom:(flam3_genome *)genome withImage:(NSImage *)image";
+		rLen = 94;
+		rLoc = 863;
+		rType = 0;
+		vrLen = 1263;
+		vrLoc = 863;
+	};
+	A4DD0D21099FD9E7007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */;
+		name = "";
+		rLen = 1;
+		rLoc = 5841;
+		rType = 0;
+		vrLen = 486;
+		vrLoc = 5572;
+	};
+	A4DD0D22099FD9E7007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (NSMutableDictionary *)makeDictionaryFrom:(flam3_genome *)genome withImage:(NSImage *)image";
+		rLen = 94;
+		rLoc = 863;
+		rType = 0;
+		vrLen = 1263;
+		vrLoc = 863;
+	};
+	A4DD0D23099FD9E7007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */;
+		name = "";
+		rLen = 1;
+		rLoc = 5841;
+		rType = 0;
+		vrLen = 486;
+		vrLoc = 5572;
+	};
+	A4DD0D24099FD9E7007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;";
+		rLen = 74;
+		rLoc = 66569;
+		rType = 0;
+		vrLen = 925;
+		vrLoc = 66163;
+	};
+	A4DD0D2A099FDB04007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (void)populateCGenome:(flam3_genome *)newGenome From:(NSMutableDictionary *)genomeDictionary";
+		rLen = 95;
+		rLoc = 4992;
+		rType = 0;
+		vrLen = 742;
+		vrLoc = 7706;
+	};
+	A4DD0D2B099FDB04007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;";
+		rLen = 74;
+		rLoc = 66569;
+		rType = 0;
+		vrLen = 925;
+		vrLoc = 66163;
+	};
+	A4DD0D30099FDD69007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470609996C5A00A7296E /* flam3.h */;
+		name = "static char *flam3_h_id =";
+		rLen = 26;
+		rLoc = 912;
+		rType = 0;
+		vrLen = 690;
+		vrLoc = 616;
+	};
+	A4DD0D31099FDD69007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: passing argument 2 of 'flam3_print' from incompatible pointer type";
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		rLen = 1;
+		rLoc = 314;
+		rType = 1;
+	};
+	A4DD0D32099FDD69007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470609996C5A00A7296E /* flam3.h */;
+		name = "static char *flam3_h_id =";
+		rLen = 26;
+		rLoc = 912;
+		rType = 0;
+		vrLen = 690;
+		vrLoc = 616;
+	};
+	A4DD0D33099FDD69007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 387";
+		rLen = 0;
+		rLoc = 9250;
+		rType = 0;
+		vrLen = 1011;
+		vrLoc = 0;
+	};
+	A4DD0D34099FDD69007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = chld_node;
+		rLen = 9;
+		rLoc = 55622;
+		rType = 0;
+		vrLen = 1094;
+		vrLoc = 1016;
+	};
+	A4DD0D36099FDD69007E84DB /* XDModelBookmark */ = {
+		isa = XDModelBookmark;
+		fRef = A4DD0D37099FDD69007E84DB /* Genome.m_1.xcclassmodel */;
+		fallbackIsa = PBXBookmark;
+		uiCtxt = {
+			UIContextForClassArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnns = (
+					"CT Class",
+					"CT Kind",
+					"CT Superclass",
+					"CT Documentation",
+				);
+				chosenTableColumnns_sortDirections = (
+				);
+				chosenTableColumnns_sortKeys = (
+				);
+				chosenTableColumnns_sortSelectors = (
+				);
+				chosenTableWidths = (
+					76.000000,
+					45.000000,
+					56.454102,
+					22.000000,
+				);
+			};
+			UIContextForDetailArea = {
+				_indexOfSelectedView = 1;
+			};
+			UIContextForLayoutManager = {
+				detailSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {452, 0}}",
+						"{{457, 0}, {241, 0}}",
+					);
+				};
+				diagramSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {698, 0}}",
+						"{{0, 5}, {698, 437}}",
+					);
+				};
+				tableSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {144, 0}}",
+						"{{149, 0}, {302, 0}}",
+					);
+				};
+			};
+			UIContextForPropertyArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnnsAT = (
+					"PR Type Icon",
+					"PR Member",
+					"PR Kind",
+					"PR Type",
+					"PR Visibility",
+					"PR Documentation",
+				);
+				chosenTableColumnnsAT_sortDirections = (
+				);
+				chosenTableColumnnsAT_sortKeys = (
+				);
+				chosenTableColumnnsAT_sortSelectors = (
+				);
+				chosenTableColumnnsPT = (
+					"AL Type Icon",
+					"AL Member",
+					"AL Kind",
+					"AL Type",
+					"AL Visibility",
+					"AL Documentation",
+				);
+				chosenTableColumnnsPT_sortDirections = (
+				);
+				chosenTableColumnnsPT_sortKeys = (
+				);
+				chosenTableColumnnsPT_sortSelectors = (
+				);
+				chosenTableColumnnsRT = (
+					"OP Type Icon",
+					"OP Member",
+					"OP Kind",
+					"OP Type",
+					"OP Visibility",
+					"OP Documentation",
+				);
+				chosenTableColumnnsRT_sortDirections = (
+				);
+				chosenTableColumnnsRT_sortKeys = (
+				);
+				chosenTableColumnnsRT_sortSelectors = (
+				);
+				chosenTableWidthsAT = (
+					22.000000,
+					122.000000,
+					66.000000,
+					82.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsPT = (
+					22.000000,
+					122.000000,
+					61.000000,
+					87.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsRT = (
+					22.000000,
+					122.000000,
+					62.000000,
+					86.000000,
+					44.000000,
+					22.000000,
+				);
+			};
+			"xdesign model browser state key - shown/hidden" = 0;
+			"xdesign model diagram view visible rect key" = "{{-1, -4}, {683, 422}}";
+			"xdesign model selected entities key" = (
+				"<XDSCClass: 0x62b6220>{name=NSObject, package=}",
+			);
+			"xdesign model selected properties key" = (
+				"<XDSCProperty: 0x62b8da0>{name=isa, type=<XDUMLDataTypeImp: 0x62c5350>{name=Class, package=}}",
+			);
+		};
+	};
+	A4DD0D37099FDD69007E84DB /* Genome.m_1.xcclassmodel */ = {
+		isa = PBXFileReference;
+		path = Genome.m_1.xcclassmodel;
+		sourceTree = "<group>";
+	};
+	A4DD0D38099FDD69007E84DB /* XDModelBookmark */ = {
+		isa = XDModelBookmark;
+		fRef = A4DD0D39099FDD69007E84DB /* Genome.m_1.xcclassmodel */;
+		fallbackIsa = PBXBookmark;
+		uiCtxt = {
+			UIContextForClassArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnns = (
+					"CT Class",
+					"CT Kind",
+					"CT Superclass",
+					"CT Documentation",
+				);
+				chosenTableColumnns_sortDirections = (
+				);
+				chosenTableColumnns_sortKeys = (
+				);
+				chosenTableColumnns_sortSelectors = (
+				);
+				chosenTableWidths = (
+					76.000000,
+					45.000000,
+					56.454102,
+					22.000000,
+				);
+			};
+			UIContextForDetailArea = {
+				_indexOfSelectedView = 1;
+			};
+			UIContextForLayoutManager = {
+				detailSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {452, 0}}",
+						"{{457, 0}, {241, 0}}",
+					);
+				};
+				diagramSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {698, 0}}",
+						"{{0, 5}, {698, 437}}",
+					);
+				};
+				tableSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {144, 0}}",
+						"{{149, 0}, {302, 0}}",
+					);
+				};
+			};
+			UIContextForPropertyArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnnsAT = (
+					"PR Type Icon",
+					"PR Member",
+					"PR Kind",
+					"PR Type",
+					"PR Visibility",
+					"PR Documentation",
+				);
+				chosenTableColumnnsAT_sortDirections = (
+				);
+				chosenTableColumnnsAT_sortKeys = (
+				);
+				chosenTableColumnnsAT_sortSelectors = (
+				);
+				chosenTableColumnnsPT = (
+					"AL Type Icon",
+					"AL Member",
+					"AL Kind",
+					"AL Type",
+					"AL Visibility",
+					"AL Documentation",
+				);
+				chosenTableColumnnsPT_sortDirections = (
+				);
+				chosenTableColumnnsPT_sortKeys = (
+				);
+				chosenTableColumnnsPT_sortSelectors = (
+				);
+				chosenTableColumnnsRT = (
+					"OP Type Icon",
+					"OP Member",
+					"OP Kind",
+					"OP Type",
+					"OP Visibility",
+					"OP Documentation",
+				);
+				chosenTableColumnnsRT_sortDirections = (
+				);
+				chosenTableColumnnsRT_sortKeys = (
+				);
+				chosenTableColumnnsRT_sortSelectors = (
+				);
+				chosenTableWidthsAT = (
+					22.000000,
+					122.000000,
+					66.000000,
+					82.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsPT = (
+					22.000000,
+					122.000000,
+					61.000000,
+					87.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsRT = (
+					22.000000,
+					122.000000,
+					62.000000,
+					86.000000,
+					44.000000,
+					22.000000,
+				);
+			};
+			"xdesign model browser state key - shown/hidden" = 0;
+			"xdesign model diagram view visible rect key" = "{{-1, -4}, {683, 422}}";
+			"xdesign model selected entities key" = (
+				"<XDSCClass: 0x62b6220>{name=NSObject, package=}",
+			);
+			"xdesign model selected properties key" = (
+				"<XDSCProperty: 0x62b8da0>{name=isa, type=<XDUMLDataTypeImp: 0x62c5350>{name=Class, package=}}",
+			);
+		};
+	};
+	A4DD0D39099FDD69007E84DB /* Genome.m_1.xcclassmodel */ = {
+		isa = PBXFileReference;
+		path = Genome.m_1.xcclassmodel;
+		sourceTree = "<group>";
+	};
+	A4DD0D3A099FDD69007E84DB /* XDSCDebuggingWindowBookmark */ = {
+		isa = XDSCDebuggingWindowBookmark;
+		fRef = A4DD0D3B099FDD69007E84DB /* Genome.m_1.xcclassmodel */;
+		fallbackIsa = PBXBookmark;
+	};
+	A4DD0D3B099FDD69007E84DB /* Genome.m_1.xcclassmodel */ = {
+		isa = PBXFileReference;
+		path = Genome.m_1.xcclassmodel;
+		sourceTree = "<group>";
+	};
+	A4DD0D3C099FDD69007E84DB /* XDModelBookmark */ = {
+		isa = XDModelBookmark;
+		fRef = A4DD0D3D099FDD69007E84DB /* Genome.m_1.xcclassmodel */;
+		fallbackIsa = PBXBookmark;
+		uiCtxt = {
+			UIContextForClassArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnns = (
+					"CT Class",
+					"CT Kind",
+					"CT Superclass",
+					"CT Documentation",
+				);
+				chosenTableColumnns_sortDirections = (
+				);
+				chosenTableColumnns_sortKeys = (
+				);
+				chosenTableColumnns_sortSelectors = (
+				);
+				chosenTableWidths = (
+					76.000000,
+					45.000000,
+					56.454102,
+					22.000000,
+				);
+			};
+			UIContextForDetailArea = {
+				_indexOfSelectedView = 1;
+			};
+			UIContextForLayoutManager = {
+				detailSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {452, 0}}",
+						"{{457, 0}, {241, 0}}",
+					);
+				};
+				diagramSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {698, 0}}",
+						"{{0, 5}, {698, 437}}",
+					);
+				};
+				tableSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {144, 0}}",
+						"{{149, 0}, {302, 0}}",
+					);
+				};
+			};
+			UIContextForPropertyArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnnsAT = (
+					"PR Type Icon",
+					"PR Member",
+					"PR Kind",
+					"PR Type",
+					"PR Visibility",
+					"PR Documentation",
+				);
+				chosenTableColumnnsAT_sortDirections = (
+				);
+				chosenTableColumnnsAT_sortKeys = (
+				);
+				chosenTableColumnnsAT_sortSelectors = (
+				);
+				chosenTableColumnnsPT = (
+					"AL Type Icon",
+					"AL Member",
+					"AL Kind",
+					"AL Type",
+					"AL Visibility",
+					"AL Documentation",
+				);
+				chosenTableColumnnsPT_sortDirections = (
+				);
+				chosenTableColumnnsPT_sortKeys = (
+				);
+				chosenTableColumnnsPT_sortSelectors = (
+				);
+				chosenTableColumnnsRT = (
+					"OP Type Icon",
+					"OP Member",
+					"OP Kind",
+					"OP Type",
+					"OP Visibility",
+					"OP Documentation",
+				);
+				chosenTableColumnnsRT_sortDirections = (
+				);
+				chosenTableColumnnsRT_sortKeys = (
+				);
+				chosenTableColumnnsRT_sortSelectors = (
+				);
+				chosenTableWidthsAT = (
+					22.000000,
+					122.000000,
+					66.000000,
+					82.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsPT = (
+					22.000000,
+					122.000000,
+					61.000000,
+					87.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsRT = (
+					22.000000,
+					122.000000,
+					62.000000,
+					86.000000,
+					44.000000,
+					22.000000,
+				);
+			};
+			"xdesign model browser state key - shown/hidden" = 0;
+			"xdesign model diagram view visible rect key" = "{{-1, -4}, {683, 422}}";
+			"xdesign model selected entities key" = (
+				"<XDSCClass: 0x62b6220>{name=NSObject, package=}",
+			);
+			"xdesign model selected properties key" = (
+				"<XDSCProperty: 0x62b8da0>{name=isa, type=<XDUMLDataTypeImp: 0x62c5350>{name=Class, package=}}",
+			);
+		};
+	};
+	A4DD0D3D099FDD69007E84DB /* Genome.m_1.xcclassmodel */ = {
+		isa = PBXFileReference;
+		path = Genome.m_1.xcclassmodel;
+		sourceTree = "<group>";
+	};
+	A4DD0D3E099FDD69007E84DB /* XDModelBookmark */ = {
+		isa = XDModelBookmark;
+		fRef = A4DD0D3F099FDD69007E84DB /* Genome.m_1.xcclassmodel */;
+		fallbackIsa = PBXBookmark;
+		uiCtxt = {
+			UIContextForClassArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnns = (
+					"CT Class",
+					"CT Kind",
+					"CT Superclass",
+					"CT Documentation",
+				);
+				chosenTableColumnns_sortDirections = (
+				);
+				chosenTableColumnns_sortKeys = (
+				);
+				chosenTableColumnns_sortSelectors = (
+				);
+				chosenTableWidths = (
+					76.000000,
+					45.000000,
+					56.454102,
+					22.000000,
+				);
+			};
+			UIContextForDetailArea = {
+				_indexOfSelectedView = 1;
+			};
+			UIContextForLayoutManager = {
+				detailSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {452, 0}}",
+						"{{457, 0}, {241, 0}}",
+					);
+				};
+				diagramSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {698, 0}}",
+						"{{0, 5}, {698, 437}}",
+					);
+				};
+				tableSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {144, 0}}",
+						"{{149, 0}, {302, 0}}",
+					);
+				};
+			};
+			UIContextForPropertyArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnnsAT = (
+					"PR Type Icon",
+					"PR Member",
+					"PR Kind",
+					"PR Type",
+					"PR Visibility",
+					"PR Documentation",
+				);
+				chosenTableColumnnsAT_sortDirections = (
+				);
+				chosenTableColumnnsAT_sortKeys = (
+				);
+				chosenTableColumnnsAT_sortSelectors = (
+				);
+				chosenTableColumnnsPT = (
+					"AL Type Icon",
+					"AL Member",
+					"AL Kind",
+					"AL Type",
+					"AL Visibility",
+					"AL Documentation",
+				);
+				chosenTableColumnnsPT_sortDirections = (
+				);
+				chosenTableColumnnsPT_sortKeys = (
+				);
+				chosenTableColumnnsPT_sortSelectors = (
+				);
+				chosenTableColumnnsRT = (
+					"OP Type Icon",
+					"OP Member",
+					"OP Kind",
+					"OP Type",
+					"OP Visibility",
+					"OP Documentation",
+				);
+				chosenTableColumnnsRT_sortDirections = (
+				);
+				chosenTableColumnnsRT_sortKeys = (
+				);
+				chosenTableColumnnsRT_sortSelectors = (
+				);
+				chosenTableWidthsAT = (
+					22.000000,
+					122.000000,
+					66.000000,
+					82.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsPT = (
+					22.000000,
+					122.000000,
+					61.000000,
+					87.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsRT = (
+					22.000000,
+					122.000000,
+					62.000000,
+					86.000000,
+					44.000000,
+					22.000000,
+				);
+			};
+			"xdesign model browser state key - shown/hidden" = 0;
+			"xdesign model diagram view visible rect key" = "{{-1, -4}, {683, 422}}";
+			"xdesign model selected entities key" = (
+				"<XDSCClass: 0x62b6220>{name=NSObject, package=}",
+			);
+			"xdesign model selected properties key" = (
+				"<XDSCProperty: 0x62b8da0>{name=isa, type=<XDUMLDataTypeImp: 0x62c5350>{name=Class, package=}}",
+			);
+		};
+	};
+	A4DD0D3F099FDD69007E84DB /* Genome.m_1.xcclassmodel */ = {
+		isa = PBXFileReference;
+		path = Genome.m_1.xcclassmodel;
+		sourceTree = "<group>";
+	};
+	A4DD0D40099FDD69007E84DB /* XDModelBookmark */ = {
+		isa = XDModelBookmark;
+		fRef = A4DD0D41099FDD69007E84DB /* Genome.m_1.xcclassmodel */;
+		fallbackIsa = PBXBookmark;
+		uiCtxt = {
+			UIContextForClassArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnns = (
+					"CT Class",
+					"CT Kind",
+					"CT Superclass",
+					"CT Documentation",
+				);
+				chosenTableColumnns_sortDirections = (
+				);
+				chosenTableColumnns_sortKeys = (
+				);
+				chosenTableColumnns_sortSelectors = (
+				);
+				chosenTableWidths = (
+					76.000000,
+					45.000000,
+					56.454102,
+					22.000000,
+				);
+			};
+			UIContextForDetailArea = {
+				_indexOfSelectedView = 1;
+			};
+			UIContextForLayoutManager = {
+				detailSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {516, 179}}",
+						"{{521, 0}, {277, 179}}",
+					);
+				};
+				diagramSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {798, 179}}",
+						"{{0, 184}, {798, 365}}",
+					);
+				};
+				tableSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {162, 179}}",
+						"{{167, 0}, {348, 179}}",
+					);
+				};
+			};
+			UIContextForPropertyArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnnsAT = (
+					"PR Type Icon",
+					"PR Member",
+					"PR Kind",
+					"PR Type",
+					"PR Visibility",
+					"PR Documentation",
+				);
+				chosenTableColumnnsAT_sortDirections = (
+				);
+				chosenTableColumnnsAT_sortKeys = (
+				);
+				chosenTableColumnnsAT_sortSelectors = (
+				);
+				chosenTableColumnnsPT = (
+					"AL Type Icon",
+					"AL Member",
+					"AL Kind",
+					"AL Type",
+					"AL Visibility",
+					"AL Documentation",
+				);
+				chosenTableColumnnsPT_sortDirections = (
+				);
+				chosenTableColumnnsPT_sortKeys = (
+				);
+				chosenTableColumnnsPT_sortSelectors = (
+				);
+				chosenTableColumnnsRT = (
+					"OP Type Icon",
+					"OP Member",
+					"OP Kind",
+					"OP Type",
+					"OP Visibility",
+					"OP Documentation",
+				);
+				chosenTableColumnnsRT_sortDirections = (
+				);
+				chosenTableColumnnsRT_sortKeys = (
+				);
+				chosenTableColumnnsRT_sortSelectors = (
+				);
+				chosenTableWidthsAT = (
+					22.000000,
+					122.000000,
+					66.000000,
+					82.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsPT = (
+					22.000000,
+					122.000000,
+					61.000000,
+					87.000000,
+					44.000000,
+					22.000000,
+				);
+				chosenTableWidthsRT = (
+					22.000000,
+					122.000000,
+					62.000000,
+					86.000000,
+					44.000000,
+					22.000000,
+				);
+			};
+			"xdesign model browser state key - shown/hidden" = 1;
+			"xdesign model diagram view visible rect key" = "{{-43, 6}, {783, 350}}";
+			"xdesign model selected entities key" = (
+				"<XDSCClass: 0x62b5440>{name=Genome, package=}",
+			);
+			"xdesign model selected properties key" = (
+				"<XDSCOperation: 0x6625c30>{name=testXMLFrame:againstOxizdizerFrame:, type=<XDUMLDataTypeImp: 0x62c37e0>{name=BOOL, package=}}",
+			);
+		};
+	};
+	A4DD0D41099FDD69007E84DB /* Genome.m_1.xcclassmodel */ = {
+		isa = PBXFileReference;
+		path = Genome.m_1.xcclassmodel;
+		sourceTree = "<group>";
+	};
+	A4DD0D42099FDD6E007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (void)populateCGenome:(flam3_genome *)newGenome From:(NSMutableDictionary *)genomeDictionary";
+		rLen = 95;
+		rLoc = 4992;
+		rType = 0;
+		vrLen = 742;
+		vrLoc = 7706;
+	};
+	A4DD0D43099FDD6E007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = "int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;";
+		rLen = 74;
+		rLoc = 66569;
+		rType = 0;
+		vrLen = 925;
+		vrLoc = 66163;
+	};
+	A4DD0D47099FDEC9007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "Genome.m: 174";
+		rLen = 0;
+		rLoc = 8978;
+		rType = 0;
+		vrLen = 352;
+		vrLoc = 8783;
+	};
+	A4DD0D48099FDEC9007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "";
+		rLen = 1;
+		rLoc = 1750;
+		rType = 0;
+		vrLen = 498;
+		vrLoc = 1472;
+	};
+	A4DD0D49099FDEC9007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "Genome.m: 174";
+		rLen = 0;
+		rLoc = 8978;
+		rType = 0;
+		vrLen = 352;
+		vrLoc = 8783;
+	};
+	A4DD0D4A099FDEC9007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 555";
+		rLen = 0;
+		rLoc = 12821;
+		rType = 0;
+		vrLen = 384;
+		vrLoc = 12666;
+	};
+	A4DD0D4B099FDEC9007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = print;
+		rLen = 5;
+		rLoc = 66745;
+		rType = 0;
+		vrLen = 925;
+		vrLoc = 66163;
+	};
+	A4DD0D55099FEC84007E84DB /* FractalFlameModel.m:311 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		continueAfterActions = 0;
+		delayBeforeContinue = 0;
+		fileReference = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		functionName = "-loadFlam3File:intoCGenomes:returningCountInto:";
+		hitCount = 1;
+		lineNumber = 311;
+		modificationTime = 161475786.259997;
+		state = 1;
+	};
+	A4DD0D59099FECBA007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "- (IBAction)openFile:(id)sender";
+		rLen = 32;
+		rLoc = 10087;
+		rType = 0;
+		vrLen = 621;
+		vrLoc = 10187;
+	};
+	A4DD0D5A099FECBA007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = print;
+		rLen = 5;
+		rLoc = 66745;
+		rType = 0;
+		vrLen = 880;
+		vrLoc = 66458;
+	};
+	A4DD0D5B099FECBA007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps";
+		rLen = 79;
+		rLoc = 7884;
+		rType = 0;
+		vrLen = 588;
+		vrLoc = 8278;
+	};
+	A4DD0D5C099FECBA007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "+ (NSMutableDictionary *)makeDictionaryFrom:(flam3_genome *)genome withImage:(NSImage *)image";
+		rLen = 94;
+		rLoc = 863;
+		rType = 0;
+		vrLen = 1167;
+		vrLoc = 959;
+	};
+	A4DD0D5D099FECBA007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = print;
+		rLen = 5;
+		rLoc = 66745;
+		rType = 0;
+		vrLen = 880;
+		vrLoc = 66458;
+	};
+	A4DD0D5E099FECBA007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps";
+		rLen = 79;
+		rLoc = 7884;
+		rType = 0;
+		vrLen = 588;
+		vrLoc = 8278;
+	};
+	A4DD0D5F099FECBA007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = getIntSymmetry;
+		rLen = 14;
+		rLoc = 13987;
+		rType = 0;
+		vrLen = 276;
+		vrLoc = 13756;
+	};
+	A4DD0D61099FEDDE007E84DB /* FractalFlameModel.m:553 */ = {
+		isa = PBXFileBreakpoint;
+		actions = (
+		);
+		continueAfterActions = 0;
+		delayBeforeContinue = 0;
+		fileReference = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		functionName = "-renderSingleFrame:withGemone:";
+		hitCount = 2;
+		lineNumber = 553;
+		modificationTime = 161476240.704171;
+		state = 1;
+	};
+	A4DD0D69099FF166007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 436";
+		rLen = 0;
+		rLoc = 10223;
+		rType = 0;
+		vrLen = 621;
+		vrLoc = 10187;
+	};
+	A4DD0D6A099FF166007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 436";
+		rLen = 0;
+		rLoc = 10223;
+		rType = 0;
+		vrLen = 621;
+		vrLoc = 10187;
+	};
+	A4DD0D6B099FF166007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A42D470509996C5A00A7296E /* flam3.c */;
+		name = rot_center;
+		rLen = 10;
+		rLoc = 44366;
+		rType = 0;
+		vrLen = 1117;
+		vrLoc = 43857;
+	};
+	A4DD0D6C099FF166007E84DB /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = "Genome.m: 451";
+		rLen = 0;
+		rLoc = 17165;
+		rType = 0;
+		vrLen = 847;
+		vrLoc = 16603;
 	};
 	A4E1302009783F4900A69DA0 /* ImageCompression.h */ = {
 		isa = PBXFileReference;
@@ -2147,9 +3645,9 @@
 	};
 	A4F333A1096C813B00230854 /* Genome.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1046, 8218}}";
-			sepNavSelRange = "{16230, 0}";
-			sepNavVisRect = "{{0, 5936}, {1039, 275}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1046, 8260}}";
+			sepNavSelRange = "{17165, 0}";
+			sepNavVisRect = "{{0, 6093}, {1039, 273}}";
 			sepNavWindowFrame = "{{535, 60}, {1017, 678}}";
 		};
 	};
@@ -2162,18 +3660,5 @@
 		rType = 0;
 		vrLen = 296;
 		vrLoc = 0;
-	};
-	A4F5AF5B099967B400673C46 /* PaletteController.m:244 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		continueAfterActions = 0;
-		delayBeforeContinue = 0;
-		fileReference = A4D604AA09658A6C0001CD1D /* PaletteController.m */;
-		functionName = "+fillBitmapRep:withColours:usingHue:";
-		hitCount = 1;
-		lineNumber = 244;
-		modificationTime = 161453429.183892;
-		state = 1;
 	};
 }

@@ -59,7 +59,7 @@
 	[genomeDictionary setObject:[NSNumber numberWithDouble:genome->spatial_filter_radius]  forKey:@"filter"];
 
 	[genomeDictionary setObject:[NSNumber numberWithDouble:genome->contrast]  forKey:@"contrast"];
-	[genomeDictionary setObject:[Genome  getStringSymmetry:genome->symmetry == 0 ? 1 : genome->symmetry]  forKey:@"symmetry"];
+	[genomeDictionary setObject:[Genome  getStringSymmetry:genome->symmetry]  forKey:@"symmetry"];
 
 
 	[genomeDictionary setObject:image forKey:@"image"];
@@ -114,6 +114,8 @@
 	newGenome->width = [[genomeDictionary objectForKey:@"width"] intValue];
 	newGenome->center[0] = [[genomeDictionary objectForKey:@"centre_x"] doubleValue];
 	newGenome->center[1] = [[genomeDictionary objectForKey:@"centre_y"] doubleValue];
+	newGenome->rot_center[0] = newGenome->center[0];
+	newGenome->rot_center[1] = newGenome->center[1];
 	newGenome->zoom = [[genomeDictionary objectForKey:@"zoom"] doubleValue];
 	newGenome->pixels_per_unit = [[genomeDictionary objectForKey:@"scale"] doubleValue];
 	newGenome->spatial_oversample = [[genomeDictionary objectForKey:@"oversample"] intValue];
@@ -169,8 +171,9 @@
 	
 	}
 	
-	flam3_add_symmetry(newGenome, newGenome->symmetry);
-
+	if(newGenome->symmetry != 0) {
+		flam3_add_symmetry(newGenome, newGenome->symmetry);
+	}
 	
 	return;
 }
@@ -380,9 +383,9 @@ return TRUE;
 		case -1:
 			return @"Dihedral Symmetry";
 			break;
-		case 0:
+/*		case 0:
 			return @"Random";
-			break;
+			break;*/
 		default:
 			return [NSString stringWithFormat:@"%ld", value];	
 			break;
@@ -445,7 +448,7 @@ return TRUE;
 			
 			[variation setObject:[NSString stringWithCString:flam3_variation_names[j] encoding:NSUTF8StringEncoding] forKey:@"name"]; 
 
-			if(xform->var[j] > 0.0) {
+			if(xform->var[j] != 0.0) {
 				[variation setObject:[NSNumber numberWithBool:YES] forKey:@"in_use"];
 				[name appendFormat:@"%@ ", [NSString stringWithCString:flam3_variation_names[j] encoding:NSUTF8StringEncoding]]; 
 			} else {

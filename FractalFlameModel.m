@@ -51,7 +51,7 @@ int printProgress(void *filePtr, double progress) ;
 //	frame.temporal_filter_radius = 0.0;
 	frame.ngenomes = 1;
 
-	flam3_print(stderr , genome, NULL);	
+//	flam3_print(stderr , genome, NULL);	
 
 	progress = 0.0;
 	[progressIndicator setDoubleValue:0.0];
@@ -312,6 +312,9 @@ if (mDataHandlerRef)
 		return NO;
 	}
 	
+//	flam3_print(stderr, *genomes, NULL);
+
+	
 //	[symmetry setIntSymmetry:1];
 //	[symmetry setIntSymmetry:(*genomes)[0].symmetry];
 	
@@ -381,7 +384,8 @@ if (mDataHandlerRef)
 	
 	flam3_frame frame;
 	
-	int realHeight, realWidth, realScale;
+	int realHeight, realWidth;
+	double realScale;
 
 	double scaleFactor;
 	
@@ -548,6 +552,7 @@ int calc_nstrips(flam3_frame *spec) {
 //	NSImage *flameImage;
 	NSBitmapImageRep *flameRep;
 	
+	flam3_print(stderr, cps, NULL);
 	
 	
 	cps->sample_density *= qs;
