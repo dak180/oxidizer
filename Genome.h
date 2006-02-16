@@ -34,6 +34,7 @@
 + (NSMutableArray *)createXformArrayFromCGenome:(flam3_genome *)genome;
 + (BOOL)testXMLFrame:(char *)filename againstOxizdizerFrame:(flam3_frame *)new; 
 + (BOOL)testCGenome:(flam3_genome *)old againstOxizdizerCGenome:(flam3_genome *)new;
++ (xmlDocPtr) createCEditDocFromDictionary:(NSDictionary *)genome;
 
 + (int) getIntSymmetry:(NSString *)value;
 + (NSString *) getStringSymmetry:(int)value;

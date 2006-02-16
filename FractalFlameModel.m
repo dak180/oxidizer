@@ -255,7 +255,7 @@ if (mDataHandlerRef)
 
 - (BOOL)EnvironmentInit:(flam3_frame *)f {
 
-	verbose = 0;
+	verbose = 1;
 	transparency = 1;
 	qs = environment->qualityScale;
 	ss = environment->sizeScale;

@@ -18,6 +18,7 @@
 */
 
 #import "Genome.h"
+#import <libxml/parser.h>
 
 @implementation Genome
 
@@ -61,6 +62,21 @@
 	[genomeDictionary setObject:[NSNumber numberWithDouble:genome->contrast]  forKey:@"contrast"];
 	[genomeDictionary setObject:[Genome  getStringSymmetry:genome->symmetry]  forKey:@"symmetry"];
 
+	if(genome->edits != NULL) {
+	
+		xmlChar *doc;
+		int xmlSize;
+	
+		xmlDocDumpMemory(genome->edits, &doc, &xmlSize); 
+
+		NSAttributedString *edits = [[NSAttributedString alloc] initWithString:[NSString stringWithCString:doc encoding:NSUTF8StringEncoding]];		
+		[genomeDictionary setObject:edits forKey:@"edits"];
+		[edits release];
+	}
+
+	[genomeDictionary setObject:@"Vargol" forKey:@"nick"];
+	[genomeDictionary setObject:@"http://oxidizer.sf.net" forKey:@"url"];
+	[genomeDictionary setObject:@"Created by Oxidizer" forKey:@"comment"];
 
 	[genomeDictionary setObject:image forKey:@"image"];
 	
@@ -139,7 +155,7 @@
 
 	newGenome->contrast = [[genomeDictionary objectForKey:@"contrast"] doubleValue];
 	newGenome->symmetry = [Genome getIntSymmetry:[genomeDictionary objectForKey:@"symmetry"]];
-	newGenome->edits = NULL;
+	newGenome->edits = [Genome createCEditDocFromDictionary:genomeDictionary];
 	
 	if(newGenome->palette_index < 0) {
 		/* use the cmap */
@@ -584,6 +600,68 @@ return TRUE;
 
 }
 
+
++ (xmlDocPtr) createCEditDocFromDictionary:(NSDictionary *)genome {
+   
+	NSXMLElement *newEditElement;
+	NSXMLElement *oldRootElement;
+	NSXMLDocument *oldDoc;
+	NSError *xmlError;
+	NSString *date;
+	NSString *oldDocAsXML;
+	NSString *newDocAsXML;
+
+	xmlDocPtr newEdit;
+
+	struct tm *localt;
+	time_t mytime;
+	char timestring[100];
+
+
+	/* create a date stamp (change to use cocoa)*/
+	mytime = time(NULL);
+	localt = localtime(&mytime);
+	/* XXX use standard time format including timezone */
+	strftime(timestring, 100, "%a %b %e %H:%M:%S %Z %Y", localt);
+
+	date = [NSString stringWithCString:timestring encoding:NSUTF8StringEncoding];
+  
+   /* create edit element with new details */ 
+	newEditElement = [[NSXMLElement alloc] initWithName:@"edit"];
+	[newEditElement addAttribute:[NSXMLNode attributeWithName:@"nick" stringValue:[genome objectForKey:@"nick"]]];
+	[newEditElement addAttribute:[NSXMLNode attributeWithName:@"url" stringValue:[genome objectForKey:@"url"]]];
+	[newEditElement addAttribute:[NSXMLNode attributeWithName:@"comm" stringValue:[genome objectForKey:@"comment"]]];
+	[newEditElement addAttribute:[NSXMLNode attributeWithName:@"date" stringValue:date]];
+
+	/* If there are old values add them as a child element of our edit element */
+
+	oldDocAsXML = [[genome objectForKey:@"edits"] string];
+
+	if(oldDocAsXML != nil && [oldDocAsXML compare:@""] != NSOrderedSame) {
+
+		oldDoc = [[NSXMLDocument alloc] initWithXMLString:oldDocAsXML options:NSXMLDocumentTidyXML error:&xmlError];
+		if(oldDoc == nil) {
+			NSLog(@"%@\n", [xmlError localizedDescription]);
+			[xmlError release];
+		}
+		
+		oldRootElement = [oldDoc rootElement];
+		[oldRootElement detach];
+		[newEditElement addChild:oldRootElement];
+	}
+
+
+	/* now create the libxml2 Doc */
+	newDocAsXML = [newEditElement XMLString];    
+	newEdit = xmlParseMemory([newDocAsXML cStringUsingEncoding:NSUTF8StringEncoding], [newDocAsXML cStringLength]); 
+
+	[oldDocAsXML release];
+	[oldDoc release];
+	[date release];
+
+	/* return the xml doc */   	
+	return(newEdit);
+}
 
 
 @end
