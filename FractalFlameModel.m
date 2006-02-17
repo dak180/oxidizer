@@ -28,9 +28,19 @@ int printProgress(void *filePtr, double progress) ;
 
 - init
 {
+	NSUserDefaults *defaults;
+	
     if (self = [super init]) {
 		thumbnails = [[NSMutableArray alloc] init];
+		defaults = [NSUserDefaults standardUserDefaults];
+
+		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+			NSUserName(),  @"nick",
+			@"http://oxidizer.sf.net", @"url",
+			@"Made by Oxidizer", @"comment",
+		nil]];
     }
+	
     return self;
 }
 
@@ -752,7 +762,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
-
+- (IBAction)showPreferencesWindow:(id)sender {
+	[preferencesWindow makeKeyAndOrderFront:self];
+}
 
 	
 @end

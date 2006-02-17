@@ -38,6 +38,7 @@
     IBOutlet XFormController *xForm;
     IBOutlet NSTableView *flameImages;
     IBOutlet NSWindow *progressWindow;
+    IBOutlet NSWindow *preferencesWindow;
     IBOutlet NSLevelIndicator *frameIndicator;
     IBOutlet NSLevelIndicator *progressIndicator;
 	
@@ -73,6 +74,8 @@
 - (IBAction)openFile:(id)sender;
 - (IBAction)previewCurrentFlame:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
+- (IBAction)showPreferencesWindow:(id)sender;
+
 
 - (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps;
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;

@@ -38,6 +38,7 @@
                 previewCurrentFlame = id; 
                 renderAnimation = id; 
                 renderStill = id; 
+                showPreferencesWindow = id; 
             }; 
             CLASS = FractalFlameModel; 
             LANGUAGE = ObjC; 
@@ -47,6 +48,7 @@
                 flames = FlameController; 
                 frameIndicator = NSLevelIndicator; 
                 palette = PaletteController; 
+                preferencesWindow = NSWindow; 
                 progressIndicator = NSLevelIndicator; 
                 progressWindow = NSWindow; 
                 symmetry = SymmetryController; 
