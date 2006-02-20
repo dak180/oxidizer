@@ -25,7 +25,7 @@
 #include <libxml/parser.h>
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.1 2006/02/09 13:41:08 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.2 2006/02/20 19:30:28 vargol Exp $";
 
 char *flam3_version();
 
@@ -38,7 +38,6 @@ char *flam3_version();
 typedef double flam3_palette[256][3];
 
 int flam3_get_palette(int palette_index, flam3_palette p, double hue_rotation);
-int flam3_get_npalettes();
 
 
 #define flam3_variation_random (-1)
@@ -220,7 +219,7 @@ typedef struct {
    int            verbose;
    int            bits;
    double         time;
-   int            (*progress)(void *, double);
+   int            (*progress)(void *, double, int);
    void          *progress_parameter;
 } flam3_frame;
 

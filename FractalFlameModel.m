@@ -22,7 +22,7 @@
 #import "Genome.h"
 #import "QuickTime/QuickTime.h"
 
-int printProgress(void *filePtr, double progress) ;
+int printProgress(void *nslPtr, double progress, int stage);
 
 @implementation FractalFlameModel
 
@@ -769,14 +769,15 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 @end
 
-int printProgress(void *nslPtr, double progress) {
+int printProgress(void *nslPtr, double progress, int stage) {
 	
 	NSLevelIndicator *nsl = nslPtr;
 
 	[nsl setDoubleValue:progress * 100.0];
 	[nsl displayIfNeeded];
-		
-	fprintf(stderr, "Progress value: %f\n", progress); 
+
+//	fprintf(stderr, "Progress value: %f\n", progress); 
+//	fprintf(stderr, "Stage: %s\n", stage ? "filtering" : "chaos"); 
 	
 	return 0;
 }

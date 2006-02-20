@@ -54,7 +54,7 @@
 	double pixel_aspect;
 	int channels;
 	int nstrips;
-	
+			
 	/* animation variables */
 	int first_frame;
 	int last_frame;

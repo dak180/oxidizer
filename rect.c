@@ -466,9 +466,16 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
          /* Sub-batch Loop */
          for (sub_batch = 0; sub_batch < batch_size; sub_batch += SUB_BATCH_SIZE) {
 
-            if (spec->progress&&!(sbc++&7))
-               if ((*spec->progress)(spec->progress_parameter, 0.5*sub_batch/(double)batch_size))
+	     if (spec->progress&&!(sbc++&7)) {
+		 double sb_fract = sub_batch / (double)batch_size;
+		 double ts_fract = temporal_sample_num / (double)ntemporal_samples;
+		 double b_fract = batch_num / (double)nbatches;
+		 double fract = (b_fract +
+				 ts_fract / (double)nbatches +
+				 sb_fract / (double)(nbatches * ntemporal_samples));
+		if ((*spec->progress)(spec->progress_parameter, fract, 0))
                   return;
+	     }
 
             if (verbose && time(NULL) != progress_timer) {
                double percent = 100.0 *
@@ -792,8 +799,9 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
       y = de_offset;
       
       for (j = 0; j < image_height; j++) {
-			if (spec->progress && !(j&15))
-				if ((*spec->progress)(spec->progress_parameter, 0.5+0.5*(j)/(double)image_height))
+	  if (spec->progress && !(j&15))
+	      if ((*spec->progress)(spec->progress_parameter,
+				    j/(double)image_height, 1))
             return;
          x = de_offset;
          for (i = 0; i < image_width; i++) {

@@ -605,7 +605,6 @@ return TRUE;
    
 	NSXMLElement *newEditElement;
 	NSXMLElement *oldRootElement;
-	NSXMLDocument *oldDoc;
 	NSError *xmlError;
 	NSString *date;
 	NSString *oldDocAsXML;
@@ -616,6 +615,8 @@ return TRUE;
 	struct tm *localt;
 	time_t mytime;
 	char timestring[100];
+	
+	NSXMLDocument *oldDoc = nil;
 
 
 	/* create a date stamp (change to use cocoa)*/
@@ -655,8 +656,10 @@ return TRUE;
 	newDocAsXML = [newEditElement XMLString];    
 	newEdit = xmlParseMemory([newDocAsXML cStringUsingEncoding:NSUTF8StringEncoding], [newDocAsXML cStringLength]); 
 
-	[oldDocAsXML release];
-	[oldDoc release];
+	if(oldDoc != nil) {
+		[oldDocAsXML release];
+		[oldDoc release];
+	}
 	[date release];
 
 	/* return the xml doc */   	
