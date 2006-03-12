@@ -677,7 +677,6 @@
 	newDocAsXML = [newEditElement XMLString];    
 	newEdit = xmlParseMemory([newDocAsXML cStringUsingEncoding:NSUTF8StringEncoding], [newDocAsXML cStringLength]); 
 
-	[oldDocAsXML release];
 	[oldDoc release];
 	[date release];
 
