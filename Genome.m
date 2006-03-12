@@ -84,7 +84,11 @@
 		NSAttributedString *edits = [[NSAttributedString alloc] initWithString:[NSString stringWithCString:doc encoding:NSUTF8StringEncoding]];		
 		[genomeEntity setValue:edits forKey:@"edits"];
 		[edits release];
+	} else {
+		NSAttributedString *edits = [[NSAttributedString alloc] initWithString:@""];		
+		[genomeEntity setValue:edits forKey:@"edits"];
 	}
+	
 
 	[genomeEntity setValue:@"Vargol" forKey:@"nick"];
 	[genomeEntity setValue:@"http://oxidizer.sf.net" forKey:@"url"];
@@ -627,7 +631,7 @@
    
 	NSXMLElement *newEditElement;
 	NSXMLElement *oldRootElement;
-	NSXMLDocument *oldDoc;
+	NSXMLDocument *oldDoc = nil;
 	NSError *xmlError;
 	NSString *date;
 	NSString *oldDocAsXML;
@@ -657,7 +661,9 @@
 
 	/* If there are old values add them as a child element of our edit element */
 
-	oldDocAsXML = [[genome valueForKey:@"edits"] string];
+	NSAttributedString *xmlValue = [genome valueForKey:@"edits"];
+
+	oldDocAsXML = [xmlValue string];
 
 	if(oldDocAsXML != nil && [oldDocAsXML compare:@""] != NSOrderedSame) {
 
@@ -677,7 +683,9 @@
 	newDocAsXML = [newEditElement XMLString];    
 	newEdit = xmlParseMemory([newDocAsXML cStringUsingEncoding:NSUTF8StringEncoding], [newDocAsXML cStringLength]); 
 
-	[oldDoc release];
+	if(oldDoc != nil) {
+		[oldDoc release];
+	}
 	[date release];
 
 	/* return the xml doc */   	
