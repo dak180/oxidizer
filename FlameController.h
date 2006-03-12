@@ -22,7 +22,6 @@
 #import <Cocoa/Cocoa.h>
 #import "flam3.h"
 #import "PaletteController.h"
-#import "XFormController.h"
 
 
 @interface FlameController : NSObject 
@@ -33,40 +32,25 @@
     IBOutlet NSTableView *flameValues;
 	IBOutlet PaletteController *paletteController;
     IBOutlet NSImageView *paletteWithHue;
-    IBOutlet XFormController *xFormController;
-	
-	 NSMutableArray *_flameRecords;
-     NSMutableArray *_xforms;
-	 NSMutableDictionary *_currentFlame;
+    IBOutlet NSArrayController *genomeController;
 
 	 NSBitmapImageRep *_paletteWithHueRep;
-	 
-	 int _currentFlameIndex;
 
 }
 
 
 - (IBAction)showXFormWindow:(id)sender;
 - (IBAction)showFlameWindow:(id)sender;
-- (IBAction)setCurrentFlame:(id )sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
-- (IBAction)test:(id )sender;
 
 
 - (void)setValue:(id)value forKey:(NSString *)key;
 - (void)setValue:(id)value forKeyPath:(NSString *)keyPath;
 
-
-- (flam3_genome *)getSelectedFlame;
-
 -(void)removeFlameData;
--(void)addFlameData:(NSImage *)flameImage genome:(flam3_genome *)genome atIndex:(int )index;
+-(void)addFlameData:(NSImage *)flameImage genome:(flam3_genome *)genome atIndex:(int )index inContext:(NSManagedObjectContext *)moc;
 -(void)setPreviewForCurrentFlame:(NSImage *)preview;
--(void)setCurrentFlameForIndex:(int )newIndex;
--(NSArray *)getFlames;
+- (NSManagedObject *)getSelectedGenome;
 
-
-- (void) setHue:(double)newHue;
-- (double) hue;
 
 @end

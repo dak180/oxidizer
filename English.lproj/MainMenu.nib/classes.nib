@@ -13,10 +13,8 @@
         {
             ACTIONS = {
                 changePaletteAndHidePaletteWindow = id; 
-                setCurrentFlame = id; 
                 showFlameWindow = id; 
                 showXFormWindow = id; 
-                test = id; 
             }; 
             CLASS = FlameController; 
             LANGUAGE = ObjC; 
@@ -24,9 +22,9 @@
                 flameValues = NSTableView; 
                 flameWindow = NSWindow; 
                 flames = NSTableView; 
+                genomeController = NSArrayController; 
                 paletteController = PaletteController; 
                 paletteWithHue = NSImageView; 
-                xFormController = XFormController; 
                 xformWindow = NSWindow; 
             }; 
             SUPERCLASS = NSObject; 
@@ -43,10 +41,12 @@
             CLASS = FractalFlameModel; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                coordinator = NSPersistentStoreCoordinator; 
                 environment = EnvironmentController; 
                 flameImages = NSTableView; 
                 flames = FlameController; 
                 frameIndicator = NSLevelIndicator; 
+                moc = NSManagedObjectContext; 
                 palette = PaletteController; 
                 preferencesWindow = NSWindow; 
                 progressIndicator = NSLevelIndicator; 

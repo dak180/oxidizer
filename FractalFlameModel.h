@@ -22,8 +22,6 @@
 #import "EnvironmentController.h"
 #import "FlameController.h"
 #import "PaletteController.h"
-#import "SymmetryController.h"
-#import "XFormController.h"
 #import "QTKit/QTKit.h"
 
 #import "flam3.h"
@@ -34,16 +32,17 @@
     IBOutlet EnvironmentController *environment;
     IBOutlet FlameController *flames;
     IBOutlet PaletteController *palette;
-    IBOutlet SymmetryController *symmetry;
-    IBOutlet XFormController *xForm;
     IBOutlet NSTableView *flameImages;
     IBOutlet NSWindow *progressWindow;
     IBOutlet NSWindow *preferencesWindow;
     IBOutlet NSLevelIndicator *frameIndicator;
     IBOutlet NSLevelIndicator *progressIndicator;
-	
+    
+	NSManagedObjectContext *moc;
 
-	NSMutableArray *thumbnails;
+	NSArray *genomeSortDescriptors;
+	NSArray *xformSortDescriptors;
+	NSArray *variationSortDescriptors;
 	
 	int verbose;
 	int bits;
@@ -81,9 +80,11 @@
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
 - (BOOL)saveToFile:(NSBitmapImageRep *)rep;
 - (BOOL)EnvironmentInit:(flam3_frame *)f;
-- (void)rebuildflame:(flam3_genome *)cps count:(int)ncps;
+
 - (void)renderFlames:(flam3_genome *)cps numberOfFlames:(int)ncps;
- - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps;
- - (NSBitmapImageRep *)renderThumbnail:(flam3_genome *)cps; 
--(QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
+- (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps;
+- (NSBitmapImageRep *)renderThumbnail:(flam3_genome *)cps; 
+- (QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
+
+- (void) deleteOldGenomes;
 @end

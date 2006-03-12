@@ -28,15 +28,6 @@
     
 	
 	if (self = [super init]) {
-		_flameRecords = [[NSMutableArray alloc] init];
-		_currentFlame = [[NSMutableDictionary alloc] init];
-		
-		/* we need a value for use_palette due to the way it's been used */
-		[_currentFlame setObject:[NSNumber numberWithBool:YES] forKey:@"use_palette"];
-		  
-		_xforms = [[NSMutableArray alloc] init];
-		
-
 		
 		_paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 															pixelsWide:256
@@ -58,53 +49,19 @@
 }
 
 -(void)removeFlameData {
-	[_flameRecords removeAllObjects];
+
+//	[_flameRecords removeAllObjects];
+	
 }
 
--(NSArray *)getFlames {
 
-	id key;
-	NSMutableDictionary *tempFlame;
-	NSMutableDictionary *tempFlameValues;
+-(void)addFlameData:(NSImage *)flameImage genome:(flam3_genome *)genome atIndex:(int )index inContext:(NSManagedObjectContext *)moc {
 
-	NSEnumerator *enumerator;
 
-	/* check update flame array is upto date first*/
-	tempFlame = [_flameRecords objectAtIndex:_currentFlameIndex];
-	tempFlameValues = [tempFlame objectForKey:@"dictionary"];
+	NSManagedObject *test = [Genome createGenomeEntityFrom:genome withImage:flameImage inContext:moc];
 	
-	enumerator = [tempFlameValues keyEnumerator];
-	
-	while ((key = [enumerator nextObject])) {
-		[tempFlameValues setObject:[_currentFlame objectForKey:key] forKey:key];
-	}
-		
-
-	return _flameRecords;
-}
-
--(void)addFlameData:(NSImage *)flameImage genome:(flam3_genome *)genome atIndex:(int )index {
-
-	NSMutableDictionary *record; 
-	NSMutableDictionary *genomeDictionary; 
-
-	record = [[NSMutableDictionary alloc] init];
-
-
-	genomeDictionary = [Genome makeDictionaryFrom:genome withImage:flameImage];
-
-	
-
-	[record setObject:flameImage forKey:@"flame"];
-	[record setObject:genomeDictionary forKey:@"dictionary"];
-
-	[_flameRecords insertObject:record atIndex:index];
-	
-	[record release];
-	
-	[flames reloadData];
-	[flameValues reloadData];
-	NSLog(@"dictionary references %ld\n", [genomeDictionary retainCount]);
+//	[flames reloadData];
+//	[flameValues reloadData];
 	
 	
 }
@@ -116,29 +73,13 @@
 
 }
 
-- (IBAction)test:(id)sender
-{
 
-	 flam3_genome genome;	
-
-	 NSLog(@"time: %@",[_currentFlame objectForKey:@"time"]);
-	 NSLog(@"time: %@",_currentFlame);
-
-
-	[Genome populateCGenome:&genome From:_currentFlame];
-
-	 NSLog(@"time: %f", genome.hue_rotation);
-	 
- 
-
-}
 
 
 - (void)awakeFromNib
 {
    
    NSImage *image;
-   _flameRecords = [[NSMutableArray alloc] init];
     [PaletteController fillBitmapRep:_paletteWithHueRep withPalette:0 usingHue:0.0];
 	image = [[NSImage alloc] init];
 	[image addRepresentation:_paletteWithHueRep];
@@ -153,91 +94,9 @@
 
 }
 
-- (void )setCurrentFlameForIndex:(int )newIndex {
-
-	id key;
-	NSMutableDictionary *tempFlame;
-	NSMutableDictionary *tempFlameValues;
-
-	NSEnumerator *enumerator;
-	int paletteNumber;
-
-	if(newIndex != _currentFlameIndex) {
-		
-		
-		tempFlame = [_flameRecords objectAtIndex:_currentFlameIndex];
-		tempFlameValues = [tempFlame objectForKey:@"dictionary"];
-		
-		enumerator = [tempFlameValues keyEnumerator];
-		
-		while ((key = [enumerator nextObject])) {
-			[tempFlameValues setObject:[_currentFlame objectForKey:key] forKey:key];
-			[self didChangeValueForKey:key];
-		}
-		
-	}
-
-   tempFlame = [_flameRecords objectAtIndex:newIndex];
-   tempFlameValues = [tempFlame objectForKey:@"dictionary"];
-
-	enumerator = [tempFlameValues keyEnumerator];
-	
-	while ((key = [enumerator nextObject])) {
-		// code that uses the returned key  
-		[self willChangeValueForKey:key];
-	}
-		
-
-	enumerator = [tempFlameValues keyEnumerator];
-
-	while ((key = [enumerator nextObject])) {
-		[_currentFlame setObject:[tempFlameValues objectForKey:key] forKey:key];
-		[_currentFlame setObject:[[tempFlameValues objectForKey:key] copy] forKey:key];
-		[self didChangeValueForKey:key];
-	}
-	
-	paletteNumber = [[_currentFlame objectForKey:@"palette"] intValue];
-	
-	if(paletteNumber >= 0) {
-	
-		[paletteController setPalette:paletteNumber colourArray:nil usePalette:YES];
-
-		[PaletteController fillBitmapRep:_paletteWithHueRep 
-						   withPalette:paletteNumber 
-						   usingHue:[[_currentFlame objectForKey:@"hue"] doubleValue]]; 
-	} else {
-	 /* use colour array to fill bitmap */
-		[PaletteController fillBitmapRep:_paletteWithHueRep withColours:[_currentFlame objectForKey:@"cmap"] forHeight:10];
-	}	
-				   
-	[paletteWithHue setNeedsDisplay:YES];
-					   
-	_currentFlameIndex = newIndex;
-	
-	[xFormController setXformsArray:[_currentFlame objectForKey:@"xforms"]];
-	
-} 
-
-- (IBAction) setCurrentFlame:(id )sender {
-
-
-	[self setCurrentFlameForIndex:[sender selectedRow]]; 
-
-}
-
 
 
 -(void) cancelChanges:(id)sender {
-
-
-
-	NSMutableDictionary *tempFlame;
-	NSMutableDictionary *tempFlameValues;
-
-   tempFlame = [_flameRecords objectAtIndex:_currentFlameIndex];
-   tempFlameValues = [tempFlame objectForKey:@"dictionary"];
-
-	[tempFlameValues setDictionary:_currentFlame];
 
 }
 
@@ -255,22 +114,16 @@
 
 }
 
-- (flam3_genome *)getSelectedFlame {
 
-
-	flam3_genome *flame = (flam3_genome *)malloc(sizeof(flam3_genome));
-	[Genome populateCGenome:flame From:_currentFlame];
-	
-	return flame;
-
-}
 
 
 - (void)setPreviewForCurrentFlame:(NSImage *)preview {
 
-	[self willChangeValueForKey:@"image"];
-	[_currentFlame setObject:preview forKey:@"image"];
-	[self didChangeValueForKey:@"image"];
+	NSManagedObject *genome = [self getSelectedGenome];
+
+//	[genome willChangeValueForKey:@"image"];
+	[genome setValue:preview forKey:@"image"];
+//	[genome didChangeValueForKey:@"image"];
 
 }
 
@@ -278,35 +131,20 @@
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender {
 
 
+	NSManagedObject *genome = [self getSelectedGenome];
 	int paletteNumber = [paletteController changePaletteAndHidePaletteWindow];
 	
-	[PaletteController fillBitmapRep:_paletteWithHueRep 
-	                   withPalette:paletteNumber 
-					   usingHue:[[_currentFlame objectForKey:@"hue"] doubleValue]];
-
-	[_currentFlame setObject:[NSNumber numberWithInt:paletteNumber]  forKey:@"palette"];
+	[genome setValue:[NSNumber numberWithInt:paletteNumber]  forKey:@"palette"];
 
 	[paletteWithHue setNeedsDisplay:YES];
 }
 
 
-- (void) setHue:(double)newHue {
 
-	if([[_currentFlame objectForKey:@"use_palette"] boolValue]) {
+- (NSManagedObject *)getSelectedGenome {
 
-		[_currentFlame setObject:[NSNumber numberWithDouble:newHue]  forKey:@"hue"];
-			[PaletteController fillBitmapRep:_paletteWithHueRep 
-						   withPalette:[[_currentFlame objectForKey:@"palette"] intValue] 
-						   usingHue:newHue]; 
-						   
-		[paletteWithHue setNeedsDisplay:YES];
-	}
-
-}
-
-- (double) hue {
-
-	return [[_currentFlame objectForKey:@"hue"] doubleValue];
+	NSArray *selectedGenomes = [genomeController selectedObjects];
+	return [selectedGenomes objectAtIndex:0];
 
 }
 

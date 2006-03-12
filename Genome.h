@@ -23,20 +23,28 @@
 #import "FlameController.h"
 #import "flam3.h"
 
+//NSManagedObjectContext *managedObjectContext();
+
+
 @interface Genome : NSObject
 {
 }
-
-+ (void)populateCGenome:(flam3_genome *)newGenome From:(NSMutableDictionary *)genomeDictionary;
-+ (NSMutableDictionary *)makeDictionaryFrom:(flam3_genome *)genome withImage:(NSImage *)image;
-+ (void )poulateXForm:(flam3_xform *)xform FromDictionary:(NSMutableDictionary *)xformDictionary;
-+ (flam3_genome *)createAllCGenomes:(NSArray *)genome;
-+ (NSMutableArray *)createXformArrayFromCGenome:(flam3_genome *)genome;
-+ (BOOL)testXMLFrame:(char *)filename againstOxizdizerFrame:(flam3_frame *)new; 
-+ (BOOL)testCGenome:(flam3_genome *)old againstOxizdizerCGenome:(flam3_genome *)new;
-+ (xmlDocPtr) createCEditDocFromDictionary:(NSDictionary *)genome;
-
+ 
 + (int) getIntSymmetry:(NSString *)value;
 + (NSString *) getStringSymmetry:(int)value;
+
+/* Core data code */
++ (NSManagedObject *)createGenomeEntityFrom:(flam3_genome *)genome withImage:(NSImage *)image inContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createXFormEntitySetFromCGenome:(flam3_genome *)genome inContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createCMapEntitySetFromCGenome:(flam3_genome *)genome inContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createVariationsEntitySetFromCXForm:(flam3_xform *)xform inContext:(NSManagedObjectContext *)moc;
+
++ (flam3_genome *)populateAllCGenomesFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc;
++ (void )populateCGenome:(flam3_genome *)newGenome FromEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc;
++ (void )poulateXForm:(flam3_xform *)xform FromEntity:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
++ (void )poulateVariations:(flam3_xform *)xform FromEntityArray:(NSArray *)xformEntity;
++ (void )populateCMap:(flam3_palette )cmap FromEntityArray:(NSArray *)cmaps;
++ (xmlDocPtr) populateCEditDocFromEntity:(NSManagedObject *)genome;
+
 
 @end
