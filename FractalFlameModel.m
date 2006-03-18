@@ -451,15 +451,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	progress = 0.0;
 
-	[progressIndicator setDoubleValue:0.0];	
-	[frameIndicator setMaxValue:1];
-	[progressWindow setTitle:@"Rendering Preview..."];
-	
 	[progressWindow makeKeyAndOrderFront:self];
 	
 	flameRep = [self renderSingleFrame:&frame withGemone:cps];
-
-	[progressWindow setIsVisible:FALSE];
 	
 	cps->height = realHeight;
 	cps->width = realWidth;
@@ -671,7 +665,13 @@ int calc_nstrips(flam3_frame *spec) {
 	
 	[Genome populateCGenome:flame FromEntity:[flames getSelectedGenome] fromContext:moc];
 
+	[progressIndicator setDoubleValue:0.0];	
+	[frameIndicator setMaxValue:1];
+	[progressWindow setTitle:@"Rendering Preview..."];
+	
 	flameRep = [self renderThumbnail:flame];
+	
+	[progressWindow setIsVisible:NO];
 
 	flameImage = [[NSImage alloc] init];
 	[flameImage addRepresentation:flameRep];
