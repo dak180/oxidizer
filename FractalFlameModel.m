@@ -73,7 +73,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		}
 		
 		sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
-		genomeSortDescriptors = [NSArray arrayWithObject: sort];		
+		genomeSortDescriptors = [NSArray arrayWithObject: sort];
+		[genomeSortDescriptors retain];		
 		[sort  release]; 
 		
 		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"variation_index" ascending:YES];
@@ -449,9 +450,16 @@ int printProgress(void *nslPtr, double progress, int stage);
 	frame.ngenomes = 1;
 	
 	progress = 0.0;
-	[progressIndicator setDoubleValue:0.0];
+
+	[progressIndicator setDoubleValue:0.0];	
+	[frameIndicator setMaxValue:1];
+	[progressWindow setTitle:@"Rendering Preview..."];
+	
+	[progressWindow makeKeyAndOrderFront:self];
 	
 	flameRep = [self renderSingleFrame:&frame withGemone:cps];
+
+	[progressWindow setIsVisible:FALSE];
 	
 	cps->height = realHeight;
 	cps->width = realWidth;
@@ -662,8 +670,7 @@ int calc_nstrips(flam3_frame *spec) {
 	flam3_genome *flame = (flam3_genome *)malloc(sizeof(flam3_genome));
 	
 	[Genome populateCGenome:flame FromEntity:[flames getSelectedGenome] fromContext:moc];
-//	flam3_add_symmetry(flame, [symmetry getIntSymmetry]);
-	flam3_print(stderr, flame, NULL);
+
 	flameRep = [self renderThumbnail:flame];
 
 	flameImage = [[NSImage alloc] init];

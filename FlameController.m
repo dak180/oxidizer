@@ -69,7 +69,54 @@
 - (IBAction)showXFormWindow:(id)sender
 {
 
- [xformWindow makeKeyAndOrderFront:self];
+	NSManagedObject *xformEntity;
+	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
+	NSEnumerator *enumerator;
+	NSArray *objects;
+	int index;
+	// NSManagedObject *selectedGenome;
+
+	switch([segments selectedSegment]) {
+	case 0:
+		xformEntity = [NSEntityDescription insertNewObjectForEntityForName:@"XForm" inManagedObjectContext:[xformController managedObjectContext]];
+		[xformEntity setValue:[Genome createDefaultVariationsEntitySetInContext:[xformController managedObjectContext]] forKey:@"variations"];
+
+		index = [xformController selectionIndex];
+		if(index == NSNotFound) {
+			[xformController insert:xformEntity];
+		} else {
+			[xformController insertObject:xformEntity atArrangedObjectIndex:index+1];
+			objects = [xformController arrangedObjects];
+			enumerator = [objects objectEnumerator];
+			index = 0;
+			while (xformEntity = [enumerator nextObject]) {
+				[xformEntity setValue:[NSNumber numberWithInt:index] forKey:@"order"];
+				index++;
+			}
+		} 
+		break;
+	case 1:
+	//		selectedGenome = [[genomeController selectedObjects] objectAtIndex:0];
+		[xformWindow makeKeyAndOrderFront:self];
+		
+		break;
+	case 2:
+		[xformController remove:sender];
+		objects = [xformController arrangedObjects];
+		if([objects count] != 0) {
+			enumerator = [objects objectEnumerator];
+			index = 0;
+			while (xformEntity = [enumerator nextObject]) {
+				[xformEntity setValue:[NSNumber numberWithInt:index] forKey:@"order"];
+				index++;
+			}
+		}
+		break;
+	default:
+		break;
+	}	
+
+
 
 }
 
@@ -90,7 +137,59 @@
 - (IBAction)showFlameWindow:(id)sender
 {
 
- [flameWindow makeKeyAndOrderFront:self];
+	unsigned int selectedIndex, time, time2, newIndex;
+	NSArray *arrangedObjects;
+
+	 NSSegmentedControl *segments = (NSSegmentedControl *)sender;
+	 switch([segments selectedSegment]) {
+		case 0:
+			selectedIndex = [genomeController selectionIndex];
+			arrangedObjects = [genomeController arrangedObjects];
+			
+			
+			NSManagedObjectContext *moc = 			[genomeController managedObjectContext];
+			NSManagedObject *genomeEntity = [Genome createDefaultGenomeEntityFromInContext:moc];
+			[genomeEntity retain];
+			
+			switch([arrangedObjects count]) {
+			
+				case 0:
+					[genomeEntity setValue:[NSNumber numberWithInt:0] forKey:@"time"];
+					newIndex = 0;
+					break;
+				case 1:
+					time = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
+					[genomeEntity setValue:[NSNumber numberWithInt:time+50] forKey:@"time"];
+					newIndex = 1;
+					break;
+				default:
+					newIndex = selectedIndex + 1;
+					time  = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
+					if([arrangedObjects count] == selectedIndex + 1) {
+						// last object is selected
+						time2 = time + 100;
+					} else {
+						time2 = [[[arrangedObjects objectAtIndex:newIndex] valueForKey:@"time"] intValue];
+					}
+					[genomeEntity setValue:[NSNumber numberWithInt:time + ((time2 - time) / 2)] forKey:@"time"];
+					break;
+			
+			}  	
+			[genomeController insertObject:genomeEntity atArrangedObjectIndex:newIndex];
+			[genomeEntity release];
+
+			break;
+		case 1:
+			[flameWindow makeKeyAndOrderFront:self];
+			break;
+		case 2:
+			[genomeController remove:sender];
+			break;
+		default:
+			break;
+	 }	
+
+	[paletteWithHue setNeedsDisplay:YES];
 
 }
 
@@ -147,7 +246,6 @@
 	return [selectedGenomes objectAtIndex:0];
 
 }
-
 
 
 @end

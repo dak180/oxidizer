@@ -39,6 +39,12 @@
 + (NSMutableSet *)createCMapEntitySetFromCGenome:(flam3_genome *)genome inContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createVariationsEntitySetFromCXForm:(flam3_xform *)xform inContext:(NSManagedObjectContext *)moc;
 
+/* create default entities */
++ (NSManagedObject *)createDefaultGenomeEntityFromInContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc; 
++ (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc; 
+
+
 + (flam3_genome *)populateAllCGenomesFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc;
 + (void )populateCGenome:(flam3_genome *)newGenome FromEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc;
 + (void )poulateXForm:(flam3_xform *)xform FromEntity:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;

@@ -19,6 +19,7 @@
 #import <libxml/parser.h>
 #import "Genome.h"
 #import "GenomeManagedObject.h"
+#import "PaletteController.h"
 
 @implementation Genome
 
@@ -33,7 +34,6 @@
 	/* create a genome entity */
 	genomeEntity = [NSEntityDescription insertNewObjectForEntityForName:@"Genome" inManagedObjectContext:moc];
 
-	[genomeEntity setValue:[NSNumber numberWithInt:genome->genome_index]  forKey:@"genome_index"];
 	if(genome->flame_name[0] != '\0') {
 		[genomeEntity setValue:[NSString stringWithCString:genome->flame_name encoding:NSUTF8StringEncoding]  forKey:@"name"];
 	} else {
@@ -412,14 +412,28 @@
 	NSFetchRequest *fetch;
 	NSPredicate *predicate;						 
 	NSSortDescriptor *sort;
+	NSString *tempString;
 		
 	float red, green, blue;
 	int i;
 
-	strncpy(newGenome->flame_name, [[genomeEntity valueForKey:@"name"] cStringUsingEncoding:NSUTF8StringEncoding], flame_name_len);
+	tempString = [genomeEntity valueForKey:@"name"];
+	if(tempString != nil) {
+		strncpy(newGenome->flame_name, [tempString cStringUsingEncoding:NSUTF8StringEncoding], flame_name_len);
+	} else {
+		newGenome->flame_name[0] = '\0'; 
+	}
+
 	newGenome->flame_name[flame_name_len + 1] = '\0';
-	strncpy(newGenome->parent_fname, [[genomeEntity valueForKey:@"parent"] cStringUsingEncoding:NSUTF8StringEncoding], flame_name_len);
+
+	tempString = [genomeEntity valueForKey:@"parent"];
+	if(tempString != nil) {
+		strncpy(newGenome->parent_fname, [tempString cStringUsingEncoding:NSUTF8StringEncoding], flame_name_len);
+	} else {
+		newGenome->flame_name[0] = '\0'; 
+	}
 	newGenome->parent_fname[flame_name_len + 1] = '\0';
+
 	newGenome->time = [[genomeEntity valueForKey:@"time"] doubleValue];
 	newGenome->palette_index = [[genomeEntity valueForKey:@"palette"] intValue];
 	newGenome->height = [[genomeEntity valueForKey:@"height"] intValue];
@@ -742,6 +756,160 @@
 			break;
 	}
 }
+
++ (NSManagedObject *)createDefaultGenomeEntityFromInContext:(NSManagedObjectContext *)moc {
+
+		NSManagedObject *genomeEntity = [NSEntityDescription insertNewObjectForEntityForName:@"Genome" inManagedObjectContext:moc];
+		
+		NSImage *paletteImage = [[NSImage alloc] init];
+		NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+																pixelsWide:256
+																pixelsHigh:10
+															 bitsPerSample:8
+														   samplesPerPixel:3
+																  hasAlpha:NO 
+																  isPlanar:NO
+															colorSpaceName:NSDeviceRGBColorSpace
+															  bitmapFormat:0
+															   bytesPerRow:3*256
+															  bitsPerPixel:24]; 
+		[PaletteController fillBitmapRep:paletteWithHueRep withPalette:1 usingHue:0.0];
+		[paletteImage addRepresentation:paletteWithHueRep];
+
+		[genomeEntity setValue:paletteImage forKey: @"palette_image"];
+		
+			
+		[paletteWithHueRep release];
+		[paletteImage release];
+
+		[genomeEntity setValue:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0] forKey: @"background"];
+
+		[genomeEntity setValue:[Genome createDefaultXFormEntitySetInContext:moc] forKey: @"xforms"];
+		
+		return genomeEntity;
+
+}
+
+
++ (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc {
+
+			NSManagedObject *xformEntity = [NSEntityDescription insertNewObjectForEntityForName:@"XForm" inManagedObjectContext:moc];
+			[xformEntity setValue:[Genome createDefaultVariationsEntitySetInContext:moc] forKey:@"variations"];
+			return [NSMutableSet setWithObject:xformEntity];
+		
+}
+ 
++ (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc {
+
+	int j;
+
+	NSManagedObject *variation;
+	NSMutableSet *variations = [[NSMutableSet alloc] initWithCapacity:flam3_nvariations];
+
+	for(j=0; j<flam3_nvariations; j++) {
+		variation = [NSEntityDescription insertNewObjectForEntityForName:@"Variations" inManagedObjectContext:moc];
+		
+		[variation setValue:[NSString stringWithCString:flam3_variation_names[j] encoding:NSUTF8StringEncoding] forKey:@"name"]; 
+		[variation setValue:[NSNumber numberWithInt:j] forKey:@"variation_index"];
+
+		if(j == 0) {
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"in_use"];
+			[variation setValue:[NSNumber numberWithDouble:1.0] forKey:@"weight"];					
+		} else {
+			[variation setValue:[NSNumber numberWithBool:NO] forKey:@"in_use"];
+			[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"weight"];					
+
+		}
+
+		[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_1"];
+		[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_2"];
+		[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_3"];
+		[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_4"];
+
+		switch(j) {
+			case 23:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+
+
+				[variation setValue:@"Blob High:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Blob Low:" forKey:@"parameter_2_name"];
+				[variation setValue:@"Blob Wave:" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+				break;
+			case 24:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_4"];
+
+
+				[variation setValue:@"PDJ A:" forKey:@"parameter_1_name"];
+				[variation setValue:@"PDJ B:" forKey:@"parameter_2_name"];
+				[variation setValue:@"PDJ C:" forKey:@"parameter_3_name"];
+				[variation setValue:@"PDJ D:" forKey:@"parameter_4_name"];
+
+				break;
+			case 25:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+				[variation setValue:@"Fan2 x:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Fan2 y:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+
+				break;				
+			case 26:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+
+				[variation setValue:@"Rings2:" forKey:@"parameter_1_name"];
+				[variation setValue:@"parameter 2" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+
+				break;
+			case 30:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+				[variation setValue:@"Angle:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Distance:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+
+				break;
+			default:
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+				[variation setValue:@"parameter 1" forKey:@"parameter_1_name"];
+				[variation setValue:@"parameter 2" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+				break;
+		}
+		[variations addObject:variation];
+		[variation release];
+
+	}
+
+	[variations autorelease];
+	return variations;
+} 
 
 
 @end

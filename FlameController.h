@@ -33,6 +33,7 @@
 	IBOutlet PaletteController *paletteController;
     IBOutlet NSImageView *paletteWithHue;
     IBOutlet NSArrayController *genomeController;
+    IBOutlet NSArrayController *xformController;
 
 	 NSBitmapImageRep *_paletteWithHueRep;
 
@@ -42,6 +43,7 @@
 - (IBAction)showXFormWindow:(id)sender;
 - (IBAction)showFlameWindow:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
+- (IBAction)showFlameWindow:(id)sender;
 
 
 - (void)setValue:(id)value forKey:(NSString *)key;
