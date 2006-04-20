@@ -435,7 +435,6 @@
 	newGenome->parent_fname[flame_name_len + 1] = '\0';
 
 	newGenome->time = [[genomeEntity valueForKey:@"time"] doubleValue];
-	newGenome->palette_index = [[genomeEntity valueForKey:@"palette"] intValue];
 	newGenome->height = [[genomeEntity valueForKey:@"height"] intValue];
 	newGenome->width = [[genomeEntity valueForKey:@"width"] intValue];
 	newGenome->center[0] = [[genomeEntity valueForKey:@"centre_x"] doubleValue];
@@ -467,8 +466,8 @@
 	newGenome->symmetry = [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]];
 	newGenome->edits = [Genome populateCEditDocFromEntity:genomeEntity];
 
-	if(newGenome->palette_index < 0) {
-	
+	if([[genomeEntity valueForKey:@"use_palette"] boolValue] == FALSE) {
+		newGenome->palette_index = -1;
 		predicate = [NSPredicate predicateWithFormat:@"parent_genome == %@", genomeEntity];
 							 
 		sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
@@ -483,8 +482,16 @@
 		[sort release];
 		[fetch release];	
 		/* use the cmap */
-		[Genome populateCMap:newGenome->palette FromEntityArray:cmaps];
+		if([cmaps count] < 255) {
+			NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
+			[newCmaps retain];
+			[Genome populateCMap:newGenome->palette FromEntityArray:newCmaps];
+			[newCmaps release];
+		} else {
+			[Genome populateCMap:newGenome->palette FromEntityArray:cmaps];
+		}
 	} else {
+		newGenome->palette_index = [[genomeEntity valueForKey:@"palette"] intValue];
 		flam3_get_palette(newGenome->palette_index, newGenome->palette, newGenome->hue_rotation);
 	}
 	

@@ -12,18 +12,26 @@
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
+                changeColourMap = id; 
+                changeColourMapAndHideWindow = id; 
                 changePaletteAndHidePaletteWindow = id; 
                 showFlameWindow = id; 
+                showPaletteList = id; 
                 showXFormWindow = id; 
             }; 
             CLASS = FlameController; 
             LANGUAGE = ObjC; 
             OUTLETS = {
+                cmapController = NSArrayController; 
+                cmapWindow = NSWindow; 
+                colourWell = NSColorWell; 
+                colourWithHue = NSImageView; 
                 flameValues = NSTableView; 
                 flameWindow = NSWindow; 
                 flames = NSTableView; 
                 genomeController = NSArrayController; 
                 paletteController = PaletteController; 
+                paletteWindow = NSWindow; 
                 paletteWithHue = NSImageView; 
                 xformController = NSArrayController; 
                 xformWindow = NSWindow; 
@@ -42,18 +50,15 @@
             CLASS = FractalFlameModel; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                coordinator = NSPersistentStoreCoordinator; 
                 environment = EnvironmentController; 
                 flameImages = NSTableView; 
                 flames = FlameController; 
                 frameIndicator = NSLevelIndicator; 
-                moc = NSManagedObjectContext; 
                 palette = PaletteController; 
                 preferencesWindow = NSWindow; 
                 progressIndicator = NSLevelIndicator; 
                 progressWindow = NSWindow; 
-                symmetry = SymmetryController; 
-                xForm = XFormController; 
+                qtController = QuickTimeController; 
             }; 
             SUPERCLASS = NSObject; 
         }, 
@@ -80,6 +85,20 @@
                 pickPalette = NSButton; 
                 textField = NSTextField; 
                 usePalette = NSButton; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {getImageExportSettings = id; getMovieExportSettings = id; }; 
+            CLASS = QuickTimeController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                imageComponents = NSMutableArray; 
+                imageExportController = NSArrayController; 
+                imageExportPanel = NSView; 
+                movieComponents = NSMutableArray; 
+                movieExportController = NSArrayController; 
+                movieExportPanel = NSView; 
             }; 
             SUPERCLASS = NSObject; 
         }, 

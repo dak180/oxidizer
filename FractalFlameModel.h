@@ -23,6 +23,7 @@
 #import "FlameController.h"
 #import "PaletteController.h"
 #import "QTKit/QTKit.h"
+#import "QuickTimeController.h"
 
 #import "flam3.h"
 
@@ -37,12 +38,16 @@
     IBOutlet NSWindow *preferencesWindow;
     IBOutlet NSLevelIndicator *frameIndicator;
     IBOutlet NSLevelIndicator *progressIndicator;
-    
+    IBOutlet QuickTimeController *qtController;
+	
 	NSManagedObjectContext *moc;
 
 	NSArray *genomeSortDescriptors;
 	NSArray *xformSortDescriptors;
 	NSArray *variationSortDescriptors;
+	NSArray *cmapSortDescriptors;
+	
+	NSDocumentController *docController;
 	
 	int verbose;
 	int bits;
@@ -80,6 +85,7 @@
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
 - (BOOL)saveToFile:(NSBitmapImageRep *)rep;
 - (BOOL)EnvironmentInit:(flam3_frame *)f;
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
 
 - (void)renderFlames:(flam3_genome *)cps numberOfFlames:(int)ncps;
 - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps;

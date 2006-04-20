@@ -41,6 +41,17 @@
 														   bytesPerRow:3*256
 														  bitsPerPixel:24]; 
 
+		_colourWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+															pixelsWide:256
+															pixelsHigh:15
+														 bitsPerSample:8
+													   samplesPerPixel:3
+															  hasAlpha:NO 
+															  isPlanar:NO
+														colorSpaceName:NSDeviceRGBColorSpace
+														  bitmapFormat:0
+														   bytesPerRow:3*256
+														  bitsPerPixel:24]; 
 		
 	}
 		
@@ -131,7 +142,11 @@
 	image = [[NSImage alloc] init];
 	[image addRepresentation:_paletteWithHueRep];
 	[paletteWithHue setImage:image];
-   
+	[image release];
+	colourImage = [[NSImage alloc] init];
+	[colourImage addRepresentation:_colourWithHueRep];
+	[colourWithHue setImage:colourImage];
+    
 }
 
 - (IBAction)showFlameWindow:(id)sender
@@ -229,8 +244,8 @@
 
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender {
 
-
 	NSManagedObject *genome = [self getSelectedGenome];
+	
 	int paletteNumber = [paletteController changePaletteAndHidePaletteWindow];
 	
 	[genome setValue:[NSNumber numberWithInt:paletteNumber]  forKey:@"palette"];
@@ -247,5 +262,119 @@
 
 }
 
+- (IBAction)showPaletteList:(id)sender {
+
+	BOOL usePalette;
+	NSManagedObject *genome = [self getSelectedGenome];
+	
+	usePalette = [[genome valueForKey:@"use_palette"] boolValue];
+	if(usePalette) {
+	
+		[paletteWindow setIsVisible:TRUE]; 
+	} else {
+		[cmapWindow setIsVisible:TRUE]; 
+		
+	}
+}
+
+- (IBAction)changeColourMap:(id)sender {
+
+	NSManagedObject *cmapEntity;
+	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
+	NSArray *arrangedObjects;
+	NSColor *colour;
+	int index, newIndex, order, order2;
+	float red, green, blue;
+
+	arrangedObjects = [cmapController arrangedObjects];
+
+	switch([segments selectedSegment]) {
+		case 0:
+
+			index = [cmapController selectionIndex];
+			if(index == NSNotFound) {
+				cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmapController managedObjectContext]];
+				[cmapEntity setValue:[NSNumber numberWithShort:0] forKey:@"index"];
+				newIndex = 0;
+			} else {
+				switch([arrangedObjects count]) {
+				
+					case 0:
+						cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmapController managedObjectContext]];
+						[cmapEntity setValue:[NSNumber numberWithInt:0] forKey:@"index"];
+						newIndex = 0;
+						break;
+					case 1:
+						order  = [[[arrangedObjects objectAtIndex:index] valueForKey:@"index"] intValue];
+						cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmapController managedObjectContext]];
+						if(order != 255) {
+							[cmapEntity setValue:[NSNumber numberWithInt:255] forKey:@"index"];
+						} else {
+							[cmapEntity setValue:[NSNumber numberWithInt:0] forKey:@"index"];
+						}
+						newIndex = 1;
+						break;
+					case 256:	
+							NSBeep();
+							return;
+					default:
+						order  = [[[arrangedObjects objectAtIndex:index] valueForKey:@"index"] intValue];
+						if(order == 255) {
+							NSBeep();
+							return;
+						}
+						cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmapController managedObjectContext]];
+						newIndex = index + 1;
+						if([arrangedObjects count] == index + 1) {
+							// last object is selected
+							order2 = 255;
+						} else {
+							order2 = [[[arrangedObjects objectAtIndex:newIndex] valueForKey:@"index"] intValue];
+						}
+						[cmapEntity setValue:[NSNumber numberWithInt:order + ((order2 - order) / 2)] forKey:@"index"];
+						
+						break;				
+				} 		
+			} 
+			colour = [colourWell color];
+			[colour getRed:&red green:&green blue:&blue alpha:NULL];
+			[cmapEntity setValue:[NSNumber numberWithDouble:red] forKey:@"red"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:green] forKey:@"green"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
+			[cmapController insertObject:cmapEntity atArrangedObjectIndex:newIndex];
+			break;
+		case 1:
+			index = [cmapController selectionIndex];
+			cmapEntity = [arrangedObjects objectAtIndex:index];
+			colour = [colourWell color];
+			[colour getRed:&red green:&green blue:&blue alpha:NULL];
+			[cmapEntity setValue:[NSNumber numberWithDouble:red] forKey:@"red"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:green] forKey:@"green"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
+			break;
+		case 2:
+			index = [cmapController selectionIndex];
+			[cmapController removeObjectAtArrangedObjectIndex:index];
+//			[cmapController remove:sender];
+			break;
+		default:
+			break;
+	}	
+
+	[cmapController rearrangeObjects];
+	[PaletteController fillBitmapRep:_colourWithHueRep withColours:arrangedObjects forHeight:15];
+	NSManagedObject *genome = [self getSelectedGenome];
+	[genome willChangeValueForKey:@"colour_map_image"];
+	[genome setValue:colourImage forKey:@"colour_map_image"]; 	 
+	[genome didChangeValueForKey:@"colour_map_image"];
+	[colourWithHue setNeedsDisplay:YES];
+
+}
+
+- (IBAction)changeColourMapAndHideWindow:(id)sender {
+
+	[cmapWindow  setIsVisible:FALSE];
+
+}
 
 @end

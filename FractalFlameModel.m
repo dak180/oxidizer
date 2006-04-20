@@ -77,14 +77,19 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[genomeSortDescriptors retain];		
 		[sort  release]; 
 		
-		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"variation_index" ascending:YES];
+		sort = [[NSSortDescriptor alloc] initWithKey:@"variation_index" ascending:YES];
 		variationSortDescriptors = [NSArray arrayWithObject: sort];
 		[sort  release]; 
 		
 		sort = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
 		xformSortDescriptors = [NSArray arrayWithObject: sort];
 		[sort  release]; 
+
+		sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+		cmapSortDescriptors = [NSArray arrayWithObject: sort];
+		[sort  release]; 
 		
+		docController = [NSDocumentController sharedDocumentController];
 		
     }
 	
@@ -101,7 +106,14 @@ int printProgress(void *nslPtr, double progress, int stage);
 	flam3_genome *genome;
 	
 	NSArray *genomes;
-                        
+
+	BOOL doRender = [qtController showQuickTimeFileImageDialogue];
+                  
+	if(doRender == NO) {
+		return;
+	}
+											
+							        
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
 
@@ -135,14 +147,173 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	[progressWindow setIsVisible:FALSE];
 
-	
-	[self saveToFile:flameRep];	
+	[qtController saveNSBitmapImageRep:flameRep];
+//	[self saveToFile:flameRep];	
 
-	[flameRep release];
+//	[flameRep release];
 
 }
 
 - (IBAction)renderAnimation:(id)sender {
+	
+	//          NSData *data;
+    //        QTDataReference *dataRef;
+   	NSBitmapImageRep *flameRep;
+	NSImage *flameImage;
+	
+	int ftime, frameCount;
+	unsigned char *image;
+	
+	flam3_genome *cps;
+	flam3_frame f;	
+	int i, ncps = 0;
+		
+	NSArray *genomes;
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomes = [moc executeFetchRequest:fetch error:nil];
+	[fetch release];	  
+	
+	channels = 4;
+	
+  	ncps = [genomes count];
+
+	if(ncps == 0) {
+		return;
+	}
+
+	BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
+	if(doRender == NO) {
+		return;
+	}
+
+	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
+	
+	dtime = 1;
+	f.genomes = cps;
+	[self EnvironmentInit:&f];
+	
+	srandom(seed ? seed : (time(0) + getpid()));
+	
+	if (pixel_aspect <= 0.0) {
+		fprintf(stderr, "pixel aspect ratio must be positive, not %g.\n",
+				pixel_aspect);
+		exit(1);
+	}
+	
+	if (NULL == cps) {
+		exit(1);
+	}
+	if (0 == ncps) {
+		fprintf(stderr, "error: no genomes.\n");
+		exit(1);
+	}
+	
+	for (i = 0; i < ncps; i++) {
+		cps[i].sample_density *= qs;
+		cps[i].height = (int)(cps[i].height * ss);
+		cps[i].width = (int)(cps[i].width * ss);
+		cps[i].pixels_per_unit *= ss;
+		if ((cps[i].width != cps[0].width) ||
+			(cps[i].height != cps[0].height)) {
+			fprintf(stderr, "warning: flame %d at time %g size mismatch.  "
+					"(%d,%d) should be (%d,%d).\n",
+					i, cps[i].time,
+					cps[i].width, cps[i].height,
+					cps[0].width, cps[0].height);
+			cps[i].width = cps[0].width;
+			cps[i].height = cps[0].height;
+		}
+	}
+	
+	
+	first_frame = (int) cps[0].time;
+	
+	last_frame = (int) cps[ncps-1].time - 1;
+	
+	
+	if (last_frame < first_frame) last_frame = first_frame;
+	
+	f.temporal_filter_radius = 0.5;
+	f.pixel_aspect_ratio = pixel_aspect;
+	f.genomes = cps;
+	f.ngenomes = ncps;
+	f.verbose = verbose;
+	f.bits = bits;
+	f.progress = 0;
+	
+	flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+													  pixelsWide:cps->width
+													  pixelsHigh:cps->height
+												   bitsPerSample:8
+												 samplesPerPixel:channels
+														hasAlpha:channels == 4 ? YES : NO 
+														isPlanar:NO
+												  colorSpaceName:NSDeviceRGBColorSpace
+													bitmapFormat:0
+													 bytesPerRow:channels*cps->width
+													bitsPerPixel:8*channels];
+	image =[flameRep bitmapData];
+	
+	flameImage = [[NSImage alloc] init];
+	[flameImage addRepresentation:flameRep];
+	
+	
+	
+	if (dtime < 1) {
+		fprintf(stderr, "dtime must be positive, not %d.\n", dtime);
+		exit(1);
+	}
+	
+	f.verbose = 0;
+	
+	[progressIndicator setDoubleValue:0.0];
+	
+	[frameIndicator setMaxValue:(last_frame - first_frame) / dtime];
+	frameCount = 0;
+	[frameIndicator setIntValue:0];
+	
+	[progressWindow setTitle:@"Rendering Movie..."];
+	
+	[progressWindow makeKeyAndOrderFront:self];
+
+	f.progress = printProgress;
+	f.progress_parameter = progressIndicator;
+	
+	
+	for (ftime = first_frame; ftime <= last_frame; ftime += dtime) {
+		f.time = (double) ftime;
+		
+		[frameIndicator setIntValue:++frameCount];
+		[frameIndicator displayIfNeeded];
+		
+//		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
+		
+		flam3_render(&f, image, cps[0].width, flam3_field_both, channels, transparency);		
+		
+		[qtController addNSImageToMovie:flameImage];
+		
+    }
+	
+	[progressWindow setTitle:@"Writing Movie to Disk..."];
+	
+	[qtController saveMovie];
+
+
+	[progressWindow setIsVisible:NO];
+	
+	NSBeep();
+
+}
+
+
+- (IBAction)oldRenderAnimation:(id)sender {
 	
 	//          NSData *data;
     //        QTDataReference *dataRef;
@@ -159,6 +330,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	flam3_frame f;	
 	int i, ncps = 0;
 	
+	[qtController showQuickTimeFileMovieDialogue];
 	
 	NSArray *genomes;
 	
@@ -314,8 +486,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[progressWindow setIsVisible:NO];
 
 }
-
-
 
 
 
@@ -482,6 +652,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[self deleteOldGenomes];
 		boolResult = [self loadFlam3File:[op filename] intoCGenomes:&genomes returningCountInto:&genomeCount ];
 		if(boolResult == YES) {
+			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
 			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount];
 //			[flames setCurrentFlameForIndex:0];
 		}
@@ -496,19 +667,26 @@ int calc_nstrips(flam3_frame *spec) {
   double mem_required;
   double mem_available;
   int nstrips;
-  
-  unsigned int physmem;
+
+#ifdef __APPLE__
+
+ unsigned int physmem;
   size_t len = sizeof(physmem);
   static int mib[2] = { CTL_HW, HW_PHYSMEM };
 
-
-  if (sysctl (mib, sizeof (mib), &physmem, &len, NULL, 0) == 0 && len == sizeof (physmem)) {
+  if(sysctl(mib, 2,  &physmem, &len, NULL, 0) == 0 && len ==  sizeof(physmem)) {
 	  mem_available = (double )physmem;
   } else {
 	  fprintf(stderr, "warning: unable to determine physical memory.\n");
 	  mem_available = 2e9;
-  }
+  }  
+
+#else
+	  fprintf(stderr, "warning: unable to determine physical memory.\n");
+	  mem_available = 2e9;
+  
  	  
+#endif
  
   mem_available *= 0.8;
   mem_required = flam3_render_memory_required(spec);
@@ -804,7 +982,21 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[preferencesWindow makeKeyAndOrderFront:self];
 }
 
+- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
 
+	flam3_genome *genomes = NULL;
+	BOOL boolResult;
+	int genomeCount;
+	
+	[self deleteOldGenomes];
+	boolResult = [self loadFlam3File:filename intoCGenomes:&genomes returningCountInto:&genomeCount ];
+	if(boolResult == YES) {
+		[self generateAllThumbnailsForGenome:genomes withCount:genomeCount];
+	}
+	
+	return boolResult;
+
+}
 
 	
 @end

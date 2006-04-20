@@ -28,14 +28,21 @@
 {
     IBOutlet NSWindow *xformWindow;
     IBOutlet NSWindow *flameWindow;
+    IBOutlet NSWindow *paletteWindow;
+    IBOutlet NSWindow *cmapWindow;
     IBOutlet NSTableView *flames;
     IBOutlet NSTableView *flameValues;
 	IBOutlet PaletteController *paletteController;
     IBOutlet NSImageView *paletteWithHue;
     IBOutlet NSArrayController *genomeController;
     IBOutlet NSArrayController *xformController;
+    IBOutlet NSArrayController *cmapController;
+    IBOutlet NSColorWell *colourWell;
+    IBOutlet NSImageView *colourWithHue;
 
 	 NSBitmapImageRep *_paletteWithHueRep;
+	 NSBitmapImageRep *_colourWithHueRep;
+	 NSImage *colourImage;
 
 }
 
@@ -44,6 +51,9 @@
 - (IBAction)showFlameWindow:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
 - (IBAction)showFlameWindow:(id)sender;
+- (IBAction)showPaletteList:(id)sender;
+- (IBAction)changeColourMap:(id)sender;
+- (IBAction)changeColourMapAndHideWindow:(id)sender;
 
 
 - (void)setValue:(id)value forKey:(NSString *)key;

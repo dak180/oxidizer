@@ -39,11 +39,10 @@
 - (IBAction)setEnabled:(id)sender;
 - (IBAction)setNumber:(id)sender;
 - (IBAction)hidePaletteWindow:(id)sender;
-- (IBAction)showPaletteList:(id)sender;
 
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue;
-+ (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSMutableArray *)colours  forHeight:(int)height;
-+ (NSMutableArray *) extrapolateArray:(NSMutableArray *)colours;
++ (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSArray *)colours  forHeight:(int)height;
++ (NSMutableArray *) extrapolateArray:(NSArray *)colours;
 
 - (void) setPalette:(unsigned int )palette colourArray:(NSArray *)colours  usePalette:(BOOL)useThePaletteNumber;
 - (int)changePaletteAndHidePaletteWindow;

@@ -13,8 +13,10 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
+		A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4233E9309EFF3010047DC34 /* QuickTimeController.m */; };
 		A42D470709996C5A00A7296E /* flam3-palettes.c in Sources */ = {isa = PBXBuildFile; fileRef = A42D470409996C5A00A7296E /* flam3-palettes.c */; };
 		A42D470809996C5A00A7296E /* flam3.c in Sources */ = {isa = PBXBuildFile; fileRef = A42D470509996C5A00A7296E /* flam3.c */; };
+		A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */ = {isa = PBXBuildFile; fileRef = A4421BE409CF3CE900E9D39F /* oxidizer.icns */; };
 		A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
 		A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
@@ -53,9 +55,12 @@
 		8D1107320486CEB800E47090 /* Oxidizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oxidizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		A4233E9209EFF3000047DC34 /* QuickTimeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickTimeController.h; sourceTree = "<group>"; };
+		A4233E9309EFF3010047DC34 /* QuickTimeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickTimeController.m; sourceTree = "<group>"; };
 		A42D470409996C5A00A7296E /* flam3-palettes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = "flam3-palettes.c"; sourceTree = "<group>"; };
 		A42D470509996C5A00A7296E /* flam3.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = flam3.c; sourceTree = "<group>"; };
 		A42D470609996C5A00A7296E /* flam3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = flam3.h; sourceTree = "<group>"; };
+		A4421BE409CF3CE900E9D39F /* oxidizer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = oxidizer.icns; sourceTree = "<group>"; };
 		A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		A4D3633D09AB9CE20078025F /* genome.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = genome.xcdatamodel; sourceTree = "<group>"; };
 		A4D604A909658A6C0001CD1D /* PaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PaletteController.h; sourceTree = "<group>"; };
@@ -102,6 +107,8 @@
 				A4F333A1096C813B00230854 /* Genome.m */,
 				A4D6FA2B09B1E25200096036 /* GenomeManagedObject.h */,
 				A4D6FA2C09B1E25200096036 /* GenomeManagedObject.m */,
+				A4233E9209EFF3000047DC34 /* QuickTimeController.h */,
+				A4233E9309EFF3010047DC34 /* QuickTimeController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -163,6 +170,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -238,6 +246,7 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +267,7 @@
 				A42D470809996C5A00A7296E /* flam3.c in Sources */,
 				A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */,
 				A4D6FA2D09B1E25200096036 /* GenomeManagedObject.m in Sources */,
+				A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +362,8 @@
 					ppc,
 					i386,
 				);
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
@@ -371,8 +383,12 @@
 					i386,
 				);
 				GCC_AUTO_VECTORIZATION = YES;
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_FAST_MATH = YES;
 				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_UNROLL_LOOPS = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;

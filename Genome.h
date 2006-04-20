@@ -21,6 +21,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "FlameController.h"
+#import "PaletteController.h"
 #import "flam3.h"
 
 //NSManagedObjectContext *managedObjectContext();
