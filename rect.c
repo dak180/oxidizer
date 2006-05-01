@@ -1,5 +1,5 @@
 /*
-   flame - cosmic recursive fractal flames
+   FLAM3 - cosmic recursive fractal flames
    Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
 
    This program is free software; you can redistribute it and/or modify
@@ -245,7 +245,6 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
      fprintf(stderr, "chaos: ");
      progress_began = time(NULL);
    }
-
 /*
    if (fname) {
       int len = strlen(fname);

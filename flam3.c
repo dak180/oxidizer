@@ -1,5 +1,5 @@
 /*
-    flame - cosmic recursive fractal flames
+    FLAM3 - cosmic recursive fractal flames
     Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
 
     This program is free software; you can redistribute it and/or modify
@@ -18,11 +18,10 @@
 */
 
 static char *libifs_c_id =
-"@(#) $Id: flam3.c,v 1.1 2006/02/09 13:41:07 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.2 2006/05/01 13:23:59 vargol Exp $";
 
 
 #include "private.h"
-//#include "img.h"
 #include <limits.h>
 
 
@@ -37,6 +36,23 @@ char *flam3_version() {
 #define random_distrib(v) ((v)[random()%vlen(v)])
 
 #define badvalue(x) (((x)!=(x))||((x)>1e10)||((x)<-1e10))
+
+
+typedef struct {
+   
+   double tx,ty; /* Starting coordinates */
+   
+   double precalc_atan, precalc_sina;  /* Precalculated, if needed */
+   double precalc_cosa, precalc_sqrt;
+   
+   flam3_xform *xform; /* For the important values */
+   
+   /* Output Coords */
+   
+   double p0, p1;
+   
+} flam3_iter_helper;
+
 
 
 /* Variation functions */
@@ -71,11 +87,16 @@ static void var27_eyefish(void *, double);
 static void var28_bubble(void *, double);
 static void var29_cylinder(void *, double);
 static void var30_perspective(void *, double);
+static void var31_noise(void *, double);
+static void var32_juliaN_generic(void *, double);
+static void var33_juliaScope_generic(void *, double);
+static void var34_blur(void *, double);
+
+static int id_matrix(double s[3][2]);
 
 void prepare_xform_fn_ptrs(flam3_genome *);
-
 static void initialize_xforms(flam3_genome *thiscp, int start_here);
-
+static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, int *color_shift);
 /*
  * VARIATION FUNCTIONS
  * must be of the form void (void *, double) 
@@ -517,6 +538,7 @@ static void var23_blob (void *helper, double weight) {
       p[0] += v * nx;
       p[1] += v * ny; */
       
+      
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
    double r = f->precalc_sqrt;
    double a = f->precalc_atan;
@@ -650,6 +672,76 @@ static void var30_perspective (void *helper, double weight) {
    f->p1 += weight * f->xform->persp_vfcos * f->ty * t;
 }
 
+static void var31_noise (void *helper, double weight) {
+   /* noise (03/06) */
+   flam3_iter_helper *f = (flam3_iter_helper *)helper;
+   double tmpr, sinr, cosr, r;
+   
+   tmpr = flam3_random01() * 2 * M_PI;
+   sinr = sin(tmpr);
+   cosr = cos(tmpr);
+   
+   r = weight * flam3_random01();
+   
+   f->p0 += f->tx * r * cosr;
+   f->p1 += f->ty * r * sinr;
+}
+
+static void var32_juliaN_generic (void *helper, double weight) {
+   /* juliaN (03/06) */
+   flam3_iter_helper *f = (flam3_iter_helper *)helper;
+   
+   int t_rnd = (f->xform->juliaN_rN)*flam3_random01();
+
+   double tmpr = (atan2(f->ty, f->tx) + 2 * M_PI * t_rnd) / f->xform->juliaN_power;
+   
+   double sina = sin(tmpr);
+   double cosa = cos(tmpr);
+   
+   double r = weight * pow(f->tx*f->tx + f->ty*f->ty, f->xform->juliaN_cn);
+   
+   f->p0 += r * cosa;
+   f->p1 += r * sina;
+}
+
+static void var33_juliaScope_generic (void *helper, double weight) {
+   /* juliaScope (03/06) */
+   flam3_iter_helper *f = (flam3_iter_helper *)helper;
+
+   int t_rnd = (f->xform->juliaScope_rN) * flam3_random01();
+   
+   double tmpr, r;
+   double sina, cosa;
+   
+   if ((t_rnd & 1) == 0)
+      tmpr = (2 * M_PI * t_rnd + atan2(f->ty, f->tx)) / f->xform->juliaScope_power;      
+   else
+      tmpr = (2 * M_PI * t_rnd - atan2(f->ty, f->tx)) / f->xform->juliaScope_power;
+   
+   sina = sin(tmpr);
+   cosa = cos(tmpr);
+   
+   r = weight * pow(f->tx*f->tx + f->ty*f->ty, f->xform->juliaScope_cn);
+      
+   f->p0 += r * cosa;
+   f->p1 += r * sina;
+}
+
+static void var34_blur (void *helper, double weight) {
+   /* blur (03/06) */
+   flam3_iter_helper *f = (flam3_iter_helper *)helper;
+   double tmpr, sinr, cosr, r;
+   
+   tmpr = flam3_random01() * 2 * M_PI;
+   sinr = sin(tmpr);
+   cosr = cos(tmpr);
+   
+   r = weight * flam3_random01();
+   
+   f->p0 += r * cosr;
+   f->p1 += r * sinr;   
+}
+
 void prepare_xform_fn_ptrs(flam3_genome *cp) {
    
    double d;
@@ -659,11 +751,11 @@ void prepare_xform_fn_ptrs(flam3_genome *cp) {
    for (i = 0; i < cp->num_xforms; i++) {
       d = cp->xform[i].density;
       if (d < 0.0) {
-         fprintf(stderr, "xform weight must be non-negative, not %g.\n", d);
+         fprintf(stderr, "xform %d weight must be non-negative, not %g.\n",i,d);
          exit(1);
       }
       
-      if (d == 0.0)
+      if (i != cp->final_xform_index && d == 0.0)
          continue;
 
       totnum = 0;
@@ -771,14 +863,30 @@ void prepare_xform_fn_ptrs(flam3_genome *cp) {
                cp->xform[i].varFunc[totnum] = &var29_cylinder;
             else if (j==30)
                cp->xform[i].varFunc[totnum] = &var30_perspective;
-               
-               
+            else if (j==31)
+               cp->xform[i].varFunc[totnum] = &var31_noise;
+            else if (j==32)
+               cp->xform[i].varFunc[totnum] = &var32_juliaN_generic;
+            else if (j==33)
+               cp->xform[i].varFunc[totnum] = &var33_juliaScope_generic;
+            else if (j==34)
+               cp->xform[i].varFunc[totnum] = &var34_blur;
+
             totnum++;
          }
       }
             
       cp->xform[i].num_active_vars = totnum;
+
    }
+}
+
+FILE *cout = NULL;
+void write_color(double c) {
+    if (NULL == cout) {
+	cout = fopen("cout.txt", "w");
+    }
+    fprintf(cout, "%.30f\n", c);
 }
 
 /*
@@ -789,9 +897,13 @@ void prepare_xform_fn_ptrs(flam3_genome *cp) {
 void flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples) {
    int i, j;
    char xform_distrib[CHOOSE_XFORM_GRAIN];
-   double p[4], t, r, dr, s, s1;
-   flam3_iter_helper f;
-   
+   double p[4], q[4],t, r, dr;
+   int color_shift = 0;
+   int consec = 0;
+   double color_shift_speed = 0.0;
+   if (getenv("shift"))
+      color_shift_speed = atof(getenv("shift"));
+      
    p[0] = samples[0];
    p[1] = samples[1];
    p[2] = samples[2];
@@ -832,68 +944,103 @@ void flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples) {
    for (i = -4*fuse; i < 4*n; i+=4) {
       int fn = xform_distrib[random() % CHOOSE_XFORM_GRAIN];
       double tx, ty;
-      int var_n;
       
-      /* first compute the color coord */
-      s = cp->xform[fn].symmetry;
-/*      s1 = 0.5*(1.0 - s);*/
-      s1 = 0.5 - 0.5 * s;
-      p[2] = (p[2] + cp->xform[fn].color[0]) * s1 + s * p[2];
-      p[3] = (p[3] + cp->xform[fn].color[1]) * s1 + s * p[3];
-      
-      /* then apply the affine part of the function */
-      f.tx = cp->xform[fn].c[0][0] * p[0] + cp->xform[fn].c[1][0] * p[1] + cp->xform[fn].c[2][0];
-      f.ty = cp->xform[fn].c[0][1] * p[0] + cp->xform[fn].c[1][1] * p[1] + cp->xform[fn].c[2][1];
-      
-      /* Check to see if we can precalculate any parts */
-      /* Precalculate atan, sin, cos */
-      if (cp->xform[fn].precalc_angles_flag > 0) {
-         f.precalc_atan = atan2(f.tx,f.ty);
-         f.precalc_sina = sin(f.precalc_atan);
-         f.precalc_cosa = cos(f.precalc_atan);
-      }
-      
-      /* Check for sqrt */
-      if (cp->xform[fn].precalc_sqrt_flag > 0) {
-         f.precalc_sqrt = sqrt(f.tx*f.tx + f.ty*f.ty);
-      }
-            
-      f.p0 = 0.0;
-      f.p1 = 0.0;      
-      f.xform = &(cp->xform[fn]);
-
-      for (var_n=0; var_n < cp->xform[fn].num_active_vars; var_n++) {
-         (*cp->xform[fn].varFunc[var_n])(&f, cp->xform[fn].active_var_weights[var_n]);
-      }
-      
-      /* apply the post transform */
-      if (cp->xform[fn].post_flag > 0) {
-         tx = cp->xform[fn].post[0][0] * f.p0 + cp->xform[fn].post[1][0] * f.p1 + cp->xform[fn].post[2][0];
-         ty = cp->xform[fn].post[0][1] * f.p0 + cp->xform[fn].post[1][1] * f.p1 + cp->xform[fn].post[2][1];
+      if (1) {
+         if (apply_xform(cp, fn, p, q, &color_shift)>0) {
+            consec ++;
+            if (consec<5) {
+               p[0] = q[0];
+               p[1] = q[1];
+               p[2] = q[2];
+               p[3] = q[3];
+               i -= 4;
+               continue;
+            } else
+               consec = 0;
+         } else
+            consec = 0;
       } else {
-         tx = f.p0;
-         ty = f.p1;
+         apply_xform(cp, fn, p, q, &color_shift);
       }
+         
+      p[0] = q[0];
+      p[1] = q[1];
+      p[2] = q[2];
+      p[3] = q[3];
       
-      if (badvalue(tx) || badvalue(ty)) {
-         tx = flam3_random11();
-         ty = flam3_random11();
+      if (cp->final_xform_enable == 1) {
+         apply_xform(cp, cp->final_xform_index, p, q, &color_shift);
       }
-
-      p[0] = tx;
-      p[1] = ty;
       
       /* if fuse over, store it */
       if (i >= 0) {
-         samples[i] = p[0];
-         samples[i+1] = p[1];
-         samples[i+2] = p[2];
-         samples[i+3] = p[3];
+         samples[i] = q[0];
+         samples[i+1] = q[1];
+         samples[i+2] = fmod(q[2] + color_shift * color_shift_speed, 1.0);
+         samples[i+3] = q[3];
       }
    }
 }
 
+static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, int *color_shift)
+{
+   flam3_iter_helper f;
+   int var_n;
+   double next_color,s,s1;
 
+   s = cp->xform[fn].symmetry;
+   s1 = 0.5 - 0.5 * s;
+
+   next_color = (p[2] + cp->xform[fn].color[0]) * s1 + s * p[2];
+   if (fabs(p[2] - next_color) < 1e-3) {
+      (*color_shift)++;
+   } else {
+      (*color_shift) = 0;
+   }
+   q[2] = next_color;
+   q[3] = (p[3] + cp->xform[fn].color[1]) * s1 + s * p[3];
+   
+   f.tx = cp->xform[fn].c[0][0] * p[0] + cp->xform[fn].c[1][0] * p[1] + cp->xform[fn].c[2][0];
+   f.ty = cp->xform[fn].c[0][1] * p[0] + cp->xform[fn].c[1][1] * p[1] + cp->xform[fn].c[2][1];
+   
+   /* Check to see if we can precalculate any parts */
+   /* Precalculate atan, sin, cos */
+   if (cp->xform[fn].precalc_angles_flag > 0) {
+      f.precalc_atan = atan2(f.tx,f.ty);
+      f.precalc_sina = sin(f.precalc_atan);
+      f.precalc_cosa = cos(f.precalc_atan);
+   }
+   
+   /* Check for sqrt */
+   if (cp->xform[fn].precalc_sqrt_flag > 0) {
+      f.precalc_sqrt = sqrt(f.tx*f.tx + f.ty*f.ty);
+   }
+   
+   f.p0 = 0.0;
+   f.p1 = 0.0;      
+   f.xform = &(cp->xform[fn]);
+   
+   for (var_n=0; var_n < cp->xform[fn].num_active_vars; var_n++) {
+      (*cp->xform[fn].varFunc[var_n])(&f, cp->xform[fn].active_var_weights[var_n]);
+   }
+   
+   /* apply the post transform */
+   if (!id_matrix(cp->xform[fn].post)) {
+      q[0] = cp->xform[fn].post[0][0] * f.p0 + cp->xform[fn].post[1][0] * f.p1 + cp->xform[fn].post[2][0];
+      q[1] = cp->xform[fn].post[0][1] * f.p0 + cp->xform[fn].post[1][1] * f.p1 + cp->xform[fn].post[2][1];
+   } else {
+      q[0] = f.p0;
+      q[1] = f.p1;
+   }
+   
+   if (badvalue(q[0]) || badvalue(q[1])) {
+      q[0] = flam3_random11();
+      q[1] = flam3_random11();
+      return(1);
+   } else
+      return(0);
+   
+}
 /* correlation dimension, after clint sprott.
    computes slope of the correlation sum at a size scale
    the order of 2% the size of the attractor or the camera. */
@@ -1111,21 +1258,27 @@ static int id_matrix(double s[3][2]) {
     (s[2][1] == 0.0);
 }
 
+static void clear_matrix(double m[3][2]) {
+   m[0][0] = 0.0;
+   m[0][1] = 0.0;
+   m[1][0] = 0.0;
+   m[1][1] = 0.0;
+   m[2][0] = 0.0;
+   m[2][1] = 0.0;
+}
+
 /* element-wise linear */
-static void interpolate_matrix(double t, double m1[3][2],
-			       double m2[3][2], double m3[3][2]) {
-   double s = 1.0 - t;
+static void sum_matrix(double s, double m1[3][2], double m2[3][2]) {
 
-   m3[0][0] = s * m1[0][0] + t * m2[0][0];
-   m3[0][1] = s * m1[0][1] + t * m2[0][1];
-
-   m3[1][0] = s * m1[1][0] + t * m2[1][0];
-   m3[1][1] = s * m1[1][1] + t * m2[1][1];
-
-   m3[2][0] = s * m1[2][0] + t * m2[2][0];
-   m3[2][1] = s * m1[2][1] + t * m2[2][1];
+   m2[0][0] += s * m1[0][0];
+   m2[0][1] += s * m1[0][1];
+   m2[1][0] += s * m1[1][0];
+   m2[1][1] += s * m1[1][1];
+   m2[2][0] += s * m1[2][0];
+   m2[2][1] += s * m1[2][1];
 
 }
+
 
 static void interpolate_cmap(double cmap[256][3], double blend,
 			     int index0, double hue0, int index1, double hue1) {
@@ -1146,68 +1299,57 @@ static void interpolate_cmap(double cmap[256][3], double blend,
   }
 }
 
-#define INTERP(x)  result->x = c0 * cps[i1].x + c1 * cps[i2].x
-#define INTERI(x)  result->x = (int)floor(0.5 + c0 * cps[i1].x + c1 * cps[i2].x)
-#define XFINTERP(x)  result->x = c0 * cpi1.x + c1 * cpi2.x
-#define XFINTERI(x)  result->x = (int)floor(0.5 + c0 * cpi1.x + c1 * cpi2.x)
+/*   tTime2 = tTime * tTime
+     tTime3 = tTime2 * tTime
+tpFinal = (((-tp1 + 3 * tp2 - 3 * tp3 + tp4) * tTime3)
+                + ((2 * tp1 - 5 * tp2 + 4 * tp3 - tp4) * tTime2)
+                + ((-tp1 + tp3) * tTime)
+                + (2 * tp2))
+                / 2 
+*/
+static void interpolate_catmull_rom(flam3_genome cps[], double t, flam3_genome *result) {
+    double t2 = t * t;
+    double t3 = t2 * t;
+    double cmc[4];
 
-/*
- * create a control point that interpolates between the control points
- * passed in CPS.  for now just do linear.  in the future, add control
- * point types and other things to the cps.  CPS must be sorted by time.
- */
-void flam3_interpolate(flam3_genome cps[], int ncps,
-		       double time, flam3_genome *result) {
-   int i, j, i1, i2;
-   double c0, c1;
-   double ang;
-   flam3_genome cpi1, cpi2;
-   
-   memset(&cpi1,0,sizeof(flam3_genome));
-   memset(&cpi2,0,sizeof(flam3_genome));   
-   
-   if (1 == ncps) {
-      copy_cp(result, &(cps[0]));
-      return;
-   }
-   if (cps[0].time >= time) {
-      i1 = 0;
-      i2 = 1;
-   } else if (cps[ncps - 1].time <= time) {
-      i1 = ncps - 2;
-      i2 = ncps - 1;
-   } else {
-      i1 = 0;
-      while (cps[i1].time < time)
-         i1++;
+    cmc[0] = (2*t2 - t - t3) / 2;
+    cmc[1] = (3*t3 - 5*t2 + 2) / 2;
+    cmc[2] = (4*t2 - 3*t3 + t) / 2;
+    cmc[3] = (t3 - t2) / 2;
 
-      i1--;
-      i2 = i1 + 1;
+    flam3_interpolate_n(result, 4, cps, cmc);
+}
 
-      if (time - cps[i1].time > -1e-7 && time - cps[i1].time < 1e-7) {
-         copy_cp(result, &(cps[i1]));
-         return;
-      }
-   }
 
-   c0 = (cps[i2].time - time) / (cps[i2].time - cps[i1].time);
-   c1 = 1.0 - c0;
+#define INTERP(x)  do { result->x = 0.0; \
+	for (k = 0; k < ncp; k++) result->x += c[k] * cpi[k].x; } while(0)
 
-   result->time = time;
+#define INTERI(x)  do { double tt = 0.0; \
+	for (k = 0; k < ncp; k++) tt += c[k] * cpi[k].x; \
+	result->x = (int)rint(tt); } while(0)
 
-   for (i = 0; i < 256; i++) {
-     double t[3], s[3];
-     rgb2hsv(cps[i1].palette[i], s);
-     rgb2hsv(cps[i2].palette[i], t);
-     for (j = 0; j < 3; j++)
-       t[j] = c0 * s[j] + c1 * t[j];
-     hsv2rgb(t, result->palette[i]);
-     for (j = 0; j < 3; j++) {
-	 if (result->palette[i][j] < 0.0) {
-	     result->palette[i][j] = 0.0;
-	 }
-     }
-   }
+
+/* all cpi and result must be aligned (have the same number of xforms,
+   and have final xform in the same slot) */
+void flam3_interpolate_n(flam3_genome *result, int ncp,
+			 flam3_genome *cpi, double *c) {
+    int i, j, k;
+    double ang;
+    for (i = 0; i < 256; i++) {
+	double t[3], s[3];
+	s[0] = s[1] = s[2] = 0.0;
+	for (k = 0; k < ncp; k++) {
+	    rgb2hsv(cpi[k].palette[i], t);
+	    for (j = 0; j < 3; j++)
+		s[j] += c[k] * t[j];
+	}
+	hsv2rgb(s, result->palette[i]);
+	for (j = 0; j < 3; j++) {
+	    if (result->palette[i][j] < 0.0) {
+		result->palette[i][j] = 0.0;
+	    }
+	}
+    }
 
    result->palette_index = flam3_palette_random;
    result->symmetry = 0;
@@ -1233,70 +1375,167 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
    INTERP(rotate);
    INTERI(nbatches);
    INTERI(ntemporal_samples);
-
-   /* Density Estimation interpolation */
    INTERP(estimator);
    INTERP(estimator_minimum);
    INTERP(estimator_curve);
-   
-   /* Small gamma linearization */
    INTERP(gam_lin_thresh);
-
-   /* To interpolate the xforms, we will make copies of the source cps  */
-   /* and ensure that they both have the same number before progressing */
-   copy_cp(&cpi1,&(cps[i1]));
-   copy_cp(&cpi2,&(cps[i2]));
    
-   if (cpi1.num_xforms < cpi2.num_xforms)
-      add_xforms_to_cp(&cpi1, cpi2.num_xforms - cpi1.num_xforms);
-   else if (cpi2.num_xforms < cpi1.num_xforms)
-      add_xforms_to_cp(&cpi2, cpi1.num_xforms - cpi2.num_xforms);
-   
-   /* Clear any existing xforms in result */
-   if (result->num_xforms > 0 && result->xform != NULL) {
-      free(result->xform);
-      result->num_xforms = 0;
-   }
-   
-   /* Add the correct number */
-   add_xforms_to_cp(result, cpi1.num_xforms);
-   
-   /* Now interpolate between these two */
-   for (i = 0; i < cpi1.num_xforms; i++) {
-      XFINTERP(xform[i].density);
-      XFINTERP(xform[i].color[0]);
-      XFINTERP(xform[i].color[1]);
-      XFINTERP(xform[i].symmetry);
-      XFINTERP(xform[i].blob_low);
-      XFINTERP(xform[i].blob_high);
-      XFINTERI(xform[i].blob_waves);
-      XFINTERP(xform[i].pdj_a);
-      XFINTERP(xform[i].pdj_b);
-      XFINTERP(xform[i].pdj_c);
-      XFINTERP(xform[i].pdj_d);
-      XFINTERP(xform[i].fan2_x);
-      XFINTERP(xform[i].fan2_y);
-      XFINTERP(xform[i].rings2_val);
-      XFINTERP(xform[i].perspective_angle);
-      XFINTERP(xform[i].perspective_dist);
+   for (i = 0; i < cpi[0].num_xforms; i++) {
+      double td;
+      int all_id;
+      INTERP(xform[i].density);
+      td = result->xform[i].density;
+      result->xform[i].density = (td < 0.0) ? 0.0 : td;
+      INTERP(xform[i].color[0]);
+      INTERP(xform[i].color[1]);
+      INTERP(xform[i].symmetry);
+      INTERP(xform[i].blob_low);
+      INTERP(xform[i].blob_high);
+      INTERP(xform[i].blob_waves);
+      INTERP(xform[i].pdj_a);
+      INTERP(xform[i].pdj_b);
+      INTERP(xform[i].pdj_c);
+      INTERP(xform[i].pdj_d);
+      INTERP(xform[i].fan2_x);
+      INTERP(xform[i].fan2_y);
+      INTERP(xform[i].rings2_val);
+      INTERP(xform[i].perspective_angle);
+      INTERP(xform[i].perspective_dist);
+      INTERP(xform[i].juliaN_power);
+      INTERP(xform[i].juliaN_dist);
+      INTERP(xform[i].juliaScope_power);
+      INTERP(xform[i].juliaScope_dist);
 
       /* Precalculate two additional params for perspective */
       ang = result->xform[i].perspective_angle * M_PI / 2.0;
       result->xform[i].persp_vsin = sin(ang);
       result->xform[i].persp_vfcos = result->xform[i].perspective_dist * cos(ang);
+      
+      /* Precalculate the julia variations as well */
+      result->xform[i].juliaN_rN = fabs(result->xform[i].juliaN_power);
+      result->xform[i].juliaN_cn = result->xform[i].juliaN_dist /
+	  (double)result->xform[i].juliaN_power / 2.0;
+      result->xform[i].juliaScope_rN = fabs(result->xform[i].juliaScope_power);
+      result->xform[i].juliaScope_cn = result->xform[i].juliaScope_dist /
+	  (double)result->xform[i].juliaScope_power / 2.0;
 
       
       for (j = 0; j < flam3_nvariations; j++)
-         XFINTERP(xform[i].var[j]);
+         INTERP(xform[i].var[j]);
 
-      interpolate_matrix(c1, cpi1.xform[i].c, cpi2.xform[i].c, result->xform[i].c);
-      interpolate_matrix(c1, cpi1.xform[i].post, cpi2.xform[i].post, result->xform[i].post);
+      clear_matrix(result->xform[i].c);
+      clear_matrix(result->xform[i].post);
+      all_id = 1;
+      for (k = 0; k < ncp; k++) {
+	  sum_matrix(c[k], cpi[k].xform[i].c, result->xform[i].c);
+	  sum_matrix(c[k], cpi[k].xform[i].post, result->xform[i].post);
+	  all_id &= id_matrix(cpi[k].xform[i].post);
+      }
+      if (all_id) {
+	  clear_matrix(result->xform[i].post);
+	  result->xform[i].post[0][0] = 1.0;
+	  result->xform[i].post[1][1] = 1.0;
+      }
    }
+}
+
+static void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc) {
+    int i, tnx, max_nx = 0, max_fx = 0;
+    for (i = 0; i < nsrc; i++) {
+	tnx = src[i].num_xforms - (src[i].final_xform_index >= 0);
+	if (tnx > max_nx) max_nx = tnx;
+	max_fx |= src[i].final_xform_enable;
+    }
+    for (i = 0; i < nsrc; i++) {
+	flam3_copyx(&dst[i], &src[i], max_nx, max_fx);
+    }
+}
+
+
+/*
+ * create a control point that interpolates between the control points
+ * passed in CPS.  CPS must be sorted by time.
+ */
+void flam3_interpolate(flam3_genome cps[], int ncps,
+		       double time, flam3_genome *result) {
+   int i, j, i1, i2;
+   double c[2];
+   flam3_genome cpi[4];
+   int cpi1_std, cpi1_final;
+   int cpi2_std, cpi2_final;
+   int total_std, total_final;
    
-   /* Free up the two allocated xform arrays.     */
-   /* Everything else will be freed automagically */
-   free(cpi1.xform);
-   free(cpi2.xform);
+   if (1 == ncps) {
+      flam3_copy(result, &(cps[0]));
+      return;
+   }
+   if (cps[0].time >= time) {
+      i1 = 0;
+      i2 = 1;
+   } else if (cps[ncps - 1].time <= time) {
+      i1 = ncps - 2;
+      i2 = ncps - 1;
+   } else {
+      i1 = 0;
+      while (cps[i1].time < time)
+         i1++;
+
+      i1--;
+      i2 = i1 + 1;
+
+      if (time - cps[i1].time > -1e-7 && time - cps[i1].time < 1e-7) {
+         flam3_copy(result, &(cps[i1]));
+         return;
+      }
+   }
+
+   c[0] = (cps[i2].time - time) / (cps[i2].time - cps[i1].time);
+   c[1] = 1.0 - c[0];
+
+   memset(cpi, 0, 4*sizeof(flam3_genome));
+   /* To interpolate the xforms, we will make copies of the source cps  */
+   /* and ensure that they both have the same number before progressing */
+   if (flam3_interpolation_linear == cps[i1].interpolation) {
+       flam3_align(&cpi[0], &cps[i1], 2);
+   } else {
+       if (0 == i1) {
+	   fprintf(stderr, "error: cannot use smooth interpolation on first segment.\n");
+	   exit(1);
+       }
+       if (ncps-1 == i2) {
+	   fprintf(stderr, "error: cannot use smooth interpolation on last segment.\n");
+	   exit(1);
+       }
+       flam3_align(&cpi[0], &cps[i1-1], 4);
+   }
+   if (result->num_xforms > 0 && result->xform != NULL) {
+       free(result->xform);
+       result->num_xforms = 0;
+   }
+   flam3_add_xforms(result, cpi[0].num_xforms);
+   
+   result->final_xform_enable = cpi[0].final_xform_enable;
+   result->final_xform_index = cpi[0].final_xform_index;
+
+   result->time = time;
+   result->interpolation = flam3_interpolation_linear;
+
+   if (flam3_interpolation_linear == cps[i1].interpolation) {
+       flam3_interpolate_n(result, 2, cpi, c);
+   } else {
+       interpolate_catmull_rom(cpi, c[1], result);
+       free(cpi[2].xform);
+       free(cpi[3].xform);
+   }
+   free(cpi[0].xform);
+   free(cpi[1].xform);
+#if 0
+   flam3_print(stdout, result, NULL);
+   for (i = 0; i < sizeof(result->xform[0].post); i++) {
+       printf("%d ", ((unsigned char *)result->xform[0].post)[i]);
+   }
+   printf("\n");
+#endif
 }
 
 static int compare_xforms(const void *av, const void *bv) {
@@ -1357,8 +1596,8 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
        thiscp->xform[i].post[2][0] = 0.0;
        thiscp->xform[i].post[2][1] = 0.0;
        thiscp->xform[i].blob_low = 0.0;
-       thiscp->xform[i].blob_high = 0.0;
-       thiscp->xform[i].blob_waves = 0;
+       thiscp->xform[i].blob_high = 1.0;
+       thiscp->xform[i].blob_waves = 1.0;
        thiscp->xform[i].pdj_a = 0.0;
        thiscp->xform[i].pdj_b = 0.0;
        thiscp->xform[i].pdj_c = 0.0;
@@ -1370,11 +1609,20 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
        thiscp->xform[i].perspective_dist = 0.0;
        thiscp->xform[i].persp_vsin = 0.0;
        thiscp->xform[i].persp_vfcos = 0.0;
+       /* Change parameters so that zeros aren't interpolated against */
+       thiscp->xform[i].juliaN_power = 1.0;
+       thiscp->xform[i].juliaN_dist = 1.0;
+       thiscp->xform[i].juliaN_rN = 1.0;
+       thiscp->xform[i].juliaN_cn = 0.5;
+       thiscp->xform[i].juliaScope_power = 1.0;
+       thiscp->xform[i].juliaScope_dist = 1.0;
+       thiscp->xform[i].juliaScope_rN = 1.0;
+       thiscp->xform[i].juliaScope_cn = 0.5;
    }
 }
 
 /* Xform support functions */
-void add_xforms_to_cp(flam3_genome *thiscp, int num_to_add) {
+void flam3_add_xforms(flam3_genome *thiscp, int num_to_add) {
    
    int old_num = thiscp->num_xforms;
    
@@ -1390,8 +1638,33 @@ void add_xforms_to_cp(flam3_genome *thiscp, int num_to_add) {
    
 }
 
+void flam3_delete_xform(flam3_genome *thiscp, int idx_to_delete) {
+   
+   int i;
+   
+   /* Handle the final xform index */
+   if (thiscp->final_xform_index == idx_to_delete) {
+      thiscp->final_xform_index = -1;
+      thiscp->final_xform_enable = 0;
+   } else if (thiscp->final_xform_index > idx_to_delete) {
+      thiscp->final_xform_index--;
+   }
+   
+   /* Move all of the xforms down one */
+   for (i=idx_to_delete; i<thiscp->num_xforms-1; i++)
+      thiscp->xform[i] = thiscp->xform[i+1];
+   
+   thiscp->num_xforms--;
+   
+   /* Reduce the memory storage by one xform */
+   thiscp->xform = (flam3_xform *)realloc(thiscp->xform, sizeof(flam3_xform) * thiscp->num_xforms);
+   
+}
+   
+   
+
 /* Copy one control point to another */
-void copy_cp(flam3_genome *dest, flam3_genome *src) {
+void flam3_copy(flam3_genome *dest, flam3_genome *src) {
    
    /* If there are any xforms in dest before the copy, clean them up */
    if (dest->num_xforms > 0 && dest->xform!=NULL) {
@@ -1407,9 +1680,57 @@ void copy_cp(flam3_genome *dest, flam3_genome *src) {
    dest->num_xforms = 0;
    dest->xform = NULL;
    
-   add_xforms_to_cp(dest, src->num_xforms);
+   flam3_add_xforms(dest, src->num_xforms);
    memcpy(dest->xform, src->xform, dest->num_xforms * sizeof(flam3_xform));
 }
+
+void flam3_copyx(flam3_genome *dest, flam3_genome *src, int dest_std_xforms, int dest_final_xform) {
+   
+   int i,j;
+      
+   /* If there are any xforms in dest before the copy, clean them up */
+   if (dest->num_xforms > 0 && dest->xform!=NULL) {
+      free(dest->xform);
+      dest->num_xforms = 0;
+   }
+   
+   /* Copy main contents of genome */
+   memcpy(dest, src, sizeof(flam3_genome));
+   
+   /* Only the pointer to the xform was copied, not the actual xforms. */
+   /* We need to create new xform memory storage for this new cp       */   
+   dest->num_xforms = 0;
+   dest->xform = NULL;
+   
+   /* Add the padded standard xform list */
+   flam3_add_xforms(dest, dest_std_xforms);
+   
+   j=0;
+   for(i=0;i<src->num_xforms;i++) {
+      
+      if (i==src->final_xform_index)
+         continue;
+      
+      dest->xform[j++] = src->xform[i];
+   }
+   
+   /* Add the final xform if necessary */
+   if (dest_final_xform > 0) {
+      flam3_add_xforms(dest, dest_final_xform);
+      dest->final_xform_index = dest->num_xforms-1;
+      dest->final_xform_enable = 1;
+      
+      if (src->final_xform_enable > 0) {
+         dest->xform[dest->num_xforms-1] = src->xform[src->final_xform_index];
+      }
+      
+   } else {
+      dest->final_xform_index = -1;
+      dest->final_xform_enable = 0;
+   }
+   
+}
+
 
 static flam3_genome xml_current_cp;
 static flam3_genome *xml_all_cp;
@@ -1435,9 +1756,12 @@ static void clear_current_cp(int default_flag) {
     cp->rotate = 0.0;
     cp->edits = NULL;
     cp->pixels_per_unit = 50;
+    cp->final_xform_enable = 0;
+    cp->final_xform_index = -1;
+    cp->interpolation = flam3_interpolation_linear;
     
     cp->genome_index = 0;
-    memset(cp->parent_fname,0,parent_fn_len);
+    memset(cp->parent_fname,0,flam3_parent_fn_len);
     
     if (default_flag==flam3_defaults_on) {
        /* If defaults are on, set to reasonable values */
@@ -1513,6 +1837,10 @@ char *flam3_variation_names[1+flam3_nvariations] = {
   "bubble",
   "cylinder",
   "perspective",
+  "noise",
+  "julian",
+  "juliascope",
+  "blur",
   0
 };
 
@@ -1540,11 +1868,11 @@ static void parse_flame_element(xmlNode *flame_node) {
    att_ptr = flame_node->properties;
    
    if (att_ptr==NULL) {
-      fprintf(stderr, "Error : <flame> element has no attributes!\n");
+      fprintf(stderr, "Error : <flame> element has no attributes.\n");
       exit(1);
    }
    
-   memset(cp->flame_name,0,flame_name_len+1);
+   memset(cp->flame_name,0,flam3_name_len+1);
    
    for (cur_att = att_ptr; cur_att; cur_att = cur_att->next) {
       
@@ -1553,8 +1881,16 @@ static void parse_flame_element(xmlNode *flame_node) {
       /* Compare attribute names */
       if (!xmlStrcmp(cur_att->name, (const xmlChar *)"time")) {
          cp->time = atof(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"interpolation")) {
+	  if (!strcmp("linear", att_str)) {
+	      cp->interpolation = flam3_interpolation_linear;
+	  } else if  (!strcmp("smooth", att_str)) {
+	      cp->interpolation = flam3_interpolation_smooth;
+	  } else {
+	      fprintf(stderr, "warning: unrecognized interpolation type %s.", att_str);
+	  }
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"name")) {
-         strncpy(cp->flame_name, att_str, flame_name_len);
+         strncpy(cp->flame_name, att_str, flam3_name_len);
          i = strlen(cp->flame_name)-1;
          while(i-->0) {
             if (isspace(cp->flame_name[i]))
@@ -1597,7 +1933,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          cp->vibrancy = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"hue")) {
          cp->hue_rotation = fmod(atof(att_str), 1.0);
-      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"estimator")) {
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"estimator_radius")) {
          cp->estimator = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"estimator_minimum")) {
          cp->estimator_minimum = atof(att_str);
@@ -1623,7 +1959,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          att_ptr = chld_node->properties;
          
          if (att_ptr==NULL) {
-            fprintf(stderr,"Error!  No attributes for color element!\n");
+            fprintf(stderr,"Error:  No attributes for color element.\n");
             exit(1);
          }
          
@@ -1636,7 +1972,7 @@ static void parse_flame_element(xmlNode *flame_node) {
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rgb")) {
                sscanf(att_str, "%lf %lf %lf", &r, &g, &b);
             } else {
-               fprintf(stderr,"Error!  Unknown color attribute '%s'\n",cur_att->name);
+               fprintf(stderr,"Error:  Unknown color attribute '%s'\n",cur_att->name);
                exit(1);
             }
             
@@ -1648,10 +1984,62 @@ static void parse_flame_element(xmlNode *flame_node) {
             cp->palette[index][1] = g / 255.0;
             cp->palette[index][2] = b / 255.0;
          } else {
-            fprintf(stderr,"Error!  Color element with bad/missing index attribute (%d)\n",index);
+            fprintf(stderr,"Error:  Color element with bad/missing index attribute (%d)\n",index);
             exit(1);
          }
-
+      } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"colors")) {
+         
+         int count;
+         int c_idx=0;
+         int r,g,b;
+         int col_count=0;
+         int sscanf_ret;
+         
+         /* Loop through the attributes of the colors element */
+         att_ptr = chld_node->properties;
+         
+         if (att_ptr==NULL) {
+            fprintf(stderr,"Error: No attributes for colors element.\n");
+            exit(1);
+         }
+         
+         for (cur_att=att_ptr; cur_att; cur_att = cur_att->next) {
+            
+            att_str = (char *) xmlGetProp(chld_node,cur_att->name);
+            
+            if (!xmlStrcmp(cur_att->name, (const xmlChar *)"count")) {
+               count = atoi(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"data")) {
+               
+               c_idx=0;
+               col_count = 0;
+               
+               do {
+                  sscanf_ret = sscanf(&(att_str[c_idx]),"00%2x%2x%2x",&r,&g,&b);
+                  if (sscanf_ret != 3) {
+                     printf("Error:  Problem reading hexadecimal color data.\n");
+                     exit(1);
+                  }
+                  c_idx += 8;
+                  while (isspace( (int)att_str[c_idx]))
+                     c_idx++;
+                  
+                  cp->palette[col_count][0] = r / 255.0;
+                  cp->palette[col_count][1] = g / 255.0;
+                  cp->palette[col_count][2] = b / 255.0;
+                  
+                  col_count++;
+               } while (col_count<count);
+               
+            } else {
+               fprintf(stderr,"Error:  Unknown color attribute '%s'\n",cur_att->name);
+               exit(1);
+            }
+            
+            xmlFree(att_str);
+         }
+               
+            
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"palette")) {
          
          int index0, index1;
@@ -1664,7 +2052,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          att_ptr = chld_node->properties;
          
          if (att_ptr==NULL) {
-            fprintf(stderr,"Error!  No attributes for palette element!\n");
+            fprintf(stderr,"Error:  No attributes for palette element.\n");
             exit(1);
          }
          
@@ -1683,7 +2071,7 @@ static void parse_flame_element(xmlNode *flame_node) {
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blend")) {
                blend = atof(att_str);
             } else {
-               fprintf(stderr,"Error!  Unknown palette attribute '%s'\n",cur_att->name);
+               fprintf(stderr,"Error:  Unknown palette attribute '%s'\n",cur_att->name);
                exit(1);
             }
             
@@ -1700,7 +2088,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          att_ptr = chld_node->properties;
          
          if (att_ptr==NULL) {
-            fprintf(stderr,"Error!  No attributes for symmetry element!\n");
+            fprintf(stderr,"Error:  No attributes for symmetry element.\n");
             exit(1);
          }
          
@@ -1711,7 +2099,7 @@ static void parse_flame_element(xmlNode *flame_node) {
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"kind")) {
                kind = atoi(att_str);
             } else {
-               fprintf(stderr,"Error!  Unknown symmetry attribute '%s'\n",cur_att->name);
+               fprintf(stderr,"Error:  Unknown symmetry attribute '%s'\n",cur_att->name);
                exit(1);
             }
             
@@ -1720,13 +2108,26 @@ static void parse_flame_element(xmlNode *flame_node) {
          
          flam3_add_symmetry(cp,kind);
          
-      } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"xform")) {
+      } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"xform") || 
+                  !xmlStrcmp(chld_node->name, (const xmlChar *)"finalxform")) {
 
          int j,k,xf;
          int perspective_used = 0;
+         int julian_used = 0;
+         int juliascope_used = 0;
          
          xf = cp->num_xforms;
-         add_xforms_to_cp(cp, 1);
+         flam3_add_xforms(cp, 1);
+         
+         if (!xmlStrcmp(chld_node->name, (const xmlChar *)"finalxform")) {
+            
+            if (cp->final_xform_index >=0) {
+               fprintf(stderr,"Error:  Cannot specify more than one final xform.\n");
+               exit(1);
+            }
+            
+            cp->final_xform_index = xf;
+         }
          
          for (j = 0; j < flam3_nvariations; j++) {
             cp->xform[xf].var[j] = 0.0;
@@ -1736,7 +2137,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          att_ptr = chld_node->properties;
          
          if (att_ptr==NULL) {
-            fprintf(stderr,"Error!  No attributes for xform element!\n");
+            fprintf(stderr,"Error: No attributes for xform element.\n");
             exit(1);
          }
          
@@ -1749,6 +2150,8 @@ static void parse_flame_element(xmlNode *flame_node) {
 
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"weight")) {
                cp->xform[xf].density = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"enabled")) {
+               cp->final_xform_enable = atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"symmetry")) {
                cp->xform[xf].symmetry = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"color")) {
@@ -1762,7 +2165,7 @@ static void parse_flame_element(xmlNode *flame_node) {
                j = atoi(att_str);
                
                if (j < 0 || j >= flam3_nvariations) {
-                  fprintf(stderr,"Error!  Bad variation (%d)\n",j);
+                  fprintf(stderr,"Error:  Bad variation (%d)\n",j);
                   j=0;
                }
                
@@ -1783,13 +2186,12 @@ static void parse_flame_element(xmlNode *flame_node) {
                      cp->xform[xf].post[k][j] = strtod(cpy, &cpy);
                   }
                }
-               cp->xform[xf].post_flag = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blob_low")) {
                cp->xform[xf].blob_low = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blob_high")) {
                cp->xform[xf].blob_high = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blob_waves")) {
-               cp->xform[xf].blob_waves = atoi(att_str);
+               cp->xform[xf].blob_waves = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pdj_a")) {
                cp->xform[xf].pdj_a = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pdj_b")) {
@@ -1806,10 +2208,23 @@ static void parse_flame_element(xmlNode *flame_node) {
                cp->xform[xf].rings2_val = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"perspective_angle")) {
                cp->xform[xf].perspective_angle = atof(att_str);
+               perspective_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"perspective_dist")) {
                cp->xform[xf].perspective_dist = atof(att_str);
                perspective_used = 1;
-               
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"julian_power")) {
+               cp->xform[xf].juliaN_power = atof(att_str);
+               julian_used = 1;
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"julian_dist")) {
+               cp->xform[xf].juliaN_dist = atof(att_str);
+               julian_used = 1;               
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"juliascope_power")) {
+               cp->xform[xf].juliaScope_power = atof(att_str);
+               juliascope_used = 1;
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"juliascope_dist")) {
+               cp->xform[xf].juliaScope_dist = atof(att_str);
+               juliascope_used = 1;
+
             } else {
                int v = var2n((char *) cur_att->name);
                if (v != flam3_variation_none)
@@ -1825,6 +2240,18 @@ static void parse_flame_element(xmlNode *flame_node) {
             cp->xform[xf].persp_vsin = sin(ang);
             cp->xform[xf].persp_vfcos = cp->xform[xf].perspective_dist * cos(ang);
          }
+         
+         /* So do the two julia parametric variations */
+         if (julian_used>0) {
+            cp->xform[xf].juliaN_rN = fabs(cp->xform[xf].juliaN_power);
+            cp->xform[xf].juliaN_cn = cp->xform[xf].juliaN_dist / (double)cp->xform[xf].juliaN_power / 2.0;
+         }
+         
+         if (juliascope_used>0) {
+            cp->xform[xf].juliaScope_rN = fabs(cp->xform[xf].juliaScope_power);
+            cp->xform[xf].juliaScope_cn = cp->xform[xf].juliaScope_dist / (double)cp->xform[xf].juliaScope_power / 2.0;
+         }
+         
          
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"edit")) {
          
@@ -1865,10 +2292,10 @@ static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int defau
          }
          
          xml_current_cp.genome_index = xml_all_ncps;
-         memset(xml_current_cp.parent_fname, 0, parent_fn_len);
-         strncpy(xml_current_cp.parent_fname,parent_file,parent_fn_len-1);
+         memset(xml_current_cp.parent_fname, 0, flam3_parent_fn_len);
+         strncpy(xml_current_cp.parent_fname,parent_file,flam3_parent_fn_len-1);
          
-         copy_cp(&(xml_all_cp[xml_all_ncps]), &xml_current_cp);
+         flam3_copy(&(xml_all_cp[xml_all_ncps]), &xml_current_cp);
          xml_all_ncps ++;
 
       } else {         
@@ -2005,7 +2432,8 @@ static void flam3_edit_print(FILE *f, xmlNodePtr editNode, int tabs, int formatt
 
             /* If child is an element, indent first and then print it. */
             if (cur_chld->type==XML_ELEMENT_NODE && 
-               (!xmlStrcmp(cur_chld->name, (const xmlChar *)"edit") || (!xmlStrcmp(cur_chld->name, (const xmlChar *)"sheep")))) {
+               (!xmlStrcmp(cur_chld->name, (const xmlChar *)"edit") ||
+		(!xmlStrcmp(cur_chld->name, (const xmlChar *)"sheep")))) {
 
                if (indent_printed) {
                   indent_printed = 0;
@@ -2114,68 +2542,49 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    char *p = "";
    
    fprintf(f, "%s<flame time=\"%g\"", p, cp->time);
-
-/*   if (0 <= cp->palette_index)
-      fprintf(f, " palette=\"%d\"", cp->palette_index);*/
-
    fprintf(f, " size=\"%d %d\"", cp->width, cp->height);
-
    fprintf(f, " center=\"%g %g\"", cp->center[0], cp->center[1]);
-   
    fprintf(f, " scale=\"%g\"", cp->pixels_per_unit);
 
    if (cp->zoom != 0.0)
       fprintf(f, " zoom=\"%g\"", cp->zoom);
 
    fprintf(f, " rotate=\"%g\"", cp->rotate);
-
    fprintf(f, " oversample=\"%d\"", cp->spatial_oversample);
-
    fprintf(f, " filter=\"%g\"", cp->spatial_filter_radius);
    fprintf(f, " quality=\"%g\"", cp->sample_density);
-
    fprintf(f, " batches=\"%d\"", cp->nbatches);
-
    fprintf(f, " temporal_samples=\"%d\"", cp->ntemporal_samples);
-   fprintf(f, " background=\"%g %g %g\"", cp->background[0], cp->background[1], cp->background[2]);
+   fprintf(f, " background=\"%g %g %g\"",
+	   cp->background[0], cp->background[1], cp->background[2]);
    fprintf(f, " brightness=\"%g\"", cp->brightness);
-/*   fprintf(f, " contrast=\"%g\"", cp->contrast);*/
    fprintf(f, " gamma=\"%g\"", cp->gamma);
-
    fprintf(f, " vibrancy=\"%g\"", cp->vibrancy);
-
-/* Now never put in put in hue */   
-/*   if (0 <= cp->palette_index && cp->hue_rotation != 0.0)
-      fprintf(f, " hue=\"%g\"", cp->hue_rotation);*/
-   fprintf(f," hue=\"0.0\"");
-
-   /* Always put in the filter settings */
-/*   if (cp->estimator >= 0.0)*/
-   fprintf(f, " estimator=\"%g\" estimator_minimum=\"%g\" estimator_curve=\"%g\"",
+   fprintf(f, " estimator_radius=\"%g\" estimator_minimum=\"%g\" estimator_curve=\"%g\"",
       cp->estimator, cp->estimator_minimum, cp->estimator_curve);
+
+   if (flam3_interpolation_linear != cp->interpolation)
+       fprintf(f, " interpolation=\"smooth\"");
 
    if (extra_attributes)
       fprintf(f, " %s", extra_attributes);
    
    fprintf(f, ">\n");
-   
-
-/* We will always list the colors now instead of the indices */   
-/*   if (flam3_palette_interpolated == cp->palette_index) {
-      fprintf(f, "%s   <palette blend=\"%g\" index0=\"%d\" hue0=\"%g\" ",
-                  p, cp->palette_blend, cp->palette_index0, cp->hue_rotation0);
-      fprintf(f, "index1=\"%d\" hue1=\"%g\"/>\n",
-                  cp->palette_index1, cp->hue_rotation1);
-   }*/
-   
 
    if (cp->symmetry)
       fprintf(f, "%s   <symmetry kind=\"%d\"/>\n", p, cp->symmetry);
    for (i = 0; i < cp->num_xforms; i++) {
       int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;
-      if (cp->xform[i].density > 0.0 && !(cp->symmetry &&  cp->xform[i].symmetry == 1.0)) {
-         fprintf(f, "%s   <xform weight=\"%g\" color=\"%g",
-            p, cp->xform[i].density, cp->xform[i].color[0]);
+      int juliaN_var=0,juliaScope_var=0;
+      if ( (cp->xform[i].density > 0.0 || i==cp->final_xform_index)
+             && !(cp->symmetry &&  cp->xform[i].symmetry == 1.0)) {
+                  
+         if (i==cp->final_xform_index )
+            fprintf(f, "%s   <finalxform enabled=\"%d\" color=\"%g",
+		    p, cp->final_xform_enable, cp->xform[i].color[0]);
+         else
+            fprintf(f, "%s   <xform weight=\"%g\" color=\"%g", p, cp->xform[i].density, cp->xform[i].color[0]);
+         
          if (0 && 0.0 != cp->xform[i].color[1]) {
             fprintf(f, " %g\" ", cp->xform[i].color[1]);
          } else {
@@ -2198,13 +2607,18 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
                   rings2_var=1;
                else if (j==30)
                   perspective_var=1;
+               else if (j==32)
+                  juliaN_var=1;
+               else if (j==33)
+                  juliaScope_var=1;
+               
             }
          }
          
          if (blob_var==1) {
             fprintf(f, "blob_low=\"%g\" ", cp->xform[i].blob_low);
             fprintf(f, "blob_high=\"%g\" ", cp->xform[i].blob_high);
-            fprintf(f, "blob_waves=\"%d\" ", cp->xform[i].blob_waves);
+            fprintf(f, "blob_waves=\"%g\" ", cp->xform[i].blob_waves);
          }
          
          if (pdj_var==1) {
@@ -2227,6 +2641,16 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
             fprintf(f, "perspective_angle=\"%g\" ", cp->xform[i].perspective_angle);
             fprintf(f, "perspective_dist=\"%g\" ", cp->xform[i].perspective_dist);
          }
+         
+         if (juliaN_var==1) {
+            fprintf(f, "julian_power=\"%g\" ", cp->xform[i].juliaN_power);
+            fprintf(f, "julian_dist=\"%g\" ", cp->xform[i].juliaN_dist);
+         }
+            
+         if (juliaScope_var==1) {
+            fprintf(f, "juliascope_power=\"%g\" ", cp->xform[i].juliaScope_power);
+            fprintf(f, "juliascope_dist=\"%g\" ", cp->xform[i].juliaScope_dist);
+         }
 
          fprintf(f, "coefs=\"");
          for (j = 0; j < 3; j++) {
@@ -2247,7 +2671,6 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
       }
    }
    
-   /* Always put the palette in */
    for (i = 0; i < 256; i++) {
       int r, g, b;
       r = (int) (cp->palette[i][0] * 255.0);
@@ -2257,7 +2680,6 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
       p, i, r, g, b);
    }
 
-   /* Edit section */
    if (cp->edits != NULL) {
       
       /* We need a custom script for printing these */
@@ -2349,7 +2771,7 @@ void flam3_add_symmetry(flam3_genome *cp, int sym) {
    if (sym < 0) {
       
       i = cp->num_xforms;
-      add_xforms_to_cp(cp,1);
+      flam3_add_xforms(cp,1);
       
       cp->xform[i].density = 1.0;
       cp->xform[i].symmetry = 1.0;
@@ -2374,7 +2796,7 @@ void flam3_add_symmetry(flam3_genome *cp, int sym) {
    for (k = 1; k < sym; k++) {
       
       i = cp->num_xforms;
-      add_xforms_to_cp(cp, 1);
+      flam3_add_xforms(cp, 1);
       
       cp->xform[i].density = 1.0;
       cp->xform[i].var[0] = 1.0;
@@ -2408,6 +2830,7 @@ static int random_varn(int n) {
 
 void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_xforms) {
 
+   /** NEED TO ADD FINAL XFORM TO RANDOMNESS **/
    int i, nxforms, var, samed, multid, samepost, postid;   
 
    static int xform_distrib[] = {
@@ -2418,11 +2841,12 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
      6
    };
    
-   memset(cp->parent_fname,0,parent_fn_len);
+   memset(cp->parent_fname,0,flam3_parent_fn_len);
    
    cp->hue_rotation = (random()&7) ? 0.0 : flam3_random01();
    cp->palette_index = flam3_get_palette(flam3_palette_random, cp->palette, cp->hue_rotation);
    cp->time = 0.0;
+   cp->interpolation = flam3_interpolation_linear;
    
    /* Choose the number of xforms */
    if (spec_xforms>0)
@@ -2435,8 +2859,10 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
       free(cp->xform);
       cp->num_xforms = 0;
    }
+   cp->final_xform_index = -1;
+   cp->final_xform_enable = 0;
    
-   add_xforms_to_cp(cp,nxforms);
+   flam3_add_xforms(cp,nxforms);
 
    /* If first input variation is 'flam3_variation_random' */
    /* choose one to use or decide to use multiple    */
@@ -2543,7 +2969,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          /* Create random params for blob */
          cp->xform[i].blob_low = 0.2 + 0.5 * flam3_random01();
          cp->xform[i].blob_high = 0.8 + 0.4 * flam3_random01();
-         cp->xform[i].blob_waves = 2 + 5 * flam3_random01();
+         cp->xform[i].blob_waves = (int)(2 + 5 * flam3_random01());
       }
       
       if (cp->xform[i].var[24] > 0) {
@@ -2579,6 +3005,28 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          
       }
       
+      if (cp->xform[i].var[32] > 0) {
+         
+         /* Create random params for juliaN */
+         cp->xform[i].juliaN_power = (int)(5*flam3_random01() + 2);
+         cp->xform[i].juliaN_dist = 1.0;
+         
+         /* Calculate other params from these */
+         cp->xform[i].juliaN_rN = fabs(cp->xform[i].juliaN_power);
+         cp->xform[i].juliaN_cn = cp->xform[i].juliaN_dist / (double)cp->xform[i].juliaN_power / 2.0;
+      }
+
+      if (cp->xform[i].var[33] > 0) {
+         
+         /* Create random params for juliaScope */
+         cp->xform[i].juliaScope_power = (int)(5*flam3_random01() + 2);
+         cp->xform[i].juliaScope_dist = 1.0;
+         
+         /* Calculate other params from these */
+         cp->xform[i].juliaScope_rN = fabs(cp->xform[i].juliaScope_power);
+         cp->xform[i].juliaScope_cn = cp->xform[i].juliaScope_dist / (double)cp->xform[i].juliaScope_power / 2.0;
+      }
+
    }
    
    /* Randomly add symmetry */   
@@ -2839,3 +3287,4 @@ void flam3_render(flam3_frame *spec, unsigned char *out,
     break;
   }
 }
+

@@ -73,6 +73,8 @@
 
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->contrast]  forKey:@"contrast"];
 	[genomeEntity setValue:[Genome  getStringSymmetry:genome->symmetry]  forKey:@"symmetry"];
+	[genomeEntity setValue:[NSNumber numberWithInt:genome->interpolation]  forKey:@"interpolation"];
+
 
 	if(genome->edits != NULL) {
 	
@@ -89,10 +91,11 @@
 		[genomeEntity setValue:edits forKey:@"edits"];
 	}
 	
+	NSUserDefaults*	defaults = [NSUserDefaults standardUserDefaults];
 
-	[genomeEntity setValue:@"Vargol" forKey:@"nick"];
-	[genomeEntity setValue:@"http://oxidizer.sf.net" forKey:@"url"];
-	[genomeEntity setValue:@"Created by Oxidizer" forKey:@"comment"];
+	[genomeEntity setValue:[defaults stringForKey:@"nick"] forKey:@"nick"];
+	[genomeEntity setValue:[defaults stringForKey:@"url"] forKey:@"url"];
+	[genomeEntity setValue:[defaults stringForKey:@"comment"] forKey:@"comment"];
 
 	[genomeEntity setValue:image forKey:@"image"];
 	
@@ -182,12 +185,12 @@
 
 		[xFormEntity setValue:[NSNumber numberWithDouble:xform->symmetry] forKey:@"symmetry"];
 
-		if(xform->post_flag == 1) {
+/*		if(xform->post_flag == 1) {
 			[xFormEntity setValue:[NSNumber numberWithBool:YES] forKey:@"post_flag"];
 		} else {
 			[xFormEntity setValue:[NSNumber numberWithBool:NO] forKey:@"post_flag"];
 		}
-					
+*/					
 		
 		name = [[NSMutableString alloc] init];
 		
@@ -205,6 +208,11 @@
 		[xFormEntity setValue:variations forKey:@"variations"];
 //		[variations release];
 		
+		if(genome->final_xform_index == i && genome->final_xform_enable == 1) {
+			[xFormEntity setValue:[NSNumber numberWithBool:YES] forKey:@"final_xform"];
+		} else {
+			[xFormEntity setValue:[NSNumber numberWithBool:NO] forKey:@"final_xform"];
+		}
 
 		[xforms addObject:xFormEntity];
 	
@@ -330,6 +338,42 @@
 				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
 
 				break;
+			case 32:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaN_dist] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaN_power] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_3"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_4"];
+
+
+				[variation setValue:@"Distance:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+
+				break;
+			case 33:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaScope_dist] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaScope_power] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_3"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_4"];
+
+
+				[variation setValue:@"JS Distance:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+
+				break;
 			default:
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_1"];
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];
@@ -419,20 +463,20 @@
 
 	tempString = [genomeEntity valueForKey:@"name"];
 	if(tempString != nil) {
-		strncpy(newGenome->flame_name, [tempString cStringUsingEncoding:NSUTF8StringEncoding], flame_name_len);
+		strncpy(newGenome->flame_name, [tempString cStringUsingEncoding:NSUTF8StringEncoding], flam3_name_len);
 	} else {
 		newGenome->flame_name[0] = '\0'; 
 	}
 
-	newGenome->flame_name[flame_name_len + 1] = '\0';
+	newGenome->flame_name[flam3_name_len + 1] = '\0';
 
 	tempString = [genomeEntity valueForKey:@"parent"];
 	if(tempString != nil) {
-		strncpy(newGenome->parent_fname, [tempString cStringUsingEncoding:NSUTF8StringEncoding], flame_name_len);
+		strncpy(newGenome->parent_fname, [tempString cStringUsingEncoding:NSUTF8StringEncoding], flam3_name_len);
 	} else {
 		newGenome->flame_name[0] = '\0'; 
 	}
-	newGenome->parent_fname[flame_name_len + 1] = '\0';
+	newGenome->parent_fname[flam3_name_len + 1] = '\0';
 
 	newGenome->time = [[genomeEntity valueForKey:@"time"] doubleValue];
 	newGenome->height = [[genomeEntity valueForKey:@"height"] intValue];
@@ -464,6 +508,8 @@
 
 	newGenome->contrast = [[genomeEntity valueForKey:@"contrast"] doubleValue];
 	newGenome->symmetry = [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]];
+	newGenome->interpolation = [[genomeEntity valueForKey:@"interpolation"] intValue];
+	
 	newGenome->edits = [Genome populateCEditDocFromEntity:genomeEntity];
 
 	if([[genomeEntity valueForKey:@"use_palette"] boolValue] == FALSE) {
@@ -517,11 +563,21 @@
 	newGenome->xform = (flam3_xform *)malloc(sizeof(flam3_xform) * newGenome->num_xforms);
 	
 	
+	newGenome->final_xform_index = -1;		
 	for(i=0; i<newGenome->num_xforms; i++) {
 	
 		[Genome poulateXForm:newGenome->xform+i FromEntity:[xforms objectAtIndex:i] fromContext:moc];
+		if([[[xforms objectAtIndex:i] valueForKey:@"final_xform"] boolValue] == YES) {
+			newGenome->final_xform_index = i;
+		}
 	
 	}
+	
+	if(newGenome->final_xform_index != -1) {
+		newGenome->final_xform_enable = 1;
+	} else {
+		newGenome->final_xform_enable = 0;
+	}		
 	
 	if(newGenome->symmetry != 0) {
 		flam3_add_symmetry(newGenome, newGenome->symmetry);
@@ -574,11 +630,13 @@
 
 	xform->symmetry  = [[xformEntity valueForKey:@"symmetry"] doubleValue];
 	
+	/*	
 	if( [[xformEntity valueForKey:@"post_flag"] boolValue] == YES) {
 		xform->post_flag = 1;
 	} else {
 		xform->post_flag = 0;
 	}
+	*/
 	return;
 
 
@@ -622,6 +680,14 @@
 				xform->perspective_angle = [[variation valueForKey:@"parameter_1"] doubleValue];
 				xform->perspective_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
 				break;
+			case 32:
+				xform->juliaN_power = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->juliaN_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				break;
+			case 33:
+				xform->juliaScope_power = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->juliaScope_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				break;	
 			default:
 				break;
 
@@ -790,6 +856,13 @@
 		[paletteImage release];
 
 		[genomeEntity setValue:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0] forKey: @"background"];
+		
+		NSUserDefaults*	defaults = [NSUserDefaults standardUserDefaults];
+
+		[genomeEntity setValue:[defaults stringForKey:@"nick"] forKey:@"nick"];
+		[genomeEntity setValue:[defaults stringForKey:@"url"] forKey:@"url"];
+		[genomeEntity setValue:[defaults stringForKey:@"comment"] forKey:@"comment"];
+
 
 		[genomeEntity setValue:[Genome createDefaultXFormEntitySetInContext:moc] forKey: @"xforms"];
 		

@@ -30,6 +30,7 @@
 		sizeScale = 1;
 		seed = time(NULL);
 		useAlpha = NO;	
+		colourShift = 0.0;	
 		
 		srandom(time(NULL) + getpid()) ;
 		

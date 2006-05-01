@@ -1,5 +1,5 @@
 /*
-    flam3 - cosmic recursive fractal flames
+    FLAM3 - cosmic recursive fractal flames
     Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
 
     This program is free software; you can redistribute it and/or modify
@@ -25,7 +25,7 @@
 #include <libxml/parser.h>
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.2 2006/02/20 19:30:28 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.4 2006/07/02 12:50:18 vargol Exp $";
 
 char *flam3_version();
 
@@ -34,6 +34,8 @@ char *flam3_version();
 
 #define flam3_defaults_on          (1)
 #define flam3_defaults_off         (0)
+
+#define flam3_name_len    64
 
 typedef double flam3_palette[256][3];
 
@@ -45,14 +47,16 @@ int flam3_get_palette(int palette_index, flam3_palette p, double hue_rotation);
 
 extern char *flam3_variation_names[];
 
-#define flam3_nvariations 31
+#define flam3_nvariations 35
 #define flam3_nxforms     12
 
-#define parent_fn_len     30
+#define flam3_parent_fn_len     30
 
-#define flame_name_len    64
+#define flam3_interpolation_linear 0
+#define flam3_interpolation_smooth 1
 
-typedef void (*iterFunction)(void *, double);
+
+typedef void (*flam3_iterator)(void *, double);
 
 typedef struct {
    double var[flam3_nvariations];   /* interp coefs between variations */
@@ -62,7 +66,6 @@ typedef struct {
    double color[2];     /* color coords for this function. 0 - 1 */
    double symmetry;     /* 1=this is a symmetry xform, 0=not */
    
-   int post_flag;
    int precalc_sqrt_flag;
    int precalc_angles_flag;
 
@@ -70,7 +73,7 @@ typedef struct {
    /* Blob */
    double blob_low;
    double blob_high;
-   int blob_waves;
+   double blob_waves;
    
    /* PDJ */
    double pdj_a;
@@ -89,43 +92,47 @@ typedef struct {
    double perspective_angle;
    double perspective_dist;
    
+   /* Julia_N */
+   double juliaN_power;
+   double juliaN_dist;
+   
+   /* Julia_Scope */
+   double juliaScope_power;
+   double juliaScope_dist;
+   
    /* If perspective is used, precalculate these values */
    /* from the _angle and _dist                         */
    double persp_vsin;
    double persp_vfcos;
+   
+   /* If Julia_N is used, precalculate these values */
+   double juliaN_rN;
+   double juliaN_cn;
+
+   /* If Julia_Scope is used, precalculate these values */
+   double juliaScope_rN;
+   double juliaScope_cn;
 
    /* function pointers for faster iterations */
    int num_active_vars;
    double active_var_weights[flam3_nvariations];
-   iterFunction varFunc[flam3_nvariations];
+   flam3_iterator varFunc[flam3_nvariations];
    
 } flam3_xform;
 
 typedef struct {
-   
-   double tx,ty; /* Starting coordinates */
-   
-   double precalc_atan, precalc_sina;  /* Precalculated, if needed */
-   double precalc_cosa, precalc_sqrt;
-   
-   flam3_xform *xform; /* For the important values */
-   
-   /* Output Coords */
-   
-   double p0, p1;
-   
-} flam3_iter_helper;
-
-typedef struct {
-   char flame_name[flame_name_len+1]; /* 64 chars plus a null */
+   char flame_name[flam3_name_len+1]; /* 64 chars plus a null */
+   double time;
+   int interpolation;
    int num_xforms;
+   int final_xform_index;
+   int final_xform_enable;
    flam3_xform *xform;
    int genome_index;                   /* index into source file */
-   char parent_fname[parent_fn_len];   /* base filename where parent was located */
+   char parent_fname[flam3_parent_fn_len];   /* base filename where parent was located */
    int symmetry;                /* 0 means none */
    flam3_palette palette;
    char *input_image;           /* preview/temporary! */
-   double time;
    int  palette_index;
    double brightness;           /* 1.0 = normal */
    double contrast;             /* 1.0 = normal */
@@ -171,9 +178,11 @@ typedef struct {
    double palette_blend;
 } flam3_genome;
 
-/* xform manipulation stubs */
-void add_xforms_to_cp(flam3_genome *cp, int num_to_add);
-void copy_cp(flam3_genome *dest, flam3_genome *src);
+/* xform manipulation */
+void flam3_add_xforms(flam3_genome *cp, int num_to_add);
+void flam3_delete_xform(flam3_genome *thiscp, int idx_to_delete);
+void flam3_copy(flam3_genome *dest, flam3_genome *src);
+void flam3_copyx(flam3_genome *dest, flam3_genome *src, int num_std, int num_final);
 
 /* samples is array nsamples*4 long of x,y,color triples.
    using (samples[0], samples[1]) as starting XY point and
@@ -185,6 +194,9 @@ void flam3_iterate(flam3_genome *g, int nsamples, int fuse, double *samples);
 /* genomes is array ngenomes long, with times set and in ascending order.
    interpolate to the requested time and return in result */
 void flam3_interpolate(flam3_genome *genomes, int ngenomes, double time, flam3_genome *result);
+
+/* barycentric coordinates in c */
+void flam3_interpolate_n(flam3_genome *result, int ncp, flam3_genome *cpi, double *c);
 
 /* print genome to given file with extra_attributes if not NULL */
 void flam3_print(FILE *f, flam3_genome *g, char *extra_attributes);

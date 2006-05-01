@@ -48,6 +48,8 @@
 	NSArray *cmapSortDescriptors;
 	
 	NSDocumentController *docController;
+
+	NSUserDefaults *defaults;
 	
 	int verbose;
 	int bits;
@@ -84,7 +86,7 @@
 - (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps;
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
 - (BOOL)saveToFile:(NSBitmapImageRep *)rep;
-- (BOOL)EnvironmentInit:(flam3_frame *)f;
+- (BOOL)EnvironmentInit:(flam3_frame *)f threadCount:(int)threads;
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
 
 - (void)renderFlames:(flam3_genome *)cps numberOfFlames:(int)ncps;

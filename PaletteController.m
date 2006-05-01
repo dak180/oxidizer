@@ -31,8 +31,17 @@
 	
 	int paletteCount, i;
 	
-	if (self = [super init]) {
 	
+	char buffer[256];
+	
+	
+	if (self = [super init]) {
+   
+		[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[ NSBundle mainBundle ] resourcePath ]]; 
+   
+		getcwd(buffer, 255);		
+		fprintf(stderr, "%s\n", buffer);
+
    
 	paletteCount = 700;
 	_colours = [[NSMutableArray alloc] initWithCapacity:256];
@@ -240,7 +249,7 @@
 		if([colours count] < 256) {
 			finalColours = [PaletteController extrapolateArray:colours];
 		}  else {
-			finalColours = colours;
+			finalColours = [NSMutableArray arrayWithArray:colours];
 		}
 		
 		

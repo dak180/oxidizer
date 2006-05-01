@@ -20,6 +20,7 @@
 #import <sys/sysctl.h>
 #import "FractalFlameModel.h"
 #import "Genome.h"
+#import "ThreadParameters.h"
 #import "QuickTime/QuickTime.h"
 
 int printProgress(void *nslPtr, double progress, int stage);
@@ -28,18 +29,28 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - init
 {
-	NSUserDefaults *defaults;
 	NSSortDescriptor *sort;
-	
+	NSString *threads;
+	 
     if (self = [super init]) {
+		 unsigned int cpuCount ;
+		  size_t len = sizeof(cpuCount);
+		  static int mib[2] = { CTL_HW, HW_NCPU };
 
-
+		  if(sysctl(mib, 2,  &cpuCount, &len, NULL, 0) == 0 && len ==  sizeof(cpuCount)) {
+			  threads = [NSString stringWithFormat:@"%ld", cpuCount];
+		  } else {
+			  threads = @"1";
+		}  
+  
 		defaults = [NSUserDefaults standardUserDefaults];
+		
 		
 		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
 			NSUserName(),  @"nick",
 			@"http://oxidizer.sf.net", @"url",
 			@"Made by Oxidizer", @"comment",
+			threads, @"threads",
 			nil]
 			];
 		
@@ -129,7 +140,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 
 	frame.genomes = genome;
-	[self EnvironmentInit:&frame];
+	[self EnvironmentInit:&frame threadCount:1];
 	
 	frame.time = 0.0;
 	frame.ngenomes = 1;
@@ -155,6 +166,218 @@ int printProgress(void *nslPtr, double progress, int stage);
 }
 
 - (IBAction)renderAnimation:(id)sender {
+	
+	int threads;
+	
+	ThreadParameters *threadParameters;
+
+   	NSBitmapImageRep *flameRep;
+	NSImage *flameImage;
+	
+	int ftime, frameCount;
+	unsigned char *image;
+	
+	flam3_genome *cps;
+	flam3_frame f;	
+	int i, ncps = 0;
+		
+	NSArray *genomes;
+	
+
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomes = [moc executeFetchRequest:fetch error:nil];
+	[fetch release];	  
+	
+	threads = [defaults integerForKey:@"threads" ];
+	
+	channels = 4;
+	
+  	ncps = [genomes count];
+
+	if(ncps == 0) {
+		return;
+	}
+
+	BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
+	if(doRender == NO) {
+		return;
+	}
+
+	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
+	
+	dtime = 1;
+	f.genomes = cps;
+	[self EnvironmentInit:&f threadCount:threads];
+	
+	srandom(seed ? seed : (time(0) + getpid()));
+	
+	if (pixel_aspect <= 0.0) {
+		fprintf(stderr, "pixel aspect ratio must be positive, not %g.\n",
+				pixel_aspect);
+		exit(1);
+	}
+	
+	if (NULL == cps) {
+		exit(1);
+	}
+	if (0 == ncps) {
+		fprintf(stderr, "error: no genomes.\n");
+		exit(1);
+	}
+	
+	for (i = 0; i < ncps; i++) {
+		cps[i].sample_density *= qs;
+		cps[i].height = (int)(cps[i].height * ss);
+		cps[i].width = (int)(cps[i].width * ss);
+		cps[i].pixels_per_unit *= ss;
+		if ((cps[i].width != cps[0].width) ||
+			(cps[i].height != cps[0].height)) {
+			fprintf(stderr, "warning: flame %d at time %g size mismatch.  "
+					"(%d,%d) should be (%d,%d).\n",
+					i, cps[i].time,
+					cps[i].width, cps[i].height,
+					cps[0].width, cps[0].height);
+			cps[i].width = cps[0].width;
+			cps[i].height = cps[0].height;
+		}
+	}
+	
+	
+	first_frame = (int) cps[0].time;
+	
+	last_frame = (int) cps[ncps-1].time - 1;
+	
+	
+	if (last_frame < first_frame) last_frame = first_frame;
+	
+	f.temporal_filter_radius = 0.5;
+	f.pixel_aspect_ratio = pixel_aspect;
+	f.genomes = cps;
+	f.ngenomes = ncps;
+	f.verbose = verbose;
+	f.bits = bits;
+	f.progress = 0;
+
+	if (dtime < 1) {
+		fprintf(stderr, "dtime must be positive, not %d.\n", dtime);
+		exit(1);
+	}	
+	NSConditionLock *lock = [[NSConditionLock alloc] initWithCondition:0];
+	
+	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
+	
+	for(i=0; i<threads; i++) {
+
+		NSConditionLock *endLock = [[NSConditionLock alloc] initWithCondition:0];
+
+		threadParameters = [[ThreadParameters alloc] init];
+		
+		[threadParameters setLockCondition:i];
+		if(i+1 == threads) {
+			[threadParameters setReleaseCondition:0];
+		} else {
+			[threadParameters setReleaseCondition:i+1];
+		}
+		[threadParameters setConditionLock:lock];
+		[threadParameters setEndLock:endLock];
+		
+		[endLock release];
+
+	
+		flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+														  pixelsWide:cps->width
+														  pixelsHigh:cps->height
+													   bitsPerSample:8
+													 samplesPerPixel:channels
+															hasAlpha:channels == 4 ? YES : NO 
+															isPlanar:NO
+													  colorSpaceName:NSDeviceRGBColorSpace
+														bitmapFormat:0
+														 bytesPerRow:channels*cps->width
+														bitsPerPixel:8*channels];
+		image =[flameRep bitmapData];
+		
+		flameImage = [[NSImage alloc] init];
+		[flameImage addRepresentation:flameRep];
+		
+		flam3_frame *frame = (flam3_frame *)malloc(sizeof(flam3_frame));
+		/* no need for a deep copy */
+		*frame = f; 
+		
+		[threadParameters setFrames:frame];
+		[threadParameters setImage:flameImage];
+		[threadParameters setImageRep:flameRep];
+
+		[paramArray addObject:threadParameters];
+	}
+	
+
+	
+	f.verbose = 0;
+	
+	[progressIndicator setDoubleValue:0.0];
+	
+	[frameIndicator setMaxValue:(last_frame - first_frame) / dtime];
+	frameCount = 0;
+	[frameIndicator setIntValue:0];
+	
+	[progressWindow setTitle:@"Rendering Movie..."];
+	
+	[progressWindow makeKeyAndOrderFront:self];
+
+	f.progress = printProgress;
+	f.progress_parameter = progressIndicator;
+	
+
+//	for (ftime = first_frame; ftime <= last_frame; ftime += dtime) {
+
+	ftime = first_frame;
+	
+	for(i=0; i<threads; i++) {
+		[[[paramArray objectAtIndex:i] getEndLock] lock];
+	
+		[[paramArray objectAtIndex:i] setFirstFrame:ftime];
+		[NSThread detachNewThreadSelector:@selector(threadedMovieRender:)  toTarget:self withObject:[paramArray objectAtIndex:i]];
+		ftime += dtime;
+	}
+	
+	while (ftime <= last_frame) {
+		for(i=0; i<threads; i++) {
+			[[[paramArray objectAtIndex:i] getEndLock] lock];
+			
+			if([[paramArray objectAtIndex:i] getFirstFrame] <= last_frame) {
+				[frameIndicator setIntValue:[frameIndicator intValue]+1];
+				[frameIndicator displayIfNeeded];
+				[qtController addNSImageToMovie:[[paramArray objectAtIndex:i] getImage]];
+				[[paramArray objectAtIndex:i] setFirstFrame:ftime];
+				[NSThread detachNewThreadSelector:@selector(threadedMovieRender:)  toTarget:self withObject:[paramArray objectAtIndex:i]];
+				ftime += dtime;
+			}
+		}
+	}
+		
+	NSLog(@"saving movie");
+	[progressWindow setTitle:@"Writing Movie to Disk..."];
+	
+	[qtController saveMovie];
+
+
+	[progressWindow setIsVisible:NO];
+	
+	NSBeep();
+
+}
+
+
+
+- (IBAction)oldrenderAnimation:(id)sender {
 	
 	//          NSData *data;
     //        QTDataReference *dataRef;
@@ -197,7 +420,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	dtime = 1;
 	f.genomes = cps;
-	[self EnvironmentInit:&f];
+	[self EnvironmentInit:&f threadCount:1];
 	
 	srandom(seed ? seed : (time(0) + getpid()));
 	
@@ -313,185 +536,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 }
 
 
-- (IBAction)oldRenderAnimation:(id)sender {
-	
-	//          NSData *data;
-    //        QTDataReference *dataRef;
-   	NSBitmapImageRep *flameRep;
-	NSImage *flameImage;
-	QTMovie *movie;
-	OSErr outErr;
-	
-	int ftime, frameCount;
-	unsigned char *image;
-	DataHandler mDataHandlerRef;
-	
-	flam3_genome *cps;
-	flam3_frame f;	
-	int i, ncps = 0;
-	
-	[qtController showQuickTimeFileMovieDialogue];
-	
-	NSArray *genomes;
-	
-	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
-	
-	genomes = [moc executeFetchRequest:fetch error:nil];
-	[fetch release];	  
-	
-	channels = 4;
-	
-  	ncps = [genomes count];
-	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
-	
-	dtime = 1;
-	
-	[self EnvironmentInit:&f];
-	
-	QTTime curTime = QTMakeTime(30, 60);
-	
-	NSDictionary *myDict = [NSDictionary dictionaryWithObjectsAndKeys:@"tiff" ,
-		QTAddImageCodecType,
-		[NSNumber numberWithLong:codecHighQuality],
-		QTAddImageCodecQuality,
-		nil];
-	
-	
-	movie = [self QTMovieFromTempFile:&mDataHandlerRef error:&outErr];
-	[movie setAttribute:[NSNumber numberWithBool:YES] forKey:QTMovieEditableAttribute];	
-	
-	
-	srandom(seed ? seed : (time(0) + getpid()));
-	
-	if (pixel_aspect <= 0.0) {
-		fprintf(stderr, "pixel aspect ratio must be positive, not %g.\n",
-				pixel_aspect);
-		exit(1);
-	}
-	
-	if (NULL == cps) {
-		exit(1);
-	}
-	if (0 == ncps) {
-		fprintf(stderr, "error: no genomes.\n");
-		exit(1);
-	}
-	
-	for (i = 0; i < ncps; i++) {
-		cps[i].sample_density *= qs;
-		cps[i].height = (int)(cps[i].height * ss);
-		cps[i].width = (int)(cps[i].width * ss);
-		cps[i].pixels_per_unit *= ss;
-		if ((cps[i].width != cps[0].width) ||
-			(cps[i].height != cps[0].height)) {
-			fprintf(stderr, "warning: flame %d at time %g size mismatch.  "
-					"(%d,%d) should be (%d,%d).\n",
-					i, cps[i].time,
-					cps[i].width, cps[i].height,
-					cps[0].width, cps[0].height);
-			cps[i].width = cps[0].width;
-			cps[i].height = cps[0].height;
-		}
-	}
-	
-	
-	first_frame = (int) cps[0].time;
-	
-	last_frame = (int) cps[ncps-1].time - 1;
-	
-	
-	if (last_frame < first_frame) last_frame = first_frame;
-	
-	f.temporal_filter_radius = 0.5;
-	f.pixel_aspect_ratio = pixel_aspect;
-	f.genomes = cps;
-	f.ngenomes = ncps;
-	f.verbose = verbose;
-	f.bits = bits;
-	f.progress = 0;
-	
-	flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-													  pixelsWide:cps->width
-													  pixelsHigh:cps->height
-												   bitsPerSample:8
-												 samplesPerPixel:channels
-														hasAlpha:channels == 4 ? YES : NO 
-														isPlanar:NO
-												  colorSpaceName:NSDeviceRGBColorSpace
-													bitmapFormat:0
-													 bytesPerRow:channels*cps->width
-													bitsPerPixel:8*channels];
-	image =[flameRep bitmapData];
-	
-	flameImage = [[NSImage alloc] init];
-	[flameImage addRepresentation:flameRep];
-	
-	
-	
-	if (dtime < 1) {
-		fprintf(stderr, "dtime must be positive, not %d.\n", dtime);
-		exit(1);
-	}
-	
-	f.verbose = 0;
-	
-	[progressIndicator setDoubleValue:0.0];
-	
-	[frameIndicator setMaxValue:(last_frame - first_frame) / dtime];
-	frameCount = 0;
-	[frameIndicator setIntValue:0];
-	
-	[progressWindow setTitle:@"Rendering Movie..."];
-	
-	[progressWindow makeKeyAndOrderFront:self];
-
-	f.progress = printProgress;
-	f.progress_parameter = progressIndicator;
-	
-	
-	for (ftime = first_frame; ftime <= last_frame; ftime += dtime) {
-		f.time = (double) ftime;
-		
-		[frameIndicator setIntValue:++frameCount];
-		[frameIndicator displayIfNeeded];
-		
-//		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
-		
-		flam3_render(&f, image, cps[0].width, flam3_field_both, channels, transparency);		
-		
-		[movie addImage:flameImage forDuration:curTime withAttributes:myDict];	
-		
-    }
-	
-	[progressWindow setTitle:@"Writing Movie to Disk..."];
-	
-	ConvertMovieToFile ([movie quickTimeMovie],     /* identifies movie */
-		0,                /* all tracks */
-		0,                /* no output file */
-		0,                  /* no file type */
-		0,                  /* no creator */
-		smSystemScript,     /* script */
-		0,                /* no resource ID */
-		createMovieFileDeleteCurFile |
-		showUserSettingsDialog |
-		movieToFileOnlyExport,
-		0);
-
-
-	if (mDataHandlerRef) {
-		CloseMovieStorage(mDataHandlerRef);
-	}
-
-	[progressWindow setIsVisible:NO];
-
-}
-
-
-
-
-
-- (BOOL)EnvironmentInit:(flam3_frame *)f {
+- (BOOL)EnvironmentInit:(flam3_frame *)f threadCount:(int)threads {
 
 	verbose = 1;
 	transparency = 1;
@@ -515,8 +560,12 @@ int printProgress(void *nslPtr, double progress, int stage);
 	if (getenv("nstrips")) {
 		nstrips = atoi(getenv("nstrips"));
 	} else {
-		nstrips = calc_nstrips(f);
+		nstrips = calc_nstrips(f, threads);
 	}
+
+	if(0 != setenv("shift", [[NSString stringWithFormat:@"%f", environment->colourShift] cStringUsingEncoding:NSUTF8StringEncoding] , 1))
+		perror("shift not set");
+
 	
 	return TRUE;
 
@@ -613,7 +662,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	cps->pixels_per_unit *= scaleFactor;
 
 	frame.genomes = cps;
-	[self EnvironmentInit:&frame];
+	[self EnvironmentInit:&frame threadCount:1];
 	
 	frame.time = 0.0;
 	frame.temporal_filter_radius = 0.0;
@@ -663,7 +712,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 
 
-int calc_nstrips(flam3_frame *spec) {
+int calc_nstrips(flam3_frame *spec, int threads) {
   double mem_required;
   double mem_available;
   int nstrips;
@@ -690,6 +739,7 @@ int calc_nstrips(flam3_frame *spec) {
  
   mem_available *= 0.8;
   mem_required = flam3_render_memory_required(spec);
+  mem_required *= threads;
   
   if (mem_available >= mem_required) {
 	  return 1;
@@ -711,7 +761,7 @@ int calc_nstrips(flam3_frame *spec) {
 
 	frame.genomes = cps;
 
-	[self EnvironmentInit:&frame];
+	[self EnvironmentInit:&frame threadCount:1];
 	
 	frame.time = 0.0;
 	frame.temporal_filter_radius = 0.0;
@@ -998,7 +1048,34 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
+- (void) threadedMovieRender:(id) lockParameters {
+
+	flam3_frame *frames = [lockParameters getFrames];
+	unsigned char *image = [[lockParameters getImageRep] bitmapData];
+	int width = frames->genomes[0].width;
+
+
+	NSAutoreleasePool *subPool = [[NSAutoreleasePool alloc] init];
+
+	frames->time =  [lockParameters getFirstFrame];
+		
+	if(frames->time <= last_frame) {
+		flam3_render(frames, image, width, flam3_field_both, channels, transparency);		
+	}
+//		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
+
+	[[lockParameters getEndLock] unlock];
 	
+
+	
+	[subPool release];
+
+
+	
+}	
+
+
+
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {

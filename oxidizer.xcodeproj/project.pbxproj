@@ -24,6 +24,8 @@
 		A4DA85880966DB7D00FFCF4D /* FractalFlameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */; };
 		A4DA858E0966DD2A00FFCF4D /* EnvironmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */; };
 		A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
+		A4DAB5A80A02A9F7003BA626 /* ThreadParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DAB5A70A02A9F7003BA626 /* ThreadParameters.m */; };
+		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
 		A4F333A2096C813B00230854 /* Genome.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F333A1096C813B00230854 /* Genome.m */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +75,9 @@
 		A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = EnvironmentController.m; sourceTree = "<group>"; };
 		A4DA871B096712CA00FFCF4D /* FlameController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FlameController.h; sourceTree = "<group>"; };
 		A4DA871C096712CA00FFCF4D /* FlameController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FlameController.m; sourceTree = "<group>"; };
+		A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ThreadParameters.h; sourceTree = "<group>"; };
+		A4DAB5A70A02A9F7003BA626 /* ThreadParameters.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ThreadParameters.m; sourceTree = "<group>"; };
+		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "../../flam3-palettes.xml"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4F333A0096C813B00230854 /* Genome.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genome.h; sourceTree = "<group>"; };
 		A4F333A1096C813B00230854 /* Genome.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genome.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -95,6 +100,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */,
+				A4DAB5A70A02A9F7003BA626 /* ThreadParameters.m */,
 				A4D604A909658A6C0001CD1D /* PaletteController.h */,
 				A4D604AA09658A6C0001CD1D /* PaletteController.m */,
 				A4DA85860966DB7D00FFCF4D /* FractalFlameModel.h */,
@@ -170,6 +177,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A4E52D560A0141A400382558 /* flam3-palettes.xml */,
 				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
@@ -244,6 +252,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */,
@@ -268,6 +277,7 @@
 				A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */,
 				A4D6FA2D09B1E25200096036 /* GenomeManagedObject.m in Sources */,
 				A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */,
+				A4DAB5A80A02A9F7003BA626 /* ThreadParameters.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -18,7 +18,7 @@
 */
 
 static char *docstring_c_id =
-"@(#) $Id: docstring.c,v 1.1 2006/02/09 13:40:28 vargol Exp $";
+"@(#) $Id: docstring.c,v 1.3 2006/07/02 12:50:17 vargol Exp $";
 
 #include "config.h"
 
@@ -85,6 +85,7 @@ char *docstring =
 "nick		\"\"		nickname to use in <edit> tags (genome only)\n"
 "url		\"\"		url to use in <edit> tags (genome only)\n"
 "comment		\"\"		comment string for <edit> tags (genome only)\n"
+"use_mem		auto		floating point number of bytes of memory to use (render only)\n"
 "\n"
 "\n"
 "for example:\n"
@@ -211,6 +212,10 @@ char *docstring =
 "  bubble\n"
 "  cylinder\n"
 "  perspective\n"
+"  noise\n"
+"  julian\n"
+"  juliascope\n"
+"  blur\n"
 "\n"
 "see http://flam3.com/flame.pdf for descriptions & formulas for each of\n"
 "these.\n"
