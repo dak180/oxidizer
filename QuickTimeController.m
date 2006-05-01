@@ -358,6 +358,7 @@
 -(void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep {
 
 	Component c;
+	Component gec;
 	ComponentResult cErr;
 
 	unsigned long actualSizeWritten;
@@ -374,7 +375,7 @@
 	(**dataReference).data = (void *) [tiff bytes];
 	(**dataReference).dataLength = [tiff length];
 	
-	GraphicsImportSetDataReference( tiffImportComponent, (Handle)dataReference, PointerDataHandlerSubType );
+	cErr = GraphicsImportSetDataReference( tiffImportComponent, (Handle)dataReference, PointerDataHandlerSubType );
 	
 	int componentIndex = [imageExportController selectionIndex];
 	
@@ -384,7 +385,14 @@
 	Handle theText;
 	cErr = GraphicsExportGetSettingsAsText (geExporter, &theText );
 */
-		
+	
+	if(geExporter == NULL) {
+		int index = [imageExportController selectionIndex];
+		memcpy(&gec, [[[imageComponents objectAtIndex:index] objectForKey:@"component"] bytes], sizeof(c));
+		geExporter = OpenComponent(gec);
+	}
+	
+				
 	cErr = GraphicsExportSetInputGraphicsImporter (geExporter, tiffImportComponent);
 	
 	FSSpec spec = [QuickTimeController getToFSSpecFromPath:filename];
@@ -393,6 +401,7 @@
 	cErr = GraphicsExportDoExport (geExporter, &actualSizeWritten );
 		
 	CloseComponent(geExporter);
+	geExporter = NULL;
 	CloseComponent(tiffImportComponent);
 	
 

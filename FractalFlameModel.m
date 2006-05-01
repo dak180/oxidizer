@@ -538,7 +538,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (BOOL)EnvironmentInit:(flam3_frame *)f threadCount:(int)threads {
 
-	verbose = 1;
+	verbose = 0;
 	transparency = 1;
 	qs = environment->qualityScale;
 	ss = environment->sizeScale;
