@@ -15,7 +15,6 @@
                 changeColourMap = id; 
                 changeColourMapAndHideWindow = id; 
                 changePaletteAndHidePaletteWindow = id; 
-                showFlameWindow = id; 
                 showPaletteList = id; 
                 showXFormWindow = id; 
             }; 
@@ -41,6 +40,7 @@
         {
             ACTIONS = {
                 changePaletteAndHidePaletteWindow = id; 
+                editGenomes = id; 
                 openFile = id; 
                 previewCurrentFlame = id; 
                 renderAnimation = id; 

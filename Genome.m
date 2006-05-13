@@ -134,7 +134,6 @@
 	}
 
 //	[genomeEntity autorelease];
-	[moc save:nil];
 
 	return genomeEntity;
 
@@ -990,6 +989,8 @@
 	[variations autorelease];
 	return variations;
 } 
+
+
 
 
 @end

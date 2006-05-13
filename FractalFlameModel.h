@@ -81,6 +81,7 @@
 - (IBAction)previewCurrentFlame:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
 - (IBAction)showPreferencesWindow:(id)sender;
+- (IBAction)editGenomes:(id)sender;
 
 
 - (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps;
@@ -93,6 +94,7 @@
 - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps;
 - (NSBitmapImageRep *)renderThumbnail:(flam3_genome *)cps; 
 - (QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
+- (NSManagedObject *) createRandomGenome;
 
 - (void) deleteOldGenomes;
 @end

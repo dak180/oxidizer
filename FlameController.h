@@ -48,9 +48,7 @@
 
 
 - (IBAction)showXFormWindow:(id)sender;
-- (IBAction)showFlameWindow:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
-- (IBAction)showFlameWindow:(id)sender;
 - (IBAction)showPaletteList:(id)sender;
 - (IBAction)changeColourMap:(id)sender;
 - (IBAction)changeColourMapAndHideWindow:(id)sender;
@@ -64,5 +62,8 @@
 -(void)setPreviewForCurrentFlame:(NSImage *)preview;
 - (NSManagedObject *)getSelectedGenome;
 
+- (void)addNewFlame:(NSManagedObject *)genomeEntity;
+- (void)showFlameWindow;
+- (void)removeFlame;
 
 @end

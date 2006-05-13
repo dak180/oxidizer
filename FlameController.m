@@ -21,6 +21,7 @@
 #import "Genome.h"
 #import "flam3.h"
 
+
 @implementation FlameController : NSObject
 
 - init
@@ -149,68 +150,59 @@
     
 }
 
-- (IBAction)showFlameWindow:(id)sender
-{
+- (void)addNewFlame:(NSManagedObject *)genomeEntity {
 
 	unsigned int selectedIndex, time, time2, newIndex;
 	NSArray *arrangedObjects;
 
-	 NSSegmentedControl *segments = (NSSegmentedControl *)sender;
-	 switch([segments selectedSegment]) {
-		case 0:
-			selectedIndex = [genomeController selectionIndex];
-			arrangedObjects = [genomeController arrangedObjects];
-			
-			
-			NSManagedObjectContext *moc = 			[genomeController managedObjectContext];
-			NSManagedObject *genomeEntity = [Genome createDefaultGenomeEntityFromInContext:moc];
-			[genomeEntity retain];
-			
-			switch([arrangedObjects count]) {
-			
-				case 0:
-					[genomeEntity setValue:[NSNumber numberWithInt:0] forKey:@"time"];
-					newIndex = 0;
-					break;
-				case 1:
-					time = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
-					[genomeEntity setValue:[NSNumber numberWithInt:time+50] forKey:@"time"];
-					newIndex = 1;
-					break;
-				default:
-					newIndex = selectedIndex + 1;
-					time  = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
-					if([arrangedObjects count] == selectedIndex + 1) {
-						// last object is selected
-						time2 = time + 100;
-					} else {
-						time2 = [[[arrangedObjects objectAtIndex:newIndex] valueForKey:@"time"] intValue];
-					}
-					[genomeEntity setValue:[NSNumber numberWithInt:time + ((time2 - time) / 2)] forKey:@"time"];
-					break;
-			
-			}  	
-			[genomeController insertObject:genomeEntity atArrangedObjectIndex:newIndex];
-			[genomeEntity release];
+	selectedIndex = [genomeController selectionIndex];
+	arrangedObjects = [genomeController arrangedObjects];
 
+	switch([arrangedObjects count]) {
+
+		case 0:
+			[genomeEntity setValue:[NSNumber numberWithInt:0] forKey:@"time"];
+			newIndex = 0;
 			break;
 		case 1:
-			[flameWindow makeKeyAndOrderFront:self];
-			break;
-		case 2:
-			[genomeController remove:sender];
+			time = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
+			[genomeEntity setValue:[NSNumber numberWithInt:time+50] forKey:@"time"];
+			newIndex = 1;
 			break;
 		default:
+			newIndex = selectedIndex + 1;
+			time  = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
+			if([arrangedObjects count] == selectedIndex + 1) {
+				// last object is selected
+				time2 = time + 100;
+			} else {
+				time2 = [[[arrangedObjects objectAtIndex:newIndex] valueForKey:@"time"] intValue];
+			}
+			[genomeEntity setValue:[NSNumber numberWithInt:time + ((time2 - time) / 2)] forKey:@"time"];
 			break;
-	 }	
 
+	}  	
+//	[genomeController insertObject:genomeEntity atArrangedObjectIndex:newIndex];
+	[genomeController rearrangeObjects];
+	
 	[paletteWithHue setNeedsDisplay:YES];
 
 }
 
 
+- (void)showFlameWindow {
 
--(void) cancelChanges:(id)sender {
+	[flameWindow makeKeyAndOrderFront:self];
+
+}
+
+- (void) removeFlame {
+
+	[genomeController remove:self];
+
+}
+
+- (void) cancelChanges:(id)sender {
 
 }
 
@@ -376,5 +368,11 @@
 	[cmapWindow  setIsVisible:FALSE];
 
 }
+
+
+
+
+
+
 
 @end
