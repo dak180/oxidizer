@@ -82,7 +82,7 @@
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
 - (IBAction)showPreferencesWindow:(id)sender;
 - (IBAction)editGenomes:(id)sender;
-
+- (IBAction)appendFile:(id)sender;
 
 - (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps;
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;

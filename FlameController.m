@@ -250,8 +250,11 @@
 - (NSManagedObject *)getSelectedGenome {
 
 	NSArray *selectedGenomes = [genomeController selectedObjects];
-	return [selectedGenomes objectAtIndex:0];
-
+	if(selectedGenomes != nil && [selectedGenomes count] > 0) {
+		return [selectedGenomes objectAtIndex:0];
+	} 
+	
+	return nil;
 }
 
 - (IBAction)showPaletteList:(id)sender {

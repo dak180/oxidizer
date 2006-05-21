@@ -19,7 +19,8 @@
 		[self availableComponentsForMovie];
 		imageComponents = [[NSMutableArray alloc] initWithCapacity:10];
 		[self availableComponentsForImage];
-		frameTime = QTMakeTime(30, 60);
+		frameTime = QTMakeTime(30, 600);
+//		frameTime = QTMakeTime(0, 0);
 		movieDict = [NSMutableDictionary dictionaryWithObjectsAndKeys:@"tiff" , QTAddImageCodecType,
 						[NSNumber numberWithLong:codecHighQuality], QTAddImageCodecQuality,
 						nil];
@@ -83,6 +84,7 @@
 		qtMovie = [QTMovie movieWithQuickTimeMovie:tempMovie disposeWhenDone:YES error:nil];
 		[qtMovie retain];	
 		[qtMovie setAttribute:[NSNumber numberWithBool:YES] forKey:QTMovieEditableAttribute];
+		NSArray *movieAttributes = [QTMovie movieFileTypes:QTIncludeAllTypes];
 
 		filename = [savePanel filename];
 		
@@ -216,6 +218,10 @@
 	Component c;
 	ComponentResult err;
 	MovieExportComponent exporter;
+	QTAtom tmplAtom = 0;
+	QTAtom videAtom = 0;
+   SCTemporalSettings temporalSetting;
+
 	
 	int componentIndex = [movieExportController selectionIndex];
 	
@@ -243,6 +249,20 @@
 		return;
 	}
 	
+	
+	videAtom = QTFindChildByID(settings, kParentAtomIsContainer, kQTSettingsVideo, 1, NULL );
+	tmplAtom = QTFindChildByID(settings, videAtom, scTemporalSettingsType, 1, NULL );
+	QTGetAtomDataPtr(settings, tmplAtom, nil, 
+                                    (Ptr *)&temporalSetting);
+	
+	float framerate = FixedToFloat(temporalSetting.frameRate);
+
+	err = SCGetInfo (exporter, scTemporalSettingsType, &temporalSetting);
+
+
+	framerate = FixedToFloat(temporalSetting.frameRate);
+
+		
 	if(movieExportSettings != nil) {
 		[movieExportSettings release];
 	}
@@ -324,6 +344,8 @@
 		CloseComponent(exporter);
 
 	}
+	
+
 	
 	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
 		[NSNumber numberWithBool:YES], QTMovieExport,
