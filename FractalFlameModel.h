@@ -84,7 +84,7 @@
 - (IBAction)editGenomes:(id)sender;
 - (IBAction)appendFile:(id)sender;
 
-- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps;
+- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps inContext:(NSManagedObjectContext *)thisMoc;
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
 - (BOOL)saveToFile:(NSBitmapImageRep *)rep;
 - (BOOL)EnvironmentInit:(flam3_frame *)f threadCount:(int)threads;
@@ -94,7 +94,8 @@
 - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps;
 - (NSBitmapImageRep *)renderThumbnail:(flam3_genome *)cps; 
 - (QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
-- (NSManagedObject *) createRandomGenome;
+- (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context;
+- (NSManagedObjectContext *)getNSManagedObjectContext;
 
 - (void) deleteOldGenomes;
 @end

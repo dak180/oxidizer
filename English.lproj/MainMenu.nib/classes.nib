@@ -2,6 +2,32 @@
     IBClasses = (
         {CLASS = BlobVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
         {
+            ACTIONS = {
+                alternate = id; 
+                clone = id; 
+                doUnion = id; 
+                interpolate = id; 
+                loadNewGenomeIntoMoc1 = id; 
+                loadNewGenomeIntoMoc2 = id; 
+                mutate = id; 
+                sendResultToEditor = id; 
+                showBreedingWindow = id; 
+            }; 
+            CLASS = BreedingController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                breedingWindow = NSWindow; 
+                flameModel = FractalFlameModel; 
+                genome1 = NSArrayController; 
+                genome2 = NSArrayController; 
+                genomeResult = NSArrayController; 
+                genomeTable1 = NSTableView; 
+                genomeTable2 = NSTableView; 
+                palette = PaletteController; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
             ACTIONS = {randomSeed = id; }; 
             CLASS = EnvironmentController; 
             LANGUAGE = ObjC; 

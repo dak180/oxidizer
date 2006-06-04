@@ -8,6 +8,17 @@
 
 #import "QuickTimeController.h"
 
+#define		kVideoTimeScale 	600
+#define		kNumVideoFrames 	1
+#define		kPixelDepth 		32	/* bit depth */
+#define		kNoOffset 			0
+#define		kMgrChoose			kPixelDepth
+#define		kSyncSample 		0
+#define		kAddOneVideoSample	1
+#define		kSampleDuration 	30	/* frame duration = 1/10 sec */
+#define		kTrackStart			0
+#define		kMediaStart			0
+
 
 @implementation QuickTimeController
 
@@ -25,12 +36,24 @@
 						[NSNumber numberWithLong:codecHighQuality], QTAddImageCodecQuality,
 						nil];
 		[movieDict retain];
+		
+		
+		resRefNum = 0;
+		resId = movieInDataForkResID;
+
 
 	}
 	return self;
 }
 
+- (void) setMovieHeight:(int)height width:(int)width {
+	
+	movieRect.top = 0;
+	movieRect.left = 0;
+	movieRect.bottom = height;
+	movieRect.right = width;
 
+}
 - (BOOL) showQuickTimeFileMovieDialogue {
 
 	int runResult;
@@ -81,10 +104,65 @@
 			return NO;
 		}
 	
-		qtMovie = [QTMovie movieWithQuickTimeMovie:tempMovie disposeWhenDone:YES error:nil];
-		[qtMovie retain];	
-		[qtMovie setAttribute:[NSNumber numberWithBool:YES] forKey:QTMovieEditableAttribute];
-		NSArray *movieAttributes = [QTMovie movieFileTypes:QTIncludeAllTypes];
+		movieTrack = NewMovieTrack (tempMovie, FixRatio(movieRect.right,1), FixRatio(movieRect.bottom,1), kNoVolume);
+			
+		outErr = GetMoviesError();
+		if (outErr != noErr) {
+			return NO;
+		}
+			
+		movieMedia = NewTrackMedia (movieTrack, VideoMediaType, kVideoTimeScale, nil,	0);
+
+		outErr = GetMoviesError();
+		if (outErr != noErr) {
+			return NO;
+		}
+
+		outErr = BeginMediaEdits (movieMedia);
+		if (outErr != noErr) {
+			return NO;
+		}
+
+		long maxCompressedSize;
+
+		// Create a graphics world
+		outErr = QTNewGWorld (&movieGWorld, k32ARGBPixelFormat, &movieRect, nil, nil,	(GWorldFlags)0);	/* flags */
+		if (outErr != noErr) {
+			return NO;
+		}
+
+		// Lock the pixels
+		LockPixels (GetGWorldPixMap(movieGWorld));
+
+		// Determine the maximum size the image will be after compression.
+		// Specify the compression characteristics, along with the image.
+		outErr = GetMaxCompressionSize(GetGWorldPixMap(movieGWorld), &movieRect, kMgrChoose, codecHighQuality, kAnimationCodecType,	 (CompressorComponent)anyCodec, &maxCompressedSize);		    	/* returned size */
+		if (outErr != noErr) {
+			return NO;
+		}
+		// Create a new handle of the right size for our compressed image data
+		compressedData = NewHandle(maxCompressedSize);
+		outErr = GetMoviesError();
+		if (outErr != noErr) {
+			return NO;
+		}
+		
+		
+		MoveHHi( compressedData );
+		HLock( compressedData );
+		compressedDataPtr = *compressedData;
+
+		// Create a handle for the Image Description Structure
+		imageDesc = (ImageDescriptionHandle)NewHandle(4);
+		outErr = GetMoviesError();
+		if (outErr != noErr) {
+			return NO;
+		}
+		
+		// Change the current graphics port to the GWorld
+		GetGWorld(&oldPort, &oldGDeviceH);
+		SetGWorld(movieGWorld, nil);
+
 
 		filename = [savePanel filename];
 		
@@ -214,7 +292,6 @@
 - (IBAction) getMovieExportSettings:(id )sender {
 
 	Boolean canceled;
-	QTAtomContainer settings;
 	Component c;
 	ComponentResult err;
 	MovieExportComponent exporter;
@@ -270,8 +347,6 @@
 	movieExportSettings = [NSData dataWithBytes:*settings length:GetHandleSize(settings)];
 	[movieExportSettings retain];
 
-	DisposeHandle(settings);
-
 	CloseComponent(exporter);
 	
 	useDefaultSettings = NO;
@@ -315,63 +390,77 @@
 
 - (void) saveMovie {
 
+	OSErr err;
+
+    UnlockPixels (GetGWorldPixMap(movieGWorld)/*GetPortPixMap(theGWorld)*/);
+
+    SetGWorld (oldPort, oldGDeviceH);
+
+    // Dealocate our previously alocated handles and GWorld
+    if (imageDesc) {
+        DisposeHandle ((Handle)imageDesc);
+    }
+
+    if (compressedData) {
+        DisposeHandle (compressedData);
+    }
+
+    if (movieGWorld) {
+        DisposeGWorld (movieGWorld);
+    }
+	
+
+    err = EndMediaEdits (movieMedia);
+
+    err = InsertMediaIntoTrack (movieTrack,		/* track specifier */
+        kTrackStart,	/* track start time */
+        kMediaStart, 	/* media start time */
+        GetMediaDuration(movieMedia), /* media duration */
+        fixed1);		/* media rate ((Fixed) 0x00010000L) */
+
+			
 	int componentIndex = [movieExportController selectionIndex];
 	NSDictionary *component = [movieComponents objectAtIndex:componentIndex];
 	
-	if(useDefaultSettings) {
-		QTAtomContainer settings;
-		Component c;
+	Component c;
+	MovieExportComponent exporter;
+		
+		
+	memcpy(&c, [[component objectForKey:@"component"] bytes], sizeof(c));
+
+	exporter = OpenComponent(c);
+	
+	if(useDefaultSettings == NO) {
+
 		ComponentResult err;
-		MovieExportComponent exporter;
-		
-		int componentIndex = [movieExportController selectionIndex];
-		
-		memcpy(&c, [[[movieComponents objectAtIndex:componentIndex] objectForKey:@"component"] bytes], sizeof(c));
-
-		exporter = OpenComponent(c);
-		err = MovieExportGetSettingsAsAtomContainer(exporter, &settings);
-		
-		if(movieExportSettings != nil) {
-			[movieExportSettings release];
-		}
-		
-		movieExportSettings = [NSData dataWithBytes:*settings length:GetHandleSize(settings)];
-		
-		[movieExportSettings retain];
-		
-		DisposeHandle(settings);
-
-		CloseComponent(exporter);
+		err = MovieExportSetSettingsFromAtomContainer(exporter, settings);
 
 	}
 	
 
-	
-	NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
-		[NSNumber numberWithBool:YES], QTMovieExport,
-		[component objectForKey:@"subtype"], QTMovieExportType,
-		[component objectForKey:@"manufacturer"], QTMovieExportManufacturer,
-//		[NSNumber numberWithBool:YES], QTMovieFlatten,
-		movieExportSettings, QTMovieExportSettings,
-		nil];
-		
-	/* there's no turning back now */
-	[[NSFileManager defaultManager] removeFileAtPath:filename handler:nil];	
+    err = AddMovieResource (tempMovie, resRefNum, &resId, nil);
 
-	
-	BOOL result = [qtMovie writeToFile:filename withAttributes:attributes];
-	if(!result)
-	{
-		NSLog(@"Couldn't write movie to file");
-		return;
-	}
-	
+
 	if (movieDataHandlerRef) {
 		CloseMovieStorage(movieDataHandlerRef);
 	}
 	
-	[qtMovie release];	
+	FSSpec spec = [QuickTimeController getToFSSpecFromPath:filename];
 
+    ConvertMovieToFile (tempMovie,     /* identifies movie */
+    0,                /* all tracks */
+    &spec,                /* no output file */
+    0,                  /* no file type */
+    0,                  /* no creator */
+    -1,                 /* script */
+    0,                /* no resource ID */
+    createMovieFileDeleteCurFile |
+    movieToFileOnlyExport,
+    exporter);
+
+	DisposeHandle(settings);
+	CloseComponent(exporter);
+	
 	return;
 
 	
@@ -430,10 +519,51 @@
 }
 
 
-- (void) addNSImageToMovie:(NSImage *)image {
+- (void) addNSBitmapImageRepToMovie:(NSBitmapImageRep *)imageRepresentation {
 
-		[qtMovie addImage:image forDuration:frameTime withAttributes:movieDict];	
+    PixMapHandle 	pixMapHandle;
+    unsigned char *pixBaseAddr;
+	OSErr err;
 
+    // Lock the pixels
+    pixMapHandle = GetGWorldPixMap(movieGWorld);
+    LockPixels (pixMapHandle);
+    pixBaseAddr = (unsigned char *)GetPixBaseAddr(pixMapHandle);
+
+	unsigned char * bitMapDataPtr = [imageRepresentation bitmapData];
+
+	if ((bitMapDataPtr != nil) && (pixBaseAddr != nil)) {
+		int i,j;
+		int pixmapRowBytes = GetPixRowBytes(pixMapHandle);
+		NSSize imageSize = [(NSBitmapImageRep *)imageRepresentation size];
+		for (i=0; i< imageSize.height; i++) {
+			unsigned char *src = bitMapDataPtr + i * [(NSBitmapImageRep *)imageRepresentation bytesPerRow];
+			unsigned char *dst = pixBaseAddr + i * pixmapRowBytes;
+			for (j = 0; j < imageSize.width; j++) {
+				*dst++ = 0;		// X - our src is 24-bit only
+				*dst++ = *src++;	// Red component
+				*dst++ = *src++;	// Green component
+				*dst++ = *src++;	// Blue component
+			}
+		}
+	}
+   
+    UnlockPixels(pixMapHandle);
+
+        // Use the ICM to compress the image
+        err = CompressImage(GetGWorldPixMap(movieGWorld), &movieRect, codecHighQuality,	kAnimationCodecType,imageDesc, compressedDataPtr);	/* pointer to a location to recieve the compressed image data */
+		if(err != noErr) {
+			NSLog(@"Got error %d when calling CompressImage", err);
+			return;
+		}
+        // Add sample data and a description to a media
+        err = AddMediaSample(movieMedia, compressedData, kNoOffset, (**imageDesc).dataSize,  kSampleDuration,  
+						     (SampleDescriptionHandle)imageDesc, kAddOneVideoSample, kSyncSample, nil);	
+		if(err != noErr) {
+			NSLog(@"Got error %d when calling AddMediaSample", err);
+			return;
+		}
+ 
 }
 
 + (FSSpec)getToFSSpecFromPath:(NSString *)path { 

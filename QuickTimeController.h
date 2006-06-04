@@ -30,6 +30,23 @@
 
 	GraphicsExportComponent geExporter;
 
+    /* take two, use low level quicktime */
+	
+	Rect	movieRect;	
+	
+    GWorldPtr movieGWorld;
+    Handle compressedData;
+    Ptr compressedDataPtr;
+    ImageDescriptionHandle imageDesc;
+    CGrafPtr oldPort;
+    GDHandle oldGDeviceH;
+	Media movieMedia;
+	Track movieTrack;
+
+	QTAtomContainer settings;
+
+    short resRefNum;
+    short resId;
 
 
 @public
@@ -50,10 +67,12 @@
 - (void) availableComponentsForImage;
 - (void) saveMovie;
 - (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
-- (void) addNSImageToMovie:(NSImage *)image;
+- (void) addNSBitmapImageRepToMovie:(NSBitmapImageRep *)imageRepresentation;
 
 - (IBAction) getMovieExportSettings:(id )sender;
 - (IBAction) getImageExportSettings:(id )sender;
+
+- (void) setMovieHeight:(int)height width:(int)width;
 
 + (FSSpec)getToFSSpecFromPath:(NSString *)path;
 

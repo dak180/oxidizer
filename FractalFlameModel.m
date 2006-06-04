@@ -22,10 +22,10 @@
 #import "Genome.h"
 #import "ThreadParameters.h"
 #import "QuickTime/QuickTime.h"
+#import "flam3_tools.h"
+
 
 int printProgress(void *nslPtr, double progress, int stage);
-void truncate_variations(flam3_genome *g, int max_vars, char *action);
-void test_cp(flam3_genome *cp);
 
 
 @implementation FractalFlameModel
@@ -207,13 +207,14 @@ void test_cp(flam3_genome *cp);
 	if(ncps == 0) {
 		return;
 	}
+	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
 
+	[qtController setMovieHeight:cps->height width:cps->width];
 	BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
 	if(doRender == NO) {
 		return;
 	}
 
-	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
 	
 	dtime = 1;
 	f.genomes = cps;
@@ -331,8 +332,7 @@ void test_cp(flam3_genome *cp);
 	frameCount = 0;
 	[frameIndicator setIntValue:0];
 	
-	[progressWindow setTitle:@"Rendering Movie..."];
-	
+	[progressWindow setTitle:@"Rendering Movie..."];	
 	[progressWindow makeKeyAndOrderFront:self];
 
 	f.progress = printProgress;
@@ -358,7 +358,7 @@ void test_cp(flam3_genome *cp);
 			
 			if([[paramArray objectAtIndex:i] getFirstFrame] <= last_frame) {
 				[frameIndicator displayIfNeeded];
-				[qtController addNSImageToMovie:[[paramArray objectAtIndex:i] getImage]];
+				[qtController addNSBitmapImageRepToMovie:[[paramArray objectAtIndex:i] getImageRep]];
 				[[paramArray objectAtIndex:i] setFirstFrame:ftime];
 				[NSThread detachNewThreadSelector:@selector(threadedMovieRender:)  toTarget:self withObject:[paramArray objectAtIndex:i]];
 				ftime += dtime;
@@ -443,7 +443,7 @@ void test_cp(flam3_genome *cp);
 
 }
 
-- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps {
+- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps inContext:(NSManagedObjectContext *)thisMoc {
 
 	NSBitmapImageRep *flameRep;
 	NSImage *flameImage;
@@ -466,7 +466,7 @@ void test_cp(flam3_genome *cp);
 		flameRep = [self renderThumbnail:cps+i];
 		flameImage = [[NSImage alloc] init];
 		[flameImage addRepresentation:flameRep];
-		[flames addFlameData:flameImage genome:cps+i atIndex:i inContext:moc];  
+		[flames addFlameData:flameImage genome:cps+i atIndex:i inContext:thisMoc];  
 
 
 		[flameImage release];
@@ -477,8 +477,6 @@ void test_cp(flam3_genome *cp);
 	
 	[flameImages reloadData];
 	[progressWindow setIsVisible:FALSE];
-	
-	free(cps);
 
 
 	return TRUE;
@@ -546,11 +544,14 @@ void test_cp(flam3_genome *cp);
 		boolResult = [self loadFlam3File:[op filename] intoCGenomes:&genomes returningCountInto:&genomeCount ];
 		if(boolResult == YES) {
 			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
-			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount];
+			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
 			[moc save:nil];
 
 //			[flames setCurrentFlameForIndex:0];
 		}
+		xmlFreeDoc(genomes->edits);
+		free(genomes);
+
 	} 
 	
 	return;
@@ -598,12 +599,15 @@ void test_cp(flam3_genome *cp);
 		
 		if(boolResult == YES) {
 			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
-			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount];
+			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
 			[moc save:nil];
 
 //			[flames setCurrentFlameForIndex:0];
 		}
 		
+		xmlFreeDoc(genomes->edits);
+		free(genomes);
+
 		[fetch release];	  
 		[sort release];
 		[genomeArray release];
@@ -947,9 +951,12 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[self deleteOldGenomes];
 	boolResult = [self loadFlam3File:filename intoCGenomes:&genomes returningCountInto:&genomeCount ];
 	if(boolResult == YES) {
-		[self generateAllThumbnailsForGenome:genomes withCount:genomeCount];
+		[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
 	}
-	
+
+	xmlFreeDoc(genomes->edits);
+	free(genomes);
+
 	return boolResult;
 
 }
@@ -985,7 +992,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	 NSSegmentedControl *segments = (NSSegmentedControl *)sender;
 	 switch([segments selectedSegment]) {
 		case 0:
-			[flames addNewFlame:[self createRandomGenome]];
+			[flames addNewFlame:[self createRandomGenomeInContext:moc]];
 			break;
 		case 1:		
 			[flames showFlameWindow];
@@ -998,51 +1005,96 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 
 }
-- (NSManagedObject *) createRandomGenome {
+- (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context {
 
-	flam3_genome cp_orig;
+	flam3_genome cp_orig, cp_save;
 	NSManagedObject *genomeEntity;
 
 	int sym = 0;
 
 	int ivars[flam3_nvariations];
 	int num_ivars = 0;
+	int i;
+	int count = 0;
+	int ntries = 10;
+	
+	double avg_pix, fraction_black, fraction_white;
+	double avg_thresh = 20.0;
+	double black_thresh = 0.01;
+	double white_limit =  0.05;
 
 	flam3_frame f;
 	char action[1024];  /* Ridiculously large, but still not that big */
 
+	unsigned char *image;
+
 
 	memset(&cp_orig, 0, sizeof(flam3_genome));
+	memset(&cp_save, 0, sizeof(flam3_genome));
 
+	test_cp(&cp_orig);  // just for the width & height
+	image = (unsigned char *) malloc(3 * cp_orig.width * cp_orig.height);
 
 
 	srandom(time(0) + getpid());
 
 	f.temporal_filter_radius = 0.0;
-	f.bits = bits;
+	f.bits = 33;
 	f.verbose = 0;
 	f.genomes = &cp_orig;
 	f.ngenomes = 1;
 	f.pixel_aspect_ratio = 1.0;
 	f.progress = 0;
 	test_cp(&cp_orig);  // just for the width & height
+	image = (unsigned char *) malloc(3 * cp_orig.width * cp_orig.height);
 
 	/* Set first var to -1 for totally random */
 	ivars[0] = -1;
 	num_ivars = 1;
 
 	f.time = (double) 0.0;
-	flam3_random(&cp_orig, ivars, num_ivars, sym, 0);
-				   
-	double bmin[2], bmax[2];
-	flam3_estimate_bounding_box(&cp_orig, 0.001, 100000, bmin, bmax);
-	cp_orig.center[0] = (bmin[0] + bmax[0]) / 2.0;
-	cp_orig.center[1] = (bmin[1] + bmax[1]) / 2.0;
-	cp_orig.pixels_per_unit = cp_orig.width / (bmax[0] - bmin[0]);
-	strcat(action," reframed");
-
-	truncate_variations(&cp_orig, 5, action);
-
+	
+	do {
+		sprintf(action,"random");
+		flam3_random(&cp_orig, ivars, num_ivars, sym, 0);
+		
+		double bmin[2], bmax[2];
+		flam3_estimate_bounding_box(&cp_orig, 0.001, 100000, bmin, bmax);
+		cp_orig.center[0] = (bmin[0] + bmax[0]) / 2.0;
+		cp_orig.center[1] = (bmin[1] + bmax[1]) / 2.0;
+		cp_orig.pixels_per_unit = cp_orig.width / (bmax[0] - bmin[0]);
+		strcat(action," reframed");
+		
+		
+		truncate_variations(&cp_orig, 5, action);
+		cp_orig.edits = create_new_editdoc(action, NULL, NULL);
+		flam3_copy(&cp_save, &cp_orig);
+		test_cp(&cp_orig);
+		flam3_render(&f, image, cp_orig.width, flam3_field_both, 3, 0);
+		
+		int n, tot, totb, totw;
+		n = 3 * cp_orig.width * cp_orig.height;
+		tot = 0;
+		totb = 0;
+		totw = 0;
+		for (i = 0; i < n; i++) {
+			tot += image[i];
+			if (0 == image[i]) totb++;
+			if (255 == image[i]) totw++;
+			
+			// printf("%d ", image[i]);
+		}
+		
+		avg_pix = (tot / (double)n);
+		fraction_black = totb / (double)n;
+		fraction_white = totw / (double)n;
+		count++;
+	} while ((avg_pix < avg_thresh ||
+			  fraction_black < black_thresh ||
+			  fraction_white > white_limit) &&
+			 count < ntries);
+	
+	
 	[progressWindow makeKeyAndOrderFront:self];
 	
 	genomeEntity = [flames getSelectedGenome];
@@ -1058,7 +1110,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	NSImage *flameImage = [[NSImage alloc] init];
 	[flameImage addRepresentation:flameRep];
 
-	genomeEntity = [Genome createGenomeEntityFrom:&cp_orig withImage:flameImage inContext:moc];
+	genomeEntity = [Genome createGenomeEntityFrom:&cp_orig withImage:flameImage inContext:context];
 		
 
 	/* Free created documents */
@@ -1075,6 +1127,11 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
+- (NSManagedObjectContext *)getNSManagedObjectContext {
+	return moc;
+}
+
+
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {
@@ -1088,70 +1145,5 @@ int printProgress(void *nslPtr, double progress, int stage) {
 //	fprintf(stderr, "Stage: %s\n", stage ? "filtering" : "chaos"); 
 	
 	return 0;
-}
-
-void test_cp(flam3_genome *cp) {
-   cp->time = 0.0;
-   cp->interpolation = flam3_interpolation_linear;
-   cp->background[0] = 0.0;
-   cp->background[1] = 0.0;
-   cp->background[2] = 0.0;
-   cp->center[0] = 0.0;
-   cp->center[1] = 0.0;
-   cp->rotate = 0.0;
-   cp->pixels_per_unit = 64;
-   cp->width = 128;
-   cp->height = 128;
-   cp->spatial_oversample = 1;
-   cp->spatial_filter_radius = 0.5;
-   cp->zoom = 0.0;
-   cp->sample_density = 1;
-   cp->nbatches = 1;
-   cp->ntemporal_samples = 1;
-   cp->estimator = 0.0;
-   cp->estimator_minimum = 0.0;
-   cp->estimator_curve = 0.6;
-}
-
-void truncate_variations(flam3_genome *g, int max_vars, char *action) {
-   int i, j, nvars, smallest;
-   double sv;
-   char trunc_note[30];
-   
-   for (i = 0; i < g->num_xforms; i++) {
-      double d = g->xform[i].density;
-      
-/*      if (0.0 < d && d < 0.001) */
-
-      if (d < 0.001 && (g->final_xform_index != i)) {
-         sprintf(trunc_note," trunc_density %d",i);
-         strcat(action,trunc_note);
-         flam3_delete_xform(g, i);
-
-/*         g->xform[i].density = 0.0;
-      } else if (d > 0.0) {
-*/
-      } else {
-         do {
-            nvars = 0;
-            smallest = -1;
-            for (j = 0; j < flam3_nvariations; j++) {
-               double v = g->xform[i].var[j];
-               if (v != 0.0) {
-                  nvars++;
-                  if (-1 == smallest || fabs(v) < sv) {
-                     smallest = j;
-                     sv = fabs(v);
-                  }
-               }
-            }
-            if (nvars > max_vars) {
-               sprintf(trunc_note," trunc %d %d",i,smallest);
-               strcat(action,trunc_note);
-               g->xform[i].var[smallest] = 0.0;
-            }
-         } while (nvars > max_vars);
-      }
-   }
 }
 
