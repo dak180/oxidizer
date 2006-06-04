@@ -161,6 +161,151 @@
 }
 
 - (IBAction)interpolate:(id)sender {
+	
+	flam3_frame f;
+	flam3_genome *cp_orig;
+	flam3_genome *cp_save;
+	flam3_genome selp0, selp1;
+	
+	int seed;
+	int count = 0;
+	int ntries = 10;
+	int debug = 0;
+	int i;
+	
+	double avg_pix, fraction_black, fraction_white;
+	double avg_thresh = 20.0;
+	double black_thresh = 0.01;
+	double white_limit =  0.05;
+	
+	char action[1024];  /* Ridiculously large, but still not that big */
+	
+	unsigned char *image;
+	
+	cp_save = (flam3_genome *)malloc(sizeof(flam3_genome));
+	cp_orig = (flam3_genome *)malloc(sizeof(flam3_genome));
+	
+	memset(cp_save, 0, sizeof(flam3_genome));
+	memset(cp_orig, 0, sizeof(flam3_genome));
+	memset(&selp0, 0, sizeof(flam3_genome));
+	memset(&selp1, 0, sizeof(flam3_genome));
+	
+	
+	srandom(seed ? seed : (time(0) + getpid()));
+	
+	f.temporal_filter_radius = 0.0;
+	f.bits = 33;
+	f.verbose = 0;
+	f.genomes = cp_orig;
+	f.ngenomes = 1;
+	f.pixel_aspect_ratio = 1.0;
+	f.progress = 0;
+	test_cp(cp_orig);  // just for the width & height
+	image = (unsigned char *) malloc(3 * cp_orig->width * cp_orig->height);
+	
+	
+	int did_color;
+	
+	count = 0;
+	
+	do {
+		did_color = 0;
+		f.time = (double) 0.0;
+		
+		int rb;
+		char ministr[10];
+		flam3_genome parents[2];
+		double t = flam3_random01();
+		
+		sprintf(action,"cross interpolate");
+		
+		/* linearly interpolate somewhere between the two */
+		
+		memset(parents, 0, 2*sizeof(flam3_genome));
+		
+		[Genome populateCGenome:parents FromEntity:[[genome1 selectedObjects] objectAtIndex:0] fromContext:moc1]; 	
+		[Genome populateCGenome:parents+1 FromEntity:[[genome2 selectedObjects] objectAtIndex:0] fromContext:moc2]; 	
+		
+		
+		sprintf(ministr," %g",t);
+		strcat(action,ministr);
+		
+		parents[0].time = 0.0;
+		parents[1].time = 1.0;
+		flam3_interpolate(parents, 2, t, cp_orig);
+		
+		/* except pick a simple palette */
+		rb = flam3_random_bit();
+		sprintf(ministr," %d",rb);
+		strcat(action,ministr);
+		cp_orig->palette_index = rb ? parents->palette_index : parents[1].palette_index;
+		
+		free(parents[0].xform);
+		free(parents[1].xform);
+		
+		
+		
+		/* reset color coords */
+		if (cp_orig->num_xforms > 0) {
+			for (i = 0; i < cp_orig->num_xforms; i++) {
+				cp_orig->xform[i].color[0] = i&1;
+				cp_orig->xform[i].color[1] = (i&2)>>1;
+			}
+		}
+		
+		truncate_variations(cp_orig, 5, action);
+		cp_orig->edits = create_new_editdoc(action, parents, parents+1);
+		flam3_copy(cp_save, cp_orig);
+		test_cp(cp_orig);
+		flam3_render(&f, image, cp_orig->width, flam3_field_both, 3, 0);
+        
+		int n, tot, totb, totw;
+		n = 3 * cp_orig->width * cp_orig->height;
+		tot = 0;
+		totb = 0;
+		totw = 0;
+		for (i = 0; i < n; i++) {
+			tot += image[i];
+			if (0 == image[i]) totb++;
+			if (255 == image[i]) totw++;
+			
+			// printf("%d ", image[i]);
+		}
+		
+		avg_pix = (tot / (double)n);
+		fraction_black = totb / (double)n;
+		fraction_white = totw / (double)n;
+		
+		if (debug)
+			fprintf(stderr,
+					"avg_pix=%g fraction_black=%g fraction_white=%g n=%g\n",
+					avg_pix, fraction_black, fraction_white, (double)n);
+		
+		count++;
+	} while ((avg_pix < avg_thresh ||
+			  fraction_black < black_thresh ||
+			  fraction_white > white_limit) &&
+			 count < ntries);
+	
+	if (ntries == count) {
+		fprintf(stderr, "warning: reached maximum attempts, giving up.\n");
+	}
+	
+	if (!did_color && random()&1) {
+		improve_colors(cp_orig, 100, 0, 10);
+		strcat(action," improved colors");
+	}
+	
+	
+	cp_save->time = 0;
+	[self deleteOldGenomesInContext:mocResult];
+	[flameModel generateAllThumbnailsForGenome:cp_save withCount:1 inContext:mocResult];
+	[mocResult save:nil];
+	
+	/* Free created documents */
+	/* (Only free once, since the copy is a ptr to the original) */
+	xmlFreeDoc(cp_save->edits);
+	
 }
 
 - (IBAction)doUnion:(id)sender {
@@ -252,7 +397,6 @@
 		test_cp(&cp_orig);
 		flam3_render(&f, image, cp_orig.width, flam3_field_both, 3, 0);
         
-		if (1) {
 			int n, tot, totb, totw;
 			n = 3 * cp_orig.width * cp_orig.height;
 			tot = 0;
@@ -274,12 +418,6 @@
 				fprintf(stderr,
 						"avg_pix=%g fraction_black=%g fraction_white=%g n=%g\n",
 						avg_pix, fraction_black, fraction_white, (double)n);
-			
-		} else {
-			avg_pix = avg_thresh + 1.0;
-			fraction_black = black_thresh + 1.0;
-			fraction_white = white_limit - 1.0;
-		}
 		
 		count++;
 	} while ((avg_pix < avg_thresh ||
