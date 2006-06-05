@@ -158,6 +158,204 @@
 }
 
 - (IBAction)alternate:(id)sender {
+
+	flam3_frame f;
+	flam3_genome cp_orig;
+	flam3_genome cp_save;
+	flam3_genome selp0, selp1;
+	
+	int seed;
+	int count = 0;
+	int ntries = 10;
+	int debug = 0;
+	int i;
+	
+	double avg_pix, fraction_black, fraction_white;
+	double avg_thresh = 20.0;
+	double black_thresh = 0.01;
+	double white_limit =  0.05;
+	
+	char action[1024];  /* Ridiculously large, but still not that big */
+	
+	unsigned char *image;
+	
+	
+	memset(&cp_save, 0, sizeof(flam3_genome));
+	memset(&cp_orig, 0, sizeof(flam3_genome));
+	memset(&selp0, 0, sizeof(flam3_genome));
+	memset(&selp1, 0, sizeof(flam3_genome));
+	
+	
+	srandom(seed ? seed : (time(0) + getpid()));
+	
+	f.temporal_filter_radius = 0.0;
+	f.bits = 33;
+	f.verbose = 0;
+	f.genomes = &cp_orig;
+	f.ngenomes = 1;
+	f.pixel_aspect_ratio = 1.0;
+	f.progress = 0;
+	test_cp(&cp_orig);  // just for the width & height
+	image = (unsigned char *) malloc(3 * cp_orig.width * cp_orig.height);
+	
+	
+	int did_color;
+	
+	count = 0;
+
+	do {
+            did_color = 0;
+            f.time = (double) 0.0;
+            
+              int rb, used_parent;
+               char ministr[10];
+               char trystr[1000];
+                  
+               sprintf(action,"cross alernate");
+			[Genome populateCGenome:&selp0 FromEntity:[[genome1 selectedObjects] objectAtIndex:0] fromContext:moc1]; 	
+			[Genome populateCGenome:&selp1 FromEntity:[[genome2 selectedObjects] objectAtIndex:0] fromContext:moc2]; 	
+              
+		   int got0, got1;
+                  /* each xform from a random parent,
+                  possible for one to be excluded */
+		   do {
+		       trystr[0] = 0;
+		       got0 = got1 = 0;
+		       rb = flam3_random_bit();
+		       sprintf(ministr," %d:",rb);
+		       strcat(trystr,ministr);
+		       
+		       /* Copy the parent, sorting the final xform to the end if it's present. */
+		       if (rb) 
+			   flam3_copyx(&cp_orig, &selp1,
+				       selp1.num_xforms - (selp1.final_xform_index > 0),
+				       selp1.final_xform_enable);
+		       else
+			   flam3_copyx(&cp_orig, &selp0,
+				       selp0.num_xforms - (selp0.final_xform_index > 0),
+				       selp0.final_xform_enable);
+                  
+		       used_parent = rb;
+                  
+		       /* Only replace non-final xforms */
+		      
+		       for (i = 0; i < cp_orig.num_xforms - cp_orig.final_xform_enable; i++) {
+			   rb = flam3_random_bit();
+                     
+			   /* Replace xform if bit is 1 */
+			   if (rb==1) {
+			       if (used_parent==0) {
+				   if (i < selp1.num_xforms && selp1.xform[i].density > 0) {
+				       cp_orig.xform[i] = selp1.xform[i];
+				       sprintf(ministr," 1");
+				       got1 = 1;
+				   } else {
+				       sprintf(ministr," 0");
+				       got0 = 1;
+				   }
+			       } else {
+				   if (i < selp0.num_xforms && selp0.xform[i].density > 0) {
+				       cp_orig.xform[i] = selp0.xform[i];
+				       sprintf(ministr," 0");
+				       got0 = 1;
+				   } else {
+				       sprintf(ministr," 1");
+				       got1 = 1;
+				   }
+			       }
+			   } else {
+			       sprintf(ministr," %d",used_parent);
+			       if (used_parent)
+				   got1 = 1;
+			       else
+				   got0 = 1;
+			   }
+			   strcat(trystr,ministr);
+		       }
+		   } while ((i > 1) && !(got0 && got1));
+		   strcat(action, trystr);
+
+
+               
+               /* find the last xform */
+/*               nxf = 0;
+               for (i = 0; i < cp_orig.num_xforms; i++) {
+                  if (cp_orig.xform[i].density > 0.0) {
+                     nxf = i;
+                  }
+               }
+*/
+               /* reset color coords */
+               if (cp_orig.num_xforms > 0) {
+                  for (i = 0; i < cp_orig.num_xforms; i++) {
+                     cp_orig.xform[i].color[0] = i&1;
+                     cp_orig.xform[i].color[1] = (i&2)>>1;
+                  }
+               }
+
+
+                        
+            truncate_variations(&cp_orig, 5, action);
+            cp_orig.edits = create_new_editdoc(action, &selp0, &selp1);
+            flam3_copy(&cp_save, &cp_orig);
+            test_cp(&cp_orig);
+            flam3_render(&f, image, cp_orig.width, flam3_field_both, 3, 0);
+        
+            if (1) {
+               int n, tot, totb, totw;
+               n = 3 * cp_orig.width * cp_orig.height;
+               tot = 0;
+               totb = 0;
+               totw = 0;
+               for (i = 0; i < n; i++) {
+                  tot += image[i];
+                  if (0 == image[i]) totb++;
+                  if (255 == image[i]) totw++;
+                  
+                  // printf("%d ", image[i]);
+               }
+               
+               avg_pix = (tot / (double)n);
+               fraction_black = totb / (double)n;
+               fraction_white = totw / (double)n;
+               
+               if (debug)
+                  fprintf(stderr,
+                     "avg_pix=%g fraction_black=%g fraction_white=%g n=%g\n",
+                     avg_pix, fraction_black, fraction_white, (double)n);
+                     
+            } else {
+               avg_pix = avg_thresh + 1.0;
+               fraction_black = black_thresh + 1.0;
+               fraction_white = white_limit - 1.0;
+            }
+            
+            count++;
+         } while ((avg_pix < avg_thresh ||
+                   fraction_black < black_thresh ||
+                   fraction_white > white_limit) &&
+                   count < ntries);
+				   
+	if (ntries == count) {
+		fprintf(stderr, "warning: reached maximum attempts, giving up.\n");
+	}
+	
+	if (!did_color && random()&1) {
+		improve_colors(&cp_orig, 100, 0, 10);
+		strcat(action," improved colors");
+	}
+	
+	
+	cp_save.time = 0;
+	[self deleteOldGenomesInContext:mocResult];
+	[flameModel generateAllThumbnailsForGenome:&cp_save withCount:1 inContext:mocResult];
+	[mocResult save:nil];
+	
+	/* Free created documents */
+	/* (Only free once, since the copy is a ptr to the original) */
+	xmlFreeDoc(cp_save.edits);
+				   
+
 }
 
 - (IBAction)interpolate:(id)sender {
