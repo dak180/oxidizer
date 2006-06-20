@@ -95,7 +95,14 @@
 
 		index = [xformController selectionIndex];
 		if(index == NSNotFound) {
-			[xformController insert:xformEntity];
+			[xformController insertObject:xformEntity atArrangedObjectIndex:0];
+			objects = [xformController arrangedObjects];
+			enumerator = [objects objectEnumerator];
+			index = 0;
+			while (xformEntity = [enumerator nextObject]) {
+				[xformEntity setValue:[NSNumber numberWithInt:index] forKey:@"order"];
+				index++;
+			}
 		} else {
 			[xformController insertObject:xformEntity atArrangedObjectIndex:index+1];
 			objects = [xformController arrangedObjects];
@@ -114,6 +121,8 @@
 		break;
 	case 2:
 		[xformController remove:sender];
+//		[[xformController managedObjectContext] deleteObject:[xformController selection]];
+//		[xformController removeObjects:[xformController selectedObjects]];
 		objects = [xformController arrangedObjects];
 		if([objects count] != 0) {
 			enumerator = [objects objectEnumerator];
@@ -127,7 +136,6 @@
 	default:
 		break;
 	}	
-
 
 
 }

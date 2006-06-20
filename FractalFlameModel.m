@@ -797,6 +797,8 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 	NSBitmapImageRep *flameRep;
 	NSImage *flameImage;
 	flam3_genome *flame = (flam3_genome *)malloc(sizeof(flam3_genome));
+	NSError *error;
+	BOOL worked = [moc save:&error];
 	
 	[Genome populateCGenome:flame FromEntity:[flames getSelectedGenome] fromContext:moc];
 
@@ -1131,6 +1133,67 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	return moc;
 }
 
+
+- (IBAction)saveFlam3:(id)sender {
+
+	NSString *filename;
+	NSArray *genomes;
+	
+	int runResult;
+	int i;
+	
+	const char *fileNameChar;
+	FILE *flam3File;
+
+	flam3_genome *cps;
+
+
+
+	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	runResult = [savePanel runModal];
+	
+	if(runResult == NSOKButton && [savePanel filename] != nil) {
+		filename = [savePanel filename];
+		fileNameChar = [filename cStringUsingEncoding:NSUTF8StringEncoding];
+		flam3File = fopen(fileNameChar, "wb");
+		if(flam3File == NULL) {
+			NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Could not open file %@",  filename] defaultButton:@"Close" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not open selected file, %@",  filename]; 
+			[alert runModal];
+			return;
+		} 
+	
+		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+
+		[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+		NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+		[fetch setSortDescriptors: sortDescriptors];
+		
+		genomes = [moc executeFetchRequest:fetch error:nil];
+		[fetch release];	  
+				
+		cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
+
+		if([genomes count] > 1) {
+			fprintf(flam3File, "<oxidizer>\n");
+		}
+		
+		for(i=0; i<[genomes count]; i++) {
+		
+			flam3_print(flam3File, cps + i, NULL);
+
+		}
+
+		if([genomes count] > 1) {
+			fprintf(flam3File, "</oxidizer>\n");
+		}
+		
+		fclose(flam3File);
+		
+	} 
+
+
+}
 
 @end
 

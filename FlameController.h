@@ -53,7 +53,6 @@
 - (IBAction)changeColourMap:(id)sender;
 - (IBAction)changeColourMapAndHideWindow:(id)sender;
 
-
 - (void)setValue:(id)value forKey:(NSString *)key;
 - (void)setValue:(id)value forKeyPath:(NSString *)keyPath;
 
