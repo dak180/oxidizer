@@ -359,6 +359,8 @@
 			A4F9EEBE0A4B128400BB22BA /* PBXTextBookmark */ = A4F9EEBE0A4B128400BB22BA /* PBXTextBookmark */;
 			A4F9EEBF0A4B128400BB22BA /* PBXTextBookmark */ = A4F9EEBF0A4B128400BB22BA /* PBXTextBookmark */;
 			A4F9EEC00A4B128400BB22BA /* XDModelBookmark */ = A4F9EEC00A4B128400BB22BA /* XDModelBookmark */;
+			A4F9EEC30A4B12D700BB22BA /* PBXTextBookmark */ = A4F9EEC30A4B12D700BB22BA /* PBXTextBookmark */;
+			A4F9EEC40A4B12D700BB22BA /* XDModelBookmark */ = A4F9EEC40A4B12D700BB22BA /* XDModelBookmark */;
 			A4FA24920A48739300260492 = A4FA24920A48739300260492 /* PBXTextBookmark */;
 			A4FA249E0A4873ED00260492 = A4FA249E0A4873ED00260492 /* XDModelBookmark */;
 			A4FA24B30A48755100260492 = A4FA24B30A48755100260492 /* PBXTextBookmark */;
@@ -429,7 +431,7 @@
 		fRef = A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */;
 		name = "ThreadParameters.h: setEndLock:";
 		rLen = 81;
-		rLoc = 559;
+		rLoc = 1377;
 		rType = 0;
 		vrLen = 732;
 		vrLoc = 0;
@@ -535,7 +537,7 @@
 		fRef = A4D6FA2B09B1E25200096036 /* GenomeManagedObject.h */;
 		name = "GenomeManagedObject.h: 23";
 		rLen = 0;
-		rLoc = 882;
+		rLoc = 843;
 		rType = 0;
 		vrLen = 944;
 		vrLoc = 0;
@@ -565,7 +567,7 @@
 		fRef = A409656F0A30B5760076ACA3 /* flam3_tools.h */;
 		name = "flam3_tools.h: 10";
 		rLen = 0;
-		rLoc = 168;
+		rLoc = 844;
 		rType = 0;
 		vrLen = 637;
 		vrLoc = 0;
@@ -575,7 +577,7 @@
 		fRef = A409656F0A30B5760076ACA3 /* flam3_tools.h */;
 		name = "flam3_tools.h: 8";
 		rLen = 0;
-		rLoc = 637;
+		rLoc = 1313;
 		rType = 0;
 		vrLen = 143;
 		vrLoc = 0;
@@ -585,7 +587,7 @@
 		fRef = A40965700A30B5760076ACA3 /* flam3_tools.m */;
 		name = "flam3_tools.m: 279";
 		rLen = 0;
-		rLoc = 10442;
+		rLoc = 11118;
 		rType = 0;
 		vrLen = 1113;
 		vrLoc = 7563;
@@ -595,7 +597,7 @@
 		fRef = A40965700A30B5760076ACA3 /* flam3_tools.m */;
 		name = "flam3_tools.m: 294";
 		rLen = 0;
-		rLoc = 9114;
+		rLoc = 9790;
 		rType = 0;
 		vrLen = 1153;
 		vrLoc = 8243;
@@ -615,7 +617,7 @@
 		fRef = A4A3027B0A28995D002828D9 /* BreedingController.h */;
 		name = "- (IBAction)sendResultToEditor:(id)sender;";
 		rLen = 43;
-		rLoc = 1046;
+		rLoc = 1839;
 		rType = 0;
 		vrLen = 1013;
 		vrLoc = 122;
@@ -777,7 +779,7 @@
 		fRef = A4233E9209EFF3000047DC34 /* QuickTimeController.h */;
 		name = "QuickTimeController.h: getMovieExportSettings";
 		rLen = 0;
-		rLoc = 1554;
+		rLoc = 2222;
 		rType = 0;
 		vrLen = 443;
 		vrLoc = 0;
@@ -1382,7 +1384,7 @@
 		fRef = A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */;
 		name = "ThreadParameters.h: getEndLock";
 		rLen = 0;
-		rLoc = 626;
+		rLoc = 1444;
 		rType = 0;
 		vrLen = 916;
 		vrLoc = 23;
@@ -1443,7 +1445,7 @@
 		fRef = A4233E9209EFF3000047DC34 /* QuickTimeController.h */;
 		name = "QuickTimeController.h: resId";
 		rLen = 0;
-		rLoc = 889;
+		rLoc = 1557;
 		rType = 0;
 		vrLen = 938;
 		vrLoc = 700;
@@ -1922,7 +1924,7 @@
 		fRef = A4D6FA2B09B1E25200096036 /* GenomeManagedObject.h */;
 		name = NSManagedObject;
 		rLen = 15;
-		rLoc = 917;
+		rLoc = 878;
 		rType = 0;
 		vrLen = 238;
 		vrLoc = 0;
@@ -2540,7 +2542,7 @@
 		fRef = A4233E9309EFF3010047DC34 /* QuickTimeController.m */;
 		name = "QuickTimeController.m: 182";
 		rLen = 322;
-		rLoc = 4262;
+		rLoc = 4930;
 		rType = 0;
 		vrLen = 634;
 		vrLoc = 3969;
@@ -3471,7 +3473,7 @@
 		fRef = A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */;
 		name = "ThreadParameters.h: getEndLock";
 		rLen = 0;
-		rLoc = 626;
+		rLoc = 1444;
 		rType = 0;
 		vrLen = 909;
 		vrLoc = 23;
@@ -3707,6 +3709,184 @@
 		vrLoc = 0;
 	};
 	A4F9EEC00A4B128400BB22BA /* XDModelBookmark */ = {
+		isa = XDModelBookmark;
+		fRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */;
+		fallbackIsa = PBXBookmark;
+		uiCtxt = {
+			UIContextForDetailArea = {
+				_indexOfSelectedPane = 0;
+				_indexOfSelectedView = 0;
+			};
+			UIContextForEntityArea = {
+				_indexOfSelectedView = 0;
+				chosenTableColumnns = (
+					"ET Entity",
+					"ET Abstract",
+					"ET Class",
+				);
+				chosenTableColumnns_sortDirections = (
+					YES,
+				);
+				chosenTableColumnns_sortKeys = (
+					entityClassName,
+				);
+				chosenTableColumnns_sortSelectors = (
+					"_xdcaseInsensitiveNumericCompare:",
+				);
+				chosenTableWidths = (
+					103.000000,
+					22.000000,
+					32.080078,
+				);
+			};
+			UIContextForLayoutManager = {
+				detailSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {622, 220}}",
+						"{{627, 0}, {349, 220}}",
+					);
+				};
+				diagramSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {976, 220}}",
+						"{{0, 225}, {976, 664}}",
+					);
+				};
+				tableSplitGeometry = {
+					_collapsingFrameDimension = 0;
+					_indexOfCollapsedView = 0;
+					_percentageOfCollapsedView = 0;
+					isCollapsed = yes;
+					sizes = (
+						"{{0, 0}, {179, 220}}",
+						"{{184, 0}, {438, 220}}",
+					);
+				};
+			};
+			UIContextForPropertyArea = {
+				_indexOfSelectedView = 1;
+				chosenTableColumnnFRTs = (
+					"FT Fetch Request",
+					"FT Predicate",
+				);
+				chosenTableColumnnFRTs_sortDirections = (
+					YES,
+				);
+				chosenTableColumnnFRTs_sortKeys = (
+					name,
+				);
+				chosenTableColumnnFRTs_sortSelectors = (
+					"_xdcaseInsensitiveNumericCompare:",
+				);
+				chosenTableColumnnsAT = (
+					"AT Attribute",
+					"AT Type",
+				);
+				chosenTableColumnnsAT_sortDirections = (
+					YES,
+					NO,
+				);
+				chosenTableColumnnsAT_sortKeys = (
+					name,
+					attributeTypeIndex,
+				);
+				chosenTableColumnnsAT_sortSelectors = (
+					"_xdcaseInsensitiveNumericCompare:",
+					"compare:",
+				);
+				chosenTableColumnnsFPT = (
+					"FP FetchedProperty",
+					"FP Destination",
+					"FP Predicate",
+				);
+				chosenTableColumnnsFPT_sortDirections = (
+					YES,
+				);
+				chosenTableColumnnsFPT_sortKeys = (
+					name,
+				);
+				chosenTableColumnnsFPT_sortSelectors = (
+					"_xdcaseInsensitiveNumericCompare:",
+				);
+				chosenTableColumnnsPT = (
+					"PT Property",
+					"PT Kind",
+					"PT SharedKeyOne",
+				);
+				chosenTableColumnnsPT_sortDirections = (
+					YES,
+				);
+				chosenTableColumnnsPT_sortKeys = (
+					name,
+				);
+				chosenTableColumnnsPT_sortSelectors = (
+					"_xdcaseInsensitiveNumericCompare:",
+				);
+				chosenTableColumnnsRT = (
+					"RT Relationship",
+					"RT Destination",
+				);
+				chosenTableColumnnsRT_sortDirections = (
+					YES,
+				);
+				chosenTableColumnnsRT_sortKeys = (
+					name,
+				);
+				chosenTableColumnnsRT_sortSelectors = (
+					"_xdcaseInsensitiveNumericCompare:",
+				);
+				chosenTableWidthsAT = (
+					322.238281,
+					173.000000,
+				);
+				chosenTableWidthsFPT = (
+					128.000000,
+					64.000000,
+					218.764160,
+				);
+				chosenTableWidthsFRT = (
+					128.000000,
+					249.764160,
+				);
+				chosenTableWidthsPT = (
+					128.000000,
+					108.110840,
+					214.570801,
+				);
+				chosenTableWidthsRT = (
+					128.000000,
+					329.000000,
+				);
+			};
+			"xdesign model browser state key - shown/hidden" = 1;
+			"xdesign model diagram view visible rect key" = "{{-132, 59}, {961, 649}}";
+			"xdesign model selected entities key" = (
+				"<XDPMEntity: 0x1708f1a0>{name=Genome, package=}",
+			);
+			"xdesign model selected properties key" = (
+				"<XDPMAttribute: 0x170b53a0>{name=background, type=(null)}",
+			);
+		};
+	};
+	A4F9EEC30A4B12D700BB22BA /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4A3027C0A28995D002828D9 /* BreedingController.m */;
+		name = "BreedingController.m: 20";
+		rLen = 0;
+		rLoc = 819;
+		rType = 0;
+		vrLen = 1525;
+		vrLoc = 0;
+	};
+	A4F9EEC40A4B12D700BB22BA /* XDModelBookmark */ = {
 		isa = XDModelBookmark;
 		fRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */;
 		fallbackIsa = PBXBookmark;
