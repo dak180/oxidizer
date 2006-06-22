@@ -104,9 +104,9 @@
 	
 }
 
-- (NSImage *)background {
+- (NSColor *)background {
 
-    NSImage *background;
+    NSColor *background;
 
     [self willAccessValueForKey: @"background"];
     background = [self primitiveValueForKey: @"background"];
