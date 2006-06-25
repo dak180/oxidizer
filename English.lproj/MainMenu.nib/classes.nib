@@ -28,6 +28,13 @@
             SUPERCLASS = NSObject; 
         }, 
         {
+            CLASS = DnDArrayController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {tableView = NSTableView; }; 
+            SUPERCLASS = NSArrayController; 
+        }, 
+        {CLASS = DnDImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
+        {
             ACTIONS = {randomSeed = id; }; 
             CLASS = EnvironmentController; 
             LANGUAGE = ObjC; 
