@@ -21,6 +21,7 @@
 #import "FractalFlameModel.h"
 #import "Genome.h"
 #import "ThreadParameters.h"
+#import "GreaterThanThreeTransformer.h"
 #import "QuickTime/QuickTime.h"
 #import "flam3_tools.h"
 
@@ -34,8 +35,19 @@ int printProgress(void *nslPtr, double progress, int stage);
 {
 	NSSortDescriptor *sort;
 	NSString *threads;
+	
+	GreaterThanThreeTransformer *gttt;
+    
+// create an autoreleased instance of our value transformer
+	gttt = [[[GreaterThanThreeTransformer alloc] init] autorelease];
+    
+// register it with the name that we refer to it with
+	[NSValueTransformer setValueTransformer:gttt
+                                forName:@"GreaterThanThree"];
 	 
     if (self = [super init]) {
+
+
 		 unsigned int cpuCount ;
 		  size_t len = sizeof(cpuCount);
 		  static int mib[2] = { CTL_HW, HW_NCPU };

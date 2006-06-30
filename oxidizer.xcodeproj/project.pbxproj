@@ -30,6 +30,7 @@
 		A4DAB5A80A02A9F7003BA626 /* ThreadParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DAB5A70A02A9F7003BA626 /* ThreadParameters.m */; };
 		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
 		A4F333A2096C813B00230854 /* Genome.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F333A1096C813B00230854 /* Genome.m */; };
+		A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */; };
 		A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FDAB290A4EBA9400910299 /* DnDArrayController.m */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,8 @@
 		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "../../flam3-palettes.xml"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4F333A0096C813B00230854 /* Genome.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genome.h; sourceTree = "<group>"; };
 		A4F333A1096C813B00230854 /* Genome.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genome.m; sourceTree = "<group>"; };
+		A4FADCE60A55A131004FC917 /* GreaterThanThreeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreaterThanThreeTransformer.h; sourceTree = "<group>"; };
+		A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreaterThanThreeTransformer.m; sourceTree = "<group>"; };
 		A4FDAB280A4EBA9400910299 /* DnDArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDArrayController.h; sourceTree = "<group>"; };
 		A4FDAB290A4EBA9400910299 /* DnDArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DnDArrayController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -121,6 +124,8 @@
 				A4A3027C0A28995D002828D9 /* BreedingController.m */,
 				A4FDAB280A4EBA9400910299 /* DnDArrayController.h */,
 				A4FDAB290A4EBA9400910299 /* DnDArrayController.m */,
+				A4FADCE60A55A131004FC917 /* GreaterThanThreeTransformer.h */,
+				A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -279,6 +284,7 @@
 				A40965710A30B5760076ACA3 /* flam3_tools.m in Sources */,
 				A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */,
 				A4A3810E0A4F236700E7364C /* DnDImageView.m in Sources */,
+				A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
