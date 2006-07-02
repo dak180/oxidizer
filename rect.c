@@ -300,7 +300,15 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
          exit(1);
       }
 
+      if (spec->bits <= 32) {
+	  if (cp.estimator > 0.0) {
+	      fprintf(stderr, "warning: density estimation disabled with %d bit buffers.\n", spec->bits);
+	      cp.estimator = 0.0;
+	  }
+      }
+
       if (cp.estimator > 0.0) {
+
 
 	 if (cp.estimator_curve <= 0.0) {
 	    fprintf(stderr,"estimator curve must be > 0\n");
@@ -915,4 +923,16 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
    free(filter);
    free(buckets);
    if (fname) free(cmap2);
+
+   if (0) {
+       /* insert the palette into the image */
+       for (j = 0; j < 100; j++) {
+	   for (i = 0; i < image_width; i++) {
+	       unsigned char *p = out + nchan * (i + j * out_width);
+	       p[0] = cmap[i * 256 / image_width][0];
+	       p[1] = cmap[i * 256 / image_width][1];
+	       p[2] = cmap[i * 256 / image_width][2];
+	   }
+       }
+   }
 }

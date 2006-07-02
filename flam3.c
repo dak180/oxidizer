@@ -18,10 +18,11 @@
 */
 
 static char *libifs_c_id =
-"@(#) $Id: flam3.c,v 1.2 2006/05/01 13:23:59 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.3 2006/07/02 12:50:18 vargol Exp $";
 
 
 #include "private.h"
+//#include "img.h"
 #include <limits.h>
 
 
@@ -1750,7 +1751,7 @@ static void clear_current_cp(int default_flag) {
     cp->contrast = 1.0;
     cp->brightness = 4.0;
     cp->nbatches = 1;
-    cp->ntemporal_samples = 1;
+    cp->ntemporal_samples = 60;
     cp->symmetry = 0;
     cp->hue_rotation = 0.0;
     cp->rotate = 0.0;
@@ -1917,7 +1918,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          cp->spatial_filter_radius = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"quality")) {
          cp->sample_density = atof(att_str);
-      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"batches")) {
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"passes")) {
          cp->nbatches = atoi(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"temporal_samples")) {
          cp->ntemporal_samples = atoi(att_str);		
@@ -2127,6 +2128,8 @@ static void parse_flame_element(xmlNode *flame_node) {
             }
             
             cp->final_xform_index = xf;
+            /* Now, if present, the xform enable defaults to on */
+            cp->final_xform_enable = 1;
          }
          
          for (j = 0; j < flam3_nvariations; j++) {
@@ -2553,7 +2556,7 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    fprintf(f, " oversample=\"%d\"", cp->spatial_oversample);
    fprintf(f, " filter=\"%g\"", cp->spatial_filter_radius);
    fprintf(f, " quality=\"%g\"", cp->sample_density);
-   fprintf(f, " batches=\"%d\"", cp->nbatches);
+   fprintf(f, " passes=\"%d\"", cp->nbatches);
    fprintf(f, " temporal_samples=\"%d\"", cp->ntemporal_samples);
    fprintf(f, " background=\"%g %g %g\"",
 	   cp->background[0], cp->background[1], cp->background[2]);
@@ -3282,7 +3285,8 @@ void flam3_render(flam3_frame *spec, unsigned char *out,
     render_rectangle_double(spec, out, out_width, field, nchan, trans);
     break;
   default:
-    fprintf(stderr, "bad bits, must be 16, 32, 33, or 64 not %d.\n", spec->bits);
+    fprintf(stderr, "flam3: bits must be 16, 32, 33, or 64 not %d.\n",
+	    spec->bits);
     exit(1);
     break;
   }
