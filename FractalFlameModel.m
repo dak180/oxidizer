@@ -700,7 +700,7 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 }
 
 
- - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps {
+ - (NSBitmapImageRep *)oldrenderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps {
 
 	
 	unsigned char *image;
@@ -801,6 +801,164 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 
 }
 
+ - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps {
+
+	
+	unsigned char *image;
+	int strip, thread, i;
+	double center_y, center_base;
+	double zoom_scale;
+
+	ThreadParameters *threadParameters;
+ 
+	int threads = [defaults integerForKey:@"threads" ];
+	
+	/* replace this next group with values from EnvironmentController */
+
+	
+//	NSImage *flameImage;
+	NSBitmapImageRep *flameRep;
+	
+	flam3_print(stderr, cps, NULL);
+	
+	
+	cps->sample_density *= qs;
+	cps->height = (int)(cps->height * ss);
+	cps->width = (int)(cps->width * ss);
+	cps->pixels_per_unit *= ss;
+	
+	int real_height;
+	
+	f->genomes = cps;
+	f->verbose = verbose;
+	f->bits = bits;
+	f->pixel_aspect_ratio = pixel_aspect;
+	f->progress = printProgress;
+
+	f->progress_parameter = progressIndicator;
+	
+	if(threads < cps->height) {
+		if (threads > nstrips) {
+			nstrips = threads; 
+		}
+	}
+	
+	if (nstrips > cps->height) {
+		fprintf(stderr, "cannot have more strips than rows but %d>%d.\n",
+				nstrips, cps->height);
+		exit(1);
+	}
+	
+	flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+													  pixelsWide:cps->width
+													  pixelsHigh:cps->height
+												   bitsPerSample:8
+												 samplesPerPixel:channels
+														hasAlpha:channels == 4 ? YES : NO 
+														isPlanar:NO
+												  colorSpaceName:NSDeviceRGBColorSpace
+													bitmapFormat:0
+													 bytesPerRow:channels*cps->width
+													bitsPerPixel:8*channels];
+	image =[flameRep bitmapData];
+
+	cps->sample_density *= nstrips;
+	real_height = cps->height;
+	cps->height = (int) ceil(cps->height / (double) nstrips);
+	center_y = cps->center[1];
+	zoom_scale = pow(2.0, cps->zoom);
+	center_base = center_y - ((nstrips - 1) * cps->height) /
+		(2 * cps->pixels_per_unit * zoom_scale);
+
+	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
+	
+	for(i=0; i<threads; i++) {
+
+		NSConditionLock *endLock = [[NSConditionLock alloc] initWithCondition:0];
+
+		flam3_frame *frame = (flam3_frame *)malloc(sizeof(flam3_frame));
+
+		
+		/* no need for a deep copy apart from cps */
+		*frame = *f; 
+		frame->genomes = malloc(sizeof(flam3_genome));
+		*(frame->genomes) = *cps;
+		
+		threadParameters = [[ThreadParameters alloc] init];
+		[threadParameters setFrames:frame];
+		[threadParameters setEndLock:endLock];
+		[paramArray addObject:threadParameters];
+
+		[endLock release];
+	}
+	
+	
+		
+	for (strip = 0; strip < nstrips; ) {
+		
+		for (thread = 0; thread < threads; thread++) {
+
+			[[[paramArray objectAtIndex:thread] getEndLock] lock];
+
+
+			if(strip < nstrips) {	
+
+				flam3_frame *threadFlame = [[paramArray objectAtIndex:thread] getFrames];
+
+				unsigned char *strip_start =
+					image + threadFlame->genomes->height * strip * threadFlame->genomes->width * channels;
+
+				threadFlame->genomes->center[1] = center_base +
+					threadFlame->genomes->height * (double) strip /
+					(threadFlame->genomes->pixels_per_unit * zoom_scale);
+				
+				if ((threadFlame->genomes->height * (strip + 1)) > real_height) {
+					int oh = threadFlame->genomes->height;
+					threadFlame->genomes->height = real_height - oh * strip;
+					threadFlame->genomes->center[1] -= 
+						(oh - threadFlame->genomes->height) * 0.5 /
+						(threadFlame->genomes->pixels_per_unit * zoom_scale);
+				}
+				
+				if (verbose && nstrips > 1) {
+					fprintf(stderr, "strip = %d/%d\n", strip+1, nstrips);
+				}
+				
+				 [[paramArray objectAtIndex:thread] setStripStart:strip_start];
+				
+				
+				[NSThread detachNewThreadSelector:@selector(threadedStillRender:)  toTarget:self withObject:[paramArray objectAtIndex:thread]];
+
+				
+			} else {
+				[[[paramArray objectAtIndex:thread] getEndLock] unlock];
+			}
+
+			strip++;
+			
+		}
+		
+		
+	}
+	
+	for (thread = 0; thread < threads; thread++) {
+			[[[paramArray objectAtIndex:thread] getEndLock] lock];
+			[[[paramArray objectAtIndex:thread] getEndLock] unlock];
+	};
+	
+	/* restore the cps values to their original values */
+	cps->sample_density /= nstrips;
+	cps->height = real_height;
+	cps->center[1] = center_y;
+	
+	
+	if (verbose) {
+		fprintf(stderr, "done.\n");
+	}
+		
+	return flameRep;
+
+}
 
  
  
@@ -1000,6 +1158,29 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	
 }	
+
+- (void) threadedStillRender:(id) lockParameters {
+
+	flam3_frame *frames = [lockParameters getFrames];
+	unsigned char *image = [lockParameters getStripStart];
+
+	int width = frames->genomes[0].width;
+
+	NSAutoreleasePool *subPool = [[NSAutoreleasePool alloc] init];
+	
+	flam3_render(frames, image, width, flam3_field_both, channels, transparency);		
+//		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
+
+	[[lockParameters getEndLock] unlock];
+	
+
+	
+	[subPool release];
+
+
+	
+}	
+
 
 - (IBAction)editGenomes:(id)sender {
 
@@ -1215,7 +1396,7 @@ int printProgress(void *nslPtr, double progress, int stage) {
 
 	[nsl setDoubleValue:progress * 100.0];
 //	[nsl displayIfNeeded];
-	[nsl performSelectorOnMainThread:@selector(displayIfNeeded) withObject:nil waitUntilDone:YES];
+//	[nsl performSelectorOnMainThread:@selector(displayIfNeeded) withObject:nil waitUntilDone:YES];
 //	fprintf(stderr, "Progress value: %f\n", progress); 
 //	fprintf(stderr, "Stage: %s\n", stage ? "filtering" : "chaos"); 
 	

@@ -89,11 +89,26 @@
 	return endLock;
 }
 
+- (void)setStripStart:(unsigned char *)strip {
+	
+	stripStart = strip;
+	
+}
+
+- (unsigned char *)getStripStart {
+
+	return stripStart;
+	
+}
+
+
 
 - (void)dealloc 
 {
 	[self setConditionLock:nil];
 	[super dealloc];
 }
+
+
 
 @end

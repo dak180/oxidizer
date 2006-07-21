@@ -33,7 +33,7 @@
 	double firstFrame;
 	NSImage *image;
 	NSBitmapImageRep *imageRep;
-
+	unsigned char *stripStart;
 
 }
 
@@ -58,6 +58,7 @@
 - (void)setImage:(NSImage *)newImage;
 - (void)setImageRep:(NSBitmapImageRep *)newImageRep;
 
-
+- (void)setStripStart:(unsigned char *)strip;
+- (unsigned char *)getStripStart;
 
 @end
