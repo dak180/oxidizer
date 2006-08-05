@@ -86,12 +86,13 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 environment = EnvironmentController; 
-                flameImages = NSTableView; 
                 flames = FlameController; 
                 frameIndicator = NSLevelIndicator; 
+                oxidizerWindow = NSWindow; 
                 palette = PaletteController; 
                 preferencesWindow = NSWindow; 
-                progressIndicator = NSLevelIndicator; 
+                progessTable = NSTableView; 
+                progressController = NSArrayController; 
                 progressWindow = NSWindow; 
                 qtController = QuickTimeController; 
             }; 
@@ -123,6 +124,7 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = ProgressDetails; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {getImageExportSettings = id; getMovieExportSettings = id; }; 
             CLASS = QuickTimeController; 
@@ -137,6 +139,7 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
+        {CLASS = QuicktimeThreadParameters; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = Ring2Variation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
         {CLASS = SymmetryController; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = Variation; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 

@@ -22,6 +22,7 @@
 #import "Genome.h"
 #import "ThreadParameters.h"
 #import "GreaterThanThreeTransformer.h"
+#import "ProgressDetails.h"
 #import "QuickTime/QuickTime.h"
 #import "flam3_tools.h"
 
@@ -35,17 +36,16 @@ int printProgress(void *nslPtr, double progress, int stage);
 {
 	NSSortDescriptor *sort;
 	NSString *threads;
-	
-	GreaterThanThreeTransformer *gttt;
-    
-// create an autoreleased instance of our value transformer
-	gttt = [[[GreaterThanThreeTransformer alloc] init] autorelease];
-    
-// register it with the name that we refer to it with
-	[NSValueTransformer setValueTransformer:gttt
-                                forName:@"GreaterThanThree"];
-	 
+		 
     if (self = [super init]) {
+		GreaterThanThreeTransformer *gttt;
+		
+	// create an autoreleased instance of our value transformer
+		gttt = [[[GreaterThanThreeTransformer alloc] init] autorelease];
+		
+	// register it with the name that we refer to it with
+		[NSValueTransformer setValueTransformer:gttt
+                                forName:@"GreaterThanThree"];
 
 
 		 unsigned int cpuCount ;
@@ -117,6 +117,20 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		docController = [NSDocumentController sharedDocumentController];
 		
+		_progressInd = [[NSMutableArray alloc] initWithCapacity:2];
+
+/*
+		int threads = [defaults integerForKey:@"threads" ];
+		int i;
+		
+		for(i=0; i<threads; i++) {
+		ProgressDetails *progressDict = [[ProgressDetails alloc] init];	
+			[progressDict setThread:[NSNumber numberWithInt:i]]; 
+			[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
+			[_progressInd addObject:progressDict];
+		}
+*/		
+
     }
 	
 	
@@ -126,6 +140,22 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (IBAction)renderStill:(id)sender {
 
+	BOOL doRender = [qtController showQuickTimeFileImageDialogue];
+                  
+	if(doRender == NO) {
+		return;
+	}
+
+   [NSThread detachNewThreadSelector:@selector(renderStillInNewThread:) toTarget:self withObject:qtController];
+
+
+}
+	
+	
+- (void)renderStillInNewThread:(QuickTimeController *)qt {
+
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
 	NSBitmapImageRep *flameRep;
 	
 	flam3_frame frame;
@@ -133,12 +163,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	NSArray *genomes;
 
-	BOOL doRender = [qtController showQuickTimeFileImageDialogue];
-                  
-	if(doRender == NO) {
-		return;
-	}
-											
+									
 							        
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
@@ -150,7 +175,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	genome = (flam3_genome *)malloc(sizeof(flam3_genome));
 	
 	[Genome populateCGenome:genome FromEntity:[flames getSelectedGenome] fromContext:moc];
-
+ 
 	flam3_print(stderr, genome, NULL);
 
 
@@ -161,7 +186,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	frame.ngenomes = 1;
 
 	progress = 0.0;
-	[progressIndicator setDoubleValue:0.0];
 	
 	[frameIndicator setMaxValue:1];
 	[frameIndicator setIntValue:1];
@@ -173,14 +197,26 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	[progressWindow setIsVisible:FALSE];
 
-	[qtController saveNSBitmapImageRep:flameRep];
-//	[self saveToFile:flameRep];	
-
-//	[flameRep release];
+//	[self performSelectorOnMainThread:@selector(saveNSBitmapImageRep:) withObject:flameRep waitUntilDone:YES];
+	[qt saveNSBitmapImageRep:flameRep];
+	
+	[pool release];
 
 }
 
 - (IBAction)renderAnimation:(id)sender {
+
+	BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
+	if(doRender == NO) {
+		return;
+	}
+   [NSThread detachNewThreadSelector:@selector(renderAnimationInNewThread) toTarget:self withObject:nil];
+
+}
+
+- (IBAction)renderAnimationInNewThread {
+
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
 	int threads;
 	
@@ -222,10 +258,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
 
 	[qtController setMovieHeight:cps->height width:cps->width];
-	BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
-	if(doRender == NO) {
-		return;
+	BOOL doRender = [qtController CreateMovieGWorld];
+	if(doRender == FALSE) {
+		;
 	}
+
 
 	
 	dtime = 1;
@@ -280,6 +317,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	f.verbose = verbose;
 	f.bits = bits;
 	f.progress = 0;
+	f.progress = printProgress;
 
 	if (dtime < 1) {
 		fprintf(stderr, "dtime must be positive, not %d.\n", dtime);
@@ -288,6 +326,16 @@ int printProgress(void *nslPtr, double progress, int stage);
 	NSConditionLock *lock = [[NSConditionLock alloc] initWithCondition:0];
 	
 	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
+	
+	[progressController removeObjects:[progressController arrangedObjects]];
+
+
+	for(i=0; i<threads; i++) {
+		ProgressDetails *progressDict = [[ProgressDetails alloc] init];
+		[progressController insertObject:progressDict atArrangedObjectIndex:i];
+	}	
+
+	NSArray *progressObjects = [progressController arrangedObjects];
 	
 	for(i=0; i<threads; i++) {
 
@@ -303,6 +351,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 		}
 		[threadParameters setConditionLock:lock];
 		[threadParameters setEndLock:endLock];
+		
+		ProgressDetails *progressDict = [progressObjects objectAtIndex:i];
+
+		[progressDict setThread:[NSNumber numberWithInt:i]]; 		
+		[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
 		
 		[endLock release];
 
@@ -326,10 +379,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 		flam3_frame *frame = (flam3_frame *)malloc(sizeof(flam3_frame));
 		/* no need for a deep copy */
 		*frame = f; 
+		frame->progress_parameter = progressDict;
+		
+
 		
 		[threadParameters setFrames:frame];
 		[threadParameters setImage:flameImage];
 		[threadParameters setImageRep:flameRep];
+		
+
 
 		[paramArray addObject:threadParameters];
 	}
@@ -338,8 +396,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	f.verbose = 0;
 	
-	[progressIndicator setDoubleValue:0.0];
-	
 	[frameIndicator setMaxValue:(last_frame - first_frame) / dtime];
 	frameCount = 0;
 	[frameIndicator setIntValue:0];
@@ -347,8 +403,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[progressWindow setTitle:@"Rendering Movie..."];	
 	[progressWindow makeKeyAndOrderFront:self];
 
-	f.progress = printProgress;
-	f.progress_parameter = progressIndicator;
 	
 
 //	for (ftime = first_frame; ftime <= last_frame; ftime += dtime) {
@@ -367,11 +421,16 @@ int printProgress(void *nslPtr, double progress, int stage);
 		for(i=0; i<threads; i++) {
 			[[[paramArray objectAtIndex:i] getEndLock] lock];
 			[frameIndicator setIntValue:[frameIndicator intValue]+1];
+				ProgressDetails *progressDict = [_progressInd objectAtIndex:i];	
+				[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
 			
 			if([[paramArray objectAtIndex:i] getFirstFrame] <= last_frame) {
 				[frameIndicator displayIfNeeded];
 				[qtController addNSBitmapImageRepToMovie:[[paramArray objectAtIndex:i] getImageRep]];
 				[[paramArray objectAtIndex:i] setFirstFrame:ftime];
+				
+
+				
 				[NSThread detachNewThreadSelector:@selector(threadedMovieRender:)  toTarget:self withObject:[paramArray objectAtIndex:i]];
 				ftime += dtime;
 			} else {
@@ -384,13 +443,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 	NSLog(@"saving movie");
 	[progressWindow setTitle:@"Writing Movie to Disk..."];
 	
-	[qtController saveMovie];
+//	[qtController saveMovie];
+	[qtController performSelectorOnMainThread:@selector(saveMovie) withObject:nil waitUntilDone:YES];
 
 
 	[progressWindow setIsVisible:NO];
 	
 	NSBeep();
-
+	
+	[pool release];
 }
 
 
@@ -463,7 +524,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	int i;
 	
 	progress = 0.0;
-	[progressIndicator setDoubleValue:0.0];
 	
 	[frameIndicator setMaxValue:ncps];
 	[progressWindow setTitle:@"Rendering Thumbnails..."];
@@ -487,7 +547,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	}
 
 	
-	[flameImages reloadData];
+//	[flameImages reloadData];
 	[progressWindow setIsVisible:FALSE];
 
 
@@ -700,107 +760,6 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 }
 
 
- - (NSBitmapImageRep *)oldrenderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps {
-
-	
-	unsigned char *image;
-	int strip;
-	double center_y, center_base;
-	double zoom_scale;
-
-	
-	/* replace this next group with values from EnvironmentController */
-
-	
-//	NSImage *flameImage;
-	NSBitmapImageRep *flameRep;
-	
-	flam3_print(stderr, cps, NULL);
-	
-	
-	cps->sample_density *= qs;
-	cps->height = (int)(cps->height * ss);
-	cps->width = (int)(cps->width * ss);
-	cps->pixels_per_unit *= ss;
-	
-	int real_height;
-	
-	f->genomes = cps;
-	f->verbose = verbose;
-	f->bits = bits;
-	f->pixel_aspect_ratio = pixel_aspect;
-	f->progress = printProgress;
-
-	f->progress_parameter = progressIndicator;
-	
-	if (nstrips > cps->height) {
-		fprintf(stderr, "cannot have more strips than rows but %d>%d.\n",
-				nstrips, cps->height);
-		exit(1);
-	}
-	
-	flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-													  pixelsWide:cps->width
-													  pixelsHigh:cps->height
-												   bitsPerSample:8
-												 samplesPerPixel:channels
-														hasAlpha:channels == 4 ? YES : NO 
-														isPlanar:NO
-												  colorSpaceName:NSDeviceRGBColorSpace
-													bitmapFormat:0
-													 bytesPerRow:channels*cps->width
-													bitsPerPixel:8*channels];
-	image =[flameRep bitmapData];
-	
-	
-	cps->sample_density *= nstrips;
-	real_height = cps->height;
-	cps->height = (int) ceil(cps->height / (double) nstrips);
-	center_y = cps->center[1];
-	zoom_scale = pow(2.0, cps->zoom);
-	center_base = center_y - ((nstrips - 1) * cps->height) /
-		(2 * cps->pixels_per_unit * zoom_scale);
-	
-	for (strip = 0; strip < nstrips; strip++) {
-		unsigned char *strip_start =
-		image + cps->height * strip * cps->width * channels;
-		cps->center[1] = center_base +
-			cps->height * (double) strip /
-			(cps->pixels_per_unit * zoom_scale);
-		
-		if ((cps->height * (strip + 1)) > real_height) {
-			int oh = cps->height;
-			cps->height = real_height - oh * strip;
-			cps->center[1] -= 
-				(oh - cps->height) * 0.5 /
-				(cps->pixels_per_unit * zoom_scale);
-		}
-		
-		if (verbose && nstrips > 1) {
-			fprintf(stderr, "strip = %d/%d\n", strip+1, nstrips);
-		}
-
-	
-		flam3_render(f, strip_start, cps->width, flam3_field_both, channels, transparency);
-		
-		
-		
-	}
-	
-	/* restore the cps values to their original values */
-	cps->sample_density /= nstrips;
-	cps->height = real_height;
-	cps->center[1] = center_y;
-	
-	
-	if (verbose) {
-		fprintf(stderr, "done.\n");
-	}
-	
-	return flameRep;
-
-}
-
  - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps {
 
 	
@@ -834,8 +793,6 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 	f->bits = bits;
 	f->pixel_aspect_ratio = pixel_aspect;
 	f->progress = printProgress;
-
-	f->progress_parameter = progressIndicator;
 	
 	if(threads < cps->height) {
 		if (threads > nstrips) {
@@ -871,8 +828,20 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 		(2 * cps->pixels_per_unit * zoom_scale);
 
 	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
+
+	[progressController removeObjects:[progressController arrangedObjects]];
+
+
+	for(i=0; i<threads; i++) {
+		ProgressDetails *progressDict = [[ProgressDetails alloc] init];
+		[progressController insertObject:progressDict atArrangedObjectIndex:i];
+	}	
+	
+	NSArray *progressObjects = [progressController arrangedObjects];
 	
 	for(i=0; i<threads; i++) {
+	
+		ProgressDetails *progressDict = [progressObjects objectAtIndex:i];
 
 		NSConditionLock *endLock = [[NSConditionLock alloc] initWithCondition:0];
 
@@ -883,14 +852,22 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 		*frame = *f; 
 		frame->genomes = malloc(sizeof(flam3_genome));
 		*(frame->genomes) = *cps;
+		frame->progress_parameter = progressDict;
 		
 		threadParameters = [[ThreadParameters alloc] init];
 		[threadParameters setFrames:frame];
 		[threadParameters setEndLock:endLock];
 		[paramArray addObject:threadParameters];
-
+		
+		[progressDict setThread:[NSNumber numberWithInt:i]]; 
+		[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
+										
 		[endLock release];
 	}
+	
+
+	[progessTable reloadData];
+	[progessTable displayIfNeeded];
 	
 	
 		
@@ -964,6 +941,14 @@ int calc_nstrips(flam3_frame *spec, int threads) {
  
 - (IBAction)previewCurrentFlame:(id)sender {
 
+	[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread) toTarget:self withObject:nil]; 
+
+}
+
+- (IBAction)previewCurrentFlameInThread {
+
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
 	NSBitmapImageRep *flameRep;
 	NSImage *flameImage;
 	flam3_genome *flame = (flam3_genome *)malloc(sizeof(flam3_genome));
@@ -972,7 +957,6 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 	
 	[Genome populateCGenome:flame FromEntity:[flames getSelectedGenome] fromContext:moc];
 
-	[progressIndicator setDoubleValue:0.0];	
 	[frameIndicator setMaxValue:1];
 	[progressWindow setTitle:@"Rendering Preview..."];
 	
@@ -989,9 +973,10 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 	[flames setPreviewForCurrentFlame:flameImage];
 	
 	[flameImage release];
-	[flameRep release];
+//	[flameRep release];
 	free(flame);		
-		
+	
+	[pool release];	
 
 }
 
@@ -1161,12 +1146,15 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 - (void) threadedStillRender:(id) lockParameters {
 
+	NSAutoreleasePool *subPool = [[NSAutoreleasePool alloc] init];
+	
+	[NSThread setThreadPriority:0];
+
 	flam3_frame *frames = [lockParameters getFrames];
 	unsigned char *image = [lockParameters getStripStart];
 
 	int width = frames->genomes[0].width;
 
-	NSAutoreleasePool *subPool = [[NSAutoreleasePool alloc] init];
 	
 	flam3_render(frames, image, width, flam3_field_both, channels, transparency);		
 //		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
@@ -1186,8 +1174,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	 NSSegmentedControl *segments = (NSSegmentedControl *)sender;
 	 switch([segments selectedSegment]) {
-		case 0:
-			[flames addNewFlame:[self createRandomGenomeInContext:moc]];
+		case 0: 
+			[NSThread detachNewThreadSelector:@selector(AddRandomGenomeToFlamesUsingContext:) toTarget:self withObject:moc];
+//			[self AddRandomGenomeToFlamesUsingContext:moc];
 			break;
 		case 1:		
 			[flames showFlameWindow];
@@ -1200,6 +1189,23 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 
 }
+
+- (void)AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	NSManagedObject *genome = [self createRandomGenomeInContext:context];
+	[genome retain];
+
+	[flames performSelectorOnMainThread:@selector(addNewFlame:) withObject:genome waitUntilDone:YES];
+
+	[oxidizerWindow performSelectorOnMainThread:@selector(makeKeyAndOrderFront:) withObject:self waitUntilDone:YES];
+	[genome release];
+
+	[pool release];
+
+}
+
 - (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context {
 
 	flam3_genome cp_orig, cp_save;
@@ -1305,8 +1311,15 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	NSImage *flameImage = [[NSImage alloc] init];
 	[flameImage addRepresentation:flameRep];
 
-	genomeEntity = [Genome createGenomeEntityFrom:&cp_orig withImage:flameImage inContext:context];
-		
+	Genome *tmpGenome = [[Genome alloc] init];
+	
+	[tmpGenome setCGenome:&cp_orig];
+	[tmpGenome setImage:flameImage];
+	[tmpGenome setManagedObjectContext:context];  
+
+	[tmpGenome performSelectorOnMainThread:@selector(createGenomeEntity) withObject:nil waitUntilDone:YES]; 
+
+	genomeEntity = [tmpGenome getGenomeEntity];
 
 	/* Free created documents */
 	/* (Only free once, since the copy is a ptr to the original) */
@@ -1317,6 +1330,8 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	   fprintf(stderr, "\ndone.  action = %s\n", action);
 	}
 
+	[tmpGenome release];
+	[genomeEntity autorelease];
 	return genomeEntity;
 
 
@@ -1388,17 +1403,43 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
+- (NSMutableArray *)progressIndicators {
+
+	NSLog(@"Called progress indicators");
+
+	return _progressInd;
+}
+
+
+- (void)setProgressIndicators:(NSMutableArray *)indicators {
+
+	NSLog(@"Called set progress indicators");
+	
+	if(indicators != nil) {
+		[indicators retain];
+	}
+	
+	[_progressInd release];
+	
+	_progressInd = indicators;   
+	
+	return;
+}
+
+-(void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep {
+
+	[qtController saveNSBitmapImageRep:rep]; 
+}
+
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {
 	
-	NSLevelIndicator *nsl = nslPtr;
-
-	[nsl setDoubleValue:progress * 100.0];
-//	[nsl displayIfNeeded];
-//	[nsl performSelectorOnMainThread:@selector(displayIfNeeded) withObject:nil waitUntilDone:YES];
-//	fprintf(stderr, "Progress value: %f\n", progress); 
-//	fprintf(stderr, "Stage: %s\n", stage ? "filtering" : "chaos"); 
+	ProgressDetails *md = nslPtr;
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	[md performSelectorOnMainThread:@selector(setProgress:) withObject:[NSNumber numberWithDouble:(100.0 * progress)] waitUntilDone:NO];
+//	[md setProgress:[NSNumber numberWithDouble:(100.0 * progress)]];
+	[pool release];
 	
 	return 0;
 }

@@ -29,6 +29,12 @@
 
 @interface Genome : NSObject
 {
+
+	NSImage *_image;
+	NSManagedObjectContext *_moc;
+	NSManagedObject *_genomeEntity;
+	flam3_genome *_genome;
+
 }
  
 + (int) getIntSymmetry:(NSString *)value;
@@ -36,6 +42,7 @@
 
 /* Core data code */
 + (NSManagedObject *)createGenomeEntityFrom:(flam3_genome *)genome withImage:(NSImage *)image inContext:(NSManagedObjectContext *)moc;
+
 + (NSMutableSet *)createXFormEntitySetFromCGenome:(flam3_genome *)genome inContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createCMapEntitySetFromCGenome:(flam3_genome *)genome inContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createVariationsEntitySetFromCXForm:(flam3_xform *)xform inContext:(NSManagedObjectContext *)moc;
@@ -54,4 +61,18 @@
 + (xmlDocPtr) populateCEditDocFromEntity:(NSManagedObject *)genome;
 
 
+- (void)setCGenome:(flam3_genome *)cps;
+- (flam3_genome *)getCGenome;
+
+- (void)setManagedObjectContext:(NSManagedObjectContext *)moc;
+- (NSManagedObjectContext *)getManagedObjectContext;
+
+- (NSImage *)getImage;
+- (void)setImage:(NSImage *)newImage;
+
+- (NSManagedObject *)getGenomeEntity;
+- (void)setGenomeEntity:(NSManagedObject *)genomeEntity;
+
+- (void)createGenomeEntity;
+  
 @end

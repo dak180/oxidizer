@@ -70,7 +70,6 @@
 
 	int runResult;
 
-	OSErr outErr;
 	useDefaultSettings = YES;
 
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
@@ -78,7 +77,22 @@
 	runResult = [savePanel runModal];
 	
 	if(runResult == NSOKButton && [savePanel filename] != nil) {
+		filename = [savePanel filename];
+		[filename retain];
+		
+	}  else {
+	
+		filename = nil;
+		return NO;
+	}
+	
+	return YES;
 
+}
+
+-(BOOL) CreateMovieGWorld {
+
+	OSErr outErr;
 		Handle  dataRefH    = nil;
 		OSType  dataRefType;
 	
@@ -176,14 +190,6 @@
 		SetGWorld(movieGWorld, nil);
 
 
-		filename = [savePanel filename];
-		
-		
-	}  else {
-	
-		filename = nil;
-		return NO;
-	}
 	
 	return YES;
 
@@ -201,6 +207,7 @@
 	
 	if(runResult == NSOKButton && [savePanel filename] != nil) {
 		filename = [savePanel filename];
+		[filename retain];
 	} else {
 		filename = nil;
 		return NO;
@@ -469,6 +476,8 @@
     createMovieFileDeleteCurFile |
     movieToFileOnlyExport,
     exporter);
+
+	err =GetMoviesError();
 
 	DisposeHandle(settings);
 	CloseComponent(exporter);

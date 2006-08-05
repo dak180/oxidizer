@@ -23,7 +23,12 @@
 
 @implementation Genome
 
+- (void)createGenomeEntity {
 
+	[self setGenomeEntity:[Genome createGenomeEntityFrom:_genome withImage:_image inContext:_moc]];
+	
+	return;
+}
 	
 
 + (NSManagedObject *)createGenomeEntityFrom:(flam3_genome *)genome withImage:(NSImage *)image inContext:(NSManagedObjectContext *)moc {
@@ -990,8 +995,57 @@
 	return variations;
 } 
 
+- (NSImage *)getImage {
+	return _image;
+}
 
+- (void)setImage:(NSImage *)newImage {
 
+	if(newImage != nil) {
+		[newImage retain];
+	}
+	[_image release];
 
+	_image = newImage;	
+}
+
+- (NSManagedObjectContext *)getManagedObjectContext {
+	return _moc;
+}
+
+- (void)setManagedObjectContext:(NSManagedObjectContext *)moc {
+
+	if(moc != nil) {
+		[moc retain];
+	}
+	[moc release];
+
+	_moc = moc;	
+}
+
+- (void)setCGenome:(flam3_genome *)cps {
+	_genome = cps;
+}
+
+- (flam3_genome *)getCGenome {
+	
+	return _genome;
+
+}
+
+- (NSManagedObject *)getGenomeEntity {
+	return _genomeEntity;
+}
+
+- (void)setGenomeEntity:(NSManagedObject *)genomeEntity  {
+
+	if(genomeEntity != nil) {
+		[genomeEntity retain];
+	}
+	[_genomeEntity release];
+
+	_genomeEntity = genomeEntity;	
+}
+ 
 @end
 

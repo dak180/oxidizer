@@ -101,7 +101,32 @@
 	
 }
 
+- (void)setProgress:(NSMutableDictionary *)dict {
+	
+	if(dict != nil) {
+		[dict retain];
+	}
+	
+	[progress release];
 
+	progress = dict;
+	
+}
+
+- (NSMutableDictionary *)getProgress {
+
+	return progress;
+	
+}
+
+/*
+- (void)setGenome:(flam3_genome *)cps {
+	genome = cps;
+}
+- (flam3_genome *)getGenome {
+	return genome;
+}
+*/
 
 - (void)dealloc 
 {

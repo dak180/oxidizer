@@ -160,6 +160,7 @@
 
 - (void)addNewFlame:(NSManagedObject *)genomeEntity {
 
+
 	unsigned int selectedIndex, time, time2, newIndex;
 	NSArray *arrangedObjects;
 
@@ -190,12 +191,13 @@
 			break;
 
 	}  	
-//	[genomeController insertObject:genomeEntity atArrangedObjectIndex:newIndex];
+
 	[genomeController rearrangeObjects];
 	
 	[paletteWithHue setNeedsDisplay:YES];
 
 }
+
 
 
 - (void)showFlameWindow {

@@ -82,7 +82,7 @@ NSString *mocPasteboardType = @"GenomeMoc";
 	dropOperation:(NSTableViewDropOperation)op {
 
 	NSManagedObject *sourceEntity;	
-	NSManagedObjectContext **sourceMoc;
+	NSManagedObjectContext *sourceMoc;
 	NSManagedObjectContext *destinationMoc = [self managedObjectContext];
 	
 	NSPasteboard *pasteBoard = [info draggingPasteboard];
@@ -91,6 +91,7 @@ NSString *mocPasteboardType = @"GenomeMoc";
 	NSData *genomeData;
 	NSData *mocData = [moc objectAtIndex:0];
 
+	sourceMoc = [NSManagedObjectContext alloc];
 	[mocData getBytes:&sourceMoc];
 
 	flam3_genome genome;

@@ -58,6 +58,7 @@
 
 -(void)removeFlameData;
 -(void)addFlameData:(NSImage *)flameImage genome:(flam3_genome *)genome atIndex:(int )index inContext:(NSManagedObjectContext *)moc;
+- (void)AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
 -(void)setPreviewForCurrentFlame:(NSImage *)preview;
 - (NSManagedObject *)getSelectedGenome;
 

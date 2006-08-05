@@ -75,6 +75,7 @@
 
 - (BOOL) showQuickTimeFileMovieDialogue;
 - (BOOL) showQuickTimeFileImageDialogue; 
+-(BOOL) CreateMovieGWorld;
 - (void) availableComponentsForMovie;
 - (void) availableComponentsForImage;
 - (void) saveMovie;

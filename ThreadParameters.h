@@ -34,6 +34,8 @@
 	NSImage *image;
 	NSBitmapImageRep *imageRep;
 	unsigned char *stripStart;
+	NSMutableDictionary *progress;
+//	flam3_genome *genome;
 
 }
 
@@ -60,5 +62,10 @@
 
 - (void)setStripStart:(unsigned char *)strip;
 - (unsigned char *)getStripStart;
+
+/*
+- (void)setGenome:(flam3_genome *)cps;
+- (flam3_genome *)getGenome;
+*/
 
 @end

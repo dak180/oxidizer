@@ -33,12 +33,13 @@
     IBOutlet EnvironmentController *environment;
     IBOutlet FlameController *flames;
     IBOutlet PaletteController *palette;
-    IBOutlet NSTableView *flameImages;
+    IBOutlet NSTableView *progessTable;
     IBOutlet NSWindow *progressWindow;
     IBOutlet NSWindow *preferencesWindow;
+    IBOutlet NSWindow *oxidizerWindow;
     IBOutlet NSLevelIndicator *frameIndicator;
-    IBOutlet NSLevelIndicator *progressIndicator;
     IBOutlet QuickTimeController *qtController;
+	IBOutlet NSArrayController *progressController;
 	
 	NSManagedObjectContext *moc;
 
@@ -46,6 +47,8 @@
 	NSArray *xformSortDescriptors;
 	NSArray *variationSortDescriptors;
 	NSArray *cmapSortDescriptors;
+	
+	NSMutableArray *_progressInd;
 	
 	NSDocumentController *docController;
 
@@ -100,4 +103,11 @@
 - (NSManagedObjectContext *)getNSManagedObjectContext;
 
 - (void) deleteOldGenomes;
+
+- (NSMutableArray *)progressIndicators;
+- (void) renderStillInNewThread:(QuickTimeController *)qt;
+- (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
+- (void) previewCurrentFlameInThread;
+- (void)AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
+
 @end
