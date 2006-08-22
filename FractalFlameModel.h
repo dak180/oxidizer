@@ -34,12 +34,14 @@
     IBOutlet FlameController *flames;
     IBOutlet PaletteController *palette;
     IBOutlet NSTableView *progessTable;
+    IBOutlet NSTableView *flameTable;
     IBOutlet NSWindow *progressWindow;
     IBOutlet NSWindow *preferencesWindow;
     IBOutlet NSWindow *oxidizerWindow;
     IBOutlet NSLevelIndicator *frameIndicator;
     IBOutlet QuickTimeController *qtController;
 	IBOutlet NSArrayController *progressController;
+	IBOutlet NSArrayController *flameController;
 	
 	NSManagedObjectContext *moc;
 
@@ -54,6 +56,9 @@
 
 	NSUserDefaults *defaults;
 	
+	NSPersistentStoreCoordinator *coordinator;
+	
+
 	int verbose;
 	int bits;
 	int seed;
@@ -109,5 +114,7 @@
 - (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) previewCurrentFlameInThread;
 - (void)AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
+- (void)hideProgressWindow;
+- (void)initProgressController;
 
 @end

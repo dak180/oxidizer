@@ -42,7 +42,7 @@
 	if(genome->flame_name[0] != '\0') {
 		[genomeEntity setValue:[NSString stringWithCString:genome->flame_name encoding:NSUTF8StringEncoding]  forKey:@"name"];
 	} else {
-		[genomeEntity setValue:@"wibble" forKey:@"name"];
+		[genomeEntity setValue:@"Oxidizer" forKey:@"name"];
 	}
 	
 	if(genome->parent_fname[0] != '\0') {
@@ -137,8 +137,6 @@
 		[genomeEntity setValue:[NSNumber numberWithBool:YES] forKey:@"use_palette"];
 		[genomeEntity setValue:nil forKey:@"cmap"];
 	}
-
-//	[genomeEntity autorelease];
 
 	return genomeEntity;
 
@@ -1046,6 +1044,17 @@
 
 	_genomeEntity = genomeEntity;	
 }
- 
+
+- (int)setIndex {
+	return _index;
+}
+
+- (void)setIndex:(int)index  {
+	
+	index = _index;
+	
+}
+
+
 @end
 

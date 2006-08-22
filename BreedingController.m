@@ -181,7 +181,7 @@
 
 	flam3_frame f;
 	flam3_genome cp_orig;
-	flam3_genome cp_save;
+	flam3_genome *cp_save;
 	flam3_genome selp0, selp1;
 	
 	int seed;
@@ -200,7 +200,7 @@
 	unsigned char *image;
 	
 	
-	memset(&cp_save, 0, sizeof(flam3_genome));
+	cp_save = (flam3_genome *)calloc(1, sizeof(flam3_genome));
 	memset(&cp_orig, 0, sizeof(flam3_genome));
 	memset(&selp0, 0, sizeof(flam3_genome));
 	memset(&selp1, 0, sizeof(flam3_genome));
@@ -317,7 +317,7 @@
                         
             truncate_variations(&cp_orig, 5, action);
             cp_orig.edits = create_new_editdoc(action, &selp0, &selp1);
-            flam3_copy(&cp_save, &cp_orig);
+            flam3_copy(cp_save, &cp_orig);
             test_cp(&cp_orig);
             flam3_render(&f, image, cp_orig.width, flam3_field_both, 3, 0);
         
@@ -366,14 +366,14 @@
 	}
 	
 	
-	cp_save.time = 0;
+	cp_save->time = 0;
 	[self deleteOldGenomesInContext:mocResult];
-	[flameModel generateAllThumbnailsForGenome:&cp_save withCount:1 inContext:mocResult];
+	[flameModel generateAllThumbnailsForGenome:cp_save withCount:1 inContext:mocResult];
 	[mocResult save:nil];
 	
 	/* Free created documents */
 	/* (Only free once, since the copy is a ptr to the original) */
-	xmlFreeDoc(cp_save.edits);
+//	xmlFreeDoc(cp_save.edits);
 				   
 
 }
@@ -522,7 +522,7 @@
 	
 	/* Free created documents */
 	/* (Only free once, since the copy is a ptr to the original) */
-	xmlFreeDoc(cp_save->edits);
+//	xmlFreeDoc(cp_save->edits);
 	
 }
 
@@ -663,7 +663,7 @@
 	
 	/* Free created documents */
 	/* (Only free once, since the copy is a ptr to the original) */
-	xmlFreeDoc(cp_save->edits);
+//	xmlFreeDoc(cp_save->edits);
 	
 
 
@@ -674,11 +674,10 @@
 
 	flam3_frame f;
 	flam3_genome cp_orig;
-	flam3_genome cp_save;
+	flam3_genome *cp_save;
 	flam3_genome selp0;
     flam3_genome *aselp0, *aselp1;
 	
-	int seed;
 	int count = 0;
 	int ntries = 10;
 	int debug = 0;
@@ -703,7 +702,8 @@
       num_ivars = 1;
    srandom(time(0) + getpid());
 
-
+   cp_save = (flam3_genome *)calloc(1, sizeof(flam3_genome));
+   
    f.temporal_filter_radius = 0.0;
    f.bits = 33;
    f.verbose = 0;
@@ -715,7 +715,6 @@
    image = (unsigned char *) malloc(3 * cp_orig.width * cp_orig.height);
 
    memset(&cp_orig, 0, sizeof(flam3_genome));
-   memset(&cp_save, 0, sizeof(flam3_genome));
    memset(&selp0, 0, sizeof(flam3_genome));
 
 	int did_color;
@@ -983,7 +982,7 @@
 
             truncate_variations(&cp_orig, 5, action);
             cp_orig.edits = create_new_editdoc(action, aselp0, aselp1);
-            flam3_copy(&cp_save, &cp_orig);
+            flam3_copy(cp_save, &cp_orig);
             test_cp(&cp_orig);
             flam3_render(&f, image, cp_orig.width, flam3_field_both, 3, 0);
         
@@ -1034,14 +1033,14 @@
             strcat(action," improved colors");
          }
 
-	cp_save.time = 0;
+	cp_save->time = 0;
 	[self deleteOldGenomesInContext:mocResult];
-	[flameModel generateAllThumbnailsForGenome:&cp_save withCount:1 inContext:mocResult];
+	[flameModel generateAllThumbnailsForGenome:cp_save withCount:1 inContext:mocResult];
 	[mocResult save:nil];
 	
 	/* Free created documents */
 	/* (Only free once, since the copy is a ptr to the original) */
-	xmlFreeDoc(cp_save.edits);
+//	xmlFreeDoc(cp_save.edits);
 
 }
 

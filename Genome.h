@@ -34,6 +34,7 @@
 	NSManagedObjectContext *_moc;
 	NSManagedObject *_genomeEntity;
 	flam3_genome *_genome;
+	int _index;
 
 }
  

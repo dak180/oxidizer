@@ -86,6 +86,8 @@
             LANGUAGE = ObjC; 
             OUTLETS = {
                 environment = EnvironmentController; 
+                flameController = NSArrayController; 
+                flameTable = NSTableView; 
                 flames = FlameController; 
                 frameIndicator = NSLevelIndicator; 
                 oxidizerWindow = NSWindow; 
