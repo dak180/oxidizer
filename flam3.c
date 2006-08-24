@@ -18,7 +18,7 @@
 */
 
 static char *libifs_c_id =
-"@(#) $Id: flam3.c,v 1.3 2006/07/02 12:50:18 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.4 2006/08/24 13:43:59 vargol Exp $";
 
 
 #include "private.h"
@@ -2679,7 +2679,7 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
       r = (int) (cp->palette[i][0] * 255.0);
       g = (int) (cp->palette[i][1] * 255.0);
       b = (int) (cp->palette[i][2] * 255.0);
-      printf("%s   <color index=\"%d\" rgb=\"%d %d %d\"/>\n",
+      fprintf(f, "%s   <color index=\"%d\" rgb=\"%d %d %d\"/>\n",
       p, i, r, g, b);
    }
 
