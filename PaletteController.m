@@ -18,7 +18,6 @@
 */
 
 #import "PaletteController.h"
-#import "flam3.h"
 
 @implementation PaletteController
 
@@ -234,6 +233,34 @@
 
 }
 
++(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(flam3_palette)palette {
+	
+	
+	unsigned char *paletteData;
+	
+	int j;
+	
+	paletteData = [paletteRep bitmapData];
+		
+	for(j=0; j<256; j++) {
+		
+		*paletteData = (unsigned char)(255.0*palette[j][0]);
+		paletteData++;
+		*paletteData = (unsigned char)(255.0*palette[j][1]);
+		paletteData++;
+		*paletteData = (unsigned char)(255.0*palette[j][2]);
+		paletteData++;
+		
+	}																								
+	
+	paletteData = [paletteRep bitmapData];
+	
+	for(j=1; j<10; j++) {
+		memcpy(paletteData+(256*j*3), paletteData, 256*3);
+	}
+	
+}
+
 
 +(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSArray *)colours forHeight:(int)height {
 
@@ -246,11 +273,11 @@
 		paletteData = [paletteRep bitmapData];
 		
 
-		if([colours count] < 256) {
+//		if([colours count] < 256) {
 			finalColours = [PaletteController extrapolateArray:colours];
-		}  else {
-			finalColours = [NSMutableArray arrayWithArray:colours];
-		}
+//		}  else {
+//			finalColours = [NSMutableArray arrayWithArray:colours];
+//		}
 		
 		
 		for(j=0; j<256; j++) {
@@ -383,16 +410,20 @@
 			
 			}
 
-			/* add the object from the colours array */
-			newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
-
-			[newColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];
-			[newColour setObject:[NSNumber numberWithInt:round(red * 255)] forKey:@"red"];
-			[newColour setObject:[NSNumber numberWithInt:round(green * 255)] forKey:@"green"];
-			[newColour setObject:[NSNumber numberWithInt:round(blue * 255)] forKey:@"blue"];
-			[newColours addObject:newColour];
-			[newColour release];
 		}
+			/* add the object from the colours array */
+		red   = [[colour valueForKey:@"red"] doubleValue];
+		green = [[colour valueForKey:@"green"] doubleValue];
+		blue  = [[colour valueForKey:@"blue"] doubleValue];
+
+		newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
+
+		[newColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];
+		[newColour setObject:[NSNumber numberWithInt:round(red * 255)] forKey:@"red"];
+		[newColour setObject:[NSNumber numberWithInt:round(green * 255)] forKey:@"green"];
+		[newColour setObject:[NSNumber numberWithInt:round(blue * 255)] forKey:@"blue"];
+		[newColours addObject:newColour];
+		[newColour release];
 				
 		lastIndex = index;
 

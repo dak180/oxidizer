@@ -675,7 +675,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 //			[flames setCurrentFlameForIndex:0];
 		}
-		xmlFreeDoc(genomes->edits);
+
+//		xmlFreeDoc(genomes->edits);
 //		free(genomes);
 
 	} 
@@ -1434,7 +1435,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		genomes = [moc executeFetchRequest:fetch error:nil];
 		[fetch release];	  
 				
-//		[self EnvironmentInit:&frame threadCount:[defaults integerForKey:@"threads" ]];
 		cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
 
 		if([genomes count] > 1) {

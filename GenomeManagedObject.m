@@ -145,6 +145,29 @@
 	return newHue;
 }
 
+- (void)setUse_palette:(BOOL)use {
+	
+	if(use == YES) {
+
+		[self willAccessValueForKey: @"palette"];
+		int index = [[self primitiveValueForKey: @"palette"] intValue];
+		[self didAccessValueForKey: @"palette"];
+		
+		if(index < 0) {			
+			[self willChangeValueForKey: @"palette"];
+			[self setPrimitiveValue:[NSNumber numberWithInt:0] forKey: @"palette"];
+			[self didChangeValueForKey: @"palette"];			
+		}
+	
+	}
+	
+	[self willChangeValueForKey: @"use_palette"];
+	[self setPrimitiveValue:[NSNumber numberWithBool:use] forKey: @"use_palette"];
+	[self didChangeValueForKey: @"use_palette"];
+	
+	
+}
+
 - (void)setHue:(double)newHue {
 
 	int index;
@@ -155,7 +178,8 @@
     [self didAccessValueForKey: @"palette"];
 
 	if(index > -1) {
-	[self willChangeValueForKey: @"palette_image"];
+		
+		[self willChangeValueForKey: @"palette_image"];
 
 		NSImage *paletteImage = [[NSImage alloc] init];
 		NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL

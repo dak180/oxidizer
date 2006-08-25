@@ -116,10 +116,39 @@
 														  bitmapFormat:0
 														   bytesPerRow:3*256
 														  bitsPerPixel:24]; 
-	[PaletteController fillBitmapRep:paletteWithHueRep withPalette:genome->palette_index usingHue:genome->hue_rotation];
-	[paletteImage addRepresentation:paletteWithHueRep];
+
+	NSImage *colourMapImage = [[NSImage alloc] init];
+	NSBitmapImageRep *colourMapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+																				  pixelsWide:256
+																				  pixelsHigh:10
+																			   bitsPerSample:8
+																			 samplesPerPixel:3
+																					hasAlpha:NO 
+																					isPlanar:NO
+																			  colorSpaceName:NSDeviceRGBColorSpace
+																				bitmapFormat:0
+																				 bytesPerRow:3*256
+																				bitsPerPixel:24]; 	
+
 	
-	[genomeEntity setValue:paletteImage forKey:@"palette_image"];	
+	
+    if(genome->palette_index < 0) {
+		[PaletteController fillBitmapRep:colourMapImageRep withPalette:genome->palette];
+		[colourMapImage addRepresentation:colourMapImageRep];
+		[PaletteController fillBitmapRep:paletteWithHueRep withPalette:0 usingHue:0.0];
+		[paletteImage addRepresentation:paletteWithHueRep];
+		[genomeEntity setValue:colourMapImage forKey:@"colour_map_image"];	
+		[genomeEntity setValue:[NSNumber numberWithBool:NO] forKey:@"use_palette"];
+		// use the cmap 	
+		[genomeEntity setValue:[Genome createCMapEntitySetFromCGenome:genome inContext:moc] forKey:@"cmap"];		
+		[genomeEntity setValue:paletteImage forKey:@"palette_image"];	
+	} else {
+		[PaletteController fillBitmapRep:paletteWithHueRep withPalette:genome->palette_index usingHue:genome->hue_rotation];
+		[paletteImage addRepresentation:paletteWithHueRep];
+		[genomeEntity setValue:paletteImage forKey:@"palette_image"];	
+		[genomeEntity setValue:[NSNumber numberWithBool:YES] forKey:@"use_palette"];
+		[genomeEntity setValue:nil forKey:@"cmap"];
+	}
 		
 	[paletteWithHueRep release];
 	[paletteImage release];
@@ -129,14 +158,6 @@
 	[genomeEntity setValue:[Genome createXFormEntitySetFromCGenome:genome inContext:moc] forKey:@"xforms"];
 
 
-    if(genome->palette_index < 0) {
-		[genomeEntity setValue:[NSNumber numberWithBool:NO] forKey:@"use_palette"];
-		// use the cmap 	
-		[genomeEntity setValue:[Genome createCMapEntitySetFromCGenome:genome inContext:moc] forKey:@"cmap"];
-	} else {
-		[genomeEntity setValue:[NSNumber numberWithBool:YES] forKey:@"use_palette"];
-		[genomeEntity setValue:nil forKey:@"cmap"];
-	}
 
 	return genomeEntity;
 
@@ -415,9 +436,10 @@
 		newColour = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:moc];
 
 		[newColour setValue:[NSNumber numberWithInt:i] forKey:@"index"];
-		[newColour setValue:[NSNumber numberWithInt:(int)(genome->palette[i][0] * 255.0)] forKey:@"red"];
-		[newColour setValue:[NSNumber numberWithInt:(int)(genome->palette[i][1] * 255.0)] forKey:@"green"];
-		[newColour setValue:[NSNumber numberWithInt:(int)(genome->palette[i][2] * 255.0)] forKey:@"blue"];
+
+		[newColour setValue:[NSNumber numberWithDouble:genome->palette[i][0]] forKey:@"red"];
+		[newColour setValue:[NSNumber numberWithDouble:genome->palette[i][1]] forKey:@"green"];
+		[newColour setValue:[NSNumber numberWithDouble:genome->palette[i][2]] forKey:@"blue"];
 		[colours addObject:newColour];
 		[newColour release];
 	}
