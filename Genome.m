@@ -729,9 +729,9 @@
 		for(i=0; i<256; i++) {
 		
 			colour = [cmaps objectAtIndex:i];
-			cmap[i][0] = [[colour valueForKey:@"red"]   doubleValue] / 255.0;
-			cmap[i][1] = [[colour valueForKey:@"green"] doubleValue] / 255.0;
-			cmap[i][2] = [[colour valueForKey:@"blue"]  doubleValue] / 255.0;	
+			cmap[i][0] = [[colour valueForKey:@"red"]   doubleValue];
+			cmap[i][1] = [[colour valueForKey:@"green"] doubleValue];
+			cmap[i][2] = [[colour valueForKey:@"blue"]  doubleValue];	
 
 		}
 
