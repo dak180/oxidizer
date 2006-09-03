@@ -32,6 +32,10 @@
 		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
 		A4EC3FA10A755B3A008E0023 /* QuicktimeThreadParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = A4EC3FA00A755B3A008E0023 /* QuicktimeThreadParameters.m */; };
 		A4F333A2096C813B00230854 /* Genome.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F333A1096C813B00230854 /* Genome.m */; };
+		A4F49C1B0AAB05C800FA4BE8 /* OxidizerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */; };
+		A4F49CEC0AAB1D3C00FA4BE8 /* document-open.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */; };
+		A4F49CEE0AAB1D4B00FA4BE8 /* document-save.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */; };
+		A4F49CF00AAB1D5400FA4BE8 /* oxidizer_dna.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */; };
 		A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */; };
 		A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FDAB290A4EBA9400910299 /* DnDArrayController.m */; };
 /* End PBXBuildFile section */
@@ -82,6 +86,11 @@
 		A4EC3FA00A755B3A008E0023 /* QuicktimeThreadParameters.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = QuicktimeThreadParameters.m; sourceTree = "<group>"; };
 		A4F333A0096C813B00230854 /* Genome.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genome.h; sourceTree = "<group>"; };
 		A4F333A1096C813B00230854 /* Genome.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genome.m; sourceTree = "<group>"; };
+		A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OxidizerDelegate.m; sourceTree = "<group>"; };
+		A4F49C1A0AAB05C800FA4BE8 /* OxidizerDelegate.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = OxidizerDelegate.h; sourceTree = "<group>"; };
+		A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "document-open.png"; path = "icons/Tango/document-open.png"; sourceTree = "<group>"; };
+		A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "document-save.png"; path = "icons/Tango/document-save.png"; sourceTree = "<group>"; };
+		A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = oxidizer_dna.png; path = icons/oxidizer_dna.png; sourceTree = "<group>"; };
 		A4FADCE60A55A131004FC917 /* GreaterThanThreeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreaterThanThreeTransformer.h; sourceTree = "<group>"; };
 		A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreaterThanThreeTransformer.m; sourceTree = "<group>"; };
 		A4FDAB280A4EBA9400910299 /* DnDArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDArrayController.h; sourceTree = "<group>"; };
@@ -136,6 +145,8 @@
 				A46A71570A72B44E0026DFD6 /* ProgressDetails.m */,
 				A4EC3F9F0A755B3A008E0023 /* QuicktimeThreadParameters.h */,
 				A4EC3FA00A755B3A008E0023 /* QuicktimeThreadParameters.m */,
+				A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */,
+				A4F49C1A0AAB05C800FA4BE8 /* OxidizerDelegate.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -202,6 +213,9 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */,
+				A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */,
+				A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -268,6 +282,9 @@
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */,
+				A4F49CEC0AAB1D3C00FA4BE8 /* document-open.png in Resources */,
+				A4F49CEE0AAB1D4B00FA4BE8 /* document-save.png in Resources */,
+				A4F49CF00AAB1D5400FA4BE8 /* oxidizer_dna.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -297,6 +314,7 @@
 				A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */,
 				A46A71580A72B44E0026DFD6 /* ProgressDetails.m in Sources */,
 				A4EC3FA10A755B3A008E0023 /* QuicktimeThreadParameters.m in Sources */,
+				A4F49C1B0AAB05C800FA4BE8 /* OxidizerDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,7 +391,7 @@
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
-				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "";
@@ -390,7 +408,7 @@
 			buildSettings = {
 				ARCHS = (
 					ppc,
-					i386,
+					i686,
 				);
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DEBUGGING_SYMBOLS = default;
@@ -406,6 +424,7 @@
 				HEADER_SEARCH_PATHS = "";
 				LIBRARY_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
+				OTHER_CFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = Oxidizer;
 				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;

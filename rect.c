@@ -234,6 +234,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
        fprintf(stderr, "render_rectangle: h=%d w=%d nb=%d.\n", width, height, nbuckets);
        exit(1);
      }
+
      /* else fprintf(stderr, "render_rectangle: mallocked %dMb.\n", Mb); */
 
      buckets = (bucket *) last_block;

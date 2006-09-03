@@ -195,12 +195,23 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[progressWindow setTitle:@"Rendering Image"];
 	[progressWindow makeKeyAndOrderFront:self];
 	
+	NSDate *start = [NSDate date];
+	
 	flameRep = [self renderSingleFrame:&frame withGemone:genome];
 	
 	[progressWindow setIsVisible:FALSE];
 
 //	[self performSelectorOnMainThread:@selector(saveNSBitmapImageRep:) withObject:flameRep waitUntilDone:YES];
 	[qt saveNSBitmapImageRep:flameRep];
+	
+	NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
+											 defaultButton:@"Close"
+										   alternateButton:nil 
+											   otherButton:nil 
+								 informativeTextWithFormat:@"Time for render: %.2f seconds", -[start timeIntervalSinceNow]];
+	NSBeep();
+	[finishedPanel runModal];
+	
 	
 	[pool release];
 
@@ -412,6 +423,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[NSThread detachNewThreadSelector:@selector(threadedMovieRender:)  toTarget:self withObject:[paramArray objectAtIndex:i]];
 		ftime += dtime;
 	}
+
+	NSDate *start = [NSDate date];
 	
 	while ([[paramArray objectAtIndex:0] getFirstFrame] <= last_frame) {
 		for(i=0; i<threads; i++) {
@@ -436,16 +449,21 @@ int printProgress(void *nslPtr, double progress, int stage);
 		}
 	}
 		
-	NSLog(@"saving movie");
 	[progressWindow setTitle:@"Writing Movie to Disk..."];
 	
-//	[qtController saveMovie];
 	[qtController performSelectorOnMainThread:@selector(saveMovie) withObject:nil waitUntilDone:YES];
 
 
 	[progressWindow setIsVisible:NO];
 	
+	NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
+									  defaultButton:@"Close"
+									  alternateButton:nil 
+									  otherButton:nil 
+								      informativeTextWithFormat:@"Time for render: %.2f seconds", -[start timeIntervalSinceNow]];
 	NSBeep();
+	[finishedPanel runModal];
+	
 	
 	[pool release];
 }
@@ -826,7 +844,7 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 
 	ThreadParameters *threadParameters;
  
-	int threads = [defaults integerForKey:@"threads" ];
+	int threads = 1;  //[defaults integerForKey:@"threads" ];
 	
 	/* replace this next group with values from EnvironmentController */
 
@@ -850,11 +868,16 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 	f->pixel_aspect_ratio = pixel_aspect;
 	f->progress = printProgress;
 	
+	nstrips = 1;
+	
 	if(threads < cps->height) {
 		if (threads > nstrips) {
 			nstrips = threads; 
 		}
 	}
+	
+	
+	NSLog(@"nstrips: %ld", nstrips); 
 	
 	if (nstrips > cps->height) {
 		fprintf(stderr, "cannot have more strips than rows but %d>%d.\n",
@@ -885,7 +908,7 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 
 	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
 
-	[self performSelectorOnMainThread:@selector(initProgressController) withObject:nil waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(initProgressController:) withObject:[NSNumber numberWithInt:threads] waitUntilDone:YES];
 
 	
 	NSArray *progressObjects = [progressController arrangedObjects];
@@ -918,7 +941,6 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 	[progessTable displayIfNeeded];
 	
 	
-		
 	for (strip = 0; strip < nstrips; ) {
 		
 		for (thread = 0; thread < threads; thread++) {
@@ -970,7 +992,8 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 			[[[paramArray objectAtIndex:thread] getEndLock] lock];
 			[[[paramArray objectAtIndex:thread] getEndLock] unlock];
 	};
-	
+
+		  
 	/* restore the cps values to their original values */
 	cps->sample_density /= nstrips;
 	cps->height = real_height;
@@ -1149,24 +1172,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[preferencesWindow makeKeyAndOrderFront:self];
 }
 
-- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
-
-	flam3_genome *genomes = NULL;
-	BOOL boolResult;
-	int genomeCount;
-	
-	[self deleteOldGenomes];
-	boolResult = [self loadFlam3File:filename intoCGenomes:&genomes returningCountInto:&genomeCount ];
-	if(boolResult == YES) {
-		[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
-	}
-
-//	xmlFreeDoc(genomes->edits);
-//	free(genomes);
-
-	return boolResult;
-
-}
 
 - (void) threadedMovieRender:(id) lockParameters {
 
@@ -1200,14 +1205,25 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	[NSThread setThreadPriority:0];
 
-	flam3_frame *frames = [lockParameters getFrames];
-	unsigned char *image = [lockParameters getStripStart];
-
-	int width = frames->genomes[0].width;
-
+	flam3_frame *orig, copy;
 	
-	flam3_render(frames, image, width, flam3_field_both, channels, transparency);		
-//		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
+	orig = [lockParameters getFrames];
+	copy = *orig;
+	
+	copy.genomes = calloc(sizeof(flam3_genome), 1);
+	
+	flam3_copy(copy.genomes, orig->genomes);
+	
+	unsigned char *image = [lockParameters getStripStart];
+	
+	int width = copy.genomes[0].width;
+	int localFields = flam3_field_both;
+	int localChannels = channels;
+	int localTrans = transparency;
+
+	flam3_render(&copy, image, width, localFields, localChannels, localTrans);		
+
+		  //		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
 
 	[[lockParameters getEndLock] unlock];
 	
@@ -1482,6 +1498,26 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[qtController saveNSBitmapImageRep:rep]; 
 }
 
+
+- (BOOL)openRecentFile:(NSString *)filename {
+	
+	flam3_genome *genomes = NULL;
+	BOOL boolResult;
+	int genomeCount;
+	
+	[self deleteOldGenomes];
+	boolResult = [self loadFlam3File:filename intoCGenomes:&genomes returningCountInto:&genomeCount ];
+	if(boolResult == YES) {
+		[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
+	}
+	
+	//	xmlFreeDoc(genomes->edits);
+	//	free(genomes);
+	
+	return boolResult;
+	
+}
+
 - (void)hideProgressWindow {
 	
 	[progressWindow setIsVisible:NO];
@@ -1489,11 +1525,11 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 }
 
 
-- (void)initProgressController {
+- (void)initProgressController:(NSNumber *)threadsCount {
 	
 	int i, threads;
 	
-	threads = [defaults integerForKey:@"threads" ];
+	threads = [threadsCount intValue];
 	
 	[progressController removeObjects:[progressController arrangedObjects]];
 	

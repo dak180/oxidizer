@@ -98,7 +98,7 @@
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
 - (BOOL)saveToFile:(NSBitmapImageRep *)rep;
 - (BOOL)EnvironmentInit:(flam3_frame *)f threadCount:(int)threads;
-- (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename;
+- (BOOL)openRecentFile:(NSString *)filename;
 
 - (void)renderFlames:(flam3_genome *)cps numberOfFlames:(int)ncps;
 - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps;
@@ -115,6 +115,6 @@
 - (void) previewCurrentFlameInThread;
 - (void)AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
 - (void)hideProgressWindow;
-- (void)initProgressController;
+- (void)initProgressController:(NSNumber *)threadsCount;
 
 @end

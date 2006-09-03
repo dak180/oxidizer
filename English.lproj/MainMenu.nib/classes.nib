@@ -105,6 +105,12 @@
         {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
+        {
+            CLASS = OxidizerDelegate; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {bc = BreedingController; ffm = FractalFlameModel; oxidizerWindow = NSWindow; }; 
+            SUPERCLASS = NSObject; 
+        }, 
         {CLASS = PDJVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
         {
             ACTIONS = {
