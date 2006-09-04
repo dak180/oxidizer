@@ -58,6 +58,7 @@
 	
 	NSPersistentStoreCoordinator *coordinator;
 	
+	NSString *currentFilename;
 
 	int verbose;
 	int bits;
@@ -91,8 +92,7 @@
 - (IBAction)showPreferencesWindow:(id)sender;
 - (IBAction)editGenomes:(id)sender;
 - (IBAction)appendFile:(id)sender;
-- (IBAction)saveFlam3:(id)sender;
-
+- (IBAction)saveFlam3As:(id)sender;
 
 - (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps inContext:(NSManagedObjectContext *)thisMoc;
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
@@ -113,8 +113,11 @@
 - (void) renderStillInNewThread:(QuickTimeController *)qt;
 - (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) previewCurrentFlameInThread;
-- (void)AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
-- (void)hideProgressWindow;
-- (void)initProgressController:(NSNumber *)threadsCount;
+- (void) AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
+- (void) hideProgressWindow;
+- (void) initProgressController:(NSNumber *)threadsCount;
+- (void)saveFlam3:(id)sender;
 
+- (void) setCurrentFilename:(NSString *)filename;
+- (NSString *) currentFilename;
 @end

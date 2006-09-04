@@ -15,19 +15,19 @@
 		[item setLabel:@"Open"];
 		[item setPaletteLabel:[item label]];
 		[item setImage:[NSImage imageNamed:@"document-open"]];
-		[item setTarget:ffm];
+		[item setTarget:self];
 		[item setAction:@selector(openFile:)];
     } else if ( [itemIdentifier isEqualToString:@"save_flam3"] ) {
 		[item setLabel:@"Save"];
 		[item setPaletteLabel:[item label]];
 		[item setImage:[NSImage imageNamed:@"document-save"]];
-		[item setTarget:ffm];
+		[item setTarget:self];
 		[item setAction:@selector(saveFlam3:)];
     } else if ( [itemIdentifier isEqualToString:@"breed_flam3"] ) {
 		[item setLabel:@"Breeder"];
 		[item setPaletteLabel:[item label]];
 		[item setImage:[NSImage imageNamed:@"oxidizer_dna"]];
-		[item setTarget:bc];
+		[item setTarget:self];
 		[item setAction:@selector(showBreedingWindow:)];
 	}
 	
@@ -68,9 +68,44 @@
 }
 
 
+- (BOOL)validateToolbarItem:(NSToolbarItem *)item {
+	
+	if([[item itemIdentifier] isEqualToString:@"save_flam3"]) {
+		
+		if([ffm currentFilename] == nil) {
+			
+			return NO;
+		}
+	}
+	
+	return YES;
+	
+}
+
+
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
 	
 	return [ffm openRecentFile:filename];
 	
 }
+
+
+/*Actions */
+
+- (IBAction)openFile:(id)sender {
+	
+	[ffm openFile:sender]; 
+}
+
+- (IBAction)saveFlam3:(id)sender {
+	
+	[ffm saveFlam3:sender]; 
+}
+
+- (IBAction)showBreedingWindow:(id)sender {
+	
+	[bc showBreedingWindow:sender]; 
+}
+
+
 @end

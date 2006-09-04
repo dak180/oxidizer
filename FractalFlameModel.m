@@ -118,17 +118,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		_progressInd = [[NSMutableArray alloc] initWithCapacity:2];
 
-/*
-		int threads = [defaults integerForKey:@"threads" ];
-		int i;
-		
-		for(i=0; i<threads; i++) {
-		ProgressDetails *progressDict = [[ProgressDetails alloc] init];	
-			[progressDict setThread:[NSNumber numberWithInt:i]]; 
-			[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
-			[_progressInd addObject:progressDict];
-		}
-*/		
+		currentFilename = nil;
 
     }
 	
@@ -687,17 +677,38 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[self deleteOldGenomes];
 		boolResult = [self loadFlam3File:[op filename] intoCGenomes:&genomes returningCountInto:&genomeCount ];
 		if(boolResult == YES) {
+
 			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
 			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
 			[moc save:nil];
 
-//			[flames setCurrentFlameForIndex:0];
 		}
 
-//		xmlFreeDoc(genomes->edits);
-//		free(genomes);
 
 	} 
+
+	[self setCurrentFilename:[op filename]];
+		
+	return;
+	
+}
+
+- (NSString *) currentFilename {
+	
+	return currentFilename;
+}
+
+
+- (void) setCurrentFilename:(NSString *)filename {
+	
+	[filename retain];
+	
+	if(currentFilename != nil) {
+		
+		[currentFilename release];
+	}
+	
+	currentFilename = filename;
 	
 	return;
 }
@@ -1242,6 +1253,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	 switch([segments selectedSegment]) {
 		case 0: 
 			[NSThread detachNewThreadSelector:@selector(AddRandomGenomeToFlamesUsingContext:) toTarget:self withObject:moc];
+			if(currentFilename == nil) {
+				[self setCurrentFilename:@""];
+			}
 			break;
 		case 1:		
 			[flames showFlameWindow];
@@ -1412,6 +1426,28 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	return moc;
 }
 
+- (IBAction)saveFlam3As:(id)sender {
+
+	NSString *filename;
+	
+	int runResult;
+	
+	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	[savePanel setRequiredFileType:@"flam3"];
+	
+	runResult = [savePanel runModalForDirectory:nil file:[[currentFilename pathComponents] objectAtIndex:[[currentFilename pathComponents] count]-1]];
+	
+	if(runResult == NSOKButton && [savePanel filename] != nil) {
+		filename = [savePanel filename];
+	} else {
+		return;
+	}
+	
+	[self setCurrentFilename:[savePanel filename]];
+	[self saveFlam3:sender];
+
+	return;
+}
 
 - (IBAction)saveFlam3:(id)sender {
 
@@ -1426,52 +1462,63 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	flam3_genome *cps;
 
+	if(currentFilename != nil && ![currentFilename isEqualToString:@""]) {
+		filename = currentFilename;
+	} else {		
+		NSSavePanel *savePanel = [NSSavePanel savePanel];
+		[savePanel setRequiredFileType:@"flam3"];
+		
+		runResult = [savePanel runModalForDirectory:nil file:currentFilename];
 
-
-	NSSavePanel *savePanel = [NSSavePanel savePanel];
-	runResult = [savePanel runModal];
-	
-	if(runResult == NSOKButton && [savePanel filename] != nil) {
-		filename = [savePanel filename];
-		fileNameChar = [filename cStringUsingEncoding:NSUTF8StringEncoding];
-		flam3File = fopen(fileNameChar, "wb");
-		if(flam3File == NULL) {
-			NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Could not open file %@",  filename] defaultButton:@"Close" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not open selected file, %@",  filename]; 
-			[alert runModal];
+		if(runResult == NSOKButton && [savePanel filename] != nil) {
+			filename = [savePanel filename];
+		} else {
 			return;
-		} 
-	
-		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-
-		[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
-		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
-		NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
-		[fetch setSortDescriptors: sortDescriptors];
-		
-		genomes = [moc executeFetchRequest:fetch error:nil];
-		[fetch release];	  
-				
-		cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
-
-		if([genomes count] > 1) {
-			fprintf(flam3File, "<oxidizer>\n");
 		}
 		
-		for(i=0; i<[genomes count]; i++) {
-		
-			flam3_print(flam3File, cps + i, NULL);
+		[self setCurrentFilename:[savePanel filename]];
+	}
 
-		}
-
-		if([genomes count] > 1) {
-			fprintf(flam3File, "</oxidizer>\n");
-		}
-		
-		fclose(flam3File);
-		
+	fileNameChar = [filename cStringUsingEncoding:NSUTF8StringEncoding];
+	flam3File = fopen(fileNameChar, "wb");
+	if(flam3File == NULL) {
+		NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Could not open file %@",  filename] defaultButton:@"Close" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not open selected file, %@",  filename]; 
+		[alert runModal];
+		return;
 	} 
 
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomes = [moc executeFetchRequest:fetch error:nil];
+	[fetch release];	  
+			
+	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
+
+	if([genomes count] > 1) {
+		fprintf(flam3File, "<oxidizer>\n");
+	}
+	
+	for(i=0; i<[genomes count]; i++) {
+	
+		flam3_print(flam3File, cps + i, NULL);
+
+	}
+
+	if([genomes count] > 1) {
+		fprintf(flam3File, "</oxidizer>\n");
+	}
+	
+	fclose(flam3File);
+
+	NSBeep();
+
+
+	return;
 }
 
 - (NSMutableArray *)progressIndicators {
@@ -1511,8 +1558,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
 	}
 	
-	//	xmlFreeDoc(genomes->edits);
-	//	free(genomes);
+	[self setCurrentFilename:filename];
 	
 	return boolResult;
 	

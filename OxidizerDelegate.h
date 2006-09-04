@@ -24,4 +24,10 @@
 /* instance */
 - (void)setupToolbar;
 
+/* Actions */
+- (IBAction)openFile:(id)sender;
+- (IBAction)saveFlam3:(id)sender;
+- (IBAction)showBreedingWindow:(id)sender;
+	
+
 @end
