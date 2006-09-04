@@ -83,6 +83,21 @@
 }
 
 
+- (BOOL)validateMenuItem:(NSMenuItem *)item {
+	
+	if([[item  title] isEqualToString:@"Save"]) {
+		
+		if([ffm currentFilename] == nil) {
+			
+			return NO;
+		}
+	}
+	
+	return YES;
+	
+}
+
+
 - (BOOL)application:(NSApplication *)theApplication openFile:(NSString *)filename {
 	
 	return [ffm openRecentFile:filename];
