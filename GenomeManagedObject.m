@@ -75,7 +75,60 @@
 		
 }
 
+- (void)setName:(NSString *)newName {
+	
+    [self willChangeValueForKey: @"name"];
+    [self setPrimitiveValue:[newName copy] forKey: @"name"];
+    [self didChangeValueForKey: @"name"];
 
+	[self willAccessValueForKey: @"parent"];
+    NSString *parent = [self primitiveValueForKey: @"parent"];
+    [self didAccessValueForKey: @"parent"];
+	
+	[self willChangeValueForKey: @"genome_path"];
+    [self setPrimitiveValue:[NSString stringWithFormat:@"%@\n%@", newName, parent] forKey: @"genome_path"];
+    [self didChangeValueForKey: @"genome_path"];
+	
+}
+
+- (NSString *)name {
+	
+    NSString *name;
+
+    [self willAccessValueForKey: @"name"];
+    name = [self primitiveValueForKey: @"name"];
+    [self didAccessValueForKey: @"name"];
+	
+	
+    return name;
+}
+
+- (void)setParent:(NSString *)newParent {
+	
+    [self willChangeValueForKey: @"parent"];
+    [self setPrimitiveValue:[newParent copy] forKey: @"parent"];
+    [self didChangeValueForKey: @"parent"];
+
+	[self willAccessValueForKey: @"name"];
+    NSString *name = [self primitiveValueForKey: @"name"];
+    [self didAccessValueForKey: @"name"];
+	
+	[self willChangeValueForKey: @"genome_path"];
+    [self setPrimitiveValue:[NSString stringWithFormat:@"%@\n%@", name, newParent] forKey: @"genome_path"];
+    [self didChangeValueForKey: @"genome_path"];
+	
+}
+
+- (NSString *)parent {
+	
+    NSString *parent;
+	
+    [self willAccessValueForKey: @"parent"];
+    parent = [self primitiveValueForKey: @"parent"];
+    [self didAccessValueForKey: @"parent"];
+	
+    return parent;
+}
 
 - (void)setImage:(NSImage *)newImage {
 
