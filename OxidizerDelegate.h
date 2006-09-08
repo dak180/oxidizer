@@ -27,6 +27,7 @@
 /* Actions */
 - (IBAction)openFile:(id)sender;
 - (IBAction)saveFlam3:(id)sender;
+- (IBAction)saveAsFlam3:(id)sender;
 - (IBAction)showBreedingWindow:(id)sender;
 	
 

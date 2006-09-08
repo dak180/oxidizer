@@ -42,6 +42,10 @@
     IBOutlet QuickTimeController *qtController;
 	IBOutlet NSArrayController *progressController;
 	IBOutlet NSArrayController *flameController;
+	IBOutlet NSView *saveThumbnailsView;
+	
+	BOOL _saveThumbnail;
+	
 	
 	NSManagedObjectContext *moc;
 
@@ -58,7 +62,7 @@
 	
 	NSPersistentStoreCoordinator *coordinator;
 	
-	NSString *currentFilename;
+	NSString *_currentFilename;
 
 	int verbose;
 	int bits;
@@ -92,7 +96,6 @@
 - (IBAction)showPreferencesWindow:(id)sender;
 - (IBAction)editGenomes:(id)sender;
 - (IBAction)appendFile:(id)sender;
-- (IBAction)saveFlam3As:(id)sender;
 
 - (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps inContext:(NSManagedObjectContext *)thisMoc;
 - (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
@@ -116,7 +119,8 @@
 - (void) AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
 - (void) hideProgressWindow;
 - (void) initProgressController:(NSNumber *)threadsCount;
-- (void)saveFlam3:(id)sender;
+- (void) saveFlam3WithThumbnail;
+- (void) saveAsFlam3WithThumbnail;
 
 - (void) setCurrentFilename:(NSString *)filename;
 - (NSString *) currentFilename;

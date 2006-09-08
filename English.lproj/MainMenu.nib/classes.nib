@@ -79,8 +79,6 @@
                 previewCurrentFlame = id; 
                 renderAnimation = id; 
                 renderStill = id; 
-                saveFlam3 = id; 
-                saveFlam3As = id; 
                 showPreferencesWindow = id; 
             }; 
             CLASS = FractalFlameModel; 
@@ -98,6 +96,7 @@
                 progressController = NSArrayController; 
                 progressWindow = NSWindow; 
                 qtController = QuickTimeController; 
+                saveThumbnailsView = NSView; 
             }; 
             SUPERCLASS = NSObject; 
         }, 
@@ -107,7 +106,7 @@
         {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
-            ACTIONS = {openFile = id; saveFlam3 = id; showBreedingWindow = id; }; 
+            ACTIONS = {openFile = id; saveAsFlam3 = id; saveFlam3 = id; showBreedingWindow = id; }; 
             CLASS = OxidizerDelegate; 
             LANGUAGE = ObjC; 
             OUTLETS = {bc = BreedingController; ffm = FractalFlameModel; oxidizerWindow = NSWindow; }; 

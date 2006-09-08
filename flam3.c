@@ -18,7 +18,7 @@
 */
 
 static char *libifs_c_id =
-"@(#) $Id: flam3.c,v 1.4 2006/08/24 13:43:59 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.5 2006/09/08 18:06:32 vargol Exp $";
 
 
 #include "private.h"
@@ -2545,7 +2545,9 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    char *p = "";
    
    fprintf(f, "%s<flame time=\"%g\"", p, cp->time);
-   fprintf(f, " size=\"%d %d\"", cp->width, cp->height);
+   if(cp->flame_name != NULL) {
+	   fprintf(f, " size=\"%d %d\"", cp->width, cp->height);
+   }
    fprintf(f, " center=\"%g %g\"", cp->center[0], cp->center[1]);
    fprintf(f, " scale=\"%g\"", cp->pixels_per_unit);
 

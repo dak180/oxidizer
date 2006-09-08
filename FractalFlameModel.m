@@ -66,6 +66,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 			@"http://oxidizer.sf.net", @"url",
 			@"Made by Oxidizer", @"comment",
 			threads, @"threads",
+			[NSNumber numberWithBool:NO], @"save_thumbnails",
 			nil]
 			];
 		
@@ -118,7 +119,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		_progressInd = [[NSMutableArray alloc] initWithCapacity:2];
 
-		currentFilename = nil;
+		_currentFilename = nil;
+
+		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
+		
 
     }
 	
@@ -330,7 +334,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
 	
-	[self performSelectorOnMainThread:@selector(initProgressController) withObject:nil waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(initProgressController:) withObject:[NSNumber numberWithInt:threads] waitUntilDone:YES];
 
 	NSArray *progressObjects = [progressController arrangedObjects];
 	
@@ -695,7 +699,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (NSString *) currentFilename {
 	
-	return currentFilename;
+	return _currentFilename;
 }
 
 
@@ -703,12 +707,12 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	[filename retain];
 	
-	if(currentFilename != nil) {
+	if(_currentFilename != nil) {
 		
-		[currentFilename release];
+		[_currentFilename release];
 	}
 	
-	currentFilename = filename;
+	_currentFilename = filename;
 	
 	return;
 }
@@ -1253,7 +1257,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	 switch([segments selectedSegment]) {
 		case 0: 
 			[NSThread detachNewThreadSelector:@selector(AddRandomGenomeToFlamesUsingContext:) toTarget:self withObject:moc];
-			if(currentFilename == nil) {
+			if(_currentFilename == nil) {
 				[self setCurrentFilename:@""];
 			}
 			break;
@@ -1426,7 +1430,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	return moc;
 }
 
-- (IBAction)saveFlam3As:(id)sender {
+- (IBAction)saveAsFlam3WithThumbnail {
 
 	NSString *filename;
 	
@@ -1434,8 +1438,14 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
 	[savePanel setRequiredFileType:@"flam3"];
+	[savePanel setAccessoryView:saveThumbnailsView];
 	
-	runResult = [savePanel runModalForDirectory:nil file:[[currentFilename pathComponents] objectAtIndex:[[currentFilename pathComponents] count]-1]];
+	if(_currentFilename != nil && ![_currentFilename isEqualToString:@""]) {
+		runResult = [savePanel runModalForDirectory:nil file:[[_currentFilename pathComponents] objectAtIndex:[[_currentFilename pathComponents] count]-1]];	
+	} else {
+		runResult = [savePanel runModalForDirectory:nil file:nil];
+	}
+	
 	
 	if(runResult == NSOKButton && [savePanel filename] != nil) {
 		filename = [savePanel filename];
@@ -1444,12 +1454,12 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	}
 	
 	[self setCurrentFilename:[savePanel filename]];
-	[self saveFlam3:sender];
+	[self saveFlam3WithThumbnail];
 
 	return;
 }
 
-- (IBAction)saveFlam3:(id)sender {
+- (IBAction)saveFlam3WithThumbnail {
 
 	NSString *filename;
 	NSArray *genomes;
@@ -1462,13 +1472,14 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	flam3_genome *cps;
 
-	if(currentFilename != nil && ![currentFilename isEqualToString:@""]) {
-		filename = currentFilename;
+	if(_currentFilename != nil && ![_currentFilename isEqualToString:@""]) {
+		filename = _currentFilename;
 	} else {		
 		NSSavePanel *savePanel = [NSSavePanel savePanel];
 		[savePanel setRequiredFileType:@"flam3"];
+		[savePanel setAccessoryView:saveThumbnailsView];
 		
-		runResult = [savePanel runModalForDirectory:nil file:currentFilename];
+		runResult = [savePanel runModalForDirectory:nil file:_currentFilename];
 
 		if(runResult == NSOKButton && [savePanel filename] != nil) {
 			filename = [savePanel filename];
@@ -1506,7 +1517,15 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	for(i=0; i<[genomes count]; i++) {
 	
 		flam3_print(flam3File, cps + i, NULL);
-
+		if(_saveThumbnail) {
+			NSImage *thumbnail = [[genomes objectAtIndex:i] valueForKey:@"image"];
+			NSData *tiffData = [[NSData alloc] initWithData:[thumbnail TIFFRepresentation]];
+			NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithData:tiffData];
+			[[bitmap representationUsingType:NSPNGFileType properties:nil] 
+                 writeToFile:[filename stringByAppendingString:[NSString stringWithFormat:@"_%d.png", i]] 
+				  atomically:YES];
+			
+		}
 	}
 
 	if([genomes count] > 1) {

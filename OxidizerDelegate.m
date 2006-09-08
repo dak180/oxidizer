@@ -114,7 +114,12 @@
 
 - (IBAction)saveFlam3:(id)sender {
 	
-	[ffm saveFlam3:sender]; 
+	[ffm saveFlam3WithThumbnail]; 
+}
+
+- (IBAction)saveAsFlam3:(id)sender {
+	
+	[ffm saveAsFlam3WithThumbnail]; 
 }
 
 - (IBAction)showBreedingWindow:(id)sender {
