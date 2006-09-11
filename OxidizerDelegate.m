@@ -127,5 +127,8 @@
 	[bc showBreedingWindow:sender]; 
 }
 
+- (IBAction)newFlame:(id)sender {
+	[ffm newFlame];
+}	
 
 @end

@@ -29,6 +29,7 @@
 - (IBAction)saveFlam3:(id)sender;
 - (IBAction)saveAsFlam3:(id)sender;
 - (IBAction)showBreedingWindow:(id)sender;
+- (IBAction)newFlame:(id)sender;
 	
 
 @end

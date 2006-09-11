@@ -1609,7 +1609,14 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	}	
 }
 
-
+- (void) newFlame {
+	
+	[self deleteOldGenomes];
+	if(![oxidizerWindow isVisible]) {
+		
+		[oxidizerWindow makeKeyAndOrderFront:self];
+	}
+}
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {

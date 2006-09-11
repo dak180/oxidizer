@@ -106,7 +106,13 @@
         {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
-            ACTIONS = {openFile = id; saveAsFlam3 = id; saveFlam3 = id; showBreedingWindow = id; }; 
+            ACTIONS = {
+                newFlame = id; 
+                openFile = id; 
+                saveAsFlam3 = id; 
+                saveFlam3 = id; 
+                showBreedingWindow = id; 
+            }; 
             CLASS = OxidizerDelegate; 
             LANGUAGE = ObjC; 
             OUTLETS = {bc = BreedingController; ffm = FractalFlameModel; oxidizerWindow = NSWindow; }; 

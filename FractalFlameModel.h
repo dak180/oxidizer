@@ -124,4 +124,7 @@
 
 - (void) setCurrentFilename:(NSString *)filename;
 - (NSString *) currentFilename;
+
+- (void) newFlame;
+
 @end
