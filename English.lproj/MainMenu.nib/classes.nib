@@ -77,8 +77,6 @@
                 editGenomes = id; 
                 openFile = id; 
                 previewCurrentFlame = id; 
-                renderAnimation = id; 
-                renderStill = id; 
                 showPreferencesWindow = id; 
             }; 
             CLASS = FractalFlameModel; 
@@ -109,6 +107,8 @@
             ACTIONS = {
                 newFlame = id; 
                 openFile = id; 
+                renderMovie = id; 
+                renderStill = id; 
                 saveAsFlam3 = id; 
                 saveFlam3 = id; 
                 showBreedingWindow = id; 

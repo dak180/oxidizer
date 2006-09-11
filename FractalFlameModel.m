@@ -131,7 +131,7 @@ int printProgress(void *nslPtr, double progress, int stage);
     return self;
 }
 
-- (IBAction)renderStill:(id)sender {
+- (void)renderStill {
 
 	BOOL doRender = [qtController showQuickTimeFileImageDialogue];
                   
@@ -211,7 +211,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 }
 
-- (IBAction)renderAnimation:(id)sender {
+- (void)renderAnimation {
 
 	BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
 	if(doRender == NO) {

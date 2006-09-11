@@ -88,8 +88,6 @@
 
 }
 
-- (IBAction)renderStill:(id)sender;
-- (IBAction)renderAnimation:(id)sender;
 - (IBAction)openFile:(id)sender;
 - (IBAction)previewCurrentFlame:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
@@ -126,5 +124,9 @@
 - (NSString *) currentFilename;
 
 - (void) newFlame;
+
+- (void)renderStill;
+- (void)renderAnimation;
+
 
 @end

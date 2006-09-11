@@ -30,6 +30,8 @@
 - (IBAction)saveAsFlam3:(id)sender;
 - (IBAction)showBreedingWindow:(id)sender;
 - (IBAction)newFlame:(id)sender;
+- (IBAction)renderStill:(id)sender;
+- (IBAction)renderMovie:(id)sender;
 	
 
 @end

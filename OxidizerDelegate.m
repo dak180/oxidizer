@@ -23,6 +23,18 @@
 		[item setImage:[NSImage imageNamed:@"document-save"]];
 		[item setTarget:self];
 		[item setAction:@selector(saveFlam3:)];
+    } else if ( [itemIdentifier isEqualToString:@"render_still"] ) {
+		[item setLabel:@"Render"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"image-x-generic"]];
+		[item setTarget:self];
+		[item setAction:@selector(renderStill:)];
+    } else if ( [itemIdentifier isEqualToString:@"render_movie"] ) {
+		[item setLabel:@"Animate"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"video-x-generic"]];
+		[item setTarget:self];
+		[item setAction:@selector(renderMovie:)];
     } else if ( [itemIdentifier isEqualToString:@"breed_flam3"] ) {
 		[item setLabel:@"Breeder"];
 		[item setPaletteLabel:[item label]];
@@ -40,6 +52,9 @@
 	return [NSArray arrayWithObjects:@"open_flam3",
 									 @"save_flam3",
 									 NSToolbarSeparatorItemIdentifier,
+								     @"render_still", 
+									 @"render_movie", 
+									 NSToolbarSeparatorItemIdentifier,
 									 @"breed_flam3", 
 									 nil
 		];
@@ -50,6 +65,9 @@
 
 	return [NSArray arrayWithObjects:@"open_flam3", 
 									 @"save_flam3",
+									 NSToolbarSeparatorItemIdentifier,
+									 @"render_still", 
+									 @"render_movie", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"breed_flam3", 
 									 nil
@@ -62,7 +80,7 @@
 {
     NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"oxidizer_toolbar"];
     [toolbar setDelegate:self];
-    [toolbar setAllowsUserCustomization:YES];
+    [toolbar setAllowsUserCustomization:NO];
     [toolbar setAutosavesConfiguration:YES];
     [oxidizerWindow setToolbar:[toolbar autorelease]];
 }
@@ -130,5 +148,17 @@
 - (IBAction)newFlame:(id)sender {
 	[ffm newFlame];
 }	
+
+- (IBAction)renderStill:(id)sender {
+	
+	[ffm renderStill];
+}
+
+- (IBAction)renderMovie:(id)sender {
+
+ 	[ffm renderAnimation];
+
+}
+
 
 @end
