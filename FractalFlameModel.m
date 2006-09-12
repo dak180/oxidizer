@@ -198,6 +198,18 @@ int printProgress(void *nslPtr, double progress, int stage);
 //	[self performSelectorOnMainThread:@selector(saveNSBitmapImageRep:) withObject:flameRep waitUntilDone:YES];
 	[qt saveNSBitmapImageRep:flameRep];
 	
+	
+	NSImage *flameImage = [[NSImage alloc] init];
+	[flameImage addRepresentation:flameRep];
+
+
+	[previewView setImage:flameImage];
+	[previewWindow center];
+	[previewWindow makeKeyAndOrderFront:self];
+	
+	[flameImage release];
+	[flameRep release];
+	
 	NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
 											 defaultButton:@"Close"
 										   alternateButton:nil 

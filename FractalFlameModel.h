@@ -38,11 +38,13 @@
     IBOutlet NSWindow *progressWindow;
     IBOutlet NSWindow *preferencesWindow;
     IBOutlet NSWindow *oxidizerWindow;
+    IBOutlet NSWindow *previewWindow;
     IBOutlet NSLevelIndicator *frameIndicator;
     IBOutlet QuickTimeController *qtController;
 	IBOutlet NSArrayController *progressController;
 	IBOutlet NSArrayController *flameController;
 	IBOutlet NSView *saveThumbnailsView;
+    IBOutlet NSImageView *previewView;
 	
 	BOOL _saveThumbnail;
 	
