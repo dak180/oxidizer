@@ -32,6 +32,6 @@
 - (IBAction)newFlame:(id)sender;
 - (IBAction)renderStill:(id)sender;
 - (IBAction)renderMovie:(id)sender;
-	
+- (IBAction)renderStillToWindow:(id)sender;	
 
 @end

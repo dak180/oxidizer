@@ -154,6 +154,10 @@
 	[ffm renderStill];
 }
 
+- (IBAction)renderStillToWindow:(id)sender {
+	[ffm renderStillToWindow];
+}
+
 - (IBAction)renderMovie:(id)sender {
 
  	[ffm renderAnimation];

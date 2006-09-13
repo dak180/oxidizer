@@ -12,6 +12,7 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A40965710A30B5760076ACA3 /* flam3_tools.m in Sources */ = {isa = PBXBuildFile; fileRef = A40965700A30B5760076ACA3 /* flam3_tools.m */; };
+		A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
 		A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4233E9309EFF3010047DC34 /* QuickTimeController.m */; };
@@ -55,6 +56,8 @@
 		8D1107320486CEB800E47090 /* Oxidizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oxidizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A409656F0A30B5760076ACA3 /* flam3_tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flam3_tools.h; sourceTree = "<group>"; };
 		A40965700A30B5760076ACA3 /* flam3_tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = flam3_tools.m; sourceTree = "<group>"; };
+		A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragDropAndSaveImageView.h; sourceTree = "<group>"; };
+		A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DragDropAndSaveImageView.m; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		A4233E9209EFF3000047DC34 /* QuickTimeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickTimeController.h; sourceTree = "<group>"; };
@@ -119,6 +122,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */,
+				A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */,
 				A4A3810C0A4F236700E7364C /* DnDImageView.h */,
 				A4A3810D0A4F236700E7364C /* DnDImageView.m */,
 				A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */,
@@ -323,6 +328,7 @@
 				A46A71580A72B44E0026DFD6 /* ProgressDetails.m in Sources */,
 				A4EC3FA10A755B3A008E0023 /* QuicktimeThreadParameters.m in Sources */,
 				A4F49C1B0AAB05C800FA4BE8 /* OxidizerDelegate.m in Sources */,
+				A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

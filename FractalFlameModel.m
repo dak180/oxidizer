@@ -147,7 +147,22 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 }
 	
+- (void)renderStillToWindow {
 	
+	[NSThread detachNewThreadSelector:@selector(renderStillToWindowInNewThread) toTarget:self withObject:nil];
+	
+}
+
+- (void)renderStillToWindowInNewThread {
+
+	BOOL realShowRender = _showRender;
+
+	_showRender = YES;	
+	[self renderStillInNewThread:nil]; 
+	_showRender = realShowRender;
+	
+}
+
 - (void)renderStillInNewThread:(QuickTimeController *)qt {
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -198,8 +213,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	[progressWindow setIsVisible:FALSE];
 
-//	[self performSelectorOnMainThread:@selector(saveNSBitmapImageRep:) withObject:flameRep waitUntilDone:YES];
-	[qt saveNSBitmapImageRep:flameRep];
+
+	if(qt != nil) {
+		[qt saveNSBitmapImageRep:flameRep];		
+	} 
 	
 	
 	if (_showRender) {
@@ -209,6 +226,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 
 		[previewView setImage:flameImage];
+		[previewView setToolTip:@"Preview: This is the image you have just rendered. You can save a copy by dragging the image to the finder/desktop."];
 		[previewWindow center];
 		[previewWindow makeKeyAndOrderFront:self];
 		
@@ -218,15 +236,19 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 	
 	[flameRep release];
-	
-	NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
-											 defaultButton:@"Close"
-										   alternateButton:nil 
-											   otherButton:nil 
-								 informativeTextWithFormat:@"Time for render: %.2f seconds", -[start timeIntervalSinceNow]];
 	NSBeep();
-	[finishedPanel runModal];
 	
+	if(qt != nil) {
+		
+	
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:@"Time for render: %.2f seconds", -[start timeIntervalSinceNow]];
+		[finishedPanel runModal];
+	
+	}
 	
 	[pool release];
 

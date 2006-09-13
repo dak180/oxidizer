@@ -34,6 +34,7 @@
             SUPERCLASS = NSArrayController; 
         }, 
         {CLASS = DnDImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
+        {CLASS = DragDropAndSaveImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
         {
             ACTIONS = {randomSeed = id; }; 
             CLASS = EnvironmentController; 
@@ -111,6 +112,7 @@
                 openFile = id; 
                 renderMovie = id; 
                 renderStill = id; 
+                renderStillToWindow = id; 
                 saveAsFlam3 = id; 
                 saveFlam3 = id; 
                 showBreedingWindow = id; 
