@@ -47,6 +47,7 @@
     IBOutlet NSImageView *previewView;
 	
 	BOOL _saveThumbnail;
+	BOOL _showRender;
 	
 	
 	NSManagedObjectContext *moc;

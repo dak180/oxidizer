@@ -67,6 +67,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 			@"Made by Oxidizer", @"comment",
 			threads, @"threads",
 			[NSNumber numberWithBool:NO], @"save_thumbnails",
+			[NSNumber numberWithBool:NO], @"show_render",
 			nil]
 			];
 		
@@ -122,6 +123,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		_currentFilename = nil;
 
 		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
+		
+		_showRender = [defaults boolForKey:@"show_render"];
 		
 
     }
@@ -199,15 +202,21 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[qt saveNSBitmapImageRep:flameRep];
 	
 	
-	NSImage *flameImage = [[NSImage alloc] init];
-	[flameImage addRepresentation:flameRep];
+	if (_showRender) {
+		
+		NSImage *flameImage = [[NSImage alloc] init];
+		[flameImage addRepresentation:flameRep];
 
 
-	[previewView setImage:flameImage];
-	[previewWindow center];
-	[previewWindow makeKeyAndOrderFront:self];
+		[previewView setImage:flameImage];
+		[previewWindow center];
+		[previewWindow makeKeyAndOrderFront:self];
+		
+		[flameImage release];
+
+	}
+
 	
-	[flameImage release];
 	[flameRep release];
 	
 	NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
