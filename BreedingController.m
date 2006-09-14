@@ -1049,12 +1049,12 @@
 
 - (IBAction)sendResultToEditor:(id)sender {
 
-	flam3_genome newGenome;
+	flam3_genome *newGenome = (flam3_genome *)malloc(sizeof(flam3_genome));
 	
-	[Genome populateCGenome:&newGenome FromEntity:[[genomeResult arrangedObjects] objectAtIndex:0] fromContext:mocResult];
+	[Genome populateCGenome:newGenome FromEntity:[[genomeResult arrangedObjects] objectAtIndex:0] fromContext:mocResult];
 
 	[self deleteOldGenomesInContext:[flameModel getNSManagedObjectContext]];
-	[flameModel generateAllThumbnailsForGenome:&newGenome withCount:1 inContext:[flameModel getNSManagedObjectContext]];
+	[flameModel generateAllThumbnailsForGenome:newGenome withCount:1 inContext:[flameModel getNSManagedObjectContext]];
 
 }
 
