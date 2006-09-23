@@ -108,6 +108,7 @@
         {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
         {
             ACTIONS = {
+                customizeToolbar = id; 
                 newFlame = id; 
                 openFile = id; 
                 renderMovie = id; 

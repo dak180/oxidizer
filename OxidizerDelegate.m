@@ -80,11 +80,16 @@
 {
     NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"oxidizer_toolbar"];
     [toolbar setDelegate:self];
-    [toolbar setAllowsUserCustomization:NO];
+    [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
     [oxidizerWindow setToolbar:[toolbar autorelease]];
 }
 
+
+- (IBAction)customizeToolbar:(id)sender {
+	
+    [[oxidizerWindow toolbar] runCustomizationPalette:sender]; 
+}
 
 - (BOOL)validateToolbarItem:(NSToolbarItem *)item {
 	

@@ -25,6 +25,7 @@
 - (void)setupToolbar;
 
 /* Actions */
+- (IBAction)customizeToolbar:(id)sender;
 - (IBAction)openFile:(id)sender;
 - (IBAction)saveFlam3:(id)sender;
 - (IBAction)saveAsFlam3:(id)sender;

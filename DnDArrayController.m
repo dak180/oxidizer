@@ -66,7 +66,7 @@ NSString *mocPasteboardType = @"GenomeMoc";
 				 proposedRow:(int)row
 	   proposedDropOperation:(NSTableViewDropOperation)op {
     
-    NSDragOperation dragOp = NSDragOperationMove;
+    NSDragOperation dragOp = NSDragOperationCopy;
     
 	if(row == -1) {
 		row = 0;
