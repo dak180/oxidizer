@@ -80,6 +80,38 @@
 	[genomeEntity setValue:[Genome  getStringSymmetry:genome->symmetry]  forKey:@"symmetry"];
 	[genomeEntity setValue:[NSNumber numberWithInt:genome->interpolation]  forKey:@"interpolation"];
 
+	[genomeEntity setValue:[NSNumber numberWithDouble:genome->spatial_filter_radius]  forKey:@"spatial_filter_radius"];
+	[genomeEntity setValue:[NSNumber numberWithDouble:genome->motion_exp]  forKey:@"motion_exp"];
+
+	   if (genome->spatial_filter_func == Gaussian_filter) {
+		   [genomeEntity setValue:@"gaussian"  forKey:@"spatial_filter_func"];
+	   } else if (genome->spatial_filter_func == hermite_filter) {
+		   [genomeEntity setValue:@"hermite" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == box_filter) {
+			[genomeEntity setValue:@"box" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == triangle_filter) {
+			[genomeEntity setValue:@"triangle" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == bell_filter) {
+			[genomeEntity setValue:@"bell" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == B_spline_filter) {
+			[genomeEntity setValue:@"bspline" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == Mitchell_filter) {
+			[genomeEntity setValue:@"mitchell" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == Blackman_filter) {
+			[genomeEntity setValue:@"blackman" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == Catrom_filter) {
+			[genomeEntity setValue:@"catrom" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == Hanning_filter) {
+			[genomeEntity setValue:@"hanning" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == Hamming_filter) {
+			[genomeEntity setValue:@"hamming" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == Lanczos3_filter) {
+			[genomeEntity setValue:@"lanczos3" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == Lanczos2_filter) {
+			[genomeEntity setValue:@"lanczos2" forKey:@"spatial_filter_func"];
+		} else if (genome->spatial_filter_func == quadratic_filter) {
+			[genomeEntity setValue:@"quadratic" forKey:@"spatial_filter_func"];
+		}	
 
 	if(genome->edits != NULL) {
 	
@@ -533,6 +565,54 @@
 	newGenome->contrast = [[genomeEntity valueForKey:@"contrast"] doubleValue];
 	newGenome->symmetry = [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]];
 	newGenome->interpolation = [[genomeEntity valueForKey:@"interpolation"] intValue];
+	
+	
+	newGenome->spatial_filter_radius  = [[genomeEntity valueForKey:@"spatial_filter_radius"] doubleValue];
+	newGenome->motion_exp             = [[genomeEntity valueForKey:@"motion_exp"] doubleValue];
+
+	if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"gaussian"]) {
+			newGenome->spatial_filter_func = Gaussian_filter;
+			newGenome->spatial_filter_support = Gaussian_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"hermite"]) {
+			newGenome->spatial_filter_func = hermite_filter;
+			newGenome->spatial_filter_support = hermite_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"box"]) {
+			newGenome->spatial_filter_func = box_filter;
+			newGenome->spatial_filter_support = box_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"triangle"]) {
+			newGenome->spatial_filter_func = triangle_filter;
+			newGenome->spatial_filter_support = triangle_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"bell"]) {
+			newGenome->spatial_filter_func = bell_filter;
+			newGenome->spatial_filter_support = bell_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"bspline"]) {
+			newGenome->spatial_filter_func = B_spline_filter;
+			newGenome->spatial_filter_support = B_spline_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"mitchell"]) {
+			newGenome->spatial_filter_func = Mitchell_filter;
+			newGenome->spatial_filter_support = Mitchell_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"blackman"]) {
+			newGenome->spatial_filter_func = Blackman_filter;
+			newGenome->spatial_filter_support = Blackman_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"catrom"]) {
+			newGenome->spatial_filter_func = Catrom_filter;
+			newGenome->spatial_filter_support = Catrom_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"hanning"]) {
+			newGenome->spatial_filter_func = Hanning_filter;
+			newGenome->spatial_filter_support = Hanning_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"hamming"]) {
+			newGenome->spatial_filter_func = Hamming_filter;
+			newGenome->spatial_filter_support = Hamming_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"lanczos3"]) {
+			newGenome->spatial_filter_func = Lanczos3_filter;
+			newGenome->spatial_filter_support = Lanczos3_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"lanczos2"]) {
+			newGenome->spatial_filter_func = Lanczos2_filter;
+			newGenome->spatial_filter_support = Lanczos2_support;
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"quadratic"]) {
+			newGenome->spatial_filter_func = quadratic_filter;
+			newGenome->spatial_filter_support = quadratic_support;
+	}	
 	
 	newGenome->edits = [Genome populateCEditDocFromEntity:genomeEntity];
 

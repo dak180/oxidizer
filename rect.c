@@ -57,7 +57,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
    bucket  *buckets;
    abucket *accumulate;
    double *points;
-   double *filter, *temporal_filter, *temporal_deltas;
+   double *filter, *temporal_filter, *temporal_deltas, *motion_filter;
    double bounds[4], size[2], ppux, ppuy;
    double rot[2][2];
    int image_width, image_height;    /* size of the image to produce */
@@ -65,6 +65,9 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
    int filter_width;
    int oversample = spec->genomes[0].spatial_oversample;
    int nbatches = spec->genomes[0].nbatches;
+   /* ntemporal_samples ( & nbatches?) should be computed inside the batch
+      loop the same place the DE parms are.  problem is that batches now
+      depends on times.  fix by making all batches happen at the same time */
    int ntemporal_samples = spec->genomes[0].ntemporal_samples;
    bucket cmap[CMAP_SIZE];
    unsigned char *cmap2;
@@ -83,6 +86,8 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
    int gnm_idx,max_gnm_de_fw,de_offset;
    flam3_genome cp;
    double hs1, hb1s1;
+   char xform_distrib[CHOOSE_XFORM_GRAIN];
+   char *ai;
    
    memset(&cp,0, sizeof(flam3_genome));
    
@@ -105,42 +110,53 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
    } else
       image_height = spec->genomes[0].height;
 
+
+   /* Spatial Filter kernel creation */
+   
+   
    if (1) {
-       double fw =  (2.0 * FILTER_CUTOFF * oversample *
-		     spec->genomes[0].spatial_filter_radius /
-		     spec->pixel_aspect_ratio);
-       double adjust;
-       filter_width = ((int) fw) + 1;
-      /* make sure it has same parity as oversample */
-      if ((filter_width ^ oversample) & 1)
-	 filter_width++;
-      if (fw > 0.0)
-	adjust = FILTER_CUTOFF * filter_width / fw;
-      else
-	adjust = 1.0;
-
+   double (*sf_func)() = spec->genomes[0].spatial_filter_func;
+   double sf_supp = spec->genomes[0].spatial_filter_support;
+   double fw =  (2.0 * sf_supp * oversample * 
+         spec->genomes[0].spatial_filter_radius /
+         spec->pixel_aspect_ratio);		     
+   double adjust;
+   
+   filter_width = ((int) fw) + 1;
+   /* make sure it has same parity as oversample */
+   if ((filter_width ^ oversample) & 1)
+      filter_width++;
+      
+   if (fw > 0.0)
+      adjust = sf_supp * filter_width / fw;
+   else
+      adjust = 1.0;
+      
 #if 0
-      fprintf(stderr, "fw = %g filter_width = %d adjust=%g\n",
+   fprintf(stderr, "fw = %g filter_width = %d adjust=%g\n",
 	      fw, filter_width, adjust);
-#endif
+#endif	      
 
-      filter = (double *) malloc(sizeof(double) * filter_width * filter_width);
-      /* fill in the coefs */
-      for (i = 0; i < filter_width; i++)
-	 for (j = 0; j < filter_width; j++) {
-	    double ii = ((2.0 * i + 1.0) / filter_width - 1.0) * adjust;
-	    double jj = ((2.0 * j + 1.0) / filter_width - 1.0) * adjust;
-	    if (field) jj *= 2.0;
-	    jj /= spec->pixel_aspect_ratio;
-	    filter[i + j * filter_width] =
-	       exp(-2.0 * (ii * ii + jj * jj));
-	 }
+   filter = (double *) malloc(sizeof(double) * filter_width * filter_width);
+   /* fill in the coefs */
+   for (i = 0; i < filter_width; i++)
+      for (j = 0; j < filter_width; j++) {
+         double ii = ((2.0 * i + 1.0) / filter_width - 1.0)*adjust;
+         double jj = ((2.0 * j + 1.0) / filter_width - 1.0)*adjust;
+	    
+         if (field) jj *= 2.0;
 
-      if (normalize_vector(filter, filter_width * filter_width)) {
-	  fprintf(stderr, "spatial filter value is too small: %g.\n",
-		  spec->genomes[0].spatial_filter_radius);
-	  exit(1);
-      }
+         jj /= spec->pixel_aspect_ratio;
+            
+         filter[i + j * filter_width] = (*sf_func)(ii) * (*sf_func)(jj);
+      }   
+      
+
+   if (normalize_vector(filter, filter_width * filter_width)) {
+      fprintf(stderr, "spatial filter value is too small: %g.\n",
+         spec->genomes[0].spatial_filter_radius);
+      exit(1);
+   }
 #if 0
       printf("vvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
       for (j = 0; j < filter_width; j++) {
@@ -154,16 +170,27 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
 #endif
    }
    
-   /* Temporal filter: set to box filter September 2005 from exponential */
    temporal_filter = (double *) malloc(sizeof(double) * nbatches);
    temporal_deltas = (double *) malloc(sizeof(double) * nbatches * ntemporal_samples);
+   motion_filter = (double *) malloc(sizeof(double) * nbatches * ntemporal_samples);
+
    if (nbatches*ntemporal_samples > 1) {
 
       /* fill in the coefs */
       for (i = 0; i < nbatches*ntemporal_samples; i++) {
+         double slpx;
+         
+         if (spec->genomes[0].motion_exp>=0)
+            slpx = ((double)i+1.0)/(nbatches*ntemporal_samples);
+         else
+            slpx = (double)(nbatches*ntemporal_samples - i) / (nbatches*ntemporal_samples);
+            
          temporal_deltas[i] = (2.0 * ((double) i / ((nbatches*ntemporal_samples) - 1)) - 1.0)
-                                    * spec->temporal_filter_radius;
-      }
+	     * spec->temporal_filter_radius;
+	     
+	      /* Scale the color based on these values */
+	      motion_filter[i] = pow(slpx,fabs(spec->genomes[0].motion_exp));
+	   }
       for (i = 0; i < nbatches; i++) {
          temporal_filter[i] = 1.0;
       }
@@ -173,15 +200,20 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
                            spec->temporal_filter_radius);
          exit(1);
       }
+
    } else {
       temporal_filter[0] = 1.0;
       temporal_deltas[0] = 0.0;
+      motion_filter[0] = 1.0;
    }
 
 #if 0
    fprintf(stderr,"Temporal Deltas:\n");
    for (j = 0; j < nbatches*ntemporal_samples; j++)
       fprintf(stderr, "%4f\n", temporal_deltas[j]);
+   fprintf(stderr,"Motion Filter:\n");
+   for (j = 0; j < nbatches*ntemporal_samples; j++)
+      fprintf(stderr, "%4f\n", motion_filter[j]);
    fprintf(stderr,"Temporal Filter:\n");
    for (j = 0; j < nbatches; j++)
       fprintf(stderr, "%4f\n", temporal_filter[j]);
@@ -202,7 +234,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
       int this_width = (int)ceil(spec->genomes[gnm_idx].estimator) * oversample;
       if (this_width > max_gnm_de_fw)
          max_gnm_de_fw = this_width;			
-	}
+   }
 	
    /* Add one for the 3x3 averaging at the edges, if it's > 0 already */
    if (max_gnm_de_fw>0)
@@ -234,7 +266,6 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
        fprintf(stderr, "render_rectangle: h=%d w=%d nb=%d.\n", width, height, nbuckets);
        exit(1);
      }
-
      /* else fprintf(stderr, "render_rectangle: mallocked %dMb.\n", Mb); */
 
      buckets = (bucket *) last_block;
@@ -246,8 +277,10 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
      fprintf(stderr, "chaos: ");
      progress_began = time(NULL);
    }
+
 /*
-   if (fname) {
+ 
+ if (fname) {
       int len = strlen(fname);
       FILE *fin = fopen(fname, "rb");
       int w, h;
@@ -273,7 +306,6 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
    background[0] = background[1] = background[2] = 0.0;
    memset((char *) accumulate, 0, sizeof(abucket) * nbuckets);
 
-   /* Batch Loop */
    for (batch_num = 0; batch_num < nbatches; batch_num++) {
       double de_time;
       double sample_density;
@@ -292,7 +324,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
       /* interpolate and get a control point                      */
       /* ONLY FOR DENSITY FILTER WIDTH PURPOSES                   */
       /* additional interpolation will be done in the temporal_sample loop */
-      flam3_interpolate(spec->genomes, spec->ngenomes, de_time, &cp);      
+      flam3_interpolate(spec->genomes, spec->ngenomes, de_time, &cp);
       
       /* if instructed to by the genome, create the density estimation */
       /* filter kernels.  Check boundary conditions as well.           */
@@ -392,11 +424,13 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
       
       for (temporal_sample_num = 0; temporal_sample_num < ntemporal_samples; temporal_sample_num++) {
          double temporal_sample_time;
+         double color_scalar = motion_filter[batch_num*ntemporal_samples + temporal_sample_num];
          
-         temporal_sample_time = spec->time + temporal_deltas[batch_num*ntemporal_samples + temporal_sample_num];
+         temporal_sample_time = spec->time +
+	     temporal_deltas[batch_num*ntemporal_samples + temporal_sample_num];
          
          /* Interpolate and get a control point */
-         flam3_interpolate(spec->genomes, spec->ngenomes, temporal_sample_time, &cp);      
+         flam3_interpolate(spec->genomes, spec->ngenomes, temporal_sample_time, &cp);
 
          prepare_xform_fn_ptrs(&cp);
             
@@ -463,15 +497,17 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
 
          nsamples = sample_density * (double) nbuckets / (oversample * oversample);
 #if 0
-         fprintf(stderr, "sample_density=%g nsamples=%g nbuckets=%d\n",
-   	      sample_density, nsamples, nbuckets);
+         fprintf(stderr, "sample_density=%g nsamples=%g nbuckets=%d time=%g\n",
+		 sample_density, nsamples, nbuckets, temporal_sample_time);
 #endif
 
-         batch_size = nsamples / (cp.nbatches * cp.ntemporal_samples);
+         batch_size = nsamples / (nbatches * ntemporal_samples);
 
          sbc = 0;
+         
+         /* Set up the xform_distrib array */
+         flam3_create_xform_distrib(&cp,xform_distrib);          
 
-         /* Sub-batch Loop */
          for (sub_batch = 0; sub_batch < batch_size; sub_batch += SUB_BATCH_SIZE) {
 
 	     if (spec->progress&&!(sbc++&7)) {
@@ -487,7 +523,8 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
 
             if (verbose && time(NULL) != progress_timer) {
                double percent = 100.0 *
-                     ((((sub_batch / (double) batch_size) + temporal_sample_num) / ntemporal_samples) + batch_num)/nbatches;
+                     ((((sub_batch / (double) batch_size) + temporal_sample_num)
+		       / ntemporal_samples) + batch_num)/nbatches;
                double eta;
                int old_mark = 0;
 	       int ticker = (progress_timer&1)?':':'.';
@@ -530,7 +567,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
             t1 = (double)tp.tv_sec + 1.e-6*tp.tv_usec;
 */            
             
-            flam3_iterate(&cp, SUB_BATCH_SIZE, FUSE, points);
+            flam3_iterate(&cp, SUB_BATCH_SIZE, FUSE, points, xform_distrib);
 /*
             gettimeofday(&tp,NULL);
             t2 = (double)tp.tv_sec + 1.e-6*tp.tv_usec;
@@ -557,8 +594,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
                   p1 = p[1];
                }
                
-               if (p0 >= bounds[0] && p1 >= bounds[1] && p0 <= bounds[2] && p1 <= bounds[3])
-               {
+               if (p0 >= bounds[0] && p1 >= bounds[1] && p0 <= bounds[2] && p1 <= bounds[3]) {
                
                   if (fname) {
                      int ci;
@@ -594,23 +630,24 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
                      width * (int) (height * (p1 - bounds[1]) * size[1]);*/
                      
                      b = buckets + (int)(ws0 * p0 - wb0s0) + width * (int)(hs1 * p1 - hb1s1);
-                     
-                     bump_no_overflow(b[0][0], cmap[color_index0][0]);
-                     bump_no_overflow(b[0][1], cmap[color_index0][1]);
-                     bump_no_overflow(b[0][2], cmap[color_index0][2]);
-                     bump_no_overflow(b[0][3], cmap[color_index0][3]);
+
+                     /* Scale the colors based on the motion filter for this temp sample */
+                     if (color_scalar != 1.0) {
+                        bump_no_overflow(b[0][0], cmap[color_index0][0]*color_scalar);
+                        bump_no_overflow(b[0][1], cmap[color_index0][1]*color_scalar);
+                        bump_no_overflow(b[0][2], cmap[color_index0][2]*color_scalar);
+                        bump_no_overflow(b[0][3], cmap[color_index0][3]*color_scalar);
+                     } else {
+                        bump_no_overflow(b[0][0], cmap[color_index0][0]);
+                        bump_no_overflow(b[0][1], cmap[color_index0][1]);
+                        bump_no_overflow(b[0][2], cmap[color_index0][2]);
+                        bump_no_overflow(b[0][3], cmap[color_index0][3]);
+                     }
                      
                   }
                }
             }
-
-/*
-            gettimeofday(&tp,NULL);
-            t2 = (double)tp.tv_sec + 1.e-6*tp.tv_usec;
-            
-            e2 += t2-t1;
-*/
-         } /* End Sub-Batch Loop */
+         }
 
          vibrancy += cp.vibrancy;
          gamma += cp.gamma;
@@ -619,7 +656,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
          background[2] += cp.background[2];
          vib_gam_n++;
 
-      } /* End Temporal_Sample Loop */
+      }
       
       k1 =(cp.contrast * cp.brightness *
 	   PREFILTER_WHITE * 268.0 *
@@ -627,16 +664,15 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
       area = image_width * image_height / (ppux * ppuy);
       k2 = (oversample * oversample * nbatches) /
 	(cp.contrast * area * WHITE_LEVEL * sample_density);
-/*
-      printf("contrast=%f, brightness=%f, PREFILTER=%d, temporal_filter=%f\n", cp.contrast, cp.brightness, PREFILTER_WHITE, temporal_filter[batch_num]);
-      printf("oversample=%d, nbatches=%d, area = %f, WHITE_LEVEL=%d, sample_density=%f\n", oversample, nbatches, area, WHITE_LEVEL, sample_density);
-*/
-      /* log intensity accumulation */
+#if 0
+      printf("contrast=%f, brightness=%f, PREFILTER=%d, temporal_filter=%f\n",
+	     cp.contrast, cp.brightness, PREFILTER_WHITE, temporal_filter[batch_num]);
+      printf("oversample=%d, nbatches=%d, area = %f, WHITE_LEVEL=%d, sample_density=%f\n",
+	     oversample, nbatches, area, WHITE_LEVEL, sample_density);
+#endif
 
-      /* Apply density estimation? */
       if (num_de_filters == 0) {
 
-         /* Standard (original) histobinning code */	 
          for (j = 0; j < height; j++) {
             for (i = 0; i < width; i++) {
 
@@ -771,25 +807,20 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
 	 
       } /* End density estimation loop */
 		
-		/* If allocated, free the de filter memory for the next batch */
-      if (num_de_filters > 0.0) {
+      /* If allocated, free the de filter memory for the next batch */
+      if (num_de_filters > 0) {
          free(de_filter_coefs);
          free(de_filter_widths);
       }
       
-      /* Theoretical: filter accumulator down into image here. */
-      
-   } /* End main batch loop*/
+   }
 
    if (verbose) {
      fprintf(stderr, "\rchaos: 100.0%%  took: %ld seconds   \n", time(NULL) - progress_began);
-/*     fprintf(stderr, "iterations took: %g seconds, merge took: %g seconds  \n",e1,e2);*/
      fprintf(stderr, "filtering...");
    }
  
-   /*
-    * filter the accumulation buffer down into the image
-    */
+   /* filter the accumulation buffer down into the image */
    if (1) {
       int x, y;
       double t[4];
@@ -845,7 +876,7 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
                   /* Standard */
                   alpha = pow(tmp, g);
                }
-
+               
                ls = vibrancy * 256.0 * alpha / tmp;
 
                if (alpha < 0.0) 
@@ -858,6 +889,16 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
             } else {
                ls = 0.0;
                alpha = 0.0;
+            }
+            
+            /* Clamp negatives to 0 (for slightly negative kernels) */
+            if (1) {
+               if (t[0]<0)
+                  t[0]=0;
+               if (t[1]<0)
+                  t[1]=0;
+               if (t[2]<0)
+                  t[2]=0;
             }
             
             /* apply to rgb channels the relative scale from gamma of alpha channel */   
@@ -873,7 +914,6 @@ static void render_rectangle(spec, out, out_width, field, nchan, transp)
                a = 255;
             if (a < 0)
                a = 0;
-
 	    
             p[0] = (unsigned char) a;
             

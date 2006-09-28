@@ -1392,7 +1392,10 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	do {
 		sprintf(action,"random");
 		flam3_random(&cp_orig, ivars, num_ivars, sym, 0);
-		
+
+		cp_orig.spatial_filter_func = Gaussian_filter;
+		cp_orig.spatial_filter_support = Gaussian_support;
+
 		double bmin[2], bmax[2];
 		flam3_estimate_bounding_box(&cp_orig, 0.001, 100000, bmin, bmax);
 		cp_orig.center[0] = (bmin[0] + bmax[0]) / 2.0;
@@ -1660,6 +1663,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		[oxidizerWindow makeKeyAndOrderFront:self];
 	}
 }
+
+
+
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {

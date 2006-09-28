@@ -25,7 +25,7 @@
 #include <libxml/parser.h>
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.4 2006/07/02 12:50:18 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.5 2006/09/28 18:54:27 vargol Exp $";
 
 char *flam3_version();
 
@@ -47,7 +47,7 @@ int flam3_get_palette(int palette_index, flam3_palette p, double hue_rotation);
 
 extern char *flam3_variation_names[];
 
-#define flam3_nvariations 35
+#define flam3_nvariations 39
 #define flam3_nxforms     12
 
 #define flam3_parent_fn_len     30
@@ -55,8 +55,32 @@ extern char *flam3_variation_names[];
 #define flam3_interpolation_linear 0
 #define flam3_interpolation_smooth 1
 
+#define flam3_palette_interpolation_hsv   0
+#define flam3_palette_interpolation_sweep 1
+
 
 typedef void (*flam3_iterator)(void *, double);
+
+
+typedef struct {
+
+   int width, height;
+   int version;
+   int id;
+   
+   /* There are 256 levels of gray to work with */   
+   double intensity_weight[256];
+   unsigned int bin_size[256];
+   unsigned int bin_offset[256];
+   
+   /* Pointer to newly allocated memory; we will be allocating */
+   /* 2*w*h ushorts for this storage.  The bin offset will     */
+   /* provide the starting point for a random selection from   */
+   /* (bin size) ordered pairs                                 */
+   unsigned short *rowcols;
+
+} flam3_image_store;
+
 
 typedef struct {
    double var[flam3_nvariations];   /* interp coefs between variations */
@@ -100,6 +124,26 @@ typedef struct {
    double juliaScope_power;
    double juliaScope_dist;
    
+   /* Radial_Blur */
+   double radialBlur_angle;
+   
+   /* Pie */
+   double pie_slices;
+   double pie_rotation;
+   double pie_thickness;
+   
+   /* Ngon */
+   double ngon_sides;
+   double ngon_power;
+   double ngon_circle;
+   double ngon_corners;
+   
+   /* Image */
+   /*
+   int image_id;
+   flam3_image_store *image_storage;
+   */
+   
    /* If perspective is used, precalculate these values */
    /* from the _angle and _dist                         */
    double persp_vsin;
@@ -112,6 +156,17 @@ typedef struct {
    /* If Julia_Scope is used, precalculate these values */
    double juliaScope_rN;
    double juliaScope_cn;
+   
+   /* If Radial_Blur is used, precalculate these values */
+   double radialBlur_spinvar;
+   double radialBlur_zoomvar;
+   int radialBlur_randN;
+   double radialBlur_rand[4];
+   
+   /* Precalculate these values for waves */
+   double waves_dx2;
+   double waves_dy2;
+   
 
    /* function pointers for faster iterations */
    int num_active_vars;
@@ -124,6 +179,7 @@ typedef struct {
    char flame_name[flam3_name_len+1]; /* 64 chars plus a null */
    double time;
    int interpolation;
+   int palette_interpolation;
    int num_xforms;
    int final_xform_index;
    int final_xform_enable;
@@ -147,7 +203,9 @@ typedef struct {
    double background[3];
    double zoom;                  /* effects ppu, sample density, scale */
    double pixels_per_unit;       /* vertically */
-   double spatial_filter_radius; /* variance of gaussian */
+   double spatial_filter_radius; /* radius of spatial filter */
+   double (*spatial_filter_func)(); /* spatial filter kernel function */
+   double spatial_filter_support; /* size of standard kernel for specific function */
    double sample_density;        /* samples per pixel (not bucket) */
    /* in order to motion blur more accurately we compute the logs of the 
    sample density many times and average the results. */
@@ -176,7 +234,12 @@ typedef struct {
    int palette_index1;
    double hue_rotation1;
    double palette_blend;
+   
+   double motion_exp; /* Motion blur parameter that controls how the colors are scaled */
+   
+   
 } flam3_genome;
+
 
 /* xform manipulation */
 void flam3_add_xforms(flam3_genome *cp, int num_to_add);
@@ -184,12 +247,14 @@ void flam3_delete_xform(flam3_genome *thiscp, int idx_to_delete);
 void flam3_copy(flam3_genome *dest, flam3_genome *src);
 void flam3_copyx(flam3_genome *dest, flam3_genome *src, int num_std, int num_final);
 
+void flam3_create_xform_distrib(flam3_genome *cp, char *xform_distrib);
+
 /* samples is array nsamples*4 long of x,y,color triples.
    using (samples[0], samples[1]) as starting XY point and
    (samples[2], samples[3]) as starting color coordinate,
    perform fuse iterations and throw them away, then perform
    nsamples iterations and save them in the samples array */
-void flam3_iterate(flam3_genome *g, int nsamples, int fuse, double *samples);
+void flam3_iterate(flam3_genome *g, int nsamples, int fuse, double *samples, char *xform_distrib);
 
 /* genomes is array ngenomes long, with times set and in ascending order.
    interpolate to the requested time and return in result */
@@ -213,6 +278,7 @@ flam3_genome *flam3_parse_xml2(char *s, char *fn, int default_flag, int *ncps);
 flam3_genome *flam3_parse_from_file(FILE *f, char *fn, int default_flag, int *ncps);
 
 void flam3_add_symmetry(flam3_genome *g, int sym);
+void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan);
 
 void flam3_estimate_bounding_box(flam3_genome *g, double eps, int nsamples,
 				 double *bmin, double *bmax);
@@ -251,5 +317,37 @@ double flam3_random01();
 double flam3_random11();
 int flam3_random_bit();
 
+/* Spatial Filter Kernels */
+#define	hermite_support		(1.0)
+#define	box_support		(0.5)
+#define	triangle_support	(1.0)
+#define	bell_support		(1.5)
+#define	B_spline_support	(2.0)
+#define	Mitchell_support	(2.0)
+#define	Mitchell_B	(1.0 / 3.0)
+#define	Mitchell_C	(1.0 / 3.0)
+#define  Blackman_support  (1.0)
+#define  Catrom_support    (2.0)
+#define  Hanning_support   (1.0)
+#define  Hamming_support   (1.0)
+#define  Lanczos3_support  (3.0)
+#define  Lanczos2_support  (2.0)
+#define  Gaussian_support  (1.8)
+#define  quadratic_support (1.5)
 
+double hermite_filter(double t);
+double box_filter(double t);
+double triangle_filter(double t);
+double bell_filter(double t);
+double B_spline_filter(double t);
+double sinc(double x);
+double Lanczos3_filter(double t);
+double Lanczos2_filter(double t);
+double Mitchell_filter(double t);
+double Blackman_filter(double x);
+double Catrom_filter(double x);
+double Hamming_filter(double x); 
+double Hanning_filter(double x); 
+double Gaussian_filter(double x);
+double quadratic_filter(double x);
 #endif

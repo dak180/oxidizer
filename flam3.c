@@ -17,8 +17,8 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-static char *libifs_c_id =
-"@(#) $Id: flam3.c,v 1.5 2006/09/08 18:06:32 vargol Exp $";
+static char *flam3_c_id =
+"@(#) $Id: flam3.c,v 1.6 2006/09/28 18:54:27 vargol Exp $";
 
 
 #include "private.h"
@@ -92,12 +92,32 @@ static void var31_noise(void *, double);
 static void var32_juliaN_generic(void *, double);
 static void var33_juliaScope_generic(void *, double);
 static void var34_blur(void *, double);
+static void var35_gaussian(void *, double);
+static void var36_radial_blur(void *, double);
+static void var37_pie(void *, double);
+static void var38_ngon(void *, double);
+/*static void var39_image(void *, double);*/
+
+static void perspective_precalc(flam3_xform *xf);
+static void juliaN_precalc(flam3_xform *xf);
+static void juliaScope_precalc(flam3_xform *xf);
+static void radial_blur_precalc(flam3_xform *xf);
+static void waves_precalc(flam3_xform *xf);
 
 static int id_matrix(double s[3][2]);
 
 void prepare_xform_fn_ptrs(flam3_genome *);
 static void initialize_xforms(flam3_genome *thiscp, int start_here);
-static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, int *color_shift);
+static void parse_flame_element(xmlNode *);
+static void parse_image_element(xmlNode *);
+static int apply_xform(flam3_genome *cp, int fn, double *p, double *q);
+
+void decode64( char *instring, char *outstring );
+void encode64( FILE *infile, FILE *outfile, int linesize);
+void decodeblock64 (unsigned char in[4], unsigned char out[3]);
+void encodeblock64 (unsigned char in[3], unsigned char out[4], int len);
+void b64decode(char* instr, char *outstr);
+
 /*
  * VARIATION FUNCTIONS
  * must be of the form void (void *, double) 
@@ -175,14 +195,6 @@ static void var4_horseshoe (void *helper, double weight) {
       p[1] += v * ny;  */
       
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
-/*   double c1 = f->precalc_sina;
-   double c2 = f->precalc_cosa;
-   
-   double nx = c1 * f->tx - c2 * f->ty;
-   double ny = c2 * f->tx + c1 * f->ty;
-   
-   f->p0 += weight * nx;
-   f->p1 += weight * ny;*/
    
    double r = weight / (f->precalc_sqrt + EPS);
    
@@ -246,9 +258,7 @@ static void var8_disc (void *helper, double weight) {
       p[1] += v * cos(r) * a / M_PI; */
 
    flam3_iter_helper *f = (flam3_iter_helper *)helper;   
-   double nx = f->tx * M_PI;
-   double ny = f->ty * M_PI;
-   double a = atan2(nx,ny) * M_1_PI;
+   double a = f->precalc_atan * M_1_PI;
    double r = M_PI * f->precalc_sqrt;
    
    f->p0 += weight * sin(r) * a;
@@ -340,7 +350,7 @@ static void var13_julia (void *helper, double weight) {
    if (flam3_random_bit())
       a += M_PI;
    
-   r = weight * pow(f->tx * f->tx + f->ty * f->ty, 0.25);
+   r = weight * sqrt(sqrt(f->tx * f->tx + f->ty * f->ty));
 
    f->p0 += r * cos(a);
    f->p1 += r * sin(a);
@@ -380,11 +390,9 @@ static void var15_waves (void *helper, double weight) {
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
    double c10 = f->xform->c[1][0];
    double c11 = f->xform->c[1][1];
-   double dx = f->xform->c[2][0];
-   double dy = f->xform->c[2][1];
    
-   double nx = f->tx + c10 * sin( f->ty / ( (dx * dx) + EPS ) );
-   double ny = f->ty + c11 * sin( f->tx / ( (dy * dy) + EPS ) );
+   double nx = f->tx + c10 * sin( f->ty * f->xform->waves_dx2 );
+   double ny = f->ty + c11 * sin( f->tx * f->xform->waves_dy2 );
    
    f->p0 += weight * nx;
    f->p1 += weight * ny;
@@ -403,10 +411,10 @@ static void var16_fisheye (void *helper, double weight) {
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
    double r = f->precalc_sqrt;
    
-   r = 2*r / (r+1);
+   r = 2 * weight / (r+1);
 
-   f->p0 += weight * r * f->precalc_cosa;
-   f->p1 += weight * r * f->precalc_sina;
+   f->p0 += r * f->ty;
+   f->p1 += r * f->tx;
 }
 
 static void var17_popcorn (void *helper, double weight) {
@@ -472,8 +480,9 @@ static void var20_cosine (void *helper, double weight) {
       p[1] += v * ny; */
       
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
-   double nx =  cos(f->tx * M_PI) * cosh(f->ty);
-   double ny = -sin(f->tx * M_PI) * sinh(f->ty);
+   double a = f->tx * M_PI;
+   double nx =  cos(a) * cosh(f->ty);
+   double ny = -sin(a) * sinh(f->ty);
    
    f->p0 += weight * nx;
    f->p1 += weight * ny;
@@ -743,6 +752,162 @@ static void var34_blur (void *helper, double weight) {
    f->p1 += r * sinr;   
 }
 
+static void var35_gaussian (void *helper, double weight) {
+   /* gaussian (09/06) */
+   flam3_iter_helper *f = (flam3_iter_helper *)helper;
+   double ang, r, sina, cosa;
+   
+   ang = flam3_random01() * 2 * M_PI;
+   
+   sina = sin(ang);
+   cosa = cos(ang);
+   
+   r = weight * ( flam3_random01() + flam3_random01() + flam3_random01() + flam3_random01() - 2.0 );
+
+   f->p0 += r * cosa;
+   f->p1 += r * sina;   
+}
+   
+static void var36_radial_blur (void *helper, double weight) {
+   /* radial blur (09/06) */
+   flam3_iter_helper *f = (flam3_iter_helper *)helper;
+   double rndG, ra, rz, tmpa, sa, ca;
+   
+   /* Get pseudo-gaussian */
+   rndG = weight * (f->xform->radialBlur_rand[0] + f->xform->radialBlur_rand[1] + 
+            f->xform->radialBlur_rand[2] + f->xform->radialBlur_rand[3] - 2.0);
+   
+   /* Update the randoms */
+   f->xform->radialBlur_rand[f->xform->radialBlur_randN] = flam3_random01();
+   f->xform->radialBlur_randN = (f->xform->radialBlur_randN + 1) % 4;
+   
+   /* Calculate angle & zoom */
+   ra = f->precalc_sqrt;
+   tmpa = atan2(f->ty,f->tx) + f->xform->radialBlur_spinvar*rndG;
+   sa = sin(tmpa);
+   ca = cos(tmpa);
+   rz = f->xform->radialBlur_zoomvar * rndG - 1;
+   
+   f->p0 += ra * ca + rz * f->tx;
+   f->p1 += ra * sa + rz * f->ty;
+}
+
+static void var37_pie(void *helper, double weight) {
+   /* pie by Joel Faber (June 2006) */
+   flam3_iter_helper *f = (flam3_iter_helper *) helper;
+   double a, r;
+   int sl;
+
+   sl = (int) (flam3_random01() * f->xform->pie_slices + 0.5);
+   a = f->xform->pie_rotation + 
+       2.0 * M_PI * (sl + flam3_random01() * f->xform->pie_thickness) / f->xform->pie_slices;
+   r = weight * flam3_random01();
+   
+   f->p0 += r * cos(a);
+   f->p1 += r * sin(a);
+}
+
+static void var38_ngon(void *helper, double weight) {
+   /* ngon by Joel Faber (09/06) */
+   flam3_iter_helper *f = (flam3_iter_helper *) helper;
+   double r_factor,theta,phi,b, amp;
+   
+   r_factor = pow(f->tx*f->tx + f->ty*f->ty, f->xform->ngon_power/2.0);
+   
+   theta = atan2(f->ty, f->tx);
+   b = 2*M_PI/f->xform->ngon_sides;
+   
+   phi = theta - (b*floor(theta/b));
+   if (phi > b/2)
+      phi -= b;
+   
+   amp = f->xform->ngon_corners * (1.0 / (cos(phi) + EPS) - 1.0) + f->xform->ngon_circle;
+   amp /= (r_factor + EPS);
+   
+   f->p0 += weight * f->tx * amp;
+   f->p1 += weight * f->ty * amp;
+} 
+
+# if 0   
+static void var39_image(void *helper, double weight) {
+   int lo=1, hi=255;
+   int m,i,j;
+   double r = flam3_random01();
+   double xfrac,yfrac;
+   double xmult,ymult;
+   double pixelSize;
+   
+   flam3_iter_helper *f = (flam3_iter_helper *) helper;
+   flam3_image_store *is = f->xform->image_storage;
+   
+   while (lo + 1 < hi) {
+      m = (lo + hi) / 2;
+      if (r>= is->intensity_weight[m])
+         lo = m;
+      else
+         hi = m;
+   }
+   
+   if (r >= is->intensity_weight[lo])
+      i = hi;
+   else
+      i = lo;
+         
+   j = floor(flam3_random01() * is->bin_size[i]);
+   
+   xfrac = (double)(is->rowcols[is->bin_offset[i] + 2*j])/is->width;
+   yfrac = (double)(is->rowcols[is->bin_offset[i] + 2*j+1])/is->height;
+   
+   if (is->width > is->height) {
+      pixelSize = weight * 2.0 / is->width;
+      xmult = weight * 2.0;
+      ymult = weight * 2.0 * is->height / is->width;
+   } else {
+      pixelSize = weight * 2.0 / is->height;
+      ymult = weight * 2.0;
+      xmult = weight * 2.0 * is->width / is->height;
+   }
+   
+   f->p0 += xmult * xfrac - xmult / 2 + flam3_random01()*pixelSize;
+   f->p1 += ymult * yfrac - ymult / 2 + flam3_random01()*pixelSize;
+}
+
+#endif
+
+static void perspective_precalc(flam3_xform *xf) {
+   double ang = xf->perspective_angle * M_PI / 2.0;
+   xf->persp_vsin = sin(ang);
+   xf->persp_vfcos = xf->perspective_dist * cos(ang);
+}
+
+static void juliaN_precalc(flam3_xform *xf) {
+   xf->juliaN_rN = fabs(xf->juliaN_power);
+   xf->juliaN_cn = xf->juliaN_dist / (double)xf->juliaN_power / 2.0;
+}
+
+static void juliaScope_precalc(flam3_xform *xf) {
+   xf->juliaScope_rN = fabs(xf->juliaScope_power);
+   xf->juliaScope_cn = xf->juliaScope_dist / (double)xf->juliaScope_power / 2.0;
+}
+      
+static void radial_blur_precalc(flam3_xform *xf) {
+   int j;
+   xf->radialBlur_spinvar = sin(xf->radialBlur_angle * M_PI / 2);
+   xf->radialBlur_zoomvar = cos(xf->radialBlur_angle * M_PI / 2);
+   xf->radialBlur_randN = 0;
+   for (j = 0; j < 4; j++)
+      xf->radialBlur_rand[j] = flam3_random01();
+}
+
+static void waves_precalc(flam3_xform *xf) {
+   double dx = xf->c[2][0];
+   double dy = xf->c[2][1];
+   
+   xf->waves_dx2 = 1.0/(dx * dx + EPS);
+   xf->waves_dy2 = 1.0/(dy * dy + EPS);
+}
+ 
+
 void prepare_xform_fn_ptrs(flam3_genome *cp) {
    
    double d;
@@ -795,6 +960,7 @@ void prepare_xform_fn_ptrs(flam3_genome *cp) {
                cp->xform[i].precalc_sqrt_flag=1;
             } else if (j==8) {
                cp->xform[i].varFunc[totnum] = &var8_disc;
+               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
             } else if (j==9) {
                cp->xform[i].varFunc[totnum] = &var9_spiral;
@@ -872,6 +1038,17 @@ void prepare_xform_fn_ptrs(flam3_genome *cp) {
                cp->xform[i].varFunc[totnum] = &var33_juliaScope_generic;
             else if (j==34)
                cp->xform[i].varFunc[totnum] = &var34_blur;
+            else if (j==35)
+               cp->xform[i].varFunc[totnum] = &var35_gaussian;
+            else if (j==36) {
+               cp->xform[i].varFunc[totnum] = &var36_radial_blur;
+               cp->xform[i].precalc_sqrt_flag=1;
+            } else if (j==37)
+               cp->xform[i].varFunc[totnum] = &var37_pie;
+            else if (j==38) {
+               cp->xform[i].varFunc[totnum] = &var38_ngon;
+            }
+            
 
             totnum++;
          }
@@ -890,64 +1067,62 @@ void write_color(double c) {
     fprintf(cout, "%.30f\n", c);
 }
 
+void flam3_create_xform_distrib(flam3_genome *cp, char *xform_distrib) {
+
+   /* Xform distrib is a preallocated array of CHOOSE_XFORM_GRAIN chars */
+   /* address of array is passed in, contents are modified              */
+   double t,r,dr;
+   int i,j;
+   
+     dr = 0.0;
+      for (i = 0; i < cp->num_xforms; i++) {
+         double d = cp->xform[i].density;
+         if (d < 0.0) {
+            fprintf(stderr, "xform weight must be non-negative, not %g.\n", d);
+            exit(1);
+         }
+         dr += d;
+      }
+      if (dr == 0.0) {
+         fprintf(stderr, "cannot iterate empty flame.\n");
+         exit(1);
+      }
+      dr = dr / CHOOSE_XFORM_GRAIN;
+   
+      j = 0;
+      t = cp->xform[0].density;
+      r = 0.0;
+      for (i = 0; i < CHOOSE_XFORM_GRAIN; i++) {
+         while (r >= t) {
+            j++;
+            t += cp->xform[j].density;
+         }
+         xform_distrib[i] = j;
+         r += dr;
+      }   
+}
+
 /*
  * run the function system described by CP forward N generations.  store
  * the N resulting 4-vectors in SAMPLES.  the initial point is passed in
  * SAMPLES[0..3].  ignore the first FUSE iterations.
  */
-void flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples) {
-   int i, j;
-   char xform_distrib[CHOOSE_XFORM_GRAIN];
-   double p[4], q[4],t, r, dr;
-   int color_shift = 0;
+void flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, char *xform_distrib) {
+   int i;
+   double p[4], q[4];
    int consec = 0;
-   double color_shift_speed = 0.0;
-   if (getenv("shift"))
-      color_shift_speed = atof(getenv("shift"));
       
    p[0] = samples[0];
    p[1] = samples[1];
    p[2] = samples[2];
    p[3] = samples[3];
    
-   /*
-   * first, set up xform, which is an array that converts a uniform random
-   * variable into one with the distribution dictated by the density
-   * fields 
-   */
-   dr = 0.0;
-   for (i = 0; i < cp->num_xforms; i++) {
-      double d = cp->xform[i].density;
-      if (d < 0.0) {
-         fprintf(stderr, "xform weight must be non-negative, not %g.\n", d);
-         exit(1);
-      }
-      dr += d;
-   }
-   if (dr == 0.0) {
-      fprintf(stderr, "cannot iterate empty flame.\n");
-      exit(1);
-   }
-   dr = dr / CHOOSE_XFORM_GRAIN;
-   
-   j = 0;
-   t = cp->xform[0].density;
-   r = 0.0;
-   for (i = 0; i < CHOOSE_XFORM_GRAIN; i++) {
-      while (r >= t) {
-         j++;
-         t += cp->xform[j].density;
-      }
-      xform_distrib[i] = j;
-      r += dr;
-   }
-
    for (i = -4*fuse; i < 4*n; i+=4) {
       int fn = xform_distrib[random() % CHOOSE_XFORM_GRAIN];
       double tx, ty;
       
       if (1) {
-         if (apply_xform(cp, fn, p, q, &color_shift)>0) {
+         if (apply_xform(cp, fn, p, q)>0) {
             consec ++;
             if (consec<5) {
                p[0] = q[0];
@@ -961,7 +1136,7 @@ void flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples) {
          } else
             consec = 0;
       } else {
-         apply_xform(cp, fn, p, q, &color_shift);
+         apply_xform(cp, fn, p, q);
       }
          
       p[0] = q[0];
@@ -970,20 +1145,20 @@ void flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples) {
       p[3] = q[3];
       
       if (cp->final_xform_enable == 1) {
-         apply_xform(cp, cp->final_xform_index, p, q, &color_shift);
+         apply_xform(cp, cp->final_xform_index, p, q);
       }
       
       /* if fuse over, store it */
       if (i >= 0) {
          samples[i] = q[0];
          samples[i+1] = q[1];
-         samples[i+2] = fmod(q[2] + color_shift * color_shift_speed, 1.0);
+         samples[i+2] = q[2];
          samples[i+3] = q[3];
       }
    }
 }
 
-static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, int *color_shift)
+static int apply_xform(flam3_genome *cp, int fn, double *p, double *q)
 {
    flam3_iter_helper f;
    int var_n;
@@ -993,11 +1168,6 @@ static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, int *colo
    s1 = 0.5 - 0.5 * s;
 
    next_color = (p[2] + cp->xform[fn].color[0]) * s1 + s * p[2];
-   if (fabs(p[2] - next_color) < 1e-3) {
-      (*color_shift)++;
-   } else {
-      (*color_shift) = 0;
-   }
    q[2] = next_color;
    q[3] = (p[3] + cp->xform[fn].color[1]) * s1 + s * p[3];
    
@@ -1083,12 +1253,14 @@ double flam3_dimension(flam3_genome *cp, int ntries, int clip_to_camera) {
   while (got < 2*ntries) {
     double subb[4*SUB_BATCH_SIZE];
     int i4, clipped;
+    char xform_distrib[CHOOSE_XFORM_GRAIN];
     subb[0] = flam3_random11();
     subb[1] = flam3_random11();
     subb[2] = 0.0;
     subb[3] = 0.0;
     prepare_xform_fn_ptrs(cp);
-    flam3_iterate(cp, SUB_BATCH_SIZE, 20, subb);
+    flam3_create_xform_distrib(cp,xform_distrib);
+    flam3_iterate(cp, SUB_BATCH_SIZE, 20, subb, xform_distrib);
     i4 = 0;
     for (i = 0; i < SUB_BATCH_SIZE; i++) {
       if (got == 2*ntries) break;
@@ -1152,7 +1324,7 @@ double flam3_lyapunov(flam3_genome *cp, int ntries) {
   double eps = 1e-5;
   int i;
   double sum = 0.0;
-
+  char xform_distrib[CHOOSE_XFORM_GRAIN];
   if (ntries < 1) ntries = 10000;
 
   for (i = 0; i < ntries; i++) {
@@ -1166,7 +1338,8 @@ double flam3_lyapunov(flam3_genome *cp, int ntries) {
 
     // get into the attractor
     prepare_xform_fn_ptrs(cp);
-    flam3_iterate(cp, 1, 20+(random()%10), p);
+    flam3_create_xform_distrib(cp,xform_distrib);
+    flam3_iterate(cp, 1, 20+(random()%10), p, xform_distrib);
 
     x = p[0];
     y = p[1];
@@ -1175,7 +1348,8 @@ double flam3_lyapunov(flam3_genome *cp, int ntries) {
     srandom(i);
     
     prepare_xform_fn_ptrs(cp);
-    flam3_iterate(cp, 1, 0, p);
+    flam3_create_xform_distrib(cp,xform_distrib);
+    flam3_iterate(cp, 1, 0, p, xform_distrib);
 
     xn = p[0];
     yn = p[1];
@@ -1198,7 +1372,8 @@ double flam3_lyapunov(flam3_genome *cp, int ntries) {
     // take the same step but with eps
     srandom(i);
     prepare_xform_fn_ptrs(cp);
-    flam3_iterate(cp, 1, 0, p);
+    flam3_create_xform_distrib(cp,xform_distrib);
+    flam3_iterate(cp, 1, 0, p, xform_distrib);
 
     xn2 = p[0];
     yn2 = p[1];
@@ -1335,25 +1510,37 @@ static void interpolate_catmull_rom(flam3_genome cps[], double t, flam3_genome *
 void flam3_interpolate_n(flam3_genome *result, int ncp,
 			 flam3_genome *cpi, double *c) {
     int i, j, k;
-    double ang;
-    for (i = 0; i < 256; i++) {
-	double t[3], s[3];
-	s[0] = s[1] = s[2] = 0.0;
-	for (k = 0; k < ncp; k++) {
-	    rgb2hsv(cpi[k].palette[i], t);
-	    for (j = 0; j < 3; j++)
-		s[j] += c[k] * t[j];
-	}
-	hsv2rgb(s, result->palette[i]);
-	for (j = 0; j < 3; j++) {
-	    if (result->palette[i][j] < 0.0) {
-		result->palette[i][j] = 0.0;
+    int imid;
+    if (flam3_palette_interpolation_hsv ==
+	cpi[0].palette_interpolation) {
+	for (i = 0; i < 256; i++) {
+	    double t[3], s[3];
+	    s[0] = s[1] = s[2] = 0.0;
+	    for (k = 0; k < ncp; k++) {
+		rgb2hsv(cpi[k].palette[i], t);
+		for (j = 0; j < 3; j++)
+		    s[j] += c[k] * t[j];
 	    }
+	    hsv2rgb(s, result->palette[i]);
+	    for (j = 0; j < 3; j++) {
+		if (result->palette[i][j] < 0.0) {
+		    result->palette[i][j] = 0.0;
+		}
+	    }
+	}
+    } else {
+	for (i = 0; i < 256; i++) {
+	    j = (i < (256 * c[0])) ? 0 : 1;
+	    for (k = 0; k < 3; k++)
+		result->palette[i][k] =
+		    cpi[j].palette[i][k];
 	}
     }
 
    result->palette_index = flam3_palette_random;
    result->symmetry = 0;
+   result->spatial_filter_func = cpi[0].spatial_filter_func;
+   result->spatial_filter_support = cpi[0].spatial_filter_support;
    INTERP(brightness);
    INTERP(contrast);
    INTERP(gamma);
@@ -1364,8 +1551,8 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
    INTERI(spatial_oversample);
    INTERP(center[0]);
    INTERP(center[1]);
-   result->rot_center[0] = result->center[0];
-   result->rot_center[1] = result->center[1];
+   INTERP(rot_center[0]);
+   INTERP(rot_center[1]);
    INTERP(background[0]);
    INTERP(background[1]);
    INTERP(background[2]);
@@ -1380,6 +1567,7 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
    INTERP(estimator_minimum);
    INTERP(estimator_curve);
    INTERP(gam_lin_thresh);
+   INTERP(motion_exp);
    
    for (i = 0; i < cpi[0].num_xforms; i++) {
       double td;
@@ -1406,23 +1594,49 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
       INTERP(xform[i].juliaN_dist);
       INTERP(xform[i].juliaScope_power);
       INTERP(xform[i].juliaScope_dist);
-
-      /* Precalculate two additional params for perspective */
-      ang = result->xform[i].perspective_angle * M_PI / 2.0;
-      result->xform[i].persp_vsin = sin(ang);
-      result->xform[i].persp_vfcos = result->xform[i].perspective_dist * cos(ang);
+      INTERP(xform[i].radialBlur_angle);
+      INTERP(xform[i].pie_slices);
+      INTERP(xform[i].pie_rotation);
+      INTERP(xform[i].pie_thickness);
+      INTERP(xform[i].ngon_sides);
+      INTERP(xform[i].ngon_power);
+      INTERP(xform[i].ngon_circle);
+      INTERP(xform[i].ngon_corners);
       
-      /* Precalculate the julia variations as well */
-      result->xform[i].juliaN_rN = fabs(result->xform[i].juliaN_power);
-      result->xform[i].juliaN_cn = result->xform[i].juliaN_dist /
-	  (double)result->xform[i].juliaN_power / 2.0;
-      result->xform[i].juliaScope_rN = fabs(result->xform[i].juliaScope_power);
-      result->xform[i].juliaScope_cn = result->xform[i].juliaScope_dist /
-	  (double)result->xform[i].juliaScope_power / 2.0;
-
+      /* Precalculate additional params for some variations */
+      perspective_precalc(&(result->xform[i]));
+      juliaN_precalc(&(result->xform[i]));
+      juliaScope_precalc(&(result->xform[i]));
+      radial_blur_precalc(&(result->xform[i]));
+      waves_precalc(&(result->xform[i]));
       
       for (j = 0; j < flam3_nvariations; j++)
          INTERP(xform[i].var[j]);
+
+ # if 0
+      if (result->xform[i].var[39]>0) {
+         imid=-1;
+         for (k = 0; k < ncp; k++) {
+            if (cpi[k].xform[i].image_id >= 0) {
+               if (imid<0 || imid ==cpi[k].xform[i].image_id) {
+                  int numcpy;                  
+                  imid = cpi[k].xform[i].image_id;
+                  result->xform[i].image_id = imid;
+                  /* Copy the image data from the source */
+                  result->xform[i].image_storage = (flam3_image_store *)malloc(sizeof(flam3_image_store));
+                  memcpy(result->xform[i].image_storage,cpi[k].xform[i].image_storage,sizeof(flam3_image_store));
+                  /* ...and the rowcols */
+                  numcpy = 2 * result->xform[i].image_storage->height * result->xform[i].image_storage->width;
+                  result->xform[i].image_storage->rowcols = (unsigned short *)malloc(sizeof(unsigned short)*numcpy);
+                  memcpy(result->xform[i].image_storage->rowcols,cpi[k].xform[i].image_storage->rowcols,sizeof(unsigned short)*numcpy); 
+               } else {
+                  fprintf(stderr,"Error!  Unable to interpolate between two image variations!\n");
+                  exit(1);
+               }
+            }
+         }
+      }
+#endif
 
       clear_matrix(result->xform[i].c);
       clear_matrix(result->xform[i].post);
@@ -1514,12 +1728,13 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
        result->num_xforms = 0;
    }
    flam3_add_xforms(result, cpi[0].num_xforms);
-   
+      
    result->final_xform_enable = cpi[0].final_xform_enable;
    result->final_xform_index = cpi[0].final_xform_index;
 
    result->time = time;
    result->interpolation = flam3_interpolation_linear;
+   result->palette_interpolation = flam3_palette_interpolation_hsv;
 
    if (flam3_interpolation_linear == cps[i1].interpolation) {
        flam3_interpolate_n(result, 2, cpi, c);
@@ -1610,6 +1825,9 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
        thiscp->xform[i].perspective_dist = 0.0;
        thiscp->xform[i].persp_vsin = 0.0;
        thiscp->xform[i].persp_vfcos = 0.0;
+       thiscp->xform[i].radialBlur_angle = 0.0;
+       /*thiscp->xform[i].image_id = -1.0;*/
+
        /* Change parameters so that zeros aren't interpolated against */
        thiscp->xform[i].juliaN_power = 1.0;
        thiscp->xform[i].juliaN_dist = 1.0;
@@ -1619,6 +1837,17 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
        thiscp->xform[i].juliaScope_dist = 1.0;
        thiscp->xform[i].juliaScope_rN = 1.0;
        thiscp->xform[i].juliaScope_cn = 0.5;
+       thiscp->xform[i].radialBlur_spinvar = 0.0;
+       thiscp->xform[i].radialBlur_zoomvar = 1.0;
+       thiscp->xform[i].radialBlur_randN = 0;
+       thiscp->xform[i].pie_slices = 6.0;
+       thiscp->xform[i].pie_rotation = 0.0;
+       thiscp->xform[i].pie_thickness = 0.5;   
+       thiscp->xform[i].ngon_sides = 5;
+       thiscp->xform[i].ngon_power = 3;
+       thiscp->xform[i].ngon_circle = 1;
+       thiscp->xform[i].ngon_corners = 2;
+           
    }
 }
 
@@ -1735,7 +1964,9 @@ void flam3_copyx(flam3_genome *dest, flam3_genome *src, int dest_std_xforms, int
 
 static flam3_genome xml_current_cp;
 static flam3_genome *xml_all_cp;
+/*static flam3_image_store *im_store;*/
 static int xml_all_ncps;
+/*static int xml_num_images;*/
 
 static void clear_current_cp(int default_flag) {
     int i, j;
@@ -1760,6 +1991,9 @@ static void clear_current_cp(int default_flag) {
     cp->final_xform_enable = 0;
     cp->final_xform_index = -1;
     cp->interpolation = flam3_interpolation_linear;
+    cp->palette_interpolation = flam3_palette_interpolation_hsv;
+    cp->spatial_filter_func = Gaussian_filter;
+    cp->spatial_filter_support = Gaussian_support;
     
     cp->genome_index = 0;
     memset(cp->parent_fname,0,flam3_parent_fn_len);
@@ -1780,6 +2014,7 @@ static void clear_current_cp(int default_flag) {
        cp->estimator_minimum = 0.0;
        cp->estimator_curve = 0.6;
        cp->gam_lin_thresh = 0.01;
+       cp->motion_exp = 0.0;
        
     } else {       
        /* Defaults are off, so set to UN-reasonable values. */
@@ -1798,6 +2033,7 @@ static void clear_current_cp(int default_flag) {
        cp->estimator_minimum = -1;
        cp->estimator_curve = -1;
        cp->gam_lin_thresh = -1;
+       cp->motion_exp = -999;
     }
        
     if (cp->xform != NULL && cp->num_xforms > 0) {
@@ -1842,6 +2078,10 @@ char *flam3_variation_names[1+flam3_nvariations] = {
   "julian",
   "juliascope",
   "blur",
+  "gaussian_blur",
+  "radial_blur",
+  "pie",
+  "ngon",
   0
 };
 
@@ -1852,6 +2092,127 @@ static int var2n(const char *s) {
     if (!strcmp(s, flam3_variation_names[i])) return i;
   return flam3_variation_none;
 }
+
+#if 0
+static void parse_image_element(xmlNode *image_node) {
+   flam3_image_store *im = &(im_store[xml_num_images]);
+   xmlAttrPtr att_ptr, cur_att;
+   xmlNode *chld_node;
+   int cur_bin;
+   int cur_ptr;
+   char *att_str;
+   char *bin_content;
+   int i;
+   unsigned char *tmp_ptr;
+   
+   att_ptr = image_node->properties;
+   
+   if (att_ptr==NULL) {
+      fprintf(stderr,"Error : <image> element has no attributes.\n");
+      exit(1);
+   }
+   
+   for (cur_att = att_ptr; cur_att; cur_att = cur_att->next) {
+   
+      att_str = (char *) xmlGetProp(image_node,cur_att->name);
+      
+      if (!xmlStrcmp(cur_att->name, (const xmlChar *)"encoding")) {
+         
+         if (strcmp("base64", att_str)) {
+            fprintf(stderr,"Only base64 encoded image data is currently supported.\n");
+            exit(1);
+         }
+         
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"version")) {
+         im->version = atoi(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"id")) {
+         im->id = atoi(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"width")) {
+         im->width = atoi(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"height")) {
+         im->height = atoi(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"bits")) {
+         if (atoi(att_str) != 16) {
+            fprintf(stderr,"Only 16 bit encoded data is currently supported.\n");
+            exit(1);
+         }
+      }
+      
+      xmlFree(att_str);
+   }
+   
+   /* Allocate the memory for the data in the bins */
+   im->rowcols = (unsigned short *)calloc(2 * im->width * im->height, sizeof(unsigned short));
+   tmp_ptr = (unsigned char *)im->rowcols;
+   /* The image properties have been parsed.  Now there will be a series */
+   /* of 255 bin elements with lots of good information in them          */
+   cur_bin = 0; cur_ptr = 0;
+   for (chld_node=image_node->children; chld_node; chld_node = chld_node->next) {
+   
+      /* Is this a bin node? */
+      if (!xmlStrcmp(chld_node->name, (const xmlChar *)"bin")) {
+      
+         cur_bin++;
+      
+         /* The bin will also have attributes (which we should store) */
+         att_ptr = chld_node->properties;
+         
+         if (att_ptr==NULL) {
+            fprintf(stderr,"Error : <bin> element has no attributes.\n");
+            exit(1);
+         }
+         
+         for (cur_att = att_ptr; cur_att; cur_att = cur_att->next) {
+         
+            att_str = (char *) xmlGetProp(chld_node,cur_att->name);
+            
+            if (!xmlStrcmp(cur_att->name, (const xmlChar *)"weight")) {
+               im->intensity_weight[cur_bin] = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"size")) {
+               im->bin_size[cur_bin] = atoi(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"intensity")) {
+               if (cur_bin != atoi(att_str)) {
+                  fprintf(stderr,"Error : Bin %d is missing!\n",cur_bin+1);
+                  exit(1);
+               }
+            }
+            
+            xmlFree(att_str);
+         }
+
+         
+         im->bin_offset[cur_bin] = cur_ptr;
+
+         /* Now, read the contents of the <bin> and decode into 16-bit ints */
+         if (im->bin_size[cur_bin]>0) {
+            bin_content = (char *) xmlNodeGetContent(chld_node);
+            b64decode(bin_content, (char *)&(im->rowcols[cur_ptr]) );
+
+            if (cur_ptr >= im->width*im->height*2) {
+               fprintf(stderr,"Error!  Too many values specified for image! (bin=%d)\n",cur_bin);
+               exit(1);
+            }
+            
+            /* Swap bytes (contents are little-endian since written on PC */
+            for (i=cur_ptr; i<cur_ptr+2*im->bin_size[cur_bin]; i++) {
+               im->rowcols[i] = 256*(int)tmp_ptr[i*2] + (int)tmp_ptr[i*2+1];
+            }
+
+            /* Shift the pointer forward to the first element of the next bin*/
+            cur_ptr += 2 * im->bin_size[cur_bin];
+         
+            xmlFree(bin_content);
+         }
+         
+      }
+   }
+   /* Check to see that we got all the bins */
+   if (cur_bin != 255) {
+      fprintf(stderr,"Error: Bins missing! %d\n",cur_bin);
+      exit(1);
+   }
+}
+#endif
 
 static void parse_flame_element(xmlNode *flame_node) {
    flam3_genome *cp = &xml_current_cp;
@@ -1888,7 +2249,15 @@ static void parse_flame_element(xmlNode *flame_node) {
 	  } else if  (!strcmp("smooth", att_str)) {
 	      cp->interpolation = flam3_interpolation_smooth;
 	  } else {
-	      fprintf(stderr, "warning: unrecognized interpolation type %s.", att_str);
+	      fprintf(stderr, "warning: unrecognized interpolation type %s.\n", att_str);
+	  }
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"palette_interpolation")) {
+	  if (!strcmp("hsv", att_str)) {
+	      cp->palette_interpolation = flam3_palette_interpolation_hsv;
+	  } else if  (!strcmp("sweep", att_str)) {
+	      cp->palette_interpolation = flam3_palette_interpolation_sweep;
+	  } else {
+	      fprintf(stderr, "warning: unrecognized palette interpolation type %s.\n", att_str);
 	  }
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"name")) {
          strncpy(cp->flame_name, att_str, flam3_name_len);
@@ -1906,6 +2275,8 @@ static void parse_flame_element(xmlNode *flame_node) {
          sscanf(att_str, "%lf %lf", &cp->center[0], &cp->center[1]);
          cp->rot_center[0] = cp->center[0];
          cp->rot_center[1] = cp->center[1];
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rotation_center")) {
+         sscanf(att_str, "%lf %lf", &cp->rot_center[0], &cp->rot_center[1]);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"scale")) {
          cp->pixels_per_unit = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rotate")) {
@@ -1916,6 +2287,52 @@ static void parse_flame_element(xmlNode *flame_node) {
          cp->spatial_oversample = atoi(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"filter")) {
          cp->spatial_filter_radius = atof(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"filter_shape")) {
+         if (!strcmp("gaussian", att_str)) {
+            cp->spatial_filter_func = Gaussian_filter;
+            cp->spatial_filter_support = Gaussian_support;
+         } else if (!strcmp("hermite", att_str)) {
+            cp->spatial_filter_func = hermite_filter;
+            cp->spatial_filter_support = hermite_support;
+         } else if (!strcmp("box", att_str)) {
+            cp->spatial_filter_func = box_filter;
+            cp->spatial_filter_support = box_support;
+         } else if (!strcmp("triangle", att_str)) {
+            cp->spatial_filter_func = triangle_filter;
+            cp->spatial_filter_support = triangle_support;
+         } else if (!strcmp("bell", att_str)) {
+            cp->spatial_filter_func = bell_filter;
+            cp->spatial_filter_support = bell_support;
+         } else if (!strcmp("bspline", att_str)) {
+            cp->spatial_filter_func = B_spline_filter;
+            cp->spatial_filter_support = B_spline_support;
+         } else if (!strcmp("mitchell", att_str)) {
+            cp->spatial_filter_func = Mitchell_filter;
+            cp->spatial_filter_support = Mitchell_support;
+         } else if (!strcmp("blackman", att_str)) {
+            cp->spatial_filter_func = Blackman_filter;
+            cp->spatial_filter_support = Blackman_support;
+         } else if (!strcmp("catrom", att_str)) {
+            cp->spatial_filter_func = Catrom_filter;
+            cp->spatial_filter_support = Catrom_support;
+         } else if (!strcmp("hanning", att_str)) {
+            cp->spatial_filter_func = Hanning_filter;
+            cp->spatial_filter_support = Hanning_support;
+         } else if (!strcmp("hamming", att_str)) {
+            cp->spatial_filter_func = Hamming_filter;
+            cp->spatial_filter_support = Hamming_support;
+         } else if (!strcmp("lanczos3", att_str)) {
+            cp->spatial_filter_func = Lanczos3_filter;
+            cp->spatial_filter_support = Lanczos3_support;
+         } else if (!strcmp("lanczos2", att_str)) {
+            cp->spatial_filter_func = Lanczos2_filter;
+            cp->spatial_filter_support = Lanczos2_support;
+         } else if (!strcmp("quadratic", att_str)) {
+            cp->spatial_filter_func = quadratic_filter;
+            cp->spatial_filter_support = quadratic_support;
+         } else
+            fprintf(stderr, "warning: unrecognized kernel shape %s.  Using gaussian.\n", att_str);
+
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"quality")) {
          cp->sample_density = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"passes")) {
@@ -1942,6 +2359,8 @@ static void parse_flame_element(xmlNode *flame_node) {
          cp->estimator_curve = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"gamma_threshold")) {
          cp->gam_lin_thresh = atof(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"motion_exponent")) {
+         cp->motion_exp = atof(att_str);
       }
       
       xmlFree(att_str);
@@ -2011,27 +2430,7 @@ static void parse_flame_element(xmlNode *flame_node) {
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"count")) {
                count = atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"data")) {
-               
-               c_idx=0;
-               col_count = 0;
-               
-               do {
-                  sscanf_ret = sscanf(&(att_str[c_idx]),"00%2x%2x%2x",&r,&g,&b);
-                  if (sscanf_ret != 3) {
-                     printf("Error:  Problem reading hexadecimal color data.\n");
-                     exit(1);
-                  }
-                  c_idx += 8;
-                  while (isspace( (int)att_str[c_idx]))
-                     c_idx++;
-                  
-                  cp->palette[col_count][0] = r / 255.0;
-                  cp->palette[col_count][1] = g / 255.0;
-                  cp->palette[col_count][2] = b / 255.0;
-                  
-                  col_count++;
-               } while (col_count<count);
-               
+               flam3_parse_hexformat_colors(att_str, cp, count, 4);
             } else {
                fprintf(stderr,"Error:  Unknown color attribute '%s'\n",cur_att->name);
                exit(1);
@@ -2043,6 +2442,12 @@ static void parse_flame_element(xmlNode *flame_node) {
             
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"palette")) {
          
+         /* This could be either the old form of palette or the new form */
+         /* Make sure BOTH are not specified, otherwise either are ok    */
+         int numcolors=0;
+         int numbytes=0;
+         int old_format=0;
+         int new_format=0;
          int index0, index1;
          double hue0, hue1;
          double blend = 0.5;
@@ -2062,15 +2467,33 @@ static void parse_flame_element(xmlNode *flame_node) {
             att_str = (char *) xmlGetProp(chld_node,cur_att->name);
             
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"index0")) {
+               old_format++;
                index0 = atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"index1")) {
+               old_format++;
                index1 = atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"hue0")) {
+               old_format++;
                hue0 = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"hue1")) {
+               old_format++;
                hue1 = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blend")) {
+               old_format++;
                blend = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"count")) {
+               new_format++;
+               numcolors = atoi(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"format")) {
+               new_format++;
+               if (!strcmp(att_str,"RGB"))
+                  numbytes=3;
+               else if (!strcmp(att_str,"RGBA"))
+                  numbytes=4;
+               else {
+                  fprintf(stderr,"Error: Unrecognized palette format string (%s)\n",att_str);
+                  exit(1);
+               }
             } else {
                fprintf(stderr,"Error:  Unknown palette attribute '%s'\n",cur_att->name);
                exit(1);
@@ -2079,8 +2502,26 @@ static void parse_flame_element(xmlNode *flame_node) {
             xmlFree(att_str);
          }
          
-         interpolate_cmap(cp->palette, blend, index0, hue0, index1, hue1);
+         /* Old or new format? */
+         if (new_format>0 && old_format>0) {
+            fprintf(stderr,"Error: mixing of old and new palette tag syntax not allowed.\n");
+            exit(1);
+         }
          
+         if (old_format>0)
+            interpolate_cmap(cp->palette, blend, index0, hue0, index1, hue1);
+         else {
+            
+            char *pal_str;         
+            
+            /* Read formatted string from contents of tag */
+            
+            pal_str = (char *) xmlNodeGetContent(chld_node);
+            
+            flam3_parse_hexformat_colors(pal_str, cp, numcolors, numbytes);
+            
+            xmlFree(pal_str);        
+         }
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"symmetry")) {
          
          int kind=0;
@@ -2116,6 +2557,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          int perspective_used = 0;
          int julian_used = 0;
          int juliascope_used = 0;
+         int radialblur_used = 0;
          
          xf = cp->num_xforms;
          flam3_add_xforms(cp, 1);
@@ -2227,7 +2669,25 @@ static void parse_flame_element(xmlNode *flame_node) {
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"juliascope_dist")) {
                cp->xform[xf].juliaScope_dist = atof(att_str);
                juliascope_used = 1;
-
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"radial_blur_angle")) {
+               cp->xform[xf].radialBlur_angle = atof(att_str);
+               radialblur_used = 1;
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pie_slices")) {
+               cp->xform[xf].pie_slices = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pie_rotation")) {
+               cp->xform[xf].pie_rotation = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pie_thickness")) {
+               cp->xform[xf].pie_thickness = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_sides")) {
+               cp->xform[xf].ngon_sides = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_power")) {
+               cp->xform[xf].ngon_power = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_circle")) {
+               cp->xform[xf].ngon_circle = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_corners")) {
+               cp->xform[xf].ngon_corners = atof(att_str);
+/*            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"image_filename")) {
+               cp->xform[xf].image_id = atoi(att_str);*/
             } else {
                int v = var2n((char *) cur_att->name);
                if (v != flam3_variation_none)
@@ -2237,24 +2697,22 @@ static void parse_flame_element(xmlNode *flame_node) {
             xmlFree(att_str);
          }
          
-         /* Perspective uses some meta-parameters, so calculate the real params here */
-         if (perspective_used>0) {
-            double ang = cp->xform[xf].perspective_angle * M_PI / 2.0;
-            cp->xform[xf].persp_vsin = sin(ang);
-            cp->xform[xf].persp_vfcos = cp->xform[xf].perspective_dist * cos(ang);
-         }
+         /* Precalculate meta-parameters if necessary */
+         if (perspective_used>0)
+            perspective_precalc(&(cp->xform[xf]));
          
-         /* So do the two julia parametric variations */
-         if (julian_used>0) {
-            cp->xform[xf].juliaN_rN = fabs(cp->xform[xf].juliaN_power);
-            cp->xform[xf].juliaN_cn = cp->xform[xf].juliaN_dist / (double)cp->xform[xf].juliaN_power / 2.0;
-         }
+         if (julian_used>0)
+            juliaN_precalc(&(cp->xform[xf]));
          
-         if (juliascope_used>0) {
-            cp->xform[xf].juliaScope_rN = fabs(cp->xform[xf].juliaScope_power);
-            cp->xform[xf].juliaScope_cn = cp->xform[xf].juliaScope_dist / (double)cp->xform[xf].juliaScope_power / 2.0;
-         }
-         
+         if (juliascope_used>0)
+            juliaScope_precalc(&(cp->xform[xf]));
+
+         if (radialblur_used>0)
+            radial_blur_precalc(&(cp->xform[xf]));
+            
+         /* Calculate these regardless - might need them */
+         waves_precalc(&(cp->xform[xf]));
+            
          
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"edit")) {
          
@@ -2270,7 +2728,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int default_flag) {
    
    xmlNode *this_node = NULL;
-   size_t f3_storage;
+   size_t f3_storage,im_storage;
 
    /* Loop over this level of elements */
    for (this_node=cur_node; this_node; this_node = this_node->next) { 
@@ -2301,7 +2759,15 @@ static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int defau
          flam3_copy(&(xml_all_cp[xml_all_ncps]), &xml_current_cp);
          xml_all_ncps ++;
 
-      } else {         
+/*      } else if (this_node->type == XML_ELEMENT_NODE && !xmlStrcmp(this_node->name, (const xmlChar *)"image")) {
+      
+         im_storage = (1+xml_num_images)*sizeof(flam3_image_store);
+         im_store = realloc(im_store, im_storage);
+         parse_image_element(this_node);
+         xml_num_images++;
+         
+      }*/
+       } else {         
          /* Check all of the children of this element */
          scan_for_flame_nodes(this_node->children, parent_file, default_flag);
       }
@@ -2313,6 +2779,7 @@ flam3_genome *flam3_parse_xml2(char *xmldata, char *xmlfilename, int default_fla
    xmlDocPtr doc; /* Parsed XML document tree */
    xmlNode *rootnode;
    char *bn;
+   int i,j,k;
    
    /* Parse XML string into internal document */
    /* Forbid network access during read       */
@@ -2330,12 +2797,71 @@ flam3_genome *flam3_parse_xml2(char *xmldata, char *xmlfilename, int default_fla
    /* Scan for <flame> nodes, starting with this node */
    xml_all_cp = NULL;
    xml_all_ncps = 0;
+   /*xml_num_images = 0;*/
    
    bn = basename(xmlfilename);   
    scan_for_flame_nodes(rootnode, bn, default_flag);
    
    xmlFreeDoc(doc);
    
+#if 0
+   /* We must check here to see if there are any image variations present */
+   /* and if the proper image xml was read in to support it               */
+   
+   /* First, check to see if there are duplicate image ids */
+   /* or missing ids */
+   if (xml_num_images>1) {
+      for (i=0; i<xml_num_images-1; i++) {
+         for (j=i+1; j<xml_num_images; j++) {
+            if (im_store[i].id == im_store[j].id) {
+               fprintf(stderr,"Error: Duplicate image ids in flame file (%d).  Aborting.\n",im_store[i].id);
+               exit(1);
+            }
+            if (im_store[i].id == -1) {
+               fprintf(stderr,"Error: Image id missing.  Is the attr spelled correctly?  Aborting.\n");
+               exit(1);
+            }
+            
+         }
+      }
+   }
+
+   /* Next, make sure that for all image variations, an available image is specified */
+   for (i=0; i<xml_all_ncps; i++) {
+   
+      for (j=0; j<xml_all_cp[i].num_xforms; j++) {
+      
+         if (xml_all_cp[i].xform[j].var[39] > 0) {
+         
+            for (k=0; k<xml_num_images; k++) {
+            
+               if (im_store[k].id == xml_all_cp[i].xform[j].image_id) {
+                  
+                  int sz;
+                  
+                  /* Copy the im_store to the xform for iteration processing */
+                  sz = sizeof(flam3_image_store);
+                  xml_all_cp[i].xform[j].image_storage = (flam3_image_store *)malloc(sz);
+                  memcpy(xml_all_cp[i].xform[j].image_storage,&(im_store[k]), sz);
+                  /* Don't forget the rowcols */
+                  
+                  sz = 2 * sizeof(unsigned short)*im_store[k].width*im_store[k].height;
+                  xml_all_cp[i].xform[j].image_storage->rowcols = (unsigned short *)malloc(sz);
+                  memcpy(xml_all_cp[i].xform[j].image_storage->rowcols,im_store[k].rowcols, sz);
+                  break;
+               }
+            }
+         }
+      }
+   }
+   /* Free the image data that is no longer necessary */
+   for (i=0; i<xml_num_images; i++) {
+      free(im_store[i].rowcols);
+   }
+   free(im_store);
+   
+#endif
+      
    *ncps = xml_all_ncps;
    return xml_all_cp;
 }
@@ -2514,8 +3040,11 @@ void flam3_apply_template(flam3_genome *cp, flam3_genome *templ) {
       cp->zoom = templ->zoom;
    if (templ->spatial_oversample > 0)
       cp->spatial_oversample = templ->spatial_oversample;
-   if (templ->spatial_filter_radius >= 0)
+   if (templ->spatial_filter_radius >= 0) {
       cp->spatial_filter_radius = templ->spatial_filter_radius;
+      cp->spatial_filter_func = templ->spatial_filter_func;
+      cp->spatial_filter_support = templ->spatial_filter_support;
+   }
    if (templ->sample_density > 0)
       cp->sample_density = templ->sample_density;
    if (templ->nbatches > 0)
@@ -2537,6 +3066,8 @@ void flam3_apply_template(flam3_genome *cp, flam3_genome *templ) {
       cp->estimator_curve = templ->estimator_curve;
    if (templ->gam_lin_thresh >= 0)
       cp->gam_lin_thresh = templ->gam_lin_thresh;
+   if (templ->motion_exp != -999)
+      cp->motion_exp = templ->motion_exp;
 }   
    
 
@@ -2545,10 +3076,9 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    char *p = "";
    
    fprintf(f, "%s<flame time=\"%g\"", p, cp->time);
-   if(cp->flame_name != NULL) {
-	   fprintf(f, " size=\"%d %d\"", cp->width, cp->height);
-   }
+   fprintf(f, " size=\"%d %d\"", cp->width, cp->height);
    fprintf(f, " center=\"%g %g\"", cp->center[0], cp->center[1]);
+   fprintf(f, " rotation_center=\"%g %g\"", cp->rot_center[0], cp->rot_center[1]);
    fprintf(f, " scale=\"%g\"", cp->pixels_per_unit);
 
    if (cp->zoom != 0.0)
@@ -2557,6 +3087,38 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    fprintf(f, " rotate=\"%g\"", cp->rotate);
    fprintf(f, " oversample=\"%d\"", cp->spatial_oversample);
    fprintf(f, " filter=\"%g\"", cp->spatial_filter_radius);
+   
+   /* Need to print the correct kernel to use */
+   if (cp->spatial_filter_func == Gaussian_filter)
+      fprintf(f, " filter_shape=\"gaussian\"");
+   else if (cp->spatial_filter_func == hermite_filter)
+      fprintf(f, " filter_shape=\"hermite\"");
+   else if (cp->spatial_filter_func == box_filter)
+      fprintf(f, " filter_shape=\"box\"");
+   else if (cp->spatial_filter_func == triangle_filter)
+      fprintf(f, " filter_shape=\"triangle\"");
+   else if (cp->spatial_filter_func == bell_filter)
+      fprintf(f, " filter_shape=\"bell\"");
+   else if (cp->spatial_filter_func == B_spline_filter)
+      fprintf(f, " filter_shape=\"bspline\"");
+   else if (cp->spatial_filter_func == Mitchell_filter)
+      fprintf(f, " filter_shape=\"mitchell\"");
+   else if (cp->spatial_filter_func == Blackman_filter)
+      fprintf(f, " filter_shape=\"blackman\"");
+   else if (cp->spatial_filter_func == Catrom_filter)
+      fprintf(f, " filter_shape=\"catrom\"");
+   else if (cp->spatial_filter_func == Hanning_filter)
+      fprintf(f, " filter_shape=\"hanning\"");
+   else if (cp->spatial_filter_func == Hamming_filter)
+      fprintf(f, " filter_shape=\"hamming\"");
+   else if (cp->spatial_filter_func == Lanczos3_filter)
+      fprintf(f, " filter_shape=\"lanczos3\"");
+   else if (cp->spatial_filter_func == Lanczos2_filter)
+      fprintf(f, " filter_shape=\"lanczos2\"");
+   else if (cp->spatial_filter_func == quadratic_filter)
+      fprintf(f, " filter_shape=\"quadratic\"");
+      
+   
    fprintf(f, " quality=\"%g\"", cp->sample_density);
    fprintf(f, " passes=\"%d\"", cp->nbatches);
    fprintf(f, " temporal_samples=\"%d\"", cp->ntemporal_samples);
@@ -2571,6 +3133,9 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    if (flam3_interpolation_linear != cp->interpolation)
        fprintf(f, " interpolation=\"smooth\"");
 
+   if (flam3_palette_interpolation_hsv != cp->palette_interpolation)
+       fprintf(f, " palette_interpolation=\"sweep\"");
+
    if (extra_attributes)
       fprintf(f, " %s", extra_attributes);
    
@@ -2580,7 +3145,7 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
       fprintf(f, "%s   <symmetry kind=\"%d\"/>\n", p, cp->symmetry);
    for (i = 0; i < cp->num_xforms; i++) {
       int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;
-      int juliaN_var=0,juliaScope_var=0;
+      int juliaN_var=0,juliaScope_var=0,radialBlur_var=0,pie_var=0,ngon_var=0;
       if ( (cp->xform[i].density > 0.0 || i==cp->final_xform_index)
              && !(cp->symmetry &&  cp->xform[i].symmetry == 1.0)) {
                   
@@ -2616,6 +3181,12 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
                   juliaN_var=1;
                else if (j==33)
                   juliaScope_var=1;
+               else if (j==36)
+                  radialBlur_var=1;
+               else if (j==37)
+                  pie_var=1;
+               else if (j==38)
+                  ngon_var=1;
                
             }
          }
@@ -2656,6 +3227,23 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
             fprintf(f, "juliascope_power=\"%g\" ", cp->xform[i].juliaScope_power);
             fprintf(f, "juliascope_dist=\"%g\" ", cp->xform[i].juliaScope_dist);
          }
+         
+         if (radialBlur_var==1) {
+            fprintf(f, "radial_blur_angle=\"%g\" ", cp->xform[i].radialBlur_angle);
+         }
+         
+         if (pie_var==1) {
+            fprintf(f, "pie_slices=\"%g\" ", cp->xform[i].pie_slices);
+            fprintf(f, "pie_rotation=\"%g\" ", cp->xform[i].pie_rotation);
+            fprintf(f, "pie_thickness=\"%g\" ", cp->xform[i].pie_thickness);
+         }            
+
+         if (ngon_var==1) {
+            fprintf(f, "ngon_sides=\"%g\" ", cp->xform[i].ngon_sides);
+            fprintf(f, "ngon_power=\"%g\" ", cp->xform[i].ngon_power);
+            fprintf(f, "ngon_corners=\"%g\" ", cp->xform[i].ngon_corners);
+            fprintf(f, "ngon_circle=\"%g\" ", cp->xform[i].ngon_circle);
+         }
 
          fprintf(f, "coefs=\"");
          for (j = 0; j < 3; j++) {
@@ -2677,12 +3265,12 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    }
    
    for (i = 0; i < 256; i++) {
-      int r, g, b;
-      r = (int) (cp->palette[i][0] * 255.0);
-      g = (int) (cp->palette[i][1] * 255.0);
-      b = (int) (cp->palette[i][2] * 255.0);
-      fprintf(f, "%s   <color index=\"%d\" rgb=\"%d %d %d\"/>\n",
-      p, i, r, g, b);
+      double r, g, b;
+      r = (cp->palette[i][0] * 255.0);
+      g = (cp->palette[i][1] * 255.0);
+      b = (cp->palette[i][2] * 255.0);
+      fprintf(f, "%s   <color index=\"%d\" rgb=\"%.6g %.6g %.6g\"/>\n",
+	      p, i, r, g, b);
    }
 
    if (cp->edits != NULL) {
@@ -2718,6 +3306,37 @@ int flam3_random_bit() {
   return l & 1;
 }
 
+void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan) {
+
+   int c_idx=0;
+   int col_count=0;
+   int r,g,b;
+   int sscanf_ret;
+      
+   do {
+      if (chan==3)
+         sscanf_ret = sscanf(&(colstr[c_idx]),"%2x%2x%2x",&r,&g,&b);
+      else
+         sscanf_ret = sscanf(&(colstr[c_idx]),"00%2x%2x%2x",&r,&g,&b);
+      
+      if (sscanf_ret != 3) {
+         fprintf(stderr, "Error:  Problem reading hexadecimal color data.\n");
+         exit(1);
+      }
+      
+      c_idx += 2*chan;
+      
+      while (isspace( (int)colstr[c_idx]))
+         c_idx++;
+         
+      cp->palette[col_count][0] = r / 255.0;
+      cp->palette[col_count][1] = g / 255.0;
+      cp->palette[col_count][2] = b / 255.0;
+         
+      col_count++;
+      
+   } while (col_count<numcolors);
+}
 
 /* sum of entries of vector to 1 */
 static int normalize_vector(double *v, int n) {
@@ -2852,6 +3471,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
    cp->palette_index = flam3_get_palette(flam3_palette_random, cp->palette, cp->hue_rotation);
    cp->time = 0.0;
    cp->interpolation = flam3_interpolation_linear;
+   cp->palette_interpolation = flam3_palette_interpolation_hsv;
    
    /* Choose the number of xforms */
    if (spec_xforms>0)
@@ -2968,7 +3588,11 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
             }
          }
       }
-         
+
+      if (cp->xform[i].var[15] > 0) {
+         waves_precalc(&(cp->xform[i]));
+      }
+               
       /* Generate random params for parametric variations, if selected. */
       if (cp->xform[i].var[23] > 0) {
          /* Create random params for blob */
@@ -2997,17 +3621,13 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
       }
       
       if (cp->xform[i].var[30] > 0) {
-         double ang;
-         
+
          /* Create random params for perspective */
          cp->xform[i].perspective_angle = flam3_random01();
          cp->xform[i].perspective_dist = 2*flam3_random01() + 1.0;
          
          /* Calculate the other params from these */
-         ang = cp->xform[i].perspective_angle * M_PI / 2.0;
-         cp->xform[i].persp_vsin = sin(ang);
-         cp->xform[i].persp_vfcos = cp->xform[i].perspective_dist * cos(ang);
-         
+         perspective_precalc(&(cp->xform[i]));
       }
       
       if (cp->xform[i].var[32] > 0) {
@@ -3017,8 +3637,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          cp->xform[i].juliaN_dist = 1.0;
          
          /* Calculate other params from these */
-         cp->xform[i].juliaN_rN = fabs(cp->xform[i].juliaN_power);
-         cp->xform[i].juliaN_cn = cp->xform[i].juliaN_dist / (double)cp->xform[i].juliaN_power / 2.0;
+         juliaN_precalc(&(cp->xform[i]));
       }
 
       if (cp->xform[i].var[33] > 0) {
@@ -3028,8 +3647,31 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          cp->xform[i].juliaScope_dist = 1.0;
          
          /* Calculate other params from these */
-         cp->xform[i].juliaScope_rN = fabs(cp->xform[i].juliaScope_power);
-         cp->xform[i].juliaScope_cn = cp->xform[i].juliaScope_dist / (double)cp->xform[i].juliaScope_power / 2.0;
+         juliaScope_precalc(&(cp->xform[i]));
+      }
+
+      if (cp->xform[i].var[36] > 0) {
+      
+         /* Create random params for radialBlur */
+         cp->xform[i].radialBlur_angle = (2 * flam3_random01() - 1);
+      
+         /* Calculate other params from this */
+         radial_blur_precalc(&(cp->xform[i]));
+      }
+
+      if (cp->xform[i].var[37] > 0) {
+         /* Create random params for pie */
+         cp->xform[i].pie_slices = (int) 10.0*flam3_random01();
+         cp->xform[i].pie_thickness = flam3_random01();
+         cp->xform[i].pie_rotation = 2.0 * M_PI * flam3_random11();
+      }
+
+      if (cp->xform[i].var[38] > 0) {
+         /* Create random params for ngon */
+         cp->xform[i].ngon_sides = (int) flam3_random01()* 10 + 3;
+         cp->xform[i].ngon_power = 3*flam3_random01() + 1;
+         cp->xform[i].ngon_circle = 3*flam3_random01();
+         cp->xform[i].ngon_corners = 2*flam3_random01()*cp->xform[i].ngon_circle;
       }
 
    }
@@ -3078,6 +3720,7 @@ void flam3_estimate_bounding_box(flam3_genome *cp, double eps, int nsamples,
    int low_target, high_target;
    double min[2], max[2];
    double *points;
+   char xform_distrib[CHOOSE_XFORM_GRAIN];
 
    if (nsamples <= 0) nsamples = 10000;
    low_target = (int)(nsamples * eps);
@@ -3090,7 +3733,8 @@ void flam3_estimate_bounding_box(flam3_genome *cp, double eps, int nsamples,
    points[3] = 0.0;
    
    prepare_xform_fn_ptrs(cp);
-   flam3_iterate(cp, nsamples, 20, points);
+   flam3_create_xform_distrib(cp,xform_distrib);
+   flam3_iterate(cp, nsamples, 20, points, xform_distrib);
 
    min[0] = min[1] =  1e10;
    max[0] = max[1] = -1e10;
@@ -3292,5 +3936,195 @@ void flam3_render(flam3_frame *spec, unsigned char *out,
     exit(1);
     break;
   }
+}
+
+/*
+ *	filter function definitions
+ * from Graphics Gems III code
+ * and ImageMagick resize.c
+ */
+
+double hermite_filter(double t) {
+	/* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
+	if(t < 0.0) t = -t;
+	if(t < 1.0) return((2.0 * t - 3.0) * t * t + 1.0);
+	return(0.0);
+}
+
+double box_filter(double t) {
+	if((t > -0.5) && (t <= 0.5)) return(1.0);
+	return(0.0);
+}
+
+double triangle_filter(double t) {
+	if(t < 0.0) t = -t;
+	if(t < 1.0) return(1.0 - t);
+	return(0.0);
+}
+
+double bell_filter(double t) {
+	/* box (*) box (*) box */
+	if(t < 0) t = -t;
+	if(t < .5) return(.75 - (t * t));
+	if(t < 1.5) {
+		t = (t - 1.5);
+		return(.5 * (t * t));
+	}
+	return(0.0);
+}
+
+double B_spline_filter(double t) {	
+
+   /* box (*) box (*) box (*) box */	
+   double tt;
+
+	if(t < 0) t = -t;
+	if(t < 1) {
+		tt = t * t;
+		return((.5 * tt * t) - tt + (2.0 / 3.0));
+	} else if(t < 2) {
+		t = 2 - t;
+		return((1.0 / 6.0) * (t * t * t));
+	}
+	return(0.0);
+}
+
+double sinc(double x) {
+	x *= M_PI;
+	if(x != 0) return(sin(x) / x);
+	return(1.0);
+}
+
+double Blackman_filter(double x) {
+  return(0.42+0.5*cos(M_PI*x)+0.08*cos(2*M_PI*x));
+}
+
+double Catrom_filter(double x) {
+  if (x < -2.0)
+    return(0.0);
+  if (x < -1.0)
+    return(0.5*(4.0+x*(8.0+x*(5.0+x))));
+  if (x < 0.0)
+    return(0.5*(2.0+x*x*(-5.0-3.0*x)));
+  if (x < 1.0)
+    return(0.5*(2.0+x*x*(-5.0+3.0*x)));
+  if (x < 2.0)
+    return(0.5*(4.0+x*(-8.0+x*(5.0-x))));
+  return(0.0);
+}
+
+double Mitchell_filter(double t) {
+	double tt;
+
+	tt = t * t;
+	if(t < 0) t = -t;
+	if(t < 1.0) {
+		t = (((12.0 - 9.0 * Mitchell_B - 6.0 * Mitchell_C) * (t * tt))
+		   + ((-18.0 + 12.0 * Mitchell_B + 6.0 * Mitchell_C) * tt)
+		   + (6.0 - 2 * Mitchell_B));
+		return(t / 6.0);
+	} else if(t < 2.0) {
+		t = (((-1.0 * Mitchell_B - 6.0 * Mitchell_C) * (t * tt))
+		   + ((6.0 * Mitchell_B + 30.0 * Mitchell_C) * tt)
+		   + ((-12.0 * Mitchell_B - 48.0 * Mitchell_C) * t)
+		   + (8.0 * Mitchell_B + 24 * Mitchell_C));
+		return(t / 6.0);
+	}
+	return(0.0);
+}
+
+double Hanning_filter(double x) {
+  return(0.5+0.5*cos(M_PI*x));
+}
+
+double Hamming_filter(double x) {
+  return(0.54+0.46*cos(M_PI*x));
+}
+
+double Lanczos3_filter(double t) {
+	if(t < 0) t = -t;
+	if(t < 3.0) return(sinc(t) * sinc(t/3.0));
+	return(0.0);
+}
+
+double Lanczos2_filter(double t) {
+	if(t < 0) t = -t;
+	if(t < 2.0) return(sinc(t) * sinc(t/2.0));
+	return(0.0);
+}
+
+double Gaussian_filter(double x) {
+  return(exp((-2.0*x*x))*sqrt(2.0/M_PI));
+}
+
+double quadratic_filter(double x) {
+  if (x < -1.5)
+    return(0.0);
+  if (x < -0.5)
+    return(0.5*(x+1.5)*(x+1.5));
+  if (x < 0.5)
+    return(0.75-x*x);
+  if (x < 1.5)
+    return(0.5*(x-1.5)*(x-1.5));
+  return(0.0);
+}
+
+void b64decode(char* instr, char *outstr)
+{
+    char *cur, *start;
+    int d, dlast, phase;
+    char c;
+    static int table[256] = {
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 00-0F */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 10-1F */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,62,-1,-1,-1,63,  /* 20-2F */
+        52,53,54,55,56,57,58,59,60,61,-1,-1,-1,-1,-1,-1,  /* 30-3F */
+        -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,  /* 40-4F */
+        15,16,17,18,19,20,21,22,23,24,25,-1,-1,-1,-1,-1,  /* 50-5F */
+        -1,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,  /* 60-6F */
+        41,42,43,44,45,46,47,48,49,50,51,-1,-1,-1,-1,-1,  /* 70-7F */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 80-8F */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* 90-9F */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* A0-AF */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* B0-BF */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* C0-CF */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* D0-DF */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,  /* E0-EF */
+        -1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1   /* F0-FF */
+    };
+
+    d = dlast = phase = 0;
+    start = instr;
+    for (cur = instr; *cur != '\0'; ++cur )
+    {
+	// jer: this is my bit that treats line endings as physical breaks
+	if(*cur == '\n' || *cur == '\r'){phase = dlast = 0; continue;}
+        d = table[(int)*cur];
+        if(d != -1)
+        {
+            switch(phase)
+            {
+            case 0:
+                ++phase;
+                break;
+            case 1:
+                c = ((dlast << 2) | ((d & 0x30) >> 4));
+                *outstr++ = c;
+                ++phase;
+                break;
+            case 2:
+                c = (((dlast & 0xf) << 4) | ((d & 0x3c) >> 2));
+                *outstr++ = c;
+                ++phase;
+                break;
+            case 3:
+                c = (((dlast & 0x03 ) << 6) | d);
+                *outstr++ = c;
+                phase = 0;
+                break;
+            }
+            dlast = d;
+        }
+    }
 }
 
