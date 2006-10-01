@@ -56,6 +56,7 @@
 	NSArray *xformSortDescriptors;
 	NSArray *variationSortDescriptors;
 	NSArray *cmapSortDescriptors;
+	NSArray *_spatialFilterArray;
 	
 	NSMutableArray *_progressInd;
 	

@@ -18,7 +18,7 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.6 2006/09/28 18:54:27 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.7 2006/10/01 14:19:05 vargol Exp $";
 
 
 #include "private.h"
@@ -3129,6 +3129,8 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    fprintf(f, " vibrancy=\"%g\"", cp->vibrancy);
    fprintf(f, " estimator_radius=\"%g\" estimator_minimum=\"%g\" estimator_curve=\"%g\"",
       cp->estimator, cp->estimator_minimum, cp->estimator_curve);
+   fprintf(f, " gamma_threshold=\"%g\"", cp->gam_lin_thresh);
+   fprintf(f, " motion_exponent=\"%g\"", cp->motion_exp);
 
    if (flam3_interpolation_linear != cp->interpolation)
        fprintf(f, " interpolation=\"smooth\"");

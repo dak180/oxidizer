@@ -74,44 +74,46 @@
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->vibrancy]  forKey:@"vibrancy"];
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->brightness]  forKey:@"brightness"];
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->rotate]  forKey:@"rotate"];
-	[genomeEntity setValue:[NSNumber numberWithDouble:genome->spatial_filter_radius]  forKey:@"filter"];
 
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->contrast]  forKey:@"contrast"];
 	[genomeEntity setValue:[Genome  getStringSymmetry:genome->symmetry]  forKey:@"symmetry"];
 	[genomeEntity setValue:[NSNumber numberWithInt:genome->interpolation]  forKey:@"interpolation"];
 
-	[genomeEntity setValue:[NSNumber numberWithDouble:genome->spatial_filter_radius]  forKey:@"spatial_filter_radius"];
+	[genomeEntity setValue:[NSNumber numberWithDouble:genome->rot_center[0]]  forKey:@"rotation_center_0"];
+	[genomeEntity setValue:[NSNumber numberWithDouble:genome->rot_center[1]]  forKey:@"rotation_center_1"];
+
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->motion_exp]  forKey:@"motion_exp"];
 
-	   if (genome->spatial_filter_func == Gaussian_filter) {
-		   [genomeEntity setValue:@"gaussian"  forKey:@"spatial_filter_func"];
-	   } else if (genome->spatial_filter_func == hermite_filter) {
-		   [genomeEntity setValue:@"hermite" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == box_filter) {
-			[genomeEntity setValue:@"box" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == triangle_filter) {
-			[genomeEntity setValue:@"triangle" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == bell_filter) {
-			[genomeEntity setValue:@"bell" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == B_spline_filter) {
-			[genomeEntity setValue:@"bspline" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == Mitchell_filter) {
-			[genomeEntity setValue:@"mitchell" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == Blackman_filter) {
-			[genomeEntity setValue:@"blackman" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == Catrom_filter) {
-			[genomeEntity setValue:@"catrom" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == Hanning_filter) {
-			[genomeEntity setValue:@"hanning" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == Hamming_filter) {
-			[genomeEntity setValue:@"hamming" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == Lanczos3_filter) {
-			[genomeEntity setValue:@"lanczos3" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == Lanczos2_filter) {
-			[genomeEntity setValue:@"lanczos2" forKey:@"spatial_filter_func"];
-		} else if (genome->spatial_filter_func == quadratic_filter) {
-			[genomeEntity setValue:@"quadratic" forKey:@"spatial_filter_func"];
-		}	
+	[genomeEntity setValue:[NSNumber numberWithDouble:genome->spatial_filter_radius]  forKey:@"spatial_filter_radius"];
+	if (genome->spatial_filter_func == Gaussian_filter) {
+	   [genomeEntity setValue:@"Gaussian"  forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == hermite_filter) {
+	   [genomeEntity setValue:@"Hermite" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == box_filter) {
+		[genomeEntity setValue:@"Box" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == triangle_filter) {
+		[genomeEntity setValue:@"Triangle" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == bell_filter) {
+		[genomeEntity setValue:@"Bell" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == B_spline_filter) {
+		[genomeEntity setValue:@"B-Spline" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == Mitchell_filter) {
+		[genomeEntity setValue:@"Mitchell" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == Blackman_filter) {
+		[genomeEntity setValue:@"Blackman" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == Catrom_filter) {
+		[genomeEntity setValue:@"Catrom" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == Hanning_filter) {
+		[genomeEntity setValue:@"Hanning" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == Hamming_filter) {
+		[genomeEntity setValue:@"Hamming" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == Lanczos3_filter) {
+		[genomeEntity setValue:@"Lanczos3" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == Lanczos2_filter) {
+		[genomeEntity setValue:@"Lanczos2" forKey:@"spatial_filter_func"];
+	} else if (genome->spatial_filter_func == quadratic_filter) {
+		[genomeEntity setValue:@"Quadratic" forKey:@"spatial_filter_func"];
+	}	
 
 	if(genome->edits != NULL) {
 	
@@ -429,6 +431,53 @@
 				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
 
 				break;
+			case 36:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+
+				[variation setValue:@"Angle:" forKey:@"parameter_1_name"];
+				[variation setValue:@"parameter 2" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+				
+				[variation setValue:[NSNumber numberWithDouble:xform->radialBlur_angle] forKey:@"parameter_1"];
+
+				break;	
+			case 37:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+				
+				[variation setValue:@"Slices:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Rotation:" forKey:@"parameter_2_name"];
+				[variation setValue:@"Thickness:" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+				
+				[variation setValue:[NSNumber numberWithDouble:xform->pie_slices] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->pie_rotation] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:xform->pie_thickness] forKey:@"parameter_3"];
+
+				break;	
+			case 38:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_4"];
+				
+				[variation setValue:@"Sides:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+				[variation setValue:@"Circle:" forKey:@"parameter_3_name"];
+				[variation setValue:@"Corners:" forKey:@"parameter_4_name"];
+				
+				[variation setValue:[NSNumber numberWithDouble:xform->ngon_sides] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->ngon_power] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:xform->ngon_circle] forKey:@"parameter_3"];
+				[variation setValue:[NSNumber numberWithDouble:xform->ngon_corners] forKey:@"parameter_4"];
+
+				break;	
 			default:
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_1"];
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];
@@ -539,8 +588,6 @@
 	newGenome->width = [[genomeEntity valueForKey:@"width"] intValue];
 	newGenome->center[0] = [[genomeEntity valueForKey:@"centre_x"] doubleValue];
 	newGenome->center[1] = [[genomeEntity valueForKey:@"centre_y"] doubleValue];
-	newGenome->rot_center[0] = newGenome->center[0];
-	newGenome->rot_center[1] = newGenome->center[1];
 	newGenome->zoom = [[genomeEntity valueForKey:@"zoom"] doubleValue];
 	newGenome->pixels_per_unit = [[genomeEntity valueForKey:@"scale"] doubleValue];
 	newGenome->spatial_oversample = [[genomeEntity valueForKey:@"oversample"] intValue];
@@ -559,57 +606,58 @@
 	newGenome->hue_rotation = [[genomeEntity valueForKey:@"hue"] doubleValue];
 	newGenome->vibrancy = [[genomeEntity valueForKey:@"vibrancy"] doubleValue];
 	newGenome->brightness = [[genomeEntity valueForKey:@"brightness"] doubleValue];
+
 	newGenome->rotate = [[genomeEntity valueForKey:@"rotate"] doubleValue];
-	newGenome->spatial_filter_radius = [[genomeEntity valueForKey:@"filter"] doubleValue];
+	newGenome->rot_center[0] = [[genomeEntity valueForKey:@"rotation_center_0"] doubleValue];
+	newGenome->rot_center[1] = [[genomeEntity valueForKey:@"rotation_center_1"] doubleValue];
 
 	newGenome->contrast = [[genomeEntity valueForKey:@"contrast"] doubleValue];
 	newGenome->symmetry = [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]];
 	newGenome->interpolation = [[genomeEntity valueForKey:@"interpolation"] intValue];
-	
-	
-	newGenome->spatial_filter_radius  = [[genomeEntity valueForKey:@"spatial_filter_radius"] doubleValue];
+		
 	newGenome->motion_exp             = [[genomeEntity valueForKey:@"motion_exp"] doubleValue];
 
-	if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"gaussian"]) {
+	newGenome->spatial_filter_radius = [[genomeEntity valueForKey:@"spatial_filter_radius"] doubleValue];
+	if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Gaussian"]) {
 			newGenome->spatial_filter_func = Gaussian_filter;
 			newGenome->spatial_filter_support = Gaussian_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"hermite"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Hermite"]) {
 			newGenome->spatial_filter_func = hermite_filter;
 			newGenome->spatial_filter_support = hermite_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"box"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Box"]) {
 			newGenome->spatial_filter_func = box_filter;
 			newGenome->spatial_filter_support = box_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"triangle"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Triangle"]) {
 			newGenome->spatial_filter_func = triangle_filter;
 			newGenome->spatial_filter_support = triangle_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"bell"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Bell"]) {
 			newGenome->spatial_filter_func = bell_filter;
 			newGenome->spatial_filter_support = bell_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"bspline"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"B-Spline"]) {
 			newGenome->spatial_filter_func = B_spline_filter;
 			newGenome->spatial_filter_support = B_spline_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"mitchell"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Mitchell"]) {
 			newGenome->spatial_filter_func = Mitchell_filter;
 			newGenome->spatial_filter_support = Mitchell_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"blackman"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Blackman"]) {
 			newGenome->spatial_filter_func = Blackman_filter;
 			newGenome->spatial_filter_support = Blackman_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"catrom"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Catrom"]) {
 			newGenome->spatial_filter_func = Catrom_filter;
 			newGenome->spatial_filter_support = Catrom_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"hanning"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Hanning"]) {
 			newGenome->spatial_filter_func = Hanning_filter;
 			newGenome->spatial_filter_support = Hanning_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"hamming"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Hamming"]) {
 			newGenome->spatial_filter_func = Hamming_filter;
 			newGenome->spatial_filter_support = Hamming_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"lanczos3"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Lanczos3"]) {
 			newGenome->spatial_filter_func = Lanczos3_filter;
 			newGenome->spatial_filter_support = Lanczos3_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"lanczos2"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Lanczos2"]) {
 			newGenome->spatial_filter_func = Lanczos2_filter;
 			newGenome->spatial_filter_support = Lanczos2_support;
-	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"quadratic"]) {
+	} else if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"Quadratic"]) {
 			newGenome->spatial_filter_func = quadratic_filter;
 			newGenome->spatial_filter_support = quadratic_support;
 	}	
@@ -791,6 +839,20 @@
 			case 33:
 				xform->juliaScope_power = [[variation valueForKey:@"parameter_1"] doubleValue];
 				xform->juliaScope_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				break;	
+			case 36:
+				xform->radialBlur_angle = [[variation valueForKey:@"parameter_1"] doubleValue];
+				break;	
+			case 37:
+				xform->pie_slices = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->pie_rotation = [[variation valueForKey:@"parameter_2"] doubleValue];
+				xform->pie_thickness = [[variation valueForKey:@"parameter_3"] doubleValue];
+				break;	
+			case 38:
+				xform->ngon_sides = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->ngon_power = [[variation valueForKey:@"parameter_2"] doubleValue];
+				xform->ngon_circle = [[variation valueForKey:@"parameter_3"] doubleValue];
+				xform->ngon_corners = [[variation valueForKey:@"parameter_4"] doubleValue];
 				break;	
 			default:
 				break;

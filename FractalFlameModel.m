@@ -125,11 +125,12 @@ int printProgress(void *nslPtr, double progress, int stage);
 		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
 		
 		_showRender = [defaults boolForKey:@"show_render"];
-		
 
-    }
+		_spatialFilterArray = [NSArray arrayWithObjects:@"Gaussian", @"Hermite",@"Box", @"Triangle", @"Bell", 
+			                                           @"B-Spline", @"Mitchell", @"Blackman", @"Catrom", @"Hanning", 
+			                                           @"Hamming", @"Lanczos2", @"Lanczos3", @"Quadratic", nil];	
 	
-	
+	}
 	
     return self;
 }
