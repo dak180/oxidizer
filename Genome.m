@@ -79,9 +79,6 @@
 	[genomeEntity setValue:[Genome  getStringSymmetry:genome->symmetry]  forKey:@"symmetry"];
 	[genomeEntity setValue:[NSNumber numberWithInt:genome->interpolation]  forKey:@"interpolation"];
 
-	[genomeEntity setValue:[NSNumber numberWithDouble:genome->rot_center[0]]  forKey:@"rotation_center_0"];
-	[genomeEntity setValue:[NSNumber numberWithDouble:genome->rot_center[1]]  forKey:@"rotation_center_1"];
-
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->motion_exp]  forKey:@"motion_exp"];
 
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->spatial_filter_radius]  forKey:@"spatial_filter_radius"];
@@ -608,8 +605,8 @@
 	newGenome->brightness = [[genomeEntity valueForKey:@"brightness"] doubleValue];
 
 	newGenome->rotate = [[genomeEntity valueForKey:@"rotate"] doubleValue];
-	newGenome->rot_center[0] = [[genomeEntity valueForKey:@"rotation_center_0"] doubleValue];
-	newGenome->rot_center[1] = [[genomeEntity valueForKey:@"rotation_center_1"] doubleValue];
+	newGenome->rot_center[0] = [[genomeEntity valueForKey:@"centre_x"] doubleValue];
+	newGenome->rot_center[1] = [[genomeEntity valueForKey:@"centre_y"] doubleValue];
 
 	newGenome->contrast = [[genomeEntity valueForKey:@"contrast"] doubleValue];
 	newGenome->symmetry = [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]];
@@ -1129,13 +1126,102 @@
 				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
-
+/*				
+				[variation setValue:[NSNumber numberWithDouble:xform->perspective_angle] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->perspective_dist] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_3"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_4"];
+*/				
+				
 				[variation setValue:@"Angle:" forKey:@"parameter_1_name"];
 				[variation setValue:@"Distance:" forKey:@"parameter_2_name"];
 				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
 				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
-
+				
 				break;
+			case 32:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+/*				
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaN_dist] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaN_power] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_3"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_4"];
+*/				
+				
+				[variation setValue:@"Distance:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+				
+				break;
+			case 33:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+/*				
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaScope_dist] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->juliaScope_power] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_3"];
+				[variation setValue:[NSNumber numberWithDouble:0.0] forKey:@"parameter_4"];
+*/				
+				
+				[variation setValue:@"JS Distance:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+				
+				break;
+			case 36:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+				
+				[variation setValue:@"Angle:" forKey:@"parameter_1_name"];
+				[variation setValue:@"parameter 2" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter 3" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+/*				
+				[variation setValue:[NSNumber numberWithDouble:xform->radialBlur_angle] forKey:@"parameter_1"];
+*/				
+				break;	
+			case 37:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+				
+				[variation setValue:@"Slices:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Rotation:" forKey:@"parameter_2_name"];
+				[variation setValue:@"Thickness:" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter 4" forKey:@"parameter_4_name"];
+				
+/*				[variation setValue:[NSNumber numberWithDouble:xform->pie_slices] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->pie_rotation] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:xform->pie_thickness] forKey:@"parameter_3"];
+*/				
+				break;	
+			case 38:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_4"];
+				
+				[variation setValue:@"Sides:" forKey:@"parameter_1_name"];
+				[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+				[variation setValue:@"Circle:" forKey:@"parameter_3_name"];
+				[variation setValue:@"Corners:" forKey:@"parameter_4_name"];
+				
+/*				[variation setValue:[NSNumber numberWithDouble:xform->ngon_sides] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->ngon_power] forKey:@"parameter_2"];
+				[variation setValue:[NSNumber numberWithDouble:xform->ngon_circle] forKey:@"parameter_3"];
+				[variation setValue:[NSNumber numberWithDouble:xform->ngon_corners] forKey:@"parameter_4"];
+*/				
+				break;	
 			default:
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_1"];
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];

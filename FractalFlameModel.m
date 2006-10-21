@@ -30,6 +30,7 @@
 int printProgress(void *nslPtr, double progress, int stage);
 
 
+
 @implementation FractalFlameModel
 
 - init
@@ -135,6 +136,14 @@ int printProgress(void *nslPtr, double progress, int stage);
     return self;
 }
 
+
+- (void)awakeFromNib {
+	
+	[previewWindow center];
+	[previewWindow setLevel:NSFloatingWindowLevel];
+}
+
+
 - (void)renderStill {
 
 	BOOL doRender = [qtController showQuickTimeFileImageDialogue];
@@ -228,7 +237,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 		[previewView setImage:flameImage];
 		[previewView setToolTip:@"Preview: This is the image you have just rendered. You can save a copy by dragging the image to the finder/desktop."];
-		[previewWindow center];
+
 		[previewWindow makeKeyAndOrderFront:self];
 		
 		[flameImage release];
