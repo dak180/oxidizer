@@ -43,7 +43,12 @@
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = Fan2Variation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {"" = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
         {
             ACTIONS = {
                 changeColourMap = id; 

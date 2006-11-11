@@ -343,5 +343,36 @@
     return image;
 }
 
+- (void)setHeight:(double)newHeight {
+
+	[self willAccessValueForKey: @"zoom_lock"];
+    bool lock = [[self primitiveValueForKey: @"zoom_lock"] boolValue] ;
+    [self didAccessValueForKey: @"zoom_lock"];
+	
+	
+	if (lock) {
+		
+		[self willAccessValueForKey: @"height"];
+		double oldHeight = [[self primitiveValueForKey: @"height"] doubleValue];
+		[self didAccessValueForKey: @"height"];
+	
+		double scale = newHeight/oldHeight;
+
+		[self willAccessValueForKey: @"scale"];
+		double zoom = [[self primitiveValueForKey: @"scale"] doubleValue];
+		[self didAccessValueForKey: @"scale"];
+	
+		[self willChangeValueForKey: @"scale"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:(zoom * scale)] forKey: @"scale"];
+		[self didChangeValueForKey: @"scale"];
+	
+	}
+
+	[self willChangeValueForKey: @"height"];
+	[self setPrimitiveValue:[NSNumber numberWithDouble:newHeight] forKey: @"height"];
+	[self didChangeValueForKey: @"height"];
+	
+}	
+	
 
 @end
