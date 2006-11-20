@@ -800,8 +800,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		genomeArray = [moc executeFetchRequest:fetch error:nil];
 	
-		lastTime = [[[genomeArray objectAtIndex:0] valueForKey:@"time"] intValue];
-		lastTime += 50;
+		if(genomeArray != nil && [genomeArray count] > 0) {
+
+			lastTime = [[[genomeArray objectAtIndex:0] valueForKey:@"time"] intValue];
+			lastTime += 50;
+			
+		} else {
+			
+			lastTime = 0;
+		}
 
 		[genomeArray release];
 		

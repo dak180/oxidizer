@@ -21,8 +21,6 @@
                 genome1 = NSArrayController; 
                 genome2 = NSArrayController; 
                 genomeResult = NSArrayController; 
-                genomeTable1 = NSTableView; 
-                genomeTable2 = NSTableView; 
                 palette = PaletteController; 
             }; 
             SUPERCLASS = NSObject; 
@@ -32,6 +30,12 @@
             LANGUAGE = ObjC; 
             OUTLETS = {tableView = NSTableView; }; 
             SUPERCLASS = NSArrayController; 
+        }, 
+        {
+            CLASS = DnDButton; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {genePoolController = GenePoolController; }; 
+            SUPERCLASS = NSButton; 
         }, 
         {CLASS = DnDImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
         {CLASS = DragDropAndSaveImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
@@ -106,6 +110,40 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
+        {
+            ACTIONS = {
+                breedPool = id; 
+                fillPool = id; 
+                moveSelectedToEditor = id; 
+                showGenePoolWindow = id; 
+                toggleGenome = id; 
+            }; 
+            CLASS = GenePoolController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                ffm = FractalFlameModel; 
+                geneButton0 = NSButton; 
+                geneButton1 = NSButton; 
+                geneButton10 = NSButton; 
+                geneButton11 = NSButton; 
+                geneButton12 = NSButton; 
+                geneButton13 = NSButton; 
+                geneButton14 = NSButton; 
+                geneButton15 = NSButton; 
+                geneButton2 = NSButton; 
+                geneButton3 = NSButton; 
+                geneButton4 = NSButton; 
+                geneButton5 = NSButton; 
+                geneButton6 = NSButton; 
+                geneButton7 = NSButton; 
+                geneButton8 = NSButton; 
+                geneButton9 = NSButton; 
+                genePoolWindow = NSWindow; 
+                model = GenePoolModel; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = GenePoolModel; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = Genome; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {CLASS = MyGenome; LANGUAGE = ObjC; SUPERCLASS = Genome; }, 
         {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
@@ -122,10 +160,16 @@
                 saveAsFlam3 = id; 
                 saveFlam3 = id; 
                 showBreedingWindow = id; 
+                showGenePoolWindow = id; 
             }; 
             CLASS = OxidizerDelegate; 
             LANGUAGE = ObjC; 
-            OUTLETS = {bc = BreedingController; ffm = FractalFlameModel; oxidizerWindow = NSWindow; }; 
+            OUTLETS = {
+                bc = BreedingController; 
+                ffm = FractalFlameModel; 
+                gpc = GenePoolController; 
+                oxidizerWindow = NSWindow; 
+            }; 
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = PDJVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 

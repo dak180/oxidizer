@@ -3,12 +3,14 @@
 #import <Cocoa/Cocoa.h>
 #import "FractalFlameModel.h"
 #import "BreedingController.h"
+#import "GenePoolController.h"
 
 @interface OxidizerDelegate : NSObject {
 	
 	IBOutlet NSWindow *oxidizerWindow;
 	IBOutlet FractalFlameModel *ffm;
 	IBOutlet BreedingController *bc;
+	IBOutlet GenePoolController *gpc;
 		
 }
 
@@ -30,6 +32,7 @@
 - (IBAction)saveFlam3:(id)sender;
 - (IBAction)saveAsFlam3:(id)sender;
 - (IBAction)showBreedingWindow:(id)sender;
+- (IBAction)showGenePoolWindow:(id)sender;
 - (IBAction)newFlame:(id)sender;
 - (IBAction)renderStill:(id)sender;
 - (IBAction)renderMovie:(id)sender;

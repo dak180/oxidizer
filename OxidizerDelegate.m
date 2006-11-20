@@ -150,6 +150,11 @@
 	[bc showBreedingWindow:sender]; 
 }
 
+- (IBAction)showGenePoolWindow:(id)sender {
+	
+	[gpc showGenePoolWindow:sender]; 
+}
+
 - (IBAction)newFlame:(id)sender {
 	[ffm newFlame];
 }	

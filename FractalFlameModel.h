@@ -116,7 +116,7 @@
 
 - (NSMutableArray *)progressIndicators;
 - (void) renderStillInNewThread:(QuickTimeController *)qt;
-- (void)renderStillToWindowInNewThread;
+- (void )renderStillToWindowInNewThread;
 - (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) previewCurrentFlameInThread;
 - (void) AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;

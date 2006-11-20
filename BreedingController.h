@@ -28,8 +28,6 @@
     IBOutlet NSArrayController *genome1;
     IBOutlet NSArrayController *genome2;
     IBOutlet NSArrayController *genomeResult;
-    IBOutlet NSTableView *genomeTable1;
-    IBOutlet NSTableView *genomeTable2;
     IBOutlet NSWindow *breedingWindow;
 	
 	NSManagedObjectContext *moc1;
@@ -42,6 +40,12 @@
 	
 
 }
+
++ (flam3_genome *)alternateCGenome:(flam3_genome *)selp0 withCGenome:(flam3_genome *)selp1;
++ (flam3_genome *)interpolateCGenome:(flam3_genome *)selp0 withCGenome:(flam3_genome *)selp1;
++ (flam3_genome *)unionCGenome:(flam3_genome *)selp0 withCGenome:(flam3_genome *)selp1;
++ (flam3_genome *)mutateCGenome:(flam3_genome *)selp0;
++ (flam3_genome *)createRandomCGenome;
 
 - (BOOL) openFile:(NSManagedObjectContext *)moc;
 - (void) deleteOldGenomesInContext:(NSManagedObjectContext *)moc;

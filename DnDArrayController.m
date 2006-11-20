@@ -112,6 +112,10 @@ NSString *mocPasteboardType = @"GenomeMoc";
 
 }
 
++ (NSString *) dragType {
 
+	return mocPasteboardType;
+
+} 
 
 @end

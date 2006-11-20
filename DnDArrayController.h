@@ -21,8 +21,11 @@
 
 @interface DnDArrayController : NSArrayController
 {
-
+	
 IBOutlet NSTableView *tableView;
 
 }
+
++ (NSString *) dragType;
+
 @end
