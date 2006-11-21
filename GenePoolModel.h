@@ -31,7 +31,7 @@
 
 - (void)toggleGenome:(int)index;
 - (void) setGenomeCount:(unsigned int)count;
-- (void) breed;
+- (bool) breed;
 
 @end
 

@@ -31,7 +31,11 @@
 
 - (IBAction)breedPool:(id)sender {
 	
-	[model breed];
+	if([model breed] == NO) {
+		
+		return;
+		
+	}
 	
 	int i;
 	

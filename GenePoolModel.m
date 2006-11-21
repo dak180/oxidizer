@@ -93,7 +93,7 @@
 	
 } 
 
-- (void) breed {
+- (bool) breed {
 	
 	unsigned int i;
 	unsigned int breedingCount = 0;
@@ -107,7 +107,7 @@
 	}
 	
 	if(breedingCount == 0) {
-		return;
+		return NO;
 	}
 	
 	flam3_genome **newGenomes = (flam3_genome **)malloc(sizeof(flam3_genome *) * genomeCount);
@@ -186,6 +186,8 @@
 	}	
 	
 	free(newGenomes);
+	
+	return YES;
 	
 }
 
