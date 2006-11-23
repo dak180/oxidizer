@@ -108,4 +108,16 @@
 	
 }
 
+
+- (void) setFractalFlameModel:(FractalFlameModel *)ffmodel {
+	
+	if(ffmodel != nil) {
+		[ffmodel retain];
+	}
+	[ffm release];
+	
+	ffm = ffmodel;
+	
+}
+
 @end

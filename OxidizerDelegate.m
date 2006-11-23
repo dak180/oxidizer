@@ -5,6 +5,7 @@
 - (void) awakeFromNib {
 	
 	[self setupToolbar];
+
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier  willBeInsertedIntoToolbar:(BOOL)flag {
@@ -152,7 +153,14 @@
 
 - (IBAction)showGenePoolWindow:(id)sender {
 	
-	[gpc showGenePoolWindow:sender]; 
+
+	if(gpnc == nil) {
+		gpnc = [[GenePoolNibController alloc] init];
+		[NSBundle loadNibNamed:@"GenePool" owner:gpnc];
+		[gpnc setFractalFlameModel:ffm];
+	}
+		
+	[gpnc showGenePoolWindow:sender]; 
 }
 
 - (IBAction)newFlame:(id)sender {

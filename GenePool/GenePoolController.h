@@ -27,7 +27,6 @@
     IBOutlet NSButton *geneButton15;
 	
 	IBOutlet GenePoolModel *model;
-	IBOutlet FractalFlameModel *ffm;
 
 	IBOutlet NSWindow *genePoolWindow;
 	
@@ -35,6 +34,7 @@
 @private
 
 	NSArray *genePoolButtons;
+	FractalFlameModel *ffm;
 }
 
 
@@ -46,5 +46,6 @@
 - (void) setButtonImage:(NSImage *)image forIndex:(int)index;
 - (void) setButton:(NSButton *)button withCGenome:(flam3_genome *)genome;
 - (void) showGenePoolWindow:(id)sender;
+- (void) setFractalFlameModel:(FractalFlameModel *)ffm;
 
 @end

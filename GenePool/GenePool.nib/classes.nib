@@ -1,0 +1,52 @@
+{
+    IBClasses = (
+        {
+            CLASS = DnDButton; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {genePoolController = GenePoolController; }; 
+            SUPERCLASS = NSButton; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                breedPool = id; 
+                fillPool = id; 
+                moveSelectedToEditor = id; 
+                showGenePoolWindow = id; 
+                toggleGenome = id; 
+            }; 
+            CLASS = GenePoolController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                geneButton0 = NSButton; 
+                geneButton1 = NSButton; 
+                geneButton10 = NSButton; 
+                geneButton11 = NSButton; 
+                geneButton12 = NSButton; 
+                geneButton13 = NSButton; 
+                geneButton14 = NSButton; 
+                geneButton15 = NSButton; 
+                geneButton2 = NSButton; 
+                geneButton3 = NSButton; 
+                geneButton4 = NSButton; 
+                geneButton5 = NSButton; 
+                geneButton6 = NSButton; 
+                geneButton7 = NSButton; 
+                geneButton8 = NSButton; 
+                geneButton9 = NSButton; 
+                genePoolWindow = NSWindow; 
+                model = GenePoolModel; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = GenePoolModel; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {showGenePoolWindow = id; }; 
+            CLASS = GenePoolNibController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {genePoolController = GenePoolController; }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

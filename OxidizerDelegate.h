@@ -4,14 +4,21 @@
 #import "FractalFlameModel.h"
 #import "BreedingController.h"
 #import "GenePoolController.h"
+#import "GenePoolNibController.h"
 
 @interface OxidizerDelegate : NSObject {
 	
 	IBOutlet NSWindow *oxidizerWindow;
 	IBOutlet FractalFlameModel *ffm;
 	IBOutlet BreedingController *bc;
-	IBOutlet GenePoolController *gpc;
-		
+	
+	
+@private
+	
+	GenePoolController *gpc;
+	GenePoolNibController *gpnc;
+
+	
 }
 
 
