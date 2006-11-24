@@ -25,7 +25,7 @@
 	
 	[model toggleGenome:index];
 	
-	NSLog(@"pressed button %d, %d", index, [button state]);
+//	NSLog(@"pressed button %d, %d", index, [button state]);
 }
 
 

@@ -845,6 +845,21 @@
 								cp_orig.xform[i].juliaScope_dist = mutation.xform[i].juliaScope_dist;
 								cp_orig.xform[i].juliaScope_rN = mutation.xform[i].juliaScope_rN;
 								cp_orig.xform[i].juliaScope_cn = mutation.xform[i].juliaScope_cn;
+							}  else if (j==36) {
+								/* Radial Blur */
+								cp_orig.xform[i].radialBlur_angle = mutation.xform[i].radialBlur_angle;
+								
+							} else if (j==37) {
+								/* Pie */
+								cp_orig.xform[i].pie_slices = mutation.xform[i].pie_slices;
+								cp_orig.xform[i].pie_rotation = mutation.xform[i].pie_rotation;
+								cp_orig.xform[i].pie_thickness = mutation.xform[i].pie_thickness;
+							} else if (j==38) {
+								/* Ngon */
+								cp_orig.xform[i].ngon_sides = mutation.xform[i].ngon_sides;
+								cp_orig.xform[i].ngon_power = mutation.xform[i].ngon_power;
+								cp_orig.xform[i].ngon_corners = mutation.xform[i].ngon_corners;
+								cp_orig.xform[i].ngon_circle = mutation.xform[i].ngon_circle;
 							}
 							
 							done = 1;
