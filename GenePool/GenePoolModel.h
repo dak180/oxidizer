@@ -11,6 +11,10 @@
 
 
 @interface GenePoolModel : NSObject {
+
+	IBOutlet NSWindow *genePoolProgressWindow;
+	IBOutlet NSProgressIndicator *genePoolProgress;
+	IBOutlet NSTextField *genePoolProgressText;
 	
 @private
 	
@@ -32,6 +36,7 @@
 - (void)toggleGenome:(int)index;
 - (void) setGenomeCount:(unsigned int)count;
 - (bool) breed;
+- (bool) fill;
 
 @end
 

@@ -527,8 +527,8 @@
 		flam3_copy(parents, selp0);
 		flam3_copy(parents+1, selp1);	
 		
-		sprintf(ministr," %g",t);
-		strcat(action,ministr);
+//		sprintf(ministr," %g",t);
+//		strcat(action,ministr);
 		
 		parents[0].time = 0.0;
 		parents[1].time = 1.0;
@@ -536,8 +536,8 @@
 		
 		/* except pick a simple palette */
 		rb = flam3_random_bit();
-		sprintf(ministr," %d",rb);
-		strcat(action,ministr);
+//		sprintf(ministr," %d",rb);
+//		strcat(action,ministr);
 		cp_orig->palette_index = rb ? parents->palette_index : parents[1].palette_index;
 		
 		free(parents[0].xform);

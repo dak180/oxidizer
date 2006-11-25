@@ -93,6 +93,45 @@
 	
 } 
 
+- (bool) fill {
+
+	int i, fillCount;
+
+	fillCount = 0;
+	
+	for(i=0; i<genomeCount; i++) {
+		if (genomeCanBreed[i] == NO) {
+			fillCount++;
+		}
+	}
+	
+	if(fillCount == 0) {		
+		return NO;
+	}
+	
+	[genePoolProgress setMaxValue:fillCount-1];
+	[genePoolProgress setDoubleValue:0.0];
+	[genePoolProgress setUsesThreadedAnimation:YES];
+	[genePoolProgressWindow center];
+	[genePoolProgressWindow makeKeyAndOrderFront:self];
+	
+	
+	for(i=0; i<genomeCount; i++) {
+		if (genomeCanBreed[i] == NO) {
+			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Creating new Genome %d", i]];
+			[genePoolProgressText displayIfNeeded];
+			genomes[i] = [BreedingController createRandomCGenome];
+			[genePoolProgress incrementBy:1.0];
+			[genePoolProgress displayIfNeeded];
+
+		}
+	}
+	
+	[genePoolProgressWindow setIsVisible:NO];
+	return YES;
+	
+}
+
 - (bool) breed {
 	
 	unsigned int i;
@@ -109,6 +148,14 @@
 	if(breedingCount == 0) {
 		return NO;
 	}
+	
+	
+	[genePoolProgress setMaxValue:genomeCount-1];
+	[genePoolProgress setDoubleValue:0.0];
+	[genePoolProgress setUsesThreadedAnimation:YES];
+	[genePoolProgressWindow center];
+	[genePoolProgressWindow makeKeyAndOrderFront:self];
+	
 	
 	flam3_genome **newGenomes = (flam3_genome **)malloc(sizeof(flam3_genome *) * genomeCount);
 	for(i=0; i<genomeCount; i++) {
@@ -139,9 +186,13 @@
 	
 	switch (breedingCount) {
 		case 1:
+			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Mutating Genome %d", breedingOrder[0]]];
+			[genePoolProgressText displayIfNeeded];
 			while(newGenomeCount < genomeCount) {
 				newGenomes[newGenomeCount] = [BreedingController mutateCGenome:genomes[breedingOrder[0]]]; 
 				newGenomeCount++;
+				[genePoolProgress setDoubleValue:newGenomeCount];
+				[genePoolProgress displayIfNeeded];
 			}
 			break;
 		default:		
@@ -158,6 +209,8 @@
 				
 				for(i=0; i+1<breedingCount && newGenomeCount < genomeCount; i+=2) {
 					index = abs(random() % breedingCount);
+					[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Breeding Genome %d with Genome %d", breedingOrder[order[i]], breedingOrder[order[i+1]]]];
+					[genePoolProgressText displayIfNeeded];
 					switch(index) {
 						case 1:
 							/* interpolate */
@@ -172,6 +225,9 @@
 							
 					}
 					newGenomeCount++;
+					[genePoolProgress setDoubleValue:newGenomeCount];
+					[genePoolProgress displayIfNeeded];
+
 				}	
 				
 				
@@ -186,6 +242,9 @@
 	}	
 	
 	free(newGenomes);
+
+	[genePoolProgressWindow setIsVisible:NO];
+
 	
 	return YES;
 	

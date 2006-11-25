@@ -54,11 +54,15 @@
 	
 	int i;
 	
-	for(i=0; i<[genePoolButtons count]; i++) {
-		if ([model canGenomeBreed:i] == NO) {
-			[self setButtonImage:[model createRandomGenome:i] forIndex:i];
+	if([model fill]) {
+		
+		for(i=0; i<[genePoolButtons count]; i++) {
+			if ([model canGenomeBreed:i] == NO) {
+				[self setButtonImage:[model makeImageForGenome:i] forIndex:i];
+			}
 		}
-	}
+		
+	}	
 	
 }
 

@@ -368,11 +368,90 @@
 	
 	}
 
+	[self willAccessValueForKey: @"aspect_lock"];
+    lock = [[self primitiveValueForKey: @"aspect_lock"] boolValue] ;
+    [self didAccessValueForKey: @"aspect_lock"];
+	
+	
+	if (lock) {
+		
+		[self willAccessValueForKey: @"height"];
+		double oldHeight = [[self primitiveValueForKey: @"height"] doubleValue];
+		[self didAccessValueForKey: @"height"];
+
+		[self willAccessValueForKey: @"width"];
+		double oldWidth = [[self primitiveValueForKey: @"width"] doubleValue];
+		[self didAccessValueForKey: @"width"];
+		
+		double scale = newHeight/oldHeight;
+			
+		[self willChangeValueForKey: @"width"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:(oldWidth * scale)] forKey: @"width"];
+		[self didChangeValueForKey: @"width"];
+		
+	}	
+	
 	[self willChangeValueForKey: @"height"];
 	[self setPrimitiveValue:[NSNumber numberWithDouble:newHeight] forKey: @"height"];
 	[self didChangeValueForKey: @"height"];
 	
 }	
 	
+- (void)setWidth:(double)newWidth {
+	
 
+	[self willAccessValueForKey: @"aspect_lock"];
+    bool lock = [[self primitiveValueForKey: @"aspect_lock"] boolValue] ;
+    [self didAccessValueForKey: @"aspect_lock"];
+	
+	
+	if (lock) {
+		
+		[self willAccessValueForKey: @"width"];
+		double oldWidth = [[self primitiveValueForKey: @"width"] doubleValue];
+		[self didAccessValueForKey: @"width"];
+		
+		double scale = newWidth/oldWidth;
+
+		[self willAccessValueForKey: @"height"];
+		double oldHeight = [[self primitiveValueForKey: @"height"] doubleValue];
+		[self didAccessValueForKey: @"height"];
+		
+
+		/* we need to set the value for the height but can't call setHeight without
+			changing up the aspect again leading to a change of width so
+			copy some of setHeight's code
+		*/
+		
+		[self willAccessValueForKey: @"zoom_lock"];
+		bool lock = [[self primitiveValueForKey: @"zoom_lock"] boolValue] ;
+		[self didAccessValueForKey: @"zoom_lock"];
+		
+		
+		if (lock) {
+						
+			
+			[self willAccessValueForKey: @"scale"];
+			double zoom = [[self primitiveValueForKey: @"scale"] doubleValue];
+			[self didAccessValueForKey: @"scale"];
+			
+			[self willChangeValueForKey: @"scale"];
+			[self setPrimitiveValue:[NSNumber numberWithDouble:(zoom * scale)] forKey: @"scale"];
+			[self didChangeValueForKey: @"scale"];
+			
+		}
+		
+		[self willChangeValueForKey: @"height"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:oldHeight*scale] forKey: @"height"];
+		[self didChangeValueForKey: @"height"];
+		
+		
+	}	
+	
+	
+	[self willChangeValueForKey: @"width"];
+	[self setPrimitiveValue:[NSNumber numberWithDouble:newWidth] forKey: @"width"];
+	[self didChangeValueForKey: @"width"];
+	
+}	
 @end

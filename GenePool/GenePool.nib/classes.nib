@@ -39,7 +39,16 @@
             }; 
             SUPERCLASS = NSObject; 
         }, 
-        {CLASS = GenePoolModel; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            CLASS = GenePoolModel; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                genePoolProgress = NSProgressIndicator; 
+                genePoolProgressText = NSTextField; 
+                genePoolProgressWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
         {
             ACTIONS = {showGenePoolWindow = id; }; 
             CLASS = GenePoolNibController; 
