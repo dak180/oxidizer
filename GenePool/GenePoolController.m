@@ -82,6 +82,19 @@
 }
 
 
+- (IBAction)toggleButtons:(id)sender  {
+	
+	int i;
+	
+	for(i=0; i<[genePoolButtons count]; i++) {
+		[model toggleGenome:i];
+		[[genePoolButtons objectAtIndex:i] setNextState];
+	}
+	
+	//	NSLog(@"pressed button %d, %d", index, [button state]);
+}
+
+
 -(void) setButtonImage:(NSImage *)image forIndex:(int)index {
 	
 	NSButton *button = [genePoolButtons objectAtIndex:index];

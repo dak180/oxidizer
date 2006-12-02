@@ -42,6 +42,12 @@
 		[item setImage:[NSImage imageNamed:@"oxidizer_dna"]];
 		[item setTarget:self];
 		[item setAction:@selector(showBreedingWindow:)];
+    } else if ( [itemIdentifier isEqualToString:@"gene_pool"] ) {
+		[item setLabel:@"Gene Pool"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"genepool"]];
+		[item setTarget:self];
+		[item setAction:@selector(showGenePoolWindow:)];
 	}
 	
 	return [item autorelease];
@@ -57,6 +63,7 @@
 									 @"render_movie", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"breed_flam3", 
+									 @"gene_pool", 
 									 nil
 		];
 	
@@ -71,6 +78,7 @@
 									 @"render_movie", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"breed_flam3", 
+									 @"gene_pool", 
 									 nil
 		];
 	

@@ -42,6 +42,7 @@
 - (IBAction)fillPool:(id)sender;
 - (IBAction)toggleGenome:(id)sender;
 - (IBAction)moveSelectedToEditor:(id)sender;
+- (IBAction)toggleButtons:(id)sender;
 
 - (void) setButtonImage:(NSImage *)image forIndex:(int)index;
 - (void) setButton:(NSButton *)button withCGenome:(flam3_genome *)genome;
