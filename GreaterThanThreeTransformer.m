@@ -29,7 +29,7 @@
 
 - (id)transformedValue:(id)value {
 
-	if ([value selectionIndex] > 0 && [[value arrangedObjects] count] > 3 && [value selectionIndex] != [[value arrangedObjects] count] - 1) {
+	if ([value selectionIndex] > 0 && [[value arrangedObjects] count] > 3 && [value selectionIndex] < [[value arrangedObjects] count] - 2) {
 
 
 		return [NSNumber numberWithBool:YES];

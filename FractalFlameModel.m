@@ -1597,7 +1597,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	fclose(flam3File);
 
-	NSBeep();
+//	NSBeep();
 
 
 	return;

@@ -54,8 +54,11 @@
 
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->time]  forKey:@"time"];
 	[genomeEntity setValue:[NSNumber numberWithInt:genome->palette_index]  forKey:@"palette"];
+	[genomeEntity setValue:[NSNumber numberWithBool:FALSE]  forKey:@"aspect_lock"];	
 	[genomeEntity setValue:[NSNumber numberWithInt:genome->height]  forKey:@"height"];
 	[genomeEntity setValue:[NSNumber numberWithInt:genome->width]  forKey:@"width"];
+	[genomeEntity setValue:[NSNumber numberWithDouble:genome->width/(double)genome->height]  forKey:@"aspect_lock_aspect"];
+	[genomeEntity setValue:[NSNumber numberWithBool:TRUE]  forKey:@"aspect_lock"];	
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->center[0]]  forKey:@"centre_x"];
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->center[1]]  forKey:@"centre_y"];
 	[genomeEntity setValue:[NSNumber numberWithDouble:genome->zoom]  forKey:@"zoom"];
@@ -767,12 +770,26 @@
 	xform->c[2][0] = [[xformEntity valueForKey:@"coeff_2_0"] doubleValue];
 	xform->c[2][1] = [[xformEntity valueForKey:@"coeff_2_1"] doubleValue];
 	
-	xform->post[0][0] = [[xformEntity valueForKey:@"post_0_0"] doubleValue];
-	xform->post[0][1] = [[xformEntity valueForKey:@"post_0_1"] doubleValue];
-	xform->post[1][0] = [[xformEntity valueForKey:@"post_1_0"] doubleValue];
-	xform->post[1][1] = [[xformEntity valueForKey:@"post_1_1"] doubleValue];
-	xform->post[2][0] = [[xformEntity valueForKey:@"post_2_0"] doubleValue];
-	xform->post[2][1] = [[xformEntity valueForKey:@"post_2_1"] doubleValue];
+	if([[xformEntity valueForKey:@"post_flag"] boolValue] == YES) {
+
+		xform->post[0][0] = [[xformEntity valueForKey:@"post_0_0"] doubleValue];
+		xform->post[0][1] = [[xformEntity valueForKey:@"post_0_1"] doubleValue];
+		xform->post[1][0] = [[xformEntity valueForKey:@"post_1_0"] doubleValue];
+		xform->post[1][1] = [[xformEntity valueForKey:@"post_1_1"] doubleValue];
+		xform->post[2][0] = [[xformEntity valueForKey:@"post_2_0"] doubleValue];
+		xform->post[2][1] = [[xformEntity valueForKey:@"post_2_1"] doubleValue];
+		
+	} else {
+		
+		/* set post to id matrix */
+		xform->post[0][0] = 1.0;
+		xform->post[0][1] = 0.0;
+		xform->post[1][0] = 0.0;
+		xform->post[1][1] = 1.0;
+		xform->post[2][0] = 0.0;
+		xform->post[2][1] = 0.0;
+	}
+	
 
 	xform->color[0] = [[xformEntity valueForKey:@"colour_0"] doubleValue];
 	xform->color[1] = [[xformEntity valueForKey:@"colour_1"] doubleValue];

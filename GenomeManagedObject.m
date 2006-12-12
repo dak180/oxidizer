@@ -374,20 +374,26 @@
 	
 	
 	if (lock) {
-		
-		[self willAccessValueForKey: @"height"];
-		double oldHeight = [[self primitiveValueForKey: @"height"] doubleValue];
-		[self didAccessValueForKey: @"height"];
 
+		[self willAccessValueForKey: @"aspect_lock_aspect"];
+		double aspect = [[self primitiveValueForKey: @"aspect_lock_aspect"] doubleValue] ;
+		[self didAccessValueForKey: @"aspect_lock_aspect"];
+			
+		[self willChangeValueForKey: @"width"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:(newHeight * aspect)] forKey: @"width"];
+		[self didChangeValueForKey: @"width"];
+		
+	} else {
+		
+		/* update aspect */
 		[self willAccessValueForKey: @"width"];
 		double oldWidth = [[self primitiveValueForKey: @"width"] doubleValue];
 		[self didAccessValueForKey: @"width"];
 		
-		double scale = newHeight/oldHeight;
-			
-		[self willChangeValueForKey: @"width"];
-		[self setPrimitiveValue:[NSNumber numberWithDouble:(oldWidth * scale)] forKey: @"width"];
-		[self didChangeValueForKey: @"width"];
+		
+		[self willChangeValueForKey: @"aspect_lock_aspect"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:(oldWidth / newHeight)] forKey:@"aspect_lock_aspect"] ;
+		[self didChangeValueForKey: @"aspect_lock_aspect"];
 		
 	}	
 	
@@ -403,19 +409,16 @@
 	[self willAccessValueForKey: @"aspect_lock"];
     bool lock = [[self primitiveValueForKey: @"aspect_lock"] boolValue] ;
     [self didAccessValueForKey: @"aspect_lock"];
-	
-	
+		
 	if (lock) {
 		
-		[self willAccessValueForKey: @"width"];
-		double oldWidth = [[self primitiveValueForKey: @"width"] doubleValue];
-		[self didAccessValueForKey: @"width"];
-		
-		double scale = newWidth/oldWidth;
 
-		[self willAccessValueForKey: @"height"];
-		double oldHeight = [[self primitiveValueForKey: @"height"] doubleValue];
-		[self didAccessValueForKey: @"height"];
+		[self willAccessValueForKey: @"aspect_lock_aspect"];
+		double aspect = [[self primitiveValueForKey: @"aspect_lock_aspect"] doubleValue] ;
+		[self didAccessValueForKey: @"aspect_lock_aspect"];
+		
+		
+		double newHeight = newWidth / aspect;
 		
 
 		/* we need to set the value for the height but can't call setHeight without
@@ -430,6 +433,11 @@
 		
 		if (lock) {
 						
+			[self willAccessValueForKey: @"height"];
+			double oldHeight = [[self primitiveValueForKey: @"height"] doubleValue];
+			[self didAccessValueForKey: @"height"];
+						
+			double scale = newHeight/oldHeight;
 			
 			[self willAccessValueForKey: @"scale"];
 			double zoom = [[self primitiveValueForKey: @"scale"] doubleValue];
@@ -442,9 +450,21 @@
 		}
 		
 		[self willChangeValueForKey: @"height"];
-		[self setPrimitiveValue:[NSNumber numberWithDouble:oldHeight*scale] forKey: @"height"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:newHeight] forKey: @"height"];
 		[self didChangeValueForKey: @"height"];
 		
+		
+	}  else {
+		
+		/* update aspect */
+		[self willAccessValueForKey: @"height"];
+		double oldHeight = [[self primitiveValueForKey: @"height"] doubleValue];
+		[self didAccessValueForKey: @"height"];
+		
+		
+		[self willChangeValueForKey: @"aspect_lock_aspect"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:(newWidth/oldHeight)] forKey:@"aspect_lock_aspect"] ;
+		[self didChangeValueForKey: @"aspect_lock_aspect"];
 		
 	}	
 	
