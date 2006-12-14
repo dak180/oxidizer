@@ -112,6 +112,35 @@ NSString *mocPasteboardType = @"GenomeMoc";
 
 }
 
+- (NSArray *)arrangeObjects:(NSArray *)objects {
+	
+	NSManagedObject *nmo;
+	
+	NSArray *arranged = [super arrangeObjects:objects];
+	NSEnumerator *enumerator = [arranged objectEnumerator];
+	int i = 0;
+	int end = [arranged count]; 
+	end -= 2;
+	
+	while(nmo = [enumerator nextObject]) {
+		
+		if(i = 0 || i > end) {
+			[nmo setValue:[NSNumber numberWithInt:0] forKey:@"interpolation"];
+		}
+		
+	}
+	
+	return arranged;
+	
+}
+
+- (void)remove:(id)sender {
+	
+	[super remove:sender];
+	[self rearrangeObjects];
+	
+}
+
 + (NSString *) dragType {
 
 	return mocPasteboardType;

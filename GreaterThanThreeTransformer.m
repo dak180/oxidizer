@@ -35,14 +35,6 @@
 		return [NSNumber numberWithBool:YES];
 	} 
 	
-
-	NSArray *selected  = [value selectedObjects]; 
-	
-	if(value != nil && [selected count] > 0) {	
-//		[[[value selectedObjects] objectAtIndex:0] willChangeValueForKey:@"interpolation"];
-		[[selected objectAtIndex:0] setPrimitiveValue:[NSNumber numberWithInt:0] forKey:@"interpolation"];
-	}
-		
 	return[NSNumber numberWithBool:NO];
 
 

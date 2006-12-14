@@ -23,6 +23,3 @@
 
 @interface  GreaterThanThreeTransformer: NSValueTransformer {}
 @end
-
-@interface  ForceLinearFirstAndLastTransformer: NSValueTransformer {}
-@end

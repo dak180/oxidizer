@@ -48,7 +48,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[NSValueTransformer setValueTransformer:gttt
                                 forName:@"GreaterThanThree"];
 
-
+		
 		 unsigned int cpuCount ;
 		  size_t len = sizeof(cpuCount);
 		  static int mib[2] = { CTL_HW, HW_NCPU };
