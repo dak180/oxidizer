@@ -124,8 +124,9 @@ NSString *mocPasteboardType = @"GenomeMoc";
 	
 	while(nmo = [enumerator nextObject]) {
 		
-		if(i = 0 || i > end) {
+		if(i == 0 || i > end) {
 			[nmo setValue:[NSNumber numberWithInt:0] forKey:@"interpolation"];
+			i++;
 		}
 		
 	}
