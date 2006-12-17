@@ -89,7 +89,8 @@
 	double progress;
 	int flameCount;
 	int flameProgress;
-
+	NSSavePanel *savePanel;
+	
 }
 
 - (IBAction)openFile:(id)sender;

@@ -141,6 +141,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	[previewWindow center];
 	[previewWindow setLevel:NSFloatingWindowLevel];
+	savePanel = [NSSavePanel savePanel];
+	[savePanel retain];
 }
 
 
@@ -1499,9 +1501,11 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	int runResult;
 	
-	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	
 	[savePanel setRequiredFileType:@"flam3"];
-	[savePanel setAccessoryView:saveThumbnailsView];
+	if([savePanel accessoryView] != saveThumbnailsView) {
+		[savePanel setAccessoryView:saveThumbnailsView];		
+	}
 	
 	if(_currentFilename != nil && ![_currentFilename isEqualToString:@""]) {
 		runResult = [savePanel runModalForDirectory:nil file:[[_currentFilename pathComponents] objectAtIndex:[[_currentFilename pathComponents] count]-1]];	
@@ -1509,7 +1513,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		runResult = [savePanel runModalForDirectory:nil file:nil];
 	}
 	
-	
+
 	if(runResult == NSOKButton && [savePanel filename] != nil) {
 		filename = [savePanel filename];
 	} else {
@@ -1538,7 +1542,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	if(_currentFilename != nil && ![_currentFilename isEqualToString:@""]) {
 		filename = _currentFilename;
 	} else {		
-		NSSavePanel *savePanel = [NSSavePanel savePanel];
+//		NSSavePanel *savePanel = [NSSavePanel savePanel];
 		[savePanel setRequiredFileType:@"flam3"];
 		[savePanel setAccessoryView:saveThumbnailsView];
 		
