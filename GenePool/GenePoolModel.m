@@ -139,7 +139,7 @@
 
 	for(i=0; i<genomeCount; i++) {
 		
-		if(genomeCanBreed[i] == YES) {
+		if(genomeCanBreed[i] == YES && genomes[i] != NULL) {
 			breedingCount++;	
 		}
 		
@@ -266,6 +266,10 @@
 
 - (flam3_genome *) getCGenomeForIndex:(int)index {
 	
+	
+	if (genomes[index] == NULL) {
+		return NULL;
+	}
 	/* return a copy */
 	flam3_genome *copy = (flam3_genome *)malloc(sizeof(flam3_genome));
 	memset(copy, 0, sizeof(flam3_genome));

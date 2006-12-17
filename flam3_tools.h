@@ -29,3 +29,12 @@ void change_colors(flam3_genome *g, int change_palette);
 
 void truncate_variations(flam3_genome *g, int max_vars, char *action);
 void test_cp(flam3_genome *cp);
+
+
+void tools_perspective_precalc(flam3_xform *xf);
+void tools_juliaN_precalc(flam3_xform *xf);
+void tools_juliaScope_precalc(flam3_xform *xf);
+void tools_radial_blur_precalc(flam3_xform *xf);
+void tools_waves_precalc(flam3_xform *xf);
+
+#define EPS (1e-10)

@@ -353,5 +353,37 @@ void truncate_variations(flam3_genome *g, int max_vars, char *action) {
    }
 }
 
+void tools_perspective_precalc(flam3_xform *xf) {
+	double ang = xf->perspective_angle * M_PI / 2.0;
+	xf->persp_vsin = sin(ang);
+	xf->persp_vfcos = xf->perspective_dist * cos(ang);
+}
+
+void tools_juliaN_precalc(flam3_xform *xf) {
+	xf->juliaN_rN = fabs(xf->juliaN_power);
+	xf->juliaN_cn = xf->juliaN_dist / (double)xf->juliaN_power / 2.0;
+}
+
+void tools_juliaScope_precalc(flam3_xform *xf) {
+	xf->juliaScope_rN = fabs(xf->juliaScope_power);
+	xf->juliaScope_cn = xf->juliaScope_dist / (double)xf->juliaScope_power / 2.0;
+}
+
+void tools_radial_blur_precalc(flam3_xform *xf) {
+	int j;
+	xf->radialBlur_spinvar = sin(xf->radialBlur_angle * M_PI / 2);
+	xf->radialBlur_zoomvar = cos(xf->radialBlur_angle * M_PI / 2);
+	xf->radialBlur_randN = 0;
+	for (j = 0; j < 4; j++)
+		xf->radialBlur_rand[j] = flam3_random01();
+}
+
+void tools_waves_precalc(flam3_xform *xf) {
+	double dx = xf->c[2][0];
+	double dy = xf->c[2][1];
+	
+	xf->waves_dx2 = 1.0/(dx * dx + EPS);
+	xf->waves_dy2 = 1.0/(dy * dy + EPS);
+}
 
 

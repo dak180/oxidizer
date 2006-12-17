@@ -60,7 +60,8 @@
 + (void )poulateVariations:(flam3_xform *)xform FromEntityArray:(NSArray *)xformEntity;
 + (void )populateCMap:(flam3_palette )cmap FromEntityArray:(NSArray *)cmaps;
 + (xmlDocPtr) populateCEditDocFromEntity:(NSManagedObject *)genome;
-
++ (void) compareGenomesEntity:(NSManagedObject *)genomeEntity toCGenome:(flam3_genome *)genome fromContext:(NSManagedObjectContext *)moc;
++ (void) compareXForm:(flam3_xform *)of toXForm:(flam3_xform *)ff;
 
 - (void)setCGenome:(flam3_genome *)cps;
 - (flam3_genome *)getCGenome;

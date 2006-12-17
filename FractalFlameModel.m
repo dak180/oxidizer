@@ -572,7 +572,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	}
 	
 //	flam3_print(stderr, *genomes, NULL);
-
 	return YES; 
 
 }
@@ -1124,6 +1123,7 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 //	[flameRep release];
 	free(flame);		
 	
+	
 	[pool release];	
 
 }
@@ -1645,6 +1645,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	return boolResult;
 	
 }
+
 
 - (void)hideProgressWindow {
 	

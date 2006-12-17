@@ -73,7 +73,7 @@
 	NSManagedObjectContext *moc = [ffm getNSManagedObjectContext];
 	
 	for(i=0; i<[genePoolButtons count]; i++) {
-		if ([[genePoolButtons objectAtIndex:i] state] == NSOffState) {
+		if ([[genePoolButtons objectAtIndex:i] state] == NSOffState && [model getCGenomeForIndex:i] != NULL) {
 			[ffm generateAllThumbnailsForGenome:[model getCGenomeForIndex:i] withCount:1 inContext:moc];
 		}
 	}

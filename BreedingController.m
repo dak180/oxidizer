@@ -1202,6 +1202,10 @@
 			  fraction_white > white_limit) &&
 			 count < ntries);
 	
+	while(cp_save->symmetry == 0) {	
+		flam3_add_symmetry(cp_save, 0);
+	}
+	
 	return cp_save;
 }
 

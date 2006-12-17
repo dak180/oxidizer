@@ -206,20 +206,27 @@
 	
 	NSMutableString *name;
 	
-	int i, j;
+	int i, j, order;
 	flam3_xform *xform;
 
 	/* create a genome entity */
 
 	xforms = [[NSMutableSet alloc] initWithCapacity:genome->num_xforms];
 	
+	order = 1;
+	
 	for(i=0; i<genome->num_xforms; i++) {
-		xFormEntity = [NSEntityDescription insertNewObjectForEntityForName:@"XForm" inManagedObjectContext:moc];
-
+		
 		xform = genome->xform+i;
 
-		[xFormEntity setValue:[NSNumber numberWithInt:i] forKey:@"order"];
+		if ((xform->density > 0.0 || i==genome->final_xform_index) && !(genome->symmetry &&  xform->symmetry == 1.0)) {
+			
 		
+		xFormEntity = [NSEntityDescription insertNewObjectForEntityForName:@"XForm" inManagedObjectContext:moc];
+
+
+		[xFormEntity setValue:[NSNumber numberWithInt:order] forKey:@"order"];
+		order++;
 				//genome->
 		[xFormEntity setValue:[NSNumber numberWithDouble:xform->density] forKey:@"density"];
 
@@ -239,7 +246,19 @@
 		[xFormEntity setValue:[NSNumber numberWithDouble:xform->post[1][1]] forKey:@"post_1_1"];
 		[xFormEntity setValue:[NSNumber numberWithDouble:xform->post[2][0]] forKey:@"post_2_0"];
 		[xFormEntity setValue:[NSNumber numberWithDouble:xform->post[2][1]] forKey:@"post_2_1"];
-
+		
+		if ((xform->post[0][0] == 1.0) &&
+			  (xform->post[0][1] == 0.0) &&
+			  (xform->post[1][0] == 0.0) &&
+			  (xform->post[1][1] == 1.0) &&
+			  (xform->post[2][0] == 0.0) &&
+			  (xform->post[2][1] == 0.0)) {
+			[xFormEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"post_flag"];
+		} else {
+			[xFormEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"post_flag"];
+			
+		}
+		
 		[xFormEntity setValue:[NSNumber numberWithDouble:xform->symmetry] forKey:@"symmetry"];
 
 /*		if(xform->post_flag == 1) {
@@ -274,6 +293,7 @@
 		[xforms addObject:xFormEntity];
 	
 		[xFormEntity release];
+		}
 	}
 	
 //	[xforms autorelease];
@@ -711,19 +731,28 @@
 	[sort release];
 	[fetch release];
 	
-	newGenome->num_xforms = [xforms count];
-	newGenome->xform = (flam3_xform *)malloc(sizeof(flam3_xform) * newGenome->num_xforms);
+	int old_num_xforms = [xforms count];
+
+	newGenome->num_xforms = 0;
 	
+	if(newGenome->symmetry != 0) {
+		flam3_add_symmetry(newGenome, newGenome->symmetry);
+		newGenome->xform = (flam3_xform *)realloc(newGenome->xform, sizeof(flam3_xform) * (newGenome->num_xforms + old_num_xforms));
+	} else {
+		newGenome->xform = (flam3_xform *)malloc(sizeof(flam3_xform) * old_num_xforms);		
+	}
 	
 	newGenome->final_xform_index = -1;		
-	for(i=0; i<newGenome->num_xforms; i++) {
+	for(i=0; i < old_num_xforms; i++) {
 	
-		[Genome poulateXForm:newGenome->xform+i FromEntity:[xforms objectAtIndex:i] fromContext:moc];
+		[Genome poulateXForm:newGenome->xform+i+newGenome->num_xforms FromEntity:[xforms objectAtIndex:i] fromContext:moc];
 		if([[[xforms objectAtIndex:i] valueForKey:@"final_xform"] boolValue] == YES) {
-			newGenome->final_xform_index = i;
+			newGenome->final_xform_index = i+newGenome->num_xforms;
 		}
 	
 	}
+	
+	newGenome->num_xforms += old_num_xforms;
 	
 	if(newGenome->final_xform_index != -1) {
 		newGenome->final_xform_enable = 1;
@@ -731,9 +760,7 @@
 		newGenome->final_xform_enable = 0;
 	}		
 	
-	if(newGenome->symmetry != 0) {
-		flam3_add_symmetry(newGenome, newGenome->symmetry);
-	}
+
 	
 	return;
 }
@@ -758,8 +785,6 @@
 	variations = [moc executeFetchRequest:fetch error:nil];
 	[sort release];
 	[fetch release];
-
-	[Genome poulateVariations:xform FromEntityArray:variations];
 	
 	xform->density = [[xformEntity valueForKey:@"density"] doubleValue];
 	
@@ -795,6 +820,9 @@
 	xform->color[1] = [[xformEntity valueForKey:@"colour_1"] doubleValue];
 
 	xform->symmetry  = [[xformEntity valueForKey:@"symmetry"] doubleValue];
+
+	[Genome poulateVariations:xform FromEntityArray:variations];
+	
 	
 	/*	
 	if( [[xformEntity valueForKey:@"post_flag"] boolValue] == YES) {
@@ -845,17 +873,21 @@
 			case 30:
 				xform->perspective_angle = [[variation valueForKey:@"parameter_1"] doubleValue];
 				xform->perspective_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				tools_perspective_precalc(xform);
 				break;
 			case 32:
 				xform->juliaN_power = [[variation valueForKey:@"parameter_1"] doubleValue];
 				xform->juliaN_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				tools_juliaN_precalc(xform);
 				break;
 			case 33:
 				xform->juliaScope_power = [[variation valueForKey:@"parameter_1"] doubleValue];
 				xform->juliaScope_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				tools_juliaScope_precalc(xform);
 				break;	
 			case 36:
 				xform->radialBlur_angle = [[variation valueForKey:@"parameter_1"] doubleValue];
+				tools_radial_blur_precalc(xform);
 				break;	
 			case 37:
 				xform->pie_slices = [[variation valueForKey:@"parameter_1"] doubleValue];
@@ -870,9 +902,12 @@
 				break;	
 			default:
 				break;
-
+				
 		}
+	
 	}
+
+	tools_waves_precalc(xform);
 
 
 }
@@ -1001,9 +1036,9 @@
 		case -1:
 			return @"Dihedral Symmetry";
 			break;
-/*		case 0:
+		case 0:
 			return @"Random";
-			break;*/
+			break;
 		default:
 			return [NSString stringWithFormat:@"%ld", value];	
 			break;
@@ -1322,6 +1357,281 @@
 	
 }
 
++ (void) compareGenomesEntity:(NSManagedObject *)genomeEntity toCGenome:(flam3_genome *)genome fromContext:(NSManagedObjectContext *)moc {
+	
+	flam3_genome oxidizerGenome;
+
+	NSLog(@"Comparing flames...");
+
+	
+	memset(&oxidizerGenome, '\0', sizeof(flam3_genome));
+	
+	[Genome populateCGenome:&oxidizerGenome FromEntity:genomeEntity fromContext:moc]; 
+		
+	if(oxidizerGenome.time != genome->time) {
+		NSLog(@"time differs, Oxidizer %g, flam3 %g", oxidizerGenome.time, genome->time);
+	}
+	
+	if(oxidizerGenome.interpolation != genome->interpolation) {
+		NSLog(@"time differs, Oxidizer %g, flam3 %g", oxidizerGenome.interpolation, genome->interpolation);
+	}
+	if(oxidizerGenome.palette_interpolation != genome->palette_interpolation) {
+		NSLog(@"palette_interpolation differs, Oxidizer %g, flam3 %g", oxidizerGenome.palette_interpolation, genome->palette_interpolation);
+	}
+	if(oxidizerGenome.num_xforms != genome->num_xforms) {
+		NSLog(@"num_xforms differs, Oxidizer %g, flam3 %g", oxidizerGenome.num_xforms, genome->num_xforms);
+	} else {
+		int i;
+		for(i=0; i < oxidizerGenome.num_xforms; i++) {
+			NSLog(@"Comparing xform %d...", i);
+
+			[Genome compareXForm:oxidizerGenome.xform+i toXForm:genome->xform+i]; 
+		
+		}
+		
+	}
+
+	if(oxidizerGenome.final_xform_enable != genome->final_xform_enable) {
+		NSLog(@"final_xform_enable differs, Oxidizer %g, flam3 %g", oxidizerGenome.final_xform_enable, genome->final_xform_enable);
+	}
+	
+	if(oxidizerGenome.final_xform_index != genome->final_xform_index) {
+		NSLog(@"final_xform_index differs, Oxidizer %g, flam3 %g", oxidizerGenome.final_xform_index, genome->final_xform_index);
+	}
+
+	if(oxidizerGenome.genome_index != genome->genome_index) {
+		NSLog(@"genome_index differs, Oxidizer %g, flam3 %g", oxidizerGenome.genome_index, genome->genome_index);
+	}
+
+	if(oxidizerGenome.symmetry != genome->symmetry) {
+		NSLog(@"symmetry differs, Oxidizer %g, flam3 %g", oxidizerGenome.symmetry, genome->symmetry);
+	}
+	
+	if(oxidizerGenome.palette_index != genome->palette_index) {
+		NSLog(@"palette_index differs, Oxidizer %g, flam3 %g", oxidizerGenome.palette_index, genome->palette_index);
+	}
+
+	if(oxidizerGenome.brightness != genome->brightness) {
+		NSLog(@"brightness differs, Oxidizer %g, flam3 %g", oxidizerGenome.brightness, genome->brightness);
+	}
+
+	if(oxidizerGenome.contrast != genome->contrast) {
+		NSLog(@"contrast differs, Oxidizer %g, flam3 %g", oxidizerGenome.contrast, genome->contrast);
+	}
+	
+	if(oxidizerGenome.width != genome->width) {
+		NSLog(@"width differs, Oxidizer %g, flam3 %g", oxidizerGenome.width, genome->width);
+	}
+	
+	if(oxidizerGenome.height != genome->height) {
+		NSLog(@"height differs, Oxidizer %g, flam3 %g", oxidizerGenome.height, genome->height);
+	}
+
+	if(oxidizerGenome.spatial_oversample != genome->spatial_oversample) {
+		NSLog(@"spatial_oversample differs, Oxidizer %g, flam3 %g", oxidizerGenome.spatial_oversample, genome->spatial_oversample);
+	}
+
+	if(oxidizerGenome.contrast != genome->contrast) {
+		NSLog(@"contrast differs, Oxidizer %g, flam3 %g", oxidizerGenome.contrast, genome->contrast);
+	}
+
+	if(oxidizerGenome.contrast != genome->contrast) {
+		NSLog(@"contrast differs, Oxidizer %g, flam3 %g", oxidizerGenome.contrast, genome->contrast);
+	}
+	
+}
+
++ (void) compareXForm:(flam3_xform *)of toXForm:(flam3_xform *)ff {
+	
+	
+	int i;
+	
+	for(i=0; i<flam3_nvariations; i++) {
+		if(of->var[i] != ff->var[i]) {
+			NSLog(@"variation %d differs, Oxidizer %g, flam3 %g", i, of->var[i], ff->var[i]);
+		}
+	}
+
+	if(of->c[0][0] != ff->c[0][0]) {
+		NSLog(@"coef[0][0] differs, Oxidizer %g, flam3 %g", of->c[0][0], ff->c[0][0]);
+	}
+	if(of->c[0][1] != ff->c[0][1]) {
+		NSLog(@"coef[0][1] differs, Oxidizer %g, flam3 %g", of->c[0][1], ff->c[0][1]);
+	}
+	if(of->c[0][2] != ff->c[0][2]) {
+		NSLog(@"coef[0][2] differs, Oxidizer %g, flam3 %g", of->c[0][2], ff->c[0][2]);
+	}
+	if(of->c[1][0] != ff->c[1][0]) {
+		NSLog(@"coef[1][0] differs, Oxidizer %g, flam3 %g", of->c[1][0], ff->c[1][0]);
+	}
+	if(of->c[1][1] != ff->c[1][1]) {
+		NSLog(@"coef[1][1] differs, Oxidizer %g, flam3 %g", of->c[1][1], ff->c[1][1]);
+	}
+	if(of->c[1][2] != ff->c[1][2]) {
+		NSLog(@"coef[1][2] differs, Oxidizer %g, flam3 %g", of->c[1][2], ff->c[1][2]);
+	}
+	
+	if(of->post[0][0] != ff->post[0][0]) {
+		NSLog(@"post[0][0] differs, Oxidizer %g, flam3 %g", of->post[0][0], ff->post[0][0]);
+	}
+	if(of->post[0][1] != ff->post[0][1]) {
+		NSLog(@"post[0][1] differs, Oxidizer %g, flam3 %g", of->post[0][1], ff->post[0][1]);
+	}
+	if(of->post[0][2] != ff->post[0][2]) {
+		NSLog(@"post[0][2] differs, Oxidizer %g, flam3 %g", of->post[0][2], ff->post[0][2]);
+	}
+	if(of->post[1][0] != ff->post[1][0]) {
+		NSLog(@"post[1][0] differs, Oxidizer %g, flam3 %g", of->post[1][0], ff->post[1][0]);
+	}
+	if(of->post[1][1] != ff->post[1][1]) {
+		NSLog(@"post[1][1] differs, Oxidizer %g, flam3 %g", of->post[1][1], ff->post[1][1]);
+	}
+	if(of->post[1][2] != ff->post[1][2]) {
+		NSLog(@"post[1][2] differs, Oxidizer %g, flam3 %g", of->post[1][2], ff->post[1][2]);
+	}
+	
+	
+	if(of->color[0] != ff->color[0]) {
+		NSLog(@"color[0] differs, Oxidizer %g, flam3 %g", of->color[0], ff->color[0]);
+	}	
+	if(of->color[1] != ff->color[1]) {
+		NSLog(@"color[0] differs, Oxidizer %g, flam3 %g", of->color[1], ff->color[1]);
+	}
+
+	if(of->density != ff->density) {
+		NSLog(@"density differs, Oxidizer %g, flam3 %g", of->density, ff->density);
+	}	
+	
+	if(of->symmetry != ff->symmetry) {
+		NSLog(@"symmetry differs, Oxidizer %g, flam3 %g", of->symmetry, ff->symmetry);
+	}	
+	
+	if(of->precalc_sqrt_flag != ff->precalc_sqrt_flag) {
+		NSLog(@"precalc_sqrt_flag differs, Oxidizer %g, flam3 %g", of->precalc_sqrt_flag, ff->precalc_sqrt_flag);
+	}	
+	if(of->precalc_angles_flag != ff->precalc_angles_flag) {
+		NSLog(@"precalc_angles_flag differs, Oxidizer %g, flam3 %g", of->precalc_angles_flag, ff->precalc_angles_flag);
+	}	
+	
+	if(of->blob_low != ff->blob_low) {
+		NSLog(@"blob_low differs, Oxidizer %g, flam3 %g", of->blob_low, ff->blob_low);
+	}	
+	if(of->blob_high != ff->blob_high) {
+		NSLog(@"symmetry differs, Oxidizer %g, flam3 %g", of->blob_high, ff->blob_high);
+	}	
+	if(of->blob_waves != ff->blob_waves) {
+		NSLog(@"blob_waves differs, Oxidizer %g, flam3 %g", of->blob_waves, ff->blob_waves);
+	}	
+
+	if(of->pdj_a != ff->pdj_a) {
+		NSLog(@"pdj_a differs, Oxidizer %g, flam3 %g", of->pdj_a, ff->pdj_a);
+	}	
+	if(of->pdj_b != ff->pdj_b) {
+		NSLog(@"pdj_b differs, Oxidizer %g, flam3 %g", of->pdj_b, ff->pdj_b);
+	}	
+	if(of->pdj_c != ff->pdj_c) {
+		NSLog(@"pdj_c differs, Oxidizer %g, flam3 %g", of->pdj_c, ff->pdj_c);
+	}	
+	if(of->pdj_d != ff->pdj_d) {
+		NSLog(@"pdj_d differs, Oxidizer %g, flam3 %g", of->pdj_d, ff->pdj_d);
+	}	
+	
+	if(of->fan2_x != ff->fan2_x) {
+		NSLog(@"fan2_x differs, Oxidizer %g, flam3 %g", of->fan2_x, ff->fan2_x);
+	}	
+	if(of->fan2_y != ff->fan2_y) {
+		NSLog(@"fan2_y differs, Oxidizer %g, flam3 %g", of->fan2_y, ff->fan2_y);
+	}	
+	
+	if(of->rings2_val != ff->rings2_val) {
+		NSLog(@"rings2_val differs, Oxidizer %g, flam3 %g", of->rings2_val, ff->rings2_val);
+	}	
+	
+	if(of->perspective_angle != ff->perspective_angle) {
+		NSLog(@"perspective_angle differs, Oxidizer %g, flam3 %g", of->perspective_angle, ff->perspective_angle);
+	}	
+	if(of->perspective_dist != ff->perspective_dist) {
+		NSLog(@"perspective_dist differs, Oxidizer %g, flam3 %g", of->perspective_dist, ff->perspective_dist);
+	}	
+	
+	if(of->juliaN_power != ff->juliaN_power) {
+		NSLog(@"juliaN_power differs, Oxidizer %g, flam3 %g", of->juliaN_power, ff->juliaN_power);
+	}	
+	if(of->juliaN_dist != ff->juliaN_dist) {
+		NSLog(@"juliaN_dist differs, Oxidizer %g, flam3 %g", of->juliaN_dist, ff->juliaN_dist);
+	}	
+	
+	if(of->juliaScope_power != ff->juliaScope_power) {
+		NSLog(@"juliaScope_power differs, Oxidizer %g, flam3 %g", of->juliaScope_power, ff->juliaScope_power);
+	}	
+	if(of->juliaScope_dist != ff->juliaScope_dist) {
+		NSLog(@"juliaScope_dist differs, Oxidizer %g, flam3 %g", of->juliaScope_dist, ff->juliaScope_dist);
+	}	
+	
+	if(of->radialBlur_angle != ff->radialBlur_angle) {
+		NSLog(@"radialBlur_angle differs, Oxidizer %g, flam3 %g", of->radialBlur_angle, ff->radialBlur_angle);
+	}	
+	
+	if(of->pie_slices != ff->pie_slices) {
+		NSLog(@"pie_slices differs, Oxidizer %g, flam3 %g", of->pie_slices, ff->pie_slices);
+	}	
+	if(of->pie_rotation != ff->pie_rotation) {
+		NSLog(@"pie_rotation differs, Oxidizer %g, flam3 %g", of->pie_rotation, ff->pie_rotation);
+	}	
+	if(of->pie_thickness != ff->pie_thickness) {
+		NSLog(@"pie_thickness differs, Oxidizer %g, flam3 %g", of->pie_thickness, ff->pie_thickness);
+	}	
+	
+	if(of->ngon_sides != ff->ngon_sides) {
+		NSLog(@"ngon_sides differs, Oxidizer %g, flam3 %g", of->ngon_sides, ff->ngon_sides);
+	}	
+	if(of->ngon_power != ff->ngon_power) {
+		NSLog(@"ngon_power differs, Oxidizer %g, flam3 %g", of->ngon_power, ff->ngon_power);
+	}	
+	if(of->ngon_circle != ff->ngon_circle) {
+		NSLog(@"ngon_circle differs, Oxidizer %g, flam3 %g", of->ngon_circle, ff->ngon_circle);
+	}	
+	if(of->ngon_corners != ff->ngon_corners) {
+		NSLog(@"ngon_corners differs, Oxidizer %g, flam3 %g", of->ngon_corners, ff->ngon_corners);
+	}	
+	
+	if(of->persp_vsin != ff->persp_vsin) {
+		NSLog(@"persp_vsin differs, Oxidizer %g, flam3 %g", of->persp_vsin, ff->persp_vsin);
+	}	
+	if(of->persp_vfcos != ff->persp_vfcos) {
+		NSLog(@"persp_vfcos differs, Oxidizer %g, flam3 %g", of->persp_vfcos, ff->persp_vfcos);
+	}	
+
+	if(of->juliaN_rN != ff->juliaN_rN) {
+		NSLog(@"juliaN_rN differs, Oxidizer %g, flam3 %g", of->juliaN_rN, ff->juliaN_rN);
+	}	
+	if(of->juliaN_cn != ff->juliaN_cn) {
+		NSLog(@"juliaN_cn differs, Oxidizer %g, flam3 %g", of->juliaN_cn, ff->juliaN_cn);
+	}	
+
+	if(of->juliaScope_rN != ff->juliaScope_rN) {
+		NSLog(@"juliaScope_rN differs, Oxidizer %g, flam3 %g", of->juliaScope_rN, ff->juliaScope_rN);
+	}	
+	if(of->juliaScope_cn != ff->juliaScope_cn) {
+		NSLog(@"juliaScope_cn differs, Oxidizer %g, flam3 %g", of->juliaScope_cn, ff->juliaScope_cn);
+	}	
+	
+	if(of->radialBlur_spinvar != ff->radialBlur_spinvar) {
+		NSLog(@"radialBlur_spinvar differs, Oxidizer %g, flam3 %g", of->radialBlur_spinvar, ff->radialBlur_spinvar);
+	}	
+	if(of->radialBlur_zoomvar != ff->radialBlur_zoomvar) {
+		NSLog(@"radialBlur_zoomvar differs, Oxidizer %g, flam3 %g", of->radialBlur_zoomvar, ff->radialBlur_zoomvar);
+	}	
+
+	if(of->waves_dx2 != ff->waves_dx2) {
+		NSLog(@"waves_dx2 differs, Oxidizer %g, flam3 %g", of->waves_dx2, ff->waves_dx2);
+	}	
+	if(of->waves_dy2 != ff->waves_dy2) {
+		NSLog(@"waves_dy2 differs, Oxidizer %g, flam3 %g", of->waves_dy2, ff->waves_dy2);
+	}	
+	
+	
+}
 
 @end
 
