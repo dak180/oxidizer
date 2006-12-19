@@ -1686,7 +1686,11 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	}
 }
 
+- (IBAction)deleteGenomes:(id)sender {
 
+	[flames  removeFlame];
+
+}
 
 @end
 

@@ -876,13 +876,13 @@
 				tools_perspective_precalc(xform);
 				break;
 			case 32:
-				xform->juliaN_power = [[variation valueForKey:@"parameter_1"] doubleValue];
-				xform->juliaN_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				xform->juliaN_dist = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->juliaN_power = [[variation valueForKey:@"parameter_2"] doubleValue];
 				tools_juliaN_precalc(xform);
 				break;
 			case 33:
-				xform->juliaScope_power = [[variation valueForKey:@"parameter_1"] doubleValue];
-				xform->juliaScope_dist = [[variation valueForKey:@"parameter_2"] doubleValue];
+				xform->juliaScope_dist = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->juliaScope_power = [[variation valueForKey:@"parameter_2"] doubleValue];
 				tools_juliaScope_precalc(xform);
 				break;	
 			case 36:
