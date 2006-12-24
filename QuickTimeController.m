@@ -561,7 +561,7 @@
 			unsigned char *src = bitMapDataPtr + i * [(NSBitmapImageRep *)imageRepresentation bytesPerRow];
 			unsigned char *dst = pixBaseAddr + i * pixmapRowBytes;
 			for (j = 0; j < imageSize.width; j++) {
-				*dst++ = 0;		// X - our src is 24-bit only
+				*dst++ = 255;		// X - our src is 24-bit only
 				*dst++ = *src++;	// Red component
 				*dst++ = *src++;	// Green component
 				*dst++ = *src++;	// Blue component
