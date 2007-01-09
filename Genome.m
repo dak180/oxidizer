@@ -767,7 +767,11 @@
 	
 	if(newGenome->symmetry != 0) {
 		flam3_add_symmetry(newGenome, newGenome->symmetry);
-		newGenome->xform = (flam3_xform *)realloc(newGenome->xform, sizeof(flam3_xform) * (newGenome->num_xforms + old_num_xforms));
+		if(newGenome->num_xforms == 0) {
+			newGenome->xform = (flam3_xform *)malloc(sizeof(flam3_xform) * old_num_xforms);					
+		} else {
+			newGenome->xform = (flam3_xform *)realloc(newGenome->xform, sizeof(flam3_xform) * (newGenome->num_xforms + old_num_xforms));
+		}
 	} else {
 		newGenome->xform = (flam3_xform *)malloc(sizeof(flam3_xform) * old_num_xforms);		
 	}
