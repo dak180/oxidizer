@@ -18,7 +18,7 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.7 2006/10/01 14:19:05 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.8 2007/01/09 18:55:29 vargol Exp $";
 
 
 #include "private.h"
@@ -97,6 +97,8 @@ static void var36_radial_blur(void *, double);
 static void var37_pie(void *, double);
 static void var38_ngon(void *, double);
 /*static void var39_image(void *, double);*/
+static void var39_curl(void *, double);
+static void var40_rectangles(void *, double);
 
 static void perspective_precalc(flam3_xform *xf);
 static void juliaN_precalc(flam3_xform *xf);
@@ -827,7 +829,7 @@ static void var38_ngon(void *helper, double weight) {
    f->p0 += weight * f->tx * amp;
    f->p1 += weight * f->ty * amp;
 } 
-
+   
 # if 0   
 static void var39_image(void *helper, double weight) {
    int lo=1, hi=255;
@@ -873,6 +875,29 @@ static void var39_image(void *helper, double weight) {
 }
 
 #endif
+
+static void var39_curl(void *helper, double weight) 
+{
+    flam3_iter_helper *f = (flam3_iter_helper *) helper;
+    
+    double re = 1.0 + f->xform->curl_c1 * f->tx + f->xform->curl_c2 * (f->tx * f->tx - f->ty * f->ty);
+    double im = f->xform->curl_c1 * f->ty + 2.0 * f->xform->curl_c2 * f->tx * f->ty;
+    
+    double r = weight / (re*re + im*im);
+    
+    f->p0 += (f->tx * re + f->ty * im) * r;
+    f->p1 += (f->ty * re - f->tx * im) * r;
+}
+
+static void var40_rectangles(void *helper, double weight) 
+{
+    double tmp;
+    flam3_iter_helper *f = (flam3_iter_helper *) helper;
+    
+    f->p0 += weight * ((2 * floor(f->tx / f->xform->rectangles_x) + 1) * f->xform->rectangles_x - f->tx);
+    f->p1 += weight * ((2 * floor(f->ty / f->xform->rectangles_y) + 1) * f->xform->rectangles_y - f->ty);
+
+}
 
 static void perspective_precalc(flam3_xform *xf) {
    double ang = xf->perspective_angle * M_PI / 2.0;
@@ -1047,7 +1072,10 @@ void prepare_xform_fn_ptrs(flam3_genome *cp) {
                cp->xform[i].varFunc[totnum] = &var37_pie;
             else if (j==38) {
                cp->xform[i].varFunc[totnum] = &var38_ngon;
-            }
+            } else if (j==39)
+                cp->xform[i].varFunc[totnum] = &var39_curl;
+            else if (j==40)
+                cp->xform[i].varFunc[totnum] = &var40_rectangles;
             
 
             totnum++;
@@ -1116,7 +1144,7 @@ void flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, char *xf
    p[1] = samples[1];
    p[2] = samples[2];
    p[3] = samples[3];
-   
+
    for (i = -4*fuse; i < 4*n; i+=4) {
       int fn = xform_distrib[random() % CHOOSE_XFORM_GRAIN];
       double tx, ty;
@@ -1602,13 +1630,10 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
       INTERP(xform[i].ngon_power);
       INTERP(xform[i].ngon_circle);
       INTERP(xform[i].ngon_corners);
-      
-      /* Precalculate additional params for some variations */
-      perspective_precalc(&(result->xform[i]));
-      juliaN_precalc(&(result->xform[i]));
-      juliaScope_precalc(&(result->xform[i]));
-      radial_blur_precalc(&(result->xform[i]));
-      waves_precalc(&(result->xform[i]));
+      INTERP(xform[i].curl_c1);
+      INTERP(xform[i].curl_c2);
+      INTERP(xform[i].rectangles_x);
+      INTERP(xform[i].rectangles_y);
       
       for (j = 0; j < flam3_nvariations; j++)
          INTERP(xform[i].var[j]);
@@ -1638,19 +1663,28 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
       }
 #endif
 
+      /* Interpolate c matrix & post */      
       clear_matrix(result->xform[i].c);
       clear_matrix(result->xform[i].post);
       all_id = 1;
       for (k = 0; k < ncp; k++) {
-	  sum_matrix(c[k], cpi[k].xform[i].c, result->xform[i].c);
-	  sum_matrix(c[k], cpi[k].xform[i].post, result->xform[i].post);
-	  all_id &= id_matrix(cpi[k].xform[i].post);
+         sum_matrix(c[k], cpi[k].xform[i].c, result->xform[i].c);
+         sum_matrix(c[k], cpi[k].xform[i].post, result->xform[i].post);
+         all_id &= id_matrix(cpi[k].xform[i].post);
       }
       if (all_id) {
-	  clear_matrix(result->xform[i].post);
-	  result->xform[i].post[0][0] = 1.0;
-	  result->xform[i].post[1][1] = 1.0;
+         clear_matrix(result->xform[i].post);
+         result->xform[i].post[0][0] = 1.0;
+         result->xform[i].post[1][1] = 1.0;
       }
+
+      /* Precalculate additional params for some variations */
+      perspective_precalc(&(result->xform[i]));
+      juliaN_precalc(&(result->xform[i]));
+      juliaScope_precalc(&(result->xform[i]));
+      radial_blur_precalc(&(result->xform[i]));
+      waves_precalc(&(result->xform[i]));
+
    }
 }
 
@@ -1728,7 +1762,7 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
        result->num_xforms = 0;
    }
    flam3_add_xforms(result, cpi[0].num_xforms);
-      
+   
    result->final_xform_enable = cpi[0].final_xform_enable;
    result->final_xform_index = cpi[0].final_xform_index;
 
@@ -1847,6 +1881,10 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
        thiscp->xform[i].ngon_power = 3;
        thiscp->xform[i].ngon_circle = 1;
        thiscp->xform[i].ngon_corners = 2;
+       thiscp->xform[i].curl_c1 = 1.0;
+       thiscp->xform[i].curl_c2 = 0.0;
+       thiscp->xform[i].rectangles_x = 1.0;
+       thiscp->xform[i].rectangles_y = 1.0;
            
    }
 }
@@ -1968,9 +2006,8 @@ static flam3_genome *xml_all_cp;
 static int xml_all_ncps;
 /*static int xml_num_images;*/
 
-static void clear_current_cp(int default_flag) {
+static void clear_cp(flam3_genome *cp, int default_flag) {
     int i, j;
-    flam3_genome *cp = &xml_current_cp;
     
     cp->palette_index = flam3_palette_random;
     cp->center[0] = 0.0;
@@ -2082,6 +2119,8 @@ char *flam3_variation_names[1+flam3_nvariations] = {
   "radial_blur",
   "pie",
   "ngon",
+  "curl",
+  "rectangles",
   0
 };
 
@@ -2275,8 +2314,6 @@ static void parse_flame_element(xmlNode *flame_node) {
          sscanf(att_str, "%lf %lf", &cp->center[0], &cp->center[1]);
          cp->rot_center[0] = cp->center[0];
          cp->rot_center[1] = cp->center[1];
-      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rotation_center")) {
-         sscanf(att_str, "%lf %lf", &cp->rot_center[0], &cp->rot_center[1]);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"scale")) {
          cp->pixels_per_unit = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rotate")) {
@@ -2688,6 +2725,14 @@ static void parse_flame_element(xmlNode *flame_node) {
                cp->xform[xf].ngon_corners = atof(att_str);
 /*            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"image_filename")) {
                cp->xform[xf].image_id = atoi(att_str);*/
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"curl_c1")) {
+               cp->xform[xf].curl_c1 = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"curl_c2")) {
+               cp->xform[xf].curl_c2 = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rectangles_x")) {
+               cp->xform[xf].rectangles_x = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rectangles_y")) {
+               cp->xform[xf].rectangles_y = atof(att_str);
             } else {
                int v = var2n((char *) cur_att->name);
                if (v != flam3_variation_none)
@@ -2737,7 +2782,7 @@ static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int defau
       if (this_node->type == XML_ELEMENT_NODE && !xmlStrcmp(this_node->name, (const xmlChar *)"flame")) {
          
          /* This is a flame element.  Parse it. */
-         clear_current_cp(default_flag);
+         clear_cp(&xml_current_cp, default_flag);
          
          parse_flame_element(this_node);
          
@@ -2767,7 +2812,7 @@ static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int defau
          xml_num_images++;
          
       }*/
-       } else {         
+      } else {         
          /* Check all of the children of this element */
          scan_for_flame_nodes(this_node->children, parent_file, default_flag);
       }
@@ -2834,7 +2879,7 @@ flam3_genome *flam3_parse_xml2(char *xmldata, char *xmlfilename, int default_fla
          if (xml_all_cp[i].xform[j].var[39] > 0) {
          
             for (k=0; k<xml_num_images; k++) {
-            
+                        
                if (im_store[k].id == xml_all_cp[i].xform[j].image_id) {
                   
                   int sz;
@@ -2859,7 +2904,7 @@ flam3_genome *flam3_parse_xml2(char *xmldata, char *xmlfilename, int default_fla
       free(im_store[i].rowcols);
    }
    free(im_store);
-   
+
 #endif
       
    *ncps = xml_all_ncps;
@@ -3078,7 +3123,6 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    fprintf(f, "%s<flame time=\"%g\"", p, cp->time);
    fprintf(f, " size=\"%d %d\"", cp->width, cp->height);
    fprintf(f, " center=\"%g %g\"", cp->center[0], cp->center[1]);
-   fprintf(f, " rotation_center=\"%g %g\"", cp->rot_center[0], cp->rot_center[1]);
    fprintf(f, " scale=\"%g\"", cp->pixels_per_unit);
 
    if (cp->zoom != 0.0)
@@ -3130,13 +3174,16 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
    fprintf(f, " estimator_radius=\"%g\" estimator_minimum=\"%g\" estimator_curve=\"%g\"",
       cp->estimator, cp->estimator_minimum, cp->estimator_curve);
    fprintf(f, " gamma_threshold=\"%g\"", cp->gam_lin_thresh);
-   fprintf(f, " motion_exponent=\"%g\"", cp->motion_exp);
 
    if (flam3_interpolation_linear != cp->interpolation)
        fprintf(f, " interpolation=\"smooth\"");
 
    if (flam3_palette_interpolation_hsv != cp->palette_interpolation)
        fprintf(f, " palette_interpolation=\"sweep\"");
+
+   if (cp->motion_exp != 0.0)
+      fprintf(f, " motion_exponent=\"%g\"", cp->motion_exp);
+      
 
    if (extra_attributes)
       fprintf(f, " %s", extra_attributes);
@@ -3147,7 +3194,7 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
       fprintf(f, "%s   <symmetry kind=\"%d\"/>\n", p, cp->symmetry);
    for (i = 0; i < cp->num_xforms; i++) {
       int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;
-      int juliaN_var=0,juliaScope_var=0,radialBlur_var=0,pie_var=0,ngon_var=0;
+      int juliaN_var=0,juliaScope_var=0,radialBlur_var=0,pie_var=0,ngon_var=0,curl_var=0,rectangles_var=0;
       if ( (cp->xform[i].density > 0.0 || i==cp->final_xform_index)
              && !(cp->symmetry &&  cp->xform[i].symmetry == 1.0)) {
                   
@@ -3189,6 +3236,10 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
                   pie_var=1;
                else if (j==38)
                   ngon_var=1;
+               else if (j==39)
+                  curl_var=1;
+               else if (j==40)
+                  rectangles_var=1;
                
             }
          }
@@ -3245,6 +3296,16 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes) {
             fprintf(f, "ngon_power=\"%g\" ", cp->xform[i].ngon_power);
             fprintf(f, "ngon_corners=\"%g\" ", cp->xform[i].ngon_corners);
             fprintf(f, "ngon_circle=\"%g\" ", cp->xform[i].ngon_circle);
+         }
+         
+         if (curl_var==1) {
+            fprintf(f, "curl_c1=\"%g\" ", cp->xform[i].curl_c1);
+            fprintf(f, "curl_c2=\"%g\" ", cp->xform[i].curl_c2);
+         }
+         
+         if (rectangles_var==1) {
+            fprintf(f, "rectangles_x=\"%g\" ", cp->xform[i].rectangles_x);
+            fprintf(f, "rectangles_y=\"%g\" ", cp->xform[i].rectangles_y);
          }
 
          fprintf(f, "coefs=\"");
@@ -3467,7 +3528,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
      6
    };
    
-   memset(cp->parent_fname,0,flam3_parent_fn_len);
+   clear_cp(cp,flam3_defaults_on);
    
    cp->hue_rotation = (random()&7) ? 0.0 : flam3_random01();
    cp->palette_index = flam3_get_palette(flam3_palette_random, cp->palette, cp->hue_rotation);
@@ -3480,14 +3541,6 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
       nxforms = spec_xforms;
    else
       nxforms = random_distrib(xform_distrib);
-   
-   /* Clear old xforms in this cp, if necessary */
-   if (cp->num_xforms>0 && cp->xform != NULL) {
-      free(cp->xform);
-      cp->num_xforms = 0;
-   }
-   cp->final_xform_index = -1;
-   cp->final_xform_enable = 0;
    
    flam3_add_xforms(cp,nxforms);
 
@@ -3675,6 +3728,18 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          cp->xform[i].ngon_circle = 3*flam3_random01();
          cp->xform[i].ngon_corners = 2*flam3_random01()*cp->xform[i].ngon_circle;
       }
+      
+      if (cp->xform[i].var[39] > 0) {
+         /* Create random params for curl */
+         cp->xform[i].curl_c1 = flam3_random01();
+         cp->xform[i].curl_c2 = flam3_random01();
+      }
+      
+      if (cp->xform[i].var[40] > 0) {
+         /* Create random params for rectangles */
+         cp->xform[i].rectangles_x = flam3_random01();
+         cp->xform[i].rectangles_y = flam3_random01();
+      }
 
    }
    
@@ -3683,12 +3748,6 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
       flam3_add_symmetry(cp, sym);
    else
       cp->symmetry = 0;
-   
-   /* Necessary with defaults? */
-   cp->gamma = 4.0;
-   cp->vibrancy = 1.0;
-   cp->contrast = 1.0;
-   cp->brightness = 4.0;
    
    qsort((char *) cp->xform, cp->num_xforms, sizeof(flam3_xform), compare_xforms);
 

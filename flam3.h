@@ -25,7 +25,7 @@
 #include <libxml/parser.h>
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.5 2006/09/28 18:54:27 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.6 2007/01/09 18:55:29 vargol Exp $";
 
 char *flam3_version();
 
@@ -47,7 +47,7 @@ int flam3_get_palette(int palette_index, flam3_palette p, double hue_rotation);
 
 extern char *flam3_variation_names[];
 
-#define flam3_nvariations 39
+#define flam3_nvariations 41
 #define flam3_nxforms     12
 
 #define flam3_parent_fn_len     30
@@ -143,6 +143,14 @@ typedef struct {
    int image_id;
    flam3_image_store *image_storage;
    */
+   
+   /* Curl */
+   double curl_c1;
+   double curl_c2;
+   
+   /* Rectangles */
+   double rectangles_x;
+   double rectangles_y;
    
    /* If perspective is used, precalculate these values */
    /* from the _angle and _dist                         */
