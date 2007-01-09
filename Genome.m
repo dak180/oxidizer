@@ -498,6 +498,36 @@
 				[variation setValue:[NSNumber numberWithDouble:xform->ngon_corners] forKey:@"parameter_4"];
 
 				break;	
+			case 39:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+				
+				[variation setValue:@"c1:" forKey:@"parameter_1_name"];
+				[variation setValue:@"c2:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter3:" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter4:" forKey:@"parameter_4_name"];
+				
+				[variation setValue:[NSNumber numberWithDouble:xform->curl_c1] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->curl_c2] forKey:@"parameter_2"];
+				
+				break;	
+			case 40:
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+				[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_3"];
+				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_4"];
+				
+				[variation setValue:@"x:" forKey:@"parameter_1_name"];
+				[variation setValue:@"y:" forKey:@"parameter_2_name"];
+				[variation setValue:@"parameter3:" forKey:@"parameter_3_name"];
+				[variation setValue:@"parameter4:" forKey:@"parameter_4_name"];
+				
+				[variation setValue:[NSNumber numberWithDouble:xform->rectangles_x] forKey:@"parameter_1"];
+				[variation setValue:[NSNumber numberWithDouble:xform->rectangles_y] forKey:@"parameter_2"];
+				
+				break;	
 			default:
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_1"];
 				[variation setValue:[NSNumber numberWithBool:NO] forKey:@"use_parameter_2"];
@@ -899,6 +929,14 @@
 				xform->ngon_power = [[variation valueForKey:@"parameter_2"] doubleValue];
 				xform->ngon_circle = [[variation valueForKey:@"parameter_3"] doubleValue];
 				xform->ngon_corners = [[variation valueForKey:@"parameter_4"] doubleValue];
+				break;	
+			case 39:
+				xform->curl_c1 = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->curl_c2 = [[variation valueForKey:@"parameter_2"] doubleValue];
+				break;	
+			case 40:
+				xform->rectangles_x = [[variation valueForKey:@"parameter_1"] doubleValue];
+				xform->rectangles_y = [[variation valueForKey:@"parameter_2"] doubleValue];
 				break;	
 			default:
 				break;
