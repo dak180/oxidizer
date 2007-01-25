@@ -135,5 +135,7 @@
 - (void)renderAnimation;
 - (void)renderStillToWindow;
 
+- (flam3_frame *)getFlam3Frame;
+- (void)setFlam3Frame:(flam3_frame *)frame;
 
 @end

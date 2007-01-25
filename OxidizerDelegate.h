@@ -32,6 +32,8 @@
 
 /* instance */
 - (void)setupToolbar;
+- (flam3_frame *)getFlam3Frame;
+
 
 /* Actions */
 - (IBAction)customizeToolbar:(id)sender;
@@ -44,5 +46,6 @@
 - (IBAction)renderStill:(id)sender;
 - (IBAction)renderMovie:(id)sender;
 - (IBAction)renderStillToWindow:(id)sender;	
+- (IBAction)runLuaScript:(id)sender;
 
 @end

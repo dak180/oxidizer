@@ -19,6 +19,8 @@
 
 
 #import "flam3_tools.h"
+#import <Cocoa/Cocoa.h>
+
 
 void improve_colors(flam3_genome *g, int ntries, int change_palette, int color_resolution) {
    int i;
@@ -387,3 +389,41 @@ void tools_waves_precalc(flam3_xform *xf) {
 }
 
 
+flam3_frame *getFlam3Frame(void) {
+	NSLog(@"it's here!!!");
+	return (flam3_frame *)[[[NSApplication sharedApplication]  delegate] getFlam3Frame];
+}
+
+void setFlam3Frame(flam3_frame *frame) {
+	NSLog(@"it's here!!!");
+	return (flam3_frame *)[[[NSApplication sharedApplication]  delegate] setFlam3Frame:frame];
+}
+
+
+flam3_genome *getGenomeFromFrame(flam3_frame *frame, int index) {
+	
+	if(index == 0 || frame == NULL || index > frame->ngenomes) {
+		return NULL;
+	}
+	
+	return frame->genomes + index -1;
+}
+
+
+flam3_xform *getXFormFromGenome(flam3_genome *genome, int index) {
+	
+	if(index == 0 || genome == NULL || index > genome->num_xforms) {
+		return NULL;
+	}
+	
+	return genome->xform + index - 1;
+}
+
+
+double getValueFromCoefficient(double coeff[][2], unsigned int index1, unsigned int index2) {
+	
+	double d = coeff[index1][index2];
+	
+	return d;
+	
+}

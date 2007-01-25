@@ -1692,6 +1692,58 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
+- (flam3_frame *)getFlam3Frame {
+	
+	
+	flam3_genome *cps;
+	flam3_frame *f = (flam3_frame *)malloc(sizeof(flam3_frame));	
+	int ncps = 0;
+	
+	NSArray *genomes;
+	
+	
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomes = [moc executeFetchRequest:fetch error:nil];
+	[fetch release];	  
+	
+  	ncps = [genomes count];
+	
+	if(ncps == 0) {
+		return NULL;
+	}
+	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
+	
+	f->genomes = cps;
+	[self EnvironmentInit:f threadCount:1];
+	
+	
+	f->temporal_filter_radius = 0.5;
+	f->pixel_aspect_ratio = pixel_aspect;
+	f->genomes = cps;
+	f->ngenomes = ncps;
+	f->verbose = verbose;
+	f->bits = bits;
+	f->progress = 0;
+	f->progress = printProgress;
+	
+	return f;
+}
+
+- (void)setFlam3Frame:(flam3_frame *)frame {
+	
+	[self deleteOldGenomes];
+	[self generateAllThumbnailsForGenome:frame->genomes withCount:frame->ngenomes inContext:moc];
+	[moc save:nil];
+	
+}
+
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {

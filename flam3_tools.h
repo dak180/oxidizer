@@ -18,7 +18,6 @@
 */
 
 
-#import <Cocoa/Cocoa.h>
 #import "flam3.h"
 
 void improve_colors(flam3_genome *g, int ntries, int change_palette, int color_resolution);
@@ -37,4 +36,12 @@ void tools_juliaScope_precalc(flam3_xform *xf);
 void tools_radial_blur_precalc(flam3_xform *xf);
 void tools_waves_precalc(flam3_xform *xf);
 
+/* scripting functions */
+
+flam3_frame *getFlam3Frame(void);
+flam3_genome *getGenomeFromFrame(flam3_frame *frame, int index);
+flam3_xform *getXFormFromGenome(flam3_genome *genome, int index);
+double getValueFromCoefficient(double coeff[][2], unsigned int index1, unsigned int index2);
+
+void setFlam3Frame(flam3_frame *frame);
 #define EPS (1e-10)

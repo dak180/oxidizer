@@ -157,6 +157,7 @@
                 renderMovie = id; 
                 renderStill = id; 
                 renderStillToWindow = id; 
+                runLuaScript = id; 
                 saveAsFlam3 = id; 
                 saveFlam3 = id; 
                 showBreedingWindow = id; 
@@ -164,12 +165,7 @@
             }; 
             CLASS = OxidizerDelegate; 
             LANGUAGE = ObjC; 
-            OUTLETS = {
-                bc = BreedingController; 
-                ffm = FractalFlameModel; 
-                gpc = GenePoolController; 
-                oxidizerWindow = NSWindow; 
-            }; 
+            OUTLETS = {bc = BreedingController; ffm = FractalFlameModel; oxidizerWindow = NSWindow; }; 
             SUPERCLASS = NSObject; 
         }, 
         {CLASS = PDJVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 

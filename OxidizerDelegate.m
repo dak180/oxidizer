@@ -1,4 +1,7 @@
 #import "OxidizerDelegate.h"
+#include "lua.h"
+#include "lualib.h"
+#include "lauxlib.h"
 
 @implementation OxidizerDelegate 
 
@@ -188,6 +191,44 @@
 
  	[ffm renderAnimation];
 
+}
+
+- (IBAction)runLuaScript:(id)sender {
+	
+	lua_State *L;
+	
+	L=lua_open();
+	luaopen_base(L);	// load basic libs (eg. print)
+	
+	Flam3_Init(L);	// load the wrappered module
+	
+	int err = luaL_loadfile(L, "/Users/vargol/Source/oxidizer/test.lua"); 
+	if (err == 0) {
+
+		lua_pcall(L,0,0,0);
+
+	} 	else {
+
+		NSLog(@"unable to load %s\n", "/Users/vargol/Source/oxidizer/test.lua");
+
+	}
+
+	lua_close(L);
+	return;
+	
+}
+
+- (flam3_frame *)getFlam3Frame {
+	
+	return [ffm getFlam3Frame];
+	
+}
+
+- (void)setFlam3Frame:(flam3_frame *)frame {
+
+	[ffm setFlam3Frame:frame];
+
+	return;
 }
 
 
