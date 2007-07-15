@@ -561,10 +561,17 @@
 			unsigned char *src = bitMapDataPtr + i * [(NSBitmapImageRep *)imageRepresentation bytesPerRow];
 			unsigned char *dst = pixBaseAddr + i * pixmapRowBytes;
 			for (j = 0; j < imageSize.width; j++) {
-				*dst++ = 255;		// X - our src is 24-bit only
-				*dst++ = *src++;	// Red component
-				*dst++ = *src++;	// Green component
-				*dst++ = *src++;	// Blue component
+ /* alpha */	dst[0] = src[3]; 
+ /* red */		dst[1] = src[0];  
+ /* green */	dst[2] = src[1];
+ /* blue */		dst[3] = src[2];
+				dst+=4;
+				src+=4;
+//				*dst++ =  *src++;		// X - our src is 24-bit only
+//				*dst++ = 255;		// X - our src is 24-bit only
+//				*dst++ = *src++;	// Red component
+//				*dst++ = *src++;	// Green component
+//				*dst++ = *src++;	// Blue component
 			}
 		}
 	}
@@ -592,11 +599,19 @@
  	FSRef ref;
  	FSSpec spec;
 	NSFileManager *nsfm;
+	
+	BOOL returnBool;
 
 	nsfm = [NSFileManager defaultManager];
 	if(![nsfm fileExistsAtPath:path]){
-		FILE *file = fopen([path cStringUsingEncoding:NSUTF8StringEncoding], "wb");
-		fclose(file);
+		returnBool = [nsfm removeFileAtPath:path handler:nil];
+		[nsfm createFileAtPath:path contents:nil attributes:nil];
+
+	} else {
+		
+		returnBool = [nsfm removeFileAtPath:path handler:nil];
+		[nsfm createFileAtPath:path contents:nil attributes:nil];
+		
 	}
 	
 //	CFURLRef url = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, (CFStringRef)path, kCFURLPOSIXPathStyle, false);

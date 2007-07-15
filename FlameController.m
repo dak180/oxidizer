@@ -19,10 +19,27 @@
 
 #import "FlameController.h"
 #import "Genome.h"
-#import "flam3.h"
 
 
 @implementation FlameController : NSObject
+
+
++ (void)attachImageToGenomeFromDictionary:(NSDictionary *)dictionary {
+	
+	[dictionary retain];
+	
+	NSManagedObject *genome = [dictionary objectForKey:@"genome"];
+	NSString *imagePath = [dictionary objectForKey:@"filename"];
+	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:imagePath]];
+	
+	[genome willChangeValueForKey:@"image"];
+	[genome setValue:flameImage forKey:@"image"];
+	[genome didChangeValueForKey:@"image"];
+	
+	[flameImage release];	
+	[dictionary release];
+	
+}
 
 - init
 {
@@ -66,17 +83,6 @@
 	
 }
 
-
--(void)addFlameData:(NSImage *)flameImage genome:(flam3_genome *)genome atIndex:(int )index inContext:(NSManagedObjectContext *)moc {
-
-
-	NSManagedObject *test = [Genome createGenomeEntityFrom:genome withImage:flameImage inContext:moc];
-	
-//	[flames reloadData];
-//	[flameValues reloadData];
-	
-	
-}
 
 - (IBAction)showXFormWindow:(id)sender
 {
@@ -242,6 +248,25 @@
 //	[genome didChangeValueForKey:@"image"];
 
 }
+
+
+- (void)setPreviewForCurrentFlameFromFile:(NSString *)previewPath {
+	
+	NSManagedObject *genome = [self getSelectedGenome];
+
+//	NSImage *flameImage = [[NSImage alloc] initByReferencingFile:previewPath];
+	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:previewPath]];
+	
+	[genome willChangeValueForKey:@"image"];
+	[genome setValue:flameImage forKey:@"image"];
+	[genome didChangeValueForKey:@"image"];
+	
+	[flameImage release];	
+	
+
+	
+}
+
 
 
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender {

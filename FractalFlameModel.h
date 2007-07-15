@@ -25,8 +25,6 @@
 #import "QTKit/QTKit.h"
 #import "QuickTimeController.h"
 
-#import "flam3.h"
-
 
 @interface FractalFlameModel : NSObject
 {
@@ -45,6 +43,11 @@
 	IBOutlet NSArrayController *flameController;
 	IBOutlet NSView *saveThumbnailsView;
     IBOutlet NSImageView *previewView;
+
+    IBOutlet NSWindow *taskProgressWindow;
+    IBOutlet NSProgressIndicator *taskAllFramesIndicator;
+    IBOutlet NSProgressIndicator *taskFrameIndicator;
+	
 	
 	BOOL _saveThumbnail;
 	BOOL _showRender;
@@ -93,22 +96,13 @@
 	
 }
 
-- (IBAction)openFile:(id)sender;
 - (IBAction)previewCurrentFlame:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
 - (IBAction)showPreferencesWindow:(id)sender;
 - (IBAction)editGenomes:(id)sender;
-- (IBAction)appendFile:(id)sender;
 
-- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps inContext:(NSManagedObjectContext *)thisMoc;
-- (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count;
 - (BOOL)saveToFile:(NSBitmapImageRep *)rep;
-- (BOOL)EnvironmentInit:(flam3_frame *)f threadCount:(int)threads;
-- (BOOL)openRecentFile:(NSString *)filename;
 
-- (void)renderFlames:(flam3_genome *)cps numberOfFlames:(int)ncps;
-- (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps;
-- (NSBitmapImageRep *)renderThumbnail:(flam3_genome *)cps; 
 - (QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
 - (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context;
 - (NSManagedObjectContext *)getNSManagedObjectContext;
@@ -135,7 +129,23 @@
 - (void)renderAnimation;
 - (void)renderStillToWindow;
 
-- (flam3_frame *)getFlam3Frame;
-- (void)setFlam3Frame:(flam3_frame *)frame;
+/* NSTask based version */
+- (void)generateAllThumbnailsForGenomes:(NSArray *)genome;
+- (void)generateAllThumbnailsForGenomesInThread:(NSArray *)genome;
+
+- (void)runFlam3RenderAsTask:(NSData *) xml;
+- (int)runFlam3StillRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary; 
+- (int)runFlam3MovieFrameRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary; 
+- (void)renderStillUsingFlam3;
+
+- (void)createGenomesFromXMLFile:(NSString *)xmlFileName inContext:(NSManagedObjectContext *)thisMoc;
+- (void)appendGenomesFromXMLFile:(NSString *)xmlFileName fromTime:(int)time inContext:(NSManagedObjectContext *)thisMoc;
+
+- (NSMutableDictionary *)environmentDictionary;
+
+- (BOOL)openRecentFile:(NSString *)filename;
+- (IBAction)openFile:(id)sender;
+- (IBAction)appendFile:(id)sender;
+
 
 @end

@@ -20,7 +20,6 @@
 /* FlameController */
 
 #import <Cocoa/Cocoa.h>
-#import "flam3.h"
 #import "PaletteController.h"
 
 
@@ -46,6 +45,8 @@
 
 }
 
++ (void)attachImageToGenomeFromDictionary:(NSDictionary *)DictionaryInformation;
+
 
 - (IBAction)showXFormWindow:(id)sender;
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender;
@@ -56,9 +57,10 @@
 - (void)setValue:(id)value forKey:(NSString *)key;
 - (void)setValue:(id)value forKeyPath:(NSString *)keyPath;
 
--(void)removeFlameData;
--(void)addFlameData:(NSImage *)flameImage genome:(flam3_genome *)genome atIndex:(int )index inContext:(NSManagedObjectContext *)moc;
--(void)setPreviewForCurrentFlame:(NSImage *)preview;
+- (void)removeFlameData;
+- (void)setPreviewForCurrentFlame:(NSImage *)preview;
+- (void)setPreviewForCurrentFlameFromFile:(NSString *)previewPath;
+
 - (NSManagedObject *)getSelectedGenome;
 
 - (void)addNewFlame:(NSManagedObject *)genomeEntity;

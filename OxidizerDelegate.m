@@ -145,6 +145,10 @@
 - (IBAction)openFile:(id)sender {
 	
 	[ffm openFile:sender]; 
+	
+	
+	
+	
 }
 
 - (IBAction)saveFlam3:(id)sender {
@@ -183,6 +187,11 @@
 	[ffm renderStill];
 }
 
+- (IBAction)renderStillUsingFlam3:(id)sender {
+	
+	[ffm renderStillUsingFlam3];
+}
+
 - (IBAction)renderStillToWindow:(id)sender {
 	[ffm renderStillToWindow];
 }
@@ -192,6 +201,8 @@
  	[ffm renderAnimation];
 
 }
+
+/*
 
 - (IBAction)runLuaScript:(id)sender {
 	
@@ -230,6 +241,6 @@
 
 	return;
 }
-
+*/
 
 @end

@@ -1,4 +1,5 @@
 #import "GenePoolController.h"
+#import "Genome.h"
 
 @implementation GenePoolController
 
@@ -70,14 +71,30 @@
 - (IBAction)moveSelectedToEditor:(id)sender {
 	
 	int i;
+	
+	NSMutableArray *newGenomes = [[NSMutableArray alloc] initWithCapacity:[genePoolButtons count]];
+	
 	NSManagedObjectContext *moc = [ffm getNSManagedObjectContext];
 	
 	for(i=0; i<[genePoolButtons count]; i++) {
-		if ([[genePoolButtons objectAtIndex:i] state] == NSOffState && [model getCGenomeForIndex:i] != NULL) {
-			[ffm generateAllThumbnailsForGenome:[model getCGenomeForIndex:i] withCount:1 inContext:moc];
+		if ([[genePoolButtons objectAtIndex:i] state] == NSOffState) {
+			NSData *genomeXML = [model getGenomeForIndex:i];
+			[genomeXML retain];
+			NSLog(@"%@", [[NSString alloc] initWithData:genomeXML encoding:NSUTF8StringEncoding]);
+			[newGenomes addObjectsFromArray:[Genome createGenomeEntitiesFromXML:genomeXML inContext:moc]];
+			[genomeXML release];
 		}
 	}
 	
+
+	if ([newGenomes count] > 0) {
+
+		[moc performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
+		[ffm generateAllThumbnailsForGenomes:newGenomes];
+		
+	}
+	
+	[newGenomes release];
 	
 }
 
@@ -103,7 +120,7 @@
 } 
 
 
-- (void)setButton:(NSButton *)button withCGenome:(flam3_genome *)genome {
+- (void)setButton:(NSButton *)button withGenome:(NSData *)genome {
 	
 	int i;
 	
@@ -112,7 +129,7 @@
 	for(i=0; i<[genePoolButtons count]; i++) {
 		tmpButton = [genePoolButtons objectAtIndex:i];
 		if (button == tmpButton) {
-			[self setButtonImage:[model setCGenome:genome forIndex:i] forIndex:i];
+			[self setButtonImage:[model setGenome:genome forIndex:i] forIndex:i];
 		}
 	}
 	

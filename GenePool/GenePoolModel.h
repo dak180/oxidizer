@@ -7,8 +7,6 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "flam3.h"
-
 
 @interface GenePoolModel : NSObject {
 
@@ -18,17 +16,19 @@
 	
 @private
 	
-	flam3_genome **genomes;
+/*	flam3_genome **genomes;
+*/
+	NSMutableArray     *genomes;
 	bool         *genomeCanBreed;
 	unsigned int genomeCount;					
 }
 
-+(NSBitmapImageRep *)renderButtomImageRep:(flam3_genome *)cps;
+//+ (NSString *)createTemporaryPathWithFileName:(NSString *)fileName;
 
 - (bool) canGenomeBreed:(int)index;
 
-- (NSImage *) setCGenome:(flam3_genome *)cGenome forIndex:(int)index;
-- (flam3_genome *) getCGenomeForIndex:(int)index;
+- (NSImage *) setGenome:(NSData *)genome forIndex:(int)index;
+- (NSData *) getGenomeForIndex:(int)index;
 
 - (NSImage *) createRandomGenome:(int)index;
 - (NSImage *) makeImageForGenome:(int)index;

@@ -41,12 +41,14 @@
 
 }
 
-+ (flam3_genome *)alternateCGenome:(flam3_genome *)selp0 withCGenome:(flam3_genome *)selp1;
-+ (flam3_genome *)interpolateCGenome:(flam3_genome *)selp0 withCGenome:(flam3_genome *)selp1;
-+ (flam3_genome *)unionCGenome:(flam3_genome *)selp0 withCGenome:(flam3_genome *)selp1;
-+ (flam3_genome *)mutateCGenome:(flam3_genome *)selp0;
-+ (flam3_genome *)createRandomCGenome;
 
++ (NSData *)alternateGenome:(NSData *)selp0 withGenome:(NSData *)selp1;
++ (NSData *)interpolateGenome:(NSData *)selp0 withGenome:(NSData *)selp1;
++ (NSData *)unionGenome:(NSData *)selp0 withGenome:(NSData *)selp1;
++ (NSData *)mutateGenome:(NSData *)selp0;
++ (NSData *)createRandomGenomeXMLwithEnvironment:(NSMutableDictionary *)environmentDictionary;
++ (NSData *)Flam3Cross:(NSData *)selp0 With:(NSData *)selp1 usingEnvironment:(NSMutableDictionary *)env;
++ (void) makeImageForGenomes:(NSArray *)genomes;
 - (BOOL) openFile:(NSManagedObjectContext *)moc;
 - (void) deleteOldGenomesInContext:(NSManagedObjectContext *)moc;
 

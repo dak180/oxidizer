@@ -22,7 +22,6 @@
 #import <Cocoa/Cocoa.h>
 #import "FlameController.h"
 #import "PaletteController.h"
-#import "flam3.h"
 
 //NSManagedObjectContext *managedObjectContext();
 
@@ -30,51 +29,36 @@
 @interface Genome : NSObject
 {
 
+	/*
 	NSImage *_image;
 	NSManagedObjectContext *_moc;
 	NSManagedObject *_genomeEntity;
 	flam3_genome *_genome;
 	int _index;
-
+*/
 }
  
 + (int) getIntSymmetry:(NSString *)value;
 + (NSString *) getStringSymmetry:(int)value;
 
-/* Core data code */
-+ (NSManagedObject *)createGenomeEntityFrom:(flam3_genome *)genome withImage:(NSImage *)image inContext:(NSManagedObjectContext *)moc;
++ (NSData *)createXMLFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc forThumbnail:(BOOL)thumbnail; 
++ (NSXMLNode *)createXMLFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc forThumbnail:(BOOL)thumbnail;
++ (void) createXMLForXFormVariations:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc toElement:(NSXMLElement *)xform;
++ (NSXMLNode *)createXMLForXFormFromEntity:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
++ (void )createXMLForCMap:(NSArray *)cmaps forElement:(NSXMLElement *)genome;
++ (void) createXMLForEditElement:(NSXMLElement *)genomeElement usingEntity:(NSManagedObject *)genome;
 
-+ (NSMutableSet *)createXFormEntitySetFromCGenome:(flam3_genome *)genome inContext:(NSManagedObjectContext *)moc;
-+ (NSMutableSet *)createCMapEntitySetFromCGenome:(flam3_genome *)genome inContext:(NSManagedObjectContext *)moc;
-+ (NSMutableSet *)createVariationsEntitySetFromCXForm:(flam3_xform *)xform inContext:(NSManagedObjectContext *)moc;
++ (NSArray *)createGenomeEntitiesFromXML:(NSData *)xml inContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createGenomeEntitiesFromElement:(NSXMLElement *)genome inContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createTransformEntitiesFromElement:(NSXMLElement *)xform inContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createVariationEntitiesFromElement:(NSXMLElement *)xform inContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createVariationEntityFromElement:(NSXMLElement *)xform ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc;
 
-/* create default entities */
 + (NSManagedObject *)createDefaultGenomeEntityFromInContext:(NSManagedObjectContext *)moc;
-+ (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc; 
-+ (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc; 
++ (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc;
 
+/* Core data code */
 
-+ (flam3_genome *)populateAllCGenomesFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc;
-+ (void )populateCGenome:(flam3_genome *)newGenome FromEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc;
-+ (void )poulateXForm:(flam3_xform *)xform FromEntity:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
-+ (void )poulateVariations:(flam3_xform *)xform FromEntityArray:(NSArray *)xformEntity;
-+ (void )populateCMap:(flam3_palette )cmap FromEntityArray:(NSArray *)cmaps;
-+ (xmlDocPtr) populateCEditDocFromEntity:(NSManagedObject *)genome;
-+ (void) compareGenomesEntity:(NSManagedObject *)genomeEntity toCGenome:(flam3_genome *)genome fromContext:(NSManagedObjectContext *)moc;
-+ (void) compareXForm:(flam3_xform *)of toXForm:(flam3_xform *)ff;
-
-- (void)setCGenome:(flam3_genome *)cps;
-- (flam3_genome *)getCGenome;
-
-- (void)setManagedObjectContext:(NSManagedObjectContext *)moc;
-- (NSManagedObjectContext *)getManagedObjectContext;
-
-- (NSImage *)getImage;
-- (void)setImage:(NSImage *)newImage;
-
-- (NSManagedObject *)getGenomeEntity;
-- (void)setGenomeEntity:(NSManagedObject *)genomeEntity;
-
-- (void)createGenomeEntity;
   
 @end

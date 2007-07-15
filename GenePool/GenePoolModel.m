@@ -1,5 +1,5 @@
 //
-//  GebePoolModel.m
+//  GenePoolModel.m
 //  oxidizer
 //
 //  Created by David Burnett on 12/11/2006.
@@ -7,6 +7,7 @@
 //
 
 #import "GenePoolModel.h"
+#import "Flam3Task.h"
 #import "BreedingController.h"
 
 
@@ -17,7 +18,7 @@
 	
     if (self = [super init]) {
 
-		genomes = NULL;
+		genomes = [[NSMutableArray alloc] initWithCapacity:16];
 		genomeCanBreed = NULL;
 	
 	}
@@ -36,13 +37,18 @@
 	
 	if(genomeCanBreed[index] == NO) {
 		
-		if(genomes[index] != NULL) {
-			free(genomes[index]);
-		}
-		genomes[index] = [BreedingController createRandomCGenome];
-//		genomeCanBreed[index] = YES;
-		NSImage *flameImage = [self makeImageForGenome:index];
-		return flameImage;
+				
+		srandom(time(NULL));
+		
+		NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
+		
+		[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
+		[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
+		[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
+		
+		[genomes replaceObjectAtIndex:index withObject:[BreedingController createRandomGenomeXMLwithEnvironment:env]];
+
+		return [self makeImageForGenome:index];
 		
 	} else {
 		
@@ -55,10 +61,29 @@
 
 - (NSImage *) makeImageForGenome:(int)index {
 	
-		NSBitmapImageRep *imageRep = [GenePoolModel renderButtomImageRep:genomes[index]];
-		NSImage *flameImage = [[NSImage alloc] init];
-		[flameImage addRepresentation:imageRep];
-		return flameImage;
+	srandom(time(NULL));
+	
+	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
+	
+	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
+	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
+	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
+	
+	NSString *pngFileName = [Flam3Task createTemporaryPathWithFileName:@"gpm.png"];
+	[pngFileName retain];
+	[env setObject:pngFileName forKey:@"out"];
+	
+	
+	
+	[Flam3Task runFlam3RenderAsQuietTask:[genomes objectAtIndex:index] withEnvironment:env];
+	
+	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:pngFileName]];
+
+	[Flam3Task deleteTemporaryPathAndFile:pngFileName];
+	
+	[flameImage autorelease];
+	[pngFileName release];
+	return flameImage;
 }	
 	
 - (void)toggleGenome:(int)index  {
@@ -72,23 +97,21 @@
 	
 	int i;
 	
-	if(genomes != NULL) {
-		for(i=0; i<genomeCount; i++) {
-			free(genomes);				
-		}
+	if(genomeCanBreed != NULL) {
 		free(genomeCanBreed);
 	}
-	
-	genomes        = (flam3_genome **)malloc(sizeof(flam3_genome *) * count);
-	
 	genomeCanBreed = (bool *)malloc(sizeof(bool) * count);
 	
-	for(i=0; i<count; i++) {
-		
-		genomes[i] = NULL;
+	for(i=0; i<count; i++) {		
 		genomeCanBreed[i] = NO;
 	}
 	
+	[genomes removeAllObjects];
+
+	for(i=0; i<count; i++) {		
+		[genomes addObject:[[NSData alloc] init]];
+	}	
+
 	genomeCount = count;
 	
 } 
@@ -114,13 +137,19 @@
 	[genePoolProgress setUsesThreadedAnimation:YES];
 	[genePoolProgressWindow center];
 	[genePoolProgressWindow makeKeyAndOrderFront:self];
+
+	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
+	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
+	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
+	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 	
 	
 	for(i=0; i<genomeCount; i++) {
 		if (genomeCanBreed[i] == NO) {
 			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Creating new Genome %d", i]];
 			[genePoolProgressText displayIfNeeded];
-			genomes[i] = [BreedingController createRandomCGenome];
+			NSData *newGenome = [BreedingController createRandomGenomeXMLwithEnvironment:env];
+			[genomes replaceObjectAtIndex:i withObject:newGenome];
 			[genePoolProgress incrementBy:1.0];
 			[genePoolProgress displayIfNeeded];
 
@@ -139,7 +168,7 @@
 
 	for(i=0; i<genomeCount; i++) {
 		
-		if(genomeCanBreed[i] == YES && genomes[i] != NULL) {
+		if(genomeCanBreed[i] == YES) {
 			breedingCount++;	
 		}
 		
@@ -157,11 +186,7 @@
 	[genePoolProgressWindow makeKeyAndOrderFront:self];
 	
 	
-	flam3_genome **newGenomes = (flam3_genome **)malloc(sizeof(flam3_genome *) * genomeCount);
-	for(i=0; i<genomeCount; i++) {
-		newGenomes[i] = NULL;
-	}	
-	
+	NSMutableArray *newGenomes = [[NSMutableArray alloc] initWithCapacity:genomeCount];
 
 	unsigned int *order = malloc(sizeof(unsigned int) * breedingCount);
 	unsigned int *breedingOrder = malloc(sizeof(unsigned int) * breedingCount);
@@ -183,13 +208,17 @@
 	}
 
 	
-	
 	switch (breedingCount) {
+		case 0:
+			[newGenomes release];
+			[genePoolProgressWindow setIsVisible:NO];
+			return NO;
+			break;
 		case 1:
 			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Mutating Genome %d", breedingOrder[0]]];
 			[genePoolProgressText displayIfNeeded];
 			while(newGenomeCount < genomeCount) {
-				newGenomes[newGenomeCount] = [BreedingController mutateCGenome:genomes[breedingOrder[0]]]; 
+				[newGenomes addObject:[BreedingController mutateGenome:[genomes objectAtIndex:breedingOrder[0]]]]; 
 				newGenomeCount++;
 				[genePoolProgress setDoubleValue:newGenomeCount];
 				[genePoolProgress displayIfNeeded];
@@ -214,14 +243,18 @@
 					switch(index) {
 						case 1:
 							/* interpolate */
-							newGenomes[newGenomeCount] = [BreedingController interpolateCGenome:genomes[breedingOrder[order[i]]] withCGenome:genomes[breedingOrder[order[i+1]]]]; 
+							[newGenomes addObject:[BreedingController interpolateGenome:[genomes objectAtIndex:breedingOrder[order[i]]] 
+																			 withGenome:[genomes objectAtIndex:breedingOrder[order[i+1]]]]]; 
 							break;
 						case 2:
-							newGenomes[newGenomeCount] = [BreedingController alternateCGenome:genomes[breedingOrder[order[i]]] withCGenome:genomes[breedingOrder[order[i+1]]]]; 
 							/* alternate */
+							[newGenomes addObject:[BreedingController alternateGenome:[genomes objectAtIndex:breedingOrder[order[i]]] 
+																			 withGenome:[genomes objectAtIndex:breedingOrder[order[i+1]]]]]; 
 							break;
 						default:
-							newGenomes[newGenomeCount] = [BreedingController unionCGenome:genomes[breedingOrder[order[i]]] withCGenome:genomes[breedingOrder[order[i+1]]]]; 
+							/* union */
+							[newGenomes addObject:[BreedingController unionGenome:[genomes objectAtIndex:breedingOrder[order[i]]] 
+																			 withGenome:[genomes objectAtIndex:breedingOrder[order[i+1]]]]]; 
 							
 					}
 					newGenomeCount++;
@@ -234,14 +267,14 @@
 			}
 	}
 	
-	for(i=0; i<genomeCount; i++) {
-		if(genomes[i] != NULL) {
-			free(genomes[i]);
-		}
-		genomes[i] = newGenomes[i];
-	}	
+
+	[genomes removeAllObjects];
+	[genomes addObjectsFromArray:newGenomes];
+	[newGenomes removeAllObjects];
+	[newGenomes release];
 	
-	free(newGenomes);
+	free(order);
+	free(breedingOrder);
 
 	[genePoolProgressWindow setIsVisible:NO];
 
@@ -251,91 +284,21 @@
 }
 
 
-- (NSImage *) setCGenome:(flam3_genome *)cGenome forIndex:(int)index {
+- (NSImage *) setGenome:(NSData *)genome forIndex:(int)index {
 	
-	if(genomes[index] != NULL) {
-		free(genomes[index]);
-	}
 
-	genomes[index] = cGenome;
+	[genomes replaceObjectAtIndex:index withObject:genome];
 
 	NSImage *flameImage = [self makeImageForGenome:index];
 	return flameImage;
 				
 }
 
-- (flam3_genome *) getCGenomeForIndex:(int)index {
+- (NSData *) getGenomeForIndex:(int)index {
 	
+	return [genomes objectAtIndex:index];
 	
-	if (genomes[index] == NULL) {
-		return NULL;
-	}
-	/* return a copy */
-	flam3_genome *copy = (flam3_genome *)malloc(sizeof(flam3_genome));
-	memset(copy, 0, sizeof(flam3_genome));
-	flam3_copy(copy, genomes[index]);
-	copy->edits =  xmlCopyDoc(genomes[index]->edits, 1);
-	return copy;
 				
-}
-
-
-+(NSBitmapImageRep *)renderButtomImageRep:(flam3_genome *)cps {
-	
-	NSBitmapImageRep *flameRep;
-	
-	flam3_frame frame;
-	
-	
-	frame.genomes = cps;
-	
-	frame.time = 0.0;
-	frame.temporal_filter_radius = 0.0;
-	frame.ngenomes = 1;
-	frame.bits = 33;
-	frame.verbose = 0;
-	frame.genomes = cps;
-	frame.pixel_aspect_ratio = 1.0;
-	frame.progress = 0;
-	
-	int realHeight, realWidth;
-	double realScale;
-	
-	double scaleFactor;
-	
-	
-	realHeight = cps->height;
-	realWidth = cps->width;
-	realScale = cps->pixels_per_unit;
-	
-	scaleFactor = realHeight > realWidth ? 72.0 / realHeight : 72.0 / realWidth; 
-	
-	cps->height *= scaleFactor;
-	cps->width *= scaleFactor;
-	cps->pixels_per_unit *= scaleFactor;
-	
-	
-	flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-													  pixelsWide:cps->width
-													  pixelsHigh:cps->height
-												   bitsPerSample:8
-												 samplesPerPixel:3
-														hasAlpha:NO 
-														isPlanar:NO
-												  colorSpaceName:NSDeviceRGBColorSpace
-													bitmapFormat:0
-													 bytesPerRow:3*cps->width
-													bitsPerPixel:8*3];
-	
-	unsigned char *image =[flameRep bitmapData];
-	
-	flam3_render(&frame, image, cps->width, flam3_field_both, 3, 0);
-	
-	cps->height = realHeight;
-	cps->width = realWidth;
-	cps-> pixels_per_unit = realScale;
-	
-	return flameRep;
 }
 
 

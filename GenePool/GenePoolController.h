@@ -45,7 +45,7 @@
 - (IBAction)toggleButtons:(id)sender;
 
 - (void) setButtonImage:(NSImage *)image forIndex:(int)index;
-- (void) setButton:(NSButton *)button withCGenome:(flam3_genome *)genome;
+- (void) setButton:(NSButton *)button withGenome:(NSData *)genome;
 - (void) showGenePoolWindow:(id)sender;
 - (void) setFractalFlameModel:(FractalFlameModel *)ffm;
 

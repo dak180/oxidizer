@@ -107,6 +107,9 @@
                 progressWindow = NSWindow; 
                 qtController = QuickTimeController; 
                 saveThumbnailsView = NSView; 
+                taskAllFramesIndicator = NSProgressIndicator; 
+                taskFrameIndicator = NSProgressIndicator; 
+                taskProgressWindow = NSWindow; 
             }; 
             SUPERCLASS = NSObject; 
         }, 
@@ -157,6 +160,7 @@
                 renderMovie = id; 
                 renderStill = id; 
                 renderStillToWindow = id; 
+                renderStillUsingFlam3 = id; 
                 runLuaScript = id; 
                 saveAsFlam3 = id; 
                 saveFlam3 = id; 

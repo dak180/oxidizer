@@ -9,7 +9,6 @@
 #import "DnDButton.h"
 #import "DnDArrayController.h"
 #import "Genome.h"
-#import "flam3.h"
 
 
 @implementation DnDButton
@@ -56,17 +55,14 @@
 	sourceMoc = [NSManagedObjectContext alloc];
 	[mocData getBytes:&sourceMoc];
 	
-	flam3_genome *genome = (flam3_genome *)malloc(sizeof(flam3_genome));
-	memset(genome, 0, sizeof(flam3_genome));
-		
 	NSArray *rows = [[sender draggingPasteboard] propertyListForType:@"Genomes"];
 	
 	NSEnumerator *enumerator = [rows objectEnumerator];
 	
 	genomeData = [enumerator nextObject];
 	[genomeData getBytes:&sourceEntity];
-	[Genome populateCGenome:genome FromEntity:sourceEntity fromContext:sourceMoc];
-	[genePoolController setButton:self withCGenome:genome];
+	NSData *xml = [Genome createXMLFromEntities:[NSArray arrayWithObject:sourceEntity]  fromContext:sourceMoc forThumbnail:NO];
+	[genePoolController setButton:self withGenome:xml];
 	
 	return YES;
 	

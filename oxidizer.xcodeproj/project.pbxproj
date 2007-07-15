@@ -12,18 +12,29 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A40238E20B5811800086458F /* lualib.h in Headers */ = {isa = PBXBuildFile; fileRef = A40238E10B5811800086458F /* lualib.h */; };
+		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; };
 		A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
+		A41B414F0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.h in Headers */ = {isa = PBXBuildFile; fileRef = A41B414D0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.h */; };
+		A41B415D0C439EA1000130DE /* NSProgressIndicatorUpdateOnMainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */; };
+		A41CF2E00C340B6D001582CC /* libpng.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2DB0C340B44001582CC /* libpng.dylib */; };
+		A41CF2EA0C340C62001582CC /* flam3-render in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2D80C340AFE001582CC /* flam3-render */; };
 		A41E6CC00B0F429900713916 /* DnDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A41E6CBF0B0F429900713916 /* DnDButton.m */; };
 		A422B9A10B162E7800019559 /* GenePool.nib in Resources */ = {isa = PBXBuildFile; fileRef = A422B9A00B162E7800019559 /* GenePool.nib */; };
 		A422B9A50B16308200019559 /* GenePoolNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9A30B16308200019559 /* GenePoolNibController.m */; };
 		A422B9A80B16316E00019559 /* GenePoolController.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9A70B16316E00019559 /* GenePoolController.m */; };
 		A422B9AB0B1631A000019559 /* GenePoolModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9AA0B1631A000019559 /* GenePoolModel.m */; };
 		A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4233E9309EFF3010047DC34 /* QuickTimeController.m */; };
+		A42608830C41109600DDB92E /* flam3-animate in Resources */ = {isa = PBXBuildFile; fileRef = A42608820C41109600DDB92E /* flam3-animate */; };
+		A42608A50C41111100DDB92E /* flam3-animate in Resources */ = {isa = PBXBuildFile; fileRef = A42608820C41109600DDB92E /* flam3-animate */; };
 		A44201EE0B21E551000B94D9 /* genepool.png in Resources */ = {isa = PBXBuildFile; fileRef = A44201ED0B21E551000B94D9 /* genepool.png */; };
 		A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */ = {isa = PBXBuildFile; fileRef = A4421BE409CF3CE900E9D39F /* oxidizer.icns */; };
 		A46A71580A72B44E0026DFD6 /* ProgressDetails.m in Sources */ = {isa = PBXBuildFile; fileRef = A46A71570A72B44E0026DFD6 /* ProgressDetails.m */; };
+		A47ABF1E0C425EF9007F1047 /* flam3-genome in Resources */ = {isa = PBXBuildFile; fileRef = A47ABF1D0C425EF9007F1047 /* flam3-genome */; };
+		A47ABF450C425F8A007F1047 /* flam3-genome in Resources */ = {isa = PBXBuildFile; fileRef = A47ABF1D0C425EF9007F1047 /* flam3-genome */; };
+		A47AC02D0C429786007F1047 /* Flam3Task.h in Headers */ = {isa = PBXBuildFile; fileRef = A47AC02B0C429786007F1047 /* Flam3Task.h */; };
+		A47DDCC10C35496C009262B6 /* libjpeg.62.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */; };
 		A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
 		A4A3810E0A4F236700E7364C /* DnDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3810D0A4F236700E7364C /* DnDImageView.m */; };
 		A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */; };
@@ -33,9 +44,7 @@
 		A4DA85880966DB7D00FFCF4D /* FractalFlameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */; };
 		A4DA858E0966DD2A00FFCF4D /* EnvironmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */; };
 		A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
-		A4DAB5A80A02A9F7003BA626 /* ThreadParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DAB5A70A02A9F7003BA626 /* ThreadParameters.m */; };
 		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
-		A4EC3FA10A755B3A008E0023 /* QuicktimeThreadParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = A4EC3FA00A755B3A008E0023 /* QuicktimeThreadParameters.m */; };
 		A4F333A2096C813B00230854 /* Genome.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F333A1096C813B00230854 /* Genome.m */; };
 		A4F3EF1E0AB5DE3100A282F2 /* image-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */; };
 		A4F3EF200AB5DE3B00A282F2 /* video-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */; };
@@ -45,17 +54,7 @@
 		A4F49CF00AAB1D5400FA4BE8 /* oxidizer_dna.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */; };
 		A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */; };
 		A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FDAB290A4EBA9400910299 /* DnDArrayController.m */; };
-		A4FDD8890B56BA160089AE35 /* flam3-palettes.c in Sources */ = {isa = PBXBuildFile; fileRef = A42D470409996C5A00A7296E /* flam3-palettes.c */; };
-		A4FDD88A0B56BA160089AE35 /* flam3.c in Sources */ = {isa = PBXBuildFile; fileRef = A42D470509996C5A00A7296E /* flam3.c */; };
-		A4FDD88B0B56BA510089AE35 /* flam3.h in Headers */ = {isa = PBXBuildFile; fileRef = A42D470609996C5A00A7296E /* flam3.h */; };
-		A4FDD8A80B56BBAD0089AE35 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */; };
-		A4FDD8B60B56BCB70089AE35 /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FDD8700B56B95C0089AE35 /* flam3.framework */; };
-		A4FDD8BD0B56BD2A0089AE35 /* flam3.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = A4FDD8700B56B95C0089AE35 /* flam3.framework */; };
-		A4FDD8E90B56BFAE0089AE35 /* flam3_tools.m in Sources */ = {isa = PBXBuildFile; fileRef = A40965700A30B5760076ACA3 /* flam3_tools.m */; };
-		A4FDD8EF0B56C0090089AE35 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		A4FDD91B0B56C0850089AE35 /* flam3_tools.h in Headers */ = {isa = PBXBuildFile; fileRef = A409656F0A30B5760076ACA3 /* flam3_tools.h */; };
 		A4FDD9390B56C1960089AE35 /* swig_interface.i in Resources */ = {isa = PBXBuildFile; fileRef = A4FDD9380B56C1960089AE35 /* swig_interface.i */; };
-		A4FDD9580B56C7F60089AE35 /* lua_interface.c in Sources */ = {isa = PBXBuildFile; fileRef = A4FDD9530B56C7C10089AE35 /* lua_interface.c */; };
 		A4FDDA1A0B56D6800089AE35 /* lapi.c in Sources */ = {isa = PBXBuildFile; fileRef = A4FDD9FA0B56D6800089AE35 /* lapi.c */; };
 		A4FDDA1B0B56D6800089AE35 /* lauxlib.c in Sources */ = {isa = PBXBuildFile; fileRef = A4FDD9FB0B56D6800089AE35 /* lauxlib.c */; };
 		A4FDDA1C0B56D6800089AE35 /* lbaselib.c in Sources */ = {isa = PBXBuildFile; fileRef = A4FDD9FC0B56D6800089AE35 /* lbaselib.c */; };
@@ -85,7 +84,6 @@
 		A4FDDA370B56D6800089AE35 /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = A4FDDA170B56D6800089AE35 /* lvm.c */; };
 		A4FDDA380B56D6800089AE35 /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = A4FDDA180B56D6800089AE35 /* lzio.c */; };
 		A4FDDA450B56D86B0089AE35 /* libreadline.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FDDA440B56D86B0089AE35 /* libreadline.dylib */; };
-		A4FDDA4D0B56D8D30089AE35 /* lua.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4FDD9790B56D4A70089AE35 /* lua.framework */; };
 		A4FDDA580B56DAB10089AE35 /* lapi.h in Headers */ = {isa = PBXBuildFile; fileRef = A4FDDA560B56DAB10089AE35 /* lapi.h */; };
 		A4FDDA590B56DAB10089AE35 /* lauxlib.h in Headers */ = {isa = PBXBuildFile; fileRef = A4FDDA570B56DAB10089AE35 /* lauxlib.h */; };
 		A4FDDA5C0B56DAD20089AE35 /* lua.h in Headers */ = {isa = PBXBuildFile; fileRef = A4FDDA5B0B56DAD20089AE35 /* lua.h */; };
@@ -94,13 +92,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A4FDD8C10B56BD530089AE35 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A4FDD86F0B56B95C0089AE35;
-			remoteInfo = flam3;
-		};
 		A4FDDA4A0B56D8BE0089AE35 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
@@ -117,7 +108,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A4FDD8BD0B56BD2A0089AE35 /* flam3.framework in Copy Private Frameworks */,
 				A4FDDA690B56DC8A0089AE35 /* lua.framework in Copy Private Frameworks */,
 			);
 			name = "Copy Private Frameworks";
@@ -137,12 +127,15 @@
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Oxidizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oxidizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A40238E10B5811800086458F /* lualib.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = lualib.h; path = "lua-5.1/src/lualib.h"; sourceTree = "<group>"; };
-		A409656F0A30B5760076ACA3 /* flam3_tools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = flam3_tools.h; sourceTree = "<group>"; };
-		A40965700A30B5760076ACA3 /* flam3_tools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = flam3_tools.m; sourceTree = "<group>"; };
 		A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragDropAndSaveImageView.h; sourceTree = "<group>"; };
 		A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DragDropAndSaveImageView.m; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		A41B414D0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NSProgressIndicatorUpdateOnMainThread.h; sourceTree = "<group>"; };
+		A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = NSProgressIndicatorUpdateOnMainThread.m; sourceTree = "<group>"; };
+		A41CF2D80C340AFE001582CC /* flam3-render */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-render"; path = "flam3/flam3-render"; sourceTree = SOURCE_ROOT; };
+		A41CF2DB0C340B44001582CC /* libpng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng.dylib; path = ../../libpng/lib/libpng.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjpeg.62.dylib; path = "../../jpeg-6b/lib/libjpeg.62.dylib"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A41E6CBE0B0F429900713916 /* DnDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DnDButton.h; sourceTree = "<group>"; };
 		A41E6CBF0B0F429900713916 /* DnDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DnDButton.m; sourceTree = "<group>"; };
 		A422B9A00B162E7800019559 /* GenePool.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = GenePool.nib; path = GenePool/GenePool.nib; sourceTree = "<group>"; };
@@ -154,13 +147,14 @@
 		A422B9AA0B1631A000019559 /* GenePoolModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = GenePoolModel.m; path = GenePool/GenePoolModel.m; sourceTree = "<group>"; };
 		A4233E9209EFF3000047DC34 /* QuickTimeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickTimeController.h; sourceTree = "<group>"; };
 		A4233E9309EFF3010047DC34 /* QuickTimeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickTimeController.m; sourceTree = "<group>"; };
-		A42D470409996C5A00A7296E /* flam3-palettes.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = "flam3-palettes.c"; sourceTree = "<group>"; };
-		A42D470509996C5A00A7296E /* flam3.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = flam3.c; sourceTree = "<group>"; };
-		A42D470609996C5A00A7296E /* flam3.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = flam3.h; sourceTree = "<group>"; };
+		A42608820C41109600DDB92E /* flam3-animate */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-animate"; path = "flam3/flam3-animate"; sourceTree = SOURCE_ROOT; };
 		A44201ED0B21E551000B94D9 /* genepool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = genepool.png; path = icons/genepool.png; sourceTree = "<group>"; };
 		A4421BE409CF3CE900E9D39F /* oxidizer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = oxidizer.icns; sourceTree = "<group>"; };
 		A46A71560A72B44E0026DFD6 /* ProgressDetails.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ProgressDetails.h; sourceTree = "<group>"; };
 		A46A71570A72B44E0026DFD6 /* ProgressDetails.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ProgressDetails.m; sourceTree = "<group>"; };
+		A47ABF1D0C425EF9007F1047 /* flam3-genome */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-genome"; path = "../../flam3/flam3-genome"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A47AC02B0C429786007F1047 /* Flam3Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Flam3Task.h; sourceTree = "<group>"; };
+		A47AC02C0C429786007F1047 /* Flam3Task.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Flam3Task.m; sourceTree = "<group>"; };
 		A4A3027B0A28995D002828D9 /* BreedingController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BreedingController.h; sourceTree = "<group>"; };
 		A4A3027C0A28995D002828D9 /* BreedingController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = BreedingController.m; sourceTree = "<group>"; };
 		A4A3810C0A4F236700E7364C /* DnDImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDImageView.h; sourceTree = "<group>"; };
@@ -177,11 +171,7 @@
 		A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = EnvironmentController.m; sourceTree = "<group>"; };
 		A4DA871B096712CA00FFCF4D /* FlameController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FlameController.h; sourceTree = "<group>"; };
 		A4DA871C096712CA00FFCF4D /* FlameController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FlameController.m; sourceTree = "<group>"; };
-		A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ThreadParameters.h; sourceTree = "<group>"; };
-		A4DAB5A70A02A9F7003BA626 /* ThreadParameters.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = ThreadParameters.m; sourceTree = "<group>"; };
-		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "../../flam3-palettes.xml"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A4EC3F9F0A755B3A008E0023 /* QuicktimeThreadParameters.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = QuicktimeThreadParameters.h; sourceTree = "<group>"; };
-		A4EC3FA00A755B3A008E0023 /* QuicktimeThreadParameters.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = QuicktimeThreadParameters.m; sourceTree = "<group>"; };
+		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "flam3/flam3-palettes.xml"; sourceTree = SOURCE_ROOT; };
 		A4F333A0096C813B00230854 /* Genome.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genome.h; sourceTree = "<group>"; };
 		A4F333A1096C813B00230854 /* Genome.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genome.m; sourceTree = "<group>"; };
 		A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "image-x-generic.png"; path = "icons/Tango/image-x-generic.png"; sourceTree = "<group>"; };
@@ -195,10 +185,8 @@
 		A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreaterThanThreeTransformer.m; sourceTree = "<group>"; };
 		A4FDAB280A4EBA9400910299 /* DnDArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDArrayController.h; sourceTree = "<group>"; };
 		A4FDAB290A4EBA9400910299 /* DnDArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DnDArrayController.m; sourceTree = "<group>"; };
-		A4FDD8700B56B95C0089AE35 /* flam3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = flam3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4FDD8710B56B95C0089AE35 /* flam3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "flam3-Info.plist"; sourceTree = "<group>"; };
 		A4FDD9380B56C1960089AE35 /* swig_interface.i */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.interfacer; path = swig_interface.i; sourceTree = "<group>"; };
-		A4FDD9530B56C7C10089AE35 /* lua_interface.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = lua_interface.c; sourceTree = "<group>"; };
 		A4FDD9790B56D4A70089AE35 /* lua.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = lua.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4FDD97A0B56D4A70089AE35 /* lua-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "lua-Info.plist"; sourceTree = "<group>"; };
 		A4FDD9FA0B56D6800089AE35 /* lapi.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; name = lapi.c; path = "lua-5.1/src/lapi.c"; sourceTree = "<group>"; };
@@ -248,18 +236,7 @@
 				A41A053409758FA10063196F /* QuickTime.framework in Frameworks */,
 				A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */,
 				A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */,
-				A4FDD8B60B56BCB70089AE35 /* flam3.framework in Frameworks */,
 				A4FDDA6B0B56DD500089AE35 /* lua.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4FDD86E0B56B95C0089AE35 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4FDD8A80B56BBAD0089AE35 /* libxml2.dylib in Frameworks */,
-				A4FDD8EF0B56C0090089AE35 /* Cocoa.framework in Frameworks */,
-				A4FDDA4D0B56D8D30089AE35 /* lua.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,21 +254,18 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A41B41A40C43AD99000130DE /* Categories */,
 				A422B9D90B16336E00019559 /* GenePool */,
 				A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */,
 				A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */,
 				A4A3810C0A4F236700E7364C /* DnDImageView.h */,
 				A4A3810D0A4F236700E7364C /* DnDImageView.m */,
-				A4DAB5A60A02A9F7003BA626 /* ThreadParameters.h */,
-				A4DAB5A70A02A9F7003BA626 /* ThreadParameters.m */,
 				A4D604A909658A6C0001CD1D /* PaletteController.h */,
 				A4D604AA09658A6C0001CD1D /* PaletteController.m */,
 				A4DA85860966DB7D00FFCF4D /* FractalFlameModel.h */,
 				A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */,
 				A4DA858C0966DD2A00FFCF4D /* EnvironmentController.h */,
 				A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */,
-				A409656F0A30B5760076ACA3 /* flam3_tools.h */,
-				A40965700A30B5760076ACA3 /* flam3_tools.m */,
 				A4DA871B096712CA00FFCF4D /* FlameController.h */,
 				A4DA871C096712CA00FFCF4D /* FlameController.m */,
 				A4F333A0096C813B00230854 /* Genome.h */,
@@ -308,12 +282,12 @@
 				A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */,
 				A46A71560A72B44E0026DFD6 /* ProgressDetails.h */,
 				A46A71570A72B44E0026DFD6 /* ProgressDetails.m */,
-				A4EC3F9F0A755B3A008E0023 /* QuicktimeThreadParameters.h */,
-				A4EC3FA00A755B3A008E0023 /* QuicktimeThreadParameters.m */,
 				A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */,
 				A4F49C1A0AAB05C800FA4BE8 /* OxidizerDelegate.h */,
 				A41E6CBE0B0F429900713916 /* DnDButton.h */,
 				A41E6CBF0B0F429900713916 /* DnDButton.m */,
+				A47AC02B0C429786007F1047 /* Flam3Task.h */,
+				A47AC02C0C429786007F1047 /* Flam3Task.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -342,7 +316,6 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* Oxidizer.app */,
-				A4FDD8700B56B95C0089AE35 /* flam3.framework */,
 				A4FDD9790B56D4A70089AE35 /* lua.framework */,
 			);
 			name = Products;
@@ -360,7 +333,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				A422B9A00B162E7800019559 /* GenePool.nib */,
 				A4FDD8710B56B95C0089AE35 /* flam3-Info.plist */,
 				A4FDD97A0B56D4A70089AE35 /* lua-Info.plist */,
 			);
@@ -370,10 +342,6 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				A4FDD9530B56C7C10089AE35 /* lua_interface.c */,
-				A42D470409996C5A00A7296E /* flam3-palettes.c */,
-				A42D470509996C5A00A7296E /* flam3.c */,
-				A42D470609996C5A00A7296E /* flam3.h */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				32CA4F630368D1EE00C91783 /* oxidizer_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
@@ -384,11 +352,17 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A47ABF1D0C425EF9007F1047 /* flam3-genome */,
+				A42608820C41109600DDB92E /* flam3-animate */,
+				A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */,
+				A41CF2DB0C340B44001582CC /* libpng.dylib */,
+				A41CF2D80C340AFE001582CC /* flam3-render */,
 				A4FDD9380B56C1960089AE35 /* swig_interface.i */,
 				A4E52D560A0141A400382558 /* flam3-palettes.xml */,
 				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				A422B9A00B162E7800019559 /* GenePool.nib */,
 				A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */,
 				A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */,
 				A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */,
@@ -406,6 +380,15 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A41B41A40C43AD99000130DE /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */,
+				A41B414D0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.h */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		A422B9D90B16336E00019559 /* GenePool */ = {
@@ -475,15 +458,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		A4FDD86B0B56B95C0089AE35 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4FDD88B0B56BA510089AE35 /* flam3.h in Headers */,
-				A4FDD91B0B56C0850089AE35 /* flam3_tools.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4FDD9740B56D4A70089AE35 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -492,6 +466,8 @@
 				A4FDDA580B56DAB10089AE35 /* lapi.h in Headers */,
 				A4FDDA590B56DAB10089AE35 /* lauxlib.h in Headers */,
 				A4FDDA5C0B56DAD20089AE35 /* lua.h in Headers */,
+				A47AC02D0C429786007F1047 /* Flam3Task.h in Headers */,
+				A41B414F0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,6 +478,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Oxidizer" */;
 			buildPhases = (
+				A41CF2280C33EBDC001582CC /* ShellScript */,
 				A4FDD8AC0B56BC980089AE35 /* Copy Private Frameworks */,
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -510,7 +487,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				A4FDD8C20B56BD530089AE35 /* PBXTargetDependency */,
 				A4FDDA4B0B56D8BE0089AE35 /* PBXTargetDependency */,
 			);
 			name = Oxidizer;
@@ -518,24 +494,6 @@
 			productName = oxidizer;
 			productReference = 8D1107320486CEB800E47090 /* Oxidizer.app */;
 			productType = "com.apple.product-type.application";
-		};
-		A4FDD86F0B56B95C0089AE35 /* flam3 */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A4FDD8720B56B95D0089AE35 /* Build configuration list for PBXNativeTarget "flam3" */;
-			buildPhases = (
-				A4FDD86B0B56B95C0089AE35 /* Headers */,
-				A4FDD86C0B56B95C0089AE35 /* Resources */,
-				A4FDD86D0B56B95C0089AE35 /* Sources */,
-				A4FDD86E0B56B95C0089AE35 /* Frameworks */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = flam3;
-			productName = flam3;
-			productReference = A4FDD8700B56B95C0089AE35 /* flam3.framework */;
-			productType = "com.apple.product-type.framework";
 		};
 		A4FDD9780B56D4A70089AE35 /* lua */ = {
 			isa = PBXNativeTarget;
@@ -566,7 +524,6 @@
 			projectDirPath = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Oxidizer */,
-				A4FDD86F0B56B95C0089AE35 /* flam3 */,
 				A4FDD9780B56D4A70089AE35 /* lua */,
 			);
 		};
@@ -577,6 +534,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A47ABF450C425F8A007F1047 /* flam3-genome in Resources */,
+				A42608A50C41111100DDB92E /* flam3-animate in Resources */,
+				A41CF2EA0C340C62001582CC /* flam3-render in Resources */,
+				A47DDCC10C35496C009262B6 /* libjpeg.62.dylib in Resources */,
+				A41CF2E00C340B6D001582CC /* libpng.dylib in Resources */,
 				A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
@@ -592,21 +554,32 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A4FDD86C0B56B95C0089AE35 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		A4FDD9750B56D4A70089AE35 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A42608830C41109600DDB92E /* flam3-animate in Resources */,
+				A47ABF1E0C425EF9007F1047 /* flam3-genome in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		A41CF2280C33EBDC001582CC /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd libpng\necho \"Building libpng\"\nenv CFLAGS=\"-O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd`\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir lib\nmkdir bin\nmkdir include\nmkdir man\nmkdir man/man1\n\nenv CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386\" CFLAGS=\"-O3 -g\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd` --enable-shared\nln -s /usr/bin/glibtool ./libtool\nmake install\n\necho \"Building flam3\"\ncd ../flam3\nenv CFLAGS=\"-O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include\" LDFLAGS=\"-arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib\" \\\n  ./configure  --disable-dependency-tracking --prefix=`pwd`\nmake\ninstall_name_tool -change `otool -L flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-render\ninstall_name_tool -change `otool -L flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-render\n\ninstall_name_tool -change `otool -L flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-animate\ninstall_name_tool -change `otool -L flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-animate\n\ninstall_name_tool -change `otool -L flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-genome\ninstall_name_tool -change `otool -L flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-genome\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {
@@ -614,6 +587,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				A41B415D0C439EA1000130DE /* NSProgressIndicatorUpdateOnMainThread.m in Sources */,
 				A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */,
 				A4DA85880966DB7D00FFCF4D /* FractalFlameModel.m in Sources */,
 				A4DA858E0966DD2A00FFCF4D /* EnvironmentController.m in Sources */,
@@ -622,30 +596,18 @@
 				A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */,
 				A4D6FA2D09B1E25200096036 /* GenomeManagedObject.m in Sources */,
 				A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */,
-				A4DAB5A80A02A9F7003BA626 /* ThreadParameters.m in Sources */,
 				A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */,
 				A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */,
 				A4A3810E0A4F236700E7364C /* DnDImageView.m in Sources */,
 				A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */,
 				A46A71580A72B44E0026DFD6 /* ProgressDetails.m in Sources */,
-				A4EC3FA10A755B3A008E0023 /* QuicktimeThreadParameters.m in Sources */,
 				A4F49C1B0AAB05C800FA4BE8 /* OxidizerDelegate.m in Sources */,
 				A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */,
 				A41E6CC00B0F429900713916 /* DnDButton.m in Sources */,
 				A422B9A50B16308200019559 /* GenePoolNibController.m in Sources */,
 				A422B9A80B16316E00019559 /* GenePoolController.m in Sources */,
 				A422B9AB0B1631A000019559 /* GenePoolModel.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A4FDD86D0B56B95C0089AE35 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A4FDD8890B56BA160089AE35 /* flam3-palettes.c in Sources */,
-				A4FDD88A0B56BA160089AE35 /* flam3.c in Sources */,
-				A4FDD8E90B56BFAE0089AE35 /* flam3_tools.m in Sources */,
-				A4FDD9580B56C7F60089AE35 /* lua_interface.c in Sources */,
+				A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -687,11 +649,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A4FDD8C20B56BD530089AE35 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A4FDD86F0B56B95C0089AE35 /* flam3 */;
-			targetProxy = A4FDD8C10B56BD530089AE35 /* PBXContainerItemProxy */;
-		};
 		A4FDDA4B0B56D8BE0089AE35 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = A4FDD9780B56D4A70089AE35 /* lua */;
@@ -719,61 +676,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		A4FDD8730B56B95D0089AE35 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				HEADER_SEARCH_PATHS = /usr/include/libxml2;
-				INFOPLIST_FILE = "flam3-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				OTHER_LDFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = flam3;
-				ZERO_LINK = YES;
-			};
-			name = Debug;
-		};
-		A4FDD8740B56B95D0089AE35 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "flam3-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/opt/local/lib,
-				);
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				PREBINDING = NO;
-				PRODUCT_NAME = flam3;
-				ZERO_LINK = NO;
-			};
-			name = Release;
-		};
 		A4FDD97C0B56D4A80089AE35 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -793,8 +695,12 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/libpng/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/jpeg-6b/lib\"";
 				OTHER_CFLAGS = (
 					"-DLUA_USE_MACOSX",
 					"-DLUA_USE_READLINE",
@@ -809,28 +715,36 @@
 		A4FDD97D0B56D4A80089AE35 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "lua-Info.plist";
-				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_3)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SYSTEM_DEVELOPER_DIR)/SDKs/MacOSX10.4u.sdk/usr/lib\"";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/libpng/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_3 = "\"$(SRCROOT)/jpeg-6b/lib\"";
+				OTHER_CFLAGS = (
+					"-DLUA_USE_MACOSX",
+					"-DLUA_USE_READLINE",
 				);
+				OTHER_LDFLAGS = "";
 				PREBINDING = NO;
 				PRODUCT_NAME = lua;
 				ZERO_LINK = NO;
@@ -873,10 +787,7 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(LIBRARY_SEARCH_PATHS)",
-					/opt/local/lib,
-				);
+				LIBRARY_SEARCH_PATHS = "$(LIBRARY_SEARCH_PATHS)";
 				PRODUCT_NAME = Oxidizer;
 				WRAPPER_EXTENSION = app;
 			};
@@ -934,15 +845,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A4FDD8720B56B95D0089AE35 /* Build configuration list for PBXNativeTarget "flam3" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A4FDD8730B56B95D0089AE35 /* Debug */,
-				A4FDD8740B56B95D0089AE35 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
-		};
 		A4FDD97B0B56D4A80089AE35 /* Build configuration list for PBXNativeTarget "lua" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

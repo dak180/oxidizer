@@ -20,8 +20,8 @@
 /* PaletteController */
 
 #import <Cocoa/Cocoa.h>
-#import "flam3.h"
 
+double *initialisePalettes(void);
 
 @interface PaletteController : NSObject
 {
@@ -36,7 +36,8 @@
 	BOOL _usePalette;
 	int _paletteNumber;
 	NSMutableArray *_colours;
-	NSMutableArray *_palettes;
+	NSMutableArray *_palettes;	
+	
 }
 - (IBAction)setEnabled:(id)sender;
 - (IBAction)setNumber:(id)sender;
@@ -44,7 +45,7 @@
 
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue;
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSArray *)colours  forHeight:(int)height;
-+ (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(flam3_palette)palette;
++ (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(double *)palette forHeight:(int)height;
 + (NSMutableArray *) extrapolateArray:(NSArray *)colours;
 
 - (void) setPalette:(unsigned int )palette colourArray:(NSArray *)colours  usePalette:(BOOL)useThePaletteNumber;

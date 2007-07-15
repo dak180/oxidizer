@@ -93,8 +93,6 @@ NSString *mocPasteboardType = @"GenomeMoc";
 
 	sourceMoc = [NSManagedObjectContext alloc];
 	[mocData getBytes:&sourceMoc];
-
-	flam3_genome genome;
 	
 	NSArray *rows = [[info draggingPasteboard] propertyListForType:@"Genomes"];
 	
@@ -102,8 +100,9 @@ NSString *mocPasteboardType = @"GenomeMoc";
 
 	while (genomeData = [enumerator nextObject]) {
 		[genomeData getBytes:&sourceEntity];
-		[Genome populateCGenome:&genome FromEntity:sourceEntity fromContext:sourceMoc];
-		[Genome createGenomeEntityFrom:&genome withImage:[sourceEntity valueForKey:@"image"] inContext:destinationMoc];
+		NSData *xml = [Genome createXMLFromEntities:[NSArray arrayWithObject:sourceEntity]  fromContext:sourceMoc forThumbnail:NO];
+		NSArray *genome = [Genome createGenomeEntitiesFromXML:xml inContext:destinationMoc];
+		[[genome objectAtIndex:0] setValue:[sourceEntity valueForKey:@"image"] forKey:@"image"];
 	}
 	
 	[self rearrangeObjects];

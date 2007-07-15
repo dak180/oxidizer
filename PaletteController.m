@@ -19,6 +19,12 @@
 
 #import "PaletteController.h"
 
+void rgb2hsv(double *rgb, double *hsv);
+void hsv2rgb(double *rgb, double *hsv);
+
+static double *_paletteData = NULL;
+
+
 @implementation PaletteController
 
 
@@ -31,15 +37,12 @@
 	int paletteCount, i;
 	
 	
-	char buffer[256];
-	
-	
 	if (self = [super init]) {
    
 		[[NSFileManager defaultManager] changeCurrentDirectoryPath:[[ NSBundle mainBundle ] resourcePath ]]; 
    
-		getcwd(buffer, 255);		
-		fprintf(stderr, "%s\n", buffer);
+//		getcwd(buffer, 255);		
+//		fprintf(stderr, "%s\n", buffer);
 
    
 	paletteCount = 700;
@@ -204,7 +207,14 @@
 
 +(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue {
 
-		flam3_palette  palette;
+	double rgbValues[3];
+	double hsv[3];
+	
+	if (_paletteData == NULL) {
+		_paletteData = initialisePalettes();
+	} 
+	
+		double *palette = _paletteData + (paletteNumber * 768) ;
 		
 		unsigned char *paletteData;
 		
@@ -212,15 +222,17 @@
 		
 		paletteData = [paletteRep bitmapData];
 		
-		flam3_get_palette(paletteNumber, palette, hue);
-		
 		for(j=0; j<256; j++) {
 			
-			*paletteData = (unsigned char)(255.0*palette[j][0]);
+			rgb2hsv(palette + (3 * j), hsv);
+			hsv[0] += hue * 6.0;
+			hsv2rgb(hsv, rgbValues);
+			
+			*paletteData = (unsigned char)(255.0 * rgbValues[0]);
 			paletteData++;
-			*paletteData = (unsigned char)(255.0*palette[j][1]);
+			*paletteData = (unsigned char)(255.0 * rgbValues[1]);
 			paletteData++;
-			*paletteData = (unsigned char)(255.0*palette[j][2]);
+			*paletteData = (unsigned char)(255.0 * rgbValues[2]);
 			paletteData++;
 			
 		}																								
@@ -233,8 +245,7 @@
 
 }
 
-+(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(flam3_palette)palette {
-	
++(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(double *)palette forHeight:(int)height {
 	
 	unsigned char *paletteData;
 	
@@ -244,18 +255,18 @@
 		
 	for(j=0; j<256; j++) {
 		
-		*paletteData = (unsigned char)(255.0*palette[j][0]);
+		*paletteData = (unsigned char)(255.0 * *(palette + (3 * j)));
 		paletteData++;
-		*paletteData = (unsigned char)(255.0*palette[j][1]);
+		*paletteData = (unsigned char)(255.0 * *(palette + (3 * j) + 1));
 		paletteData++;
-		*paletteData = (unsigned char)(255.0*palette[j][2]);
+		*paletteData = (unsigned char)((255.0 * *(palette + (3 * j) + 2)));
 		paletteData++;
 		
 	}																								
 	
 	paletteData = [paletteRep bitmapData];
 	
-	for(j=1; j<10; j++) {
+	for(j=1; j<height; j++) {
 		memcpy(paletteData+(256*j*3), paletteData, 256*3);
 	}
 	
@@ -463,4 +474,129 @@
 	[newColours autorelease];
 	return newColours;
 }
+
+
 @end
+
+double *initialisePalettes(void) {
+	
+	NSError *error;
+	
+	NSString *pathToXML = [NSString pathWithComponents:[NSArray arrayWithObjects:[[ NSBundle mainBundle ] resourcePath ], @"flam3-palettes.xml", nil]];
+	NSXMLDocument *paletteDoc = [[NSXMLDocument alloc] initWithData:[NSData dataWithContentsOfFile:pathToXML] 
+															options:0 
+															  error:&error];
+	NSXMLElement *root = [paletteDoc rootElement];
+	NSArray *palettes = [root children];
+	NSEnumerator *paletteEnumerator = [palettes objectEnumerator];
+	NSXMLElement *palette;
+	
+	int i, j;
+	
+	int red, green, blue;
+	
+	NSRange range;
+	
+	_paletteData = (double *)malloc(256 * 3 * [palettes count] * sizeof(double));
+	
+	while((palette = [paletteEnumerator nextObject])) {
+		
+		int index = [[[palette attributeForName:@"number"] stringValue] intValue];
+		NSString *data = [[palette attributeForName:@"data"] stringValue];
+		range.length = 8;
+		range.location = 0;
+		
+		int itemCount = 0;
+		
+		for(i=0; i<32; i++) {
+			for(j=0; j<8; j++) {
+				unsigned int argb = 0;
+				NSScanner *paletteScanner = [NSScanner scannerWithString:[data substringWithRange:range]];
+				[paletteScanner scanHexInt:&argb];
+				blue = (argb & 0x000000FF);
+				green = ((argb & 0x0000FF00) >> 8);
+				red = ((argb & 0x00FF0000) >> 16);
+				*(_paletteData + (index * 768) + (itemCount * 3)) = red / 255.0 ;
+				*(_paletteData + (index * 768) + (itemCount * 3) + 1) = green / 255.0;
+				*(_paletteData + (index * 768) + (itemCount * 3) + 2) = blue / 255.0;
+				range.location += 8;
+				itemCount++;
+			}
+			range.location++;
+		}
+	}
+	
+	return _paletteData; 
+}
+
+void rgb2hsv(double *rgb, double *hsv) {
+
+	double rd, gd, bd, h, s, v, max, min, del, rc, gc, bc;
+	
+	rd = rgb[0];
+	gd = rgb[1];
+	bd = rgb[2];
+	
+	/* compute maximum of rd,gd,bd */
+	if (rd>=gd) { if (rd>=bd) max = rd;  else max = bd; }
+	else { if (gd>=bd) max = gd;  else max = bd; }
+	
+	/* compute minimum of rd,gd,bd */
+	if (rd<=gd) { if (rd<=bd) min = rd;  else min = bd; }
+	else { if (gd<=bd) min = gd;  else min = bd; }
+	
+	del = max - min;
+	v = max;
+	if (max != 0.0) s = (del) / max;
+	else s = 0.0;
+	
+	h = 0;
+	if (s != 0.0) {
+		rc = (max - rd) / del;
+		gc = (max - gd) / del;
+		bc = (max - bd) / del;
+		
+		if      (rd==max) h = bc - gc;
+		else if (gd==max) h = 2 + rc - bc;
+		else if (bd==max) h = 4 + gc - rc;
+		
+		if (h<0) h += 6;
+	}
+	
+	hsv[0] = h;
+	hsv[1] = s;
+	hsv[2] = v;
+}
+
+
+/* h 0 - 6, s 0 - 1, v 0 - 1
+rgb 0 - 1 */
+void hsv2rgb(double *hsv, double *rgb) {
+	
+	double h = hsv[0], s = hsv[1], v = hsv[2];
+	int    j;
+	double rd, gd, bd;
+	double f, p, q, t;
+	
+	while (h >= 6.0) h = h - 6.0;
+	while (h <  0.0) h = h + 6.0;
+	j = (int) floor(h);
+	f = h - j;
+	p = v * (1-s);
+	q = v * (1 - (s*f));
+	t = v * (1 - (s*(1 - f)));
+	
+	switch (j) {
+		case 0:  rd = v;  gd = t;  bd = p;  break;
+		case 1:  rd = q;  gd = v;  bd = p;  break;
+		case 2:  rd = p;  gd = v;  bd = t;  break;
+		case 3:  rd = p;  gd = q;  bd = v;  break;
+		case 4:  rd = t;  gd = p;  bd = v;  break;
+		case 5:  rd = v;  gd = p;  bd = q;  break;
+		default: rd = v;  gd = t;  bd = p;  break;
+	}
+	
+	rgb[0] = rd;
+	rgb[1] = gd;
+	rgb[2] = bd;
+}

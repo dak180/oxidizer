@@ -19,12 +19,12 @@
 
 #import <sys/sysctl.h>
 #import "FractalFlameModel.h"
+#import "BreedingController.h"
+#import "Flam3Task.h"
 #import "Genome.h"
-#import "ThreadParameters.h"
 #import "GreaterThanThreeTransformer.h"
 #import "ProgressDetails.h"
 #import "QuickTime/QuickTime.h"
-#import "flam3_tools.h"
 
 
 int printProgress(void *nslPtr, double progress, int stage);
@@ -177,77 +177,67 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (void)renderStillInNewThread:(QuickTimeController *)qt {
 
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];									
 	
-	NSBitmapImageRep *flameRep;
-	
-	flam3_frame frame;
-	flam3_genome *genome;
-	
-	NSArray *genomes;
-
-									
 	[moc lock];
 	
-	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
-
-	genomes = [moc executeFetchRequest:fetch error:nil];
-	[fetch release];
-
 	
-	genome = (flam3_genome *)malloc(sizeof(flam3_genome));
+	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
+		NSTemporaryDirectory(),
+		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+		nil]];
+		
+	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
-	[Genome populateCGenome:genome FromEntity:[flames getSelectedGenome] fromContext:moc];
-
-	[moc unlock];
-
-	flam3_print(stderr, genome, NULL);
-
-
-	frame.genomes = genome;
-	[self EnvironmentInit:&frame threadCount:[defaults integerForKey:@"threads" ]];
+	[fileManager createDirectoryAtPath:previewFolder attributes:nil];
 	
-	frame.time = 0.0;
-	frame.ngenomes = 1;
+	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"still.png", nil]];
+	
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];	
+	[taskEnvironment setObject:pngFileName forKey:@"out"];
+	
+	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
 
-	progress = 0.0;
-	
-	[frameIndicator setMaxValue:1];
-	[frameIndicator setIntValue:1];
-	
-	[progressWindow setTitle:@"Rendering Image"];
-	[progressWindow makeKeyAndOrderFront:self];
-	
+
 	NSDate *start = [NSDate date];
 	
-	flameRep = [self renderSingleFrame:&frame withGemone:genome];
 	
-	[progressWindow setIsVisible:FALSE];
+	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:NO] withEnvironment:taskEnvironment];
+	
+	if (returnCode != 0) {
+			
 
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render failed!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:nil];
+		[finishedPanel runModal];		
+	}	
+	
+	[moc unlock];
+
+	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:pngFileName]];
+	
 
 	if(qt != nil) {
-		[qt saveNSBitmapImageRep:flameRep];		
+		[qt saveNSBitmapImageRep:[[flameImage representations] objectAtIndex:0]];		
 	} 
 	
 	
 	if (_showRender) {
 		
-		NSImage *flameImage = [[NSImage alloc] init];
-		[flameImage addRepresentation:flameRep];
-
-
 		[previewView setImage:flameImage];
 		[previewView setToolTip:@"Preview: This is the image you have just rendered. You can save a copy by dragging the image to the finder/desktop."];
 
 		[previewWindow makeKeyAndOrderFront:self];
 		
-		[flameImage release];
 
 	}
 
+	[flameImage release];
 	
-	[flameRep release];
 	NSBeep();
 	
 	if(qt != nil) {
@@ -261,7 +251,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[finishedPanel runModal];
 	
 	}
+
+	BOOL returnBool;
 	
+	if ([fileManager fileExistsAtPath:pngFileName]) {
+		returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
+		returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
+	}	
+	
+	[taskEnvironment release];
 	[pool release];
 
 }
@@ -279,25 +277,34 @@ int printProgress(void *nslPtr, double progress, int stage);
 - (IBAction)renderAnimationInNewThread {
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	int threads;
-	
-	ThreadParameters *threadParameters;
 
-   	NSBitmapImageRep *flameRep;
-	NSImage *flameImage;
 	
-	int ftime, frameCount;
-	unsigned char *image;
+	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
+		NSTemporaryDirectory(),
+		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+		nil]];
 	
-	flam3_genome *cps;
-	flam3_frame f;	
-	int i, ncps = 0;
+	NSLog(previewFolder);	
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	[fileManager createDirectoryAtPath:previewFolder attributes:nil];
+	
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];
+	
+	
+	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"frame.png", nil]];
+	[taskEnvironment setObject:pngFileName forKey:@"out"];
+	
+
+	int ftime;
+	
+	double progressValue;
 		
 	NSArray *genomes;
-	
-
-	
+	NSManagedObject *genome;
+		
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 
 	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
@@ -308,202 +315,77 @@ int printProgress(void *nslPtr, double progress, int stage);
 	genomes = [moc executeFetchRequest:fetch error:nil];
 	[fetch release];	  
 	
-	threads = [defaults integerForKey:@"threads" ];
+	genome = [genomes objectAtIndex:0];
 	
-	channels = 4;
 	
-  	ncps = [genomes count];
-
-	if(ncps == 0) {
-		return;
-	}
-	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
-
-	[qtController setMovieHeight:cps->height width:cps->width];
+	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] width:[[genome valueForKey:@"width"] intValue]];
 	BOOL doRender = [qtController CreateMovieGWorld];
-	if(doRender == FALSE) {
-		;
-	}
-
 
 	
 	dtime = 1;
-	f.genomes = cps;
-	[self EnvironmentInit:&f threadCount:threads];
-	
-	srandom(seed ? seed : (time(0) + getpid()));
-	
-	if (pixel_aspect <= 0.0) {
-		fprintf(stderr, "pixel aspect ratio must be positive, not %g.\n",
-				pixel_aspect);
-		exit(1);
+
+	first_frame = (int) [[genome valueForKey:@"time"] intValue];
+	last_frame = (int) [[[genomes lastObject] valueForKey:@"time"] intValue] - 1;
+		
+	if (last_frame < first_frame) {
+		last_frame = first_frame;
 	}
 	
-	if (NULL == cps) {
-		exit(1);
-	}
-	if (0 == ncps) {
-		fprintf(stderr, "error: no genomes.\n");
-		exit(1);
-	}
-	
-	for (i = 0; i < ncps; i++) {
-		cps[i].sample_density *= qs;
-		cps[i].height = (int)(cps[i].height * ss);
-		cps[i].width = (int)(cps[i].width * ss);
-		cps[i].pixels_per_unit *= ss;
-		if ((cps[i].width != cps[0].width) ||
-			(cps[i].height != cps[0].height)) {
-			fprintf(stderr, "warning: flame %d at time %g size mismatch.  "
-					"(%d,%d) should be (%d,%d).\n",
-					i, cps[i].time,
-					cps[i].width, cps[i].height,
-					cps[0].width, cps[0].height);
-			cps[i].width = cps[0].width;
-			cps[i].height = cps[0].height;
-		}
-	}
-	
-	
-	first_frame = (int) cps[0].time;
-	
-	last_frame = (int) cps[ncps-1].time - 1;
-	
-	
-	if (last_frame < first_frame) last_frame = first_frame;
-	
-	f.temporal_filter_radius = 0.5;
-	f.pixel_aspect_ratio = pixel_aspect;
-	f.genomes = cps;
-	f.ngenomes = ncps;
-	f.verbose = verbose;
-	f.bits = bits;
-	f.progress = 0;
-	f.progress = printProgress;
+	progressValue = 0.0;
 
-	if (dtime < 1) {
-		fprintf(stderr, "dtime must be positive, not %d.\n", dtime);
-		exit(1);
-	}	
-	NSConditionLock *lock = [[NSConditionLock alloc] initWithCondition:0];
+	[taskAllFramesIndicator setMaxValue:(last_frame - first_frame) / dtime];
+	[taskAllFramesIndicator setDoubleValue:progressValue];
 	
-	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
-	
-	[self performSelectorOnMainThread:@selector(initProgressController:) withObject:[NSNumber numberWithInt:threads] waitUntilDone:YES];
-
-	NSArray *progressObjects = [progressController arrangedObjects];
-	
-	for(i=0; i<threads; i++) {
-
-		NSConditionLock *endLock = [[NSConditionLock alloc] initWithCondition:0];
-
-		threadParameters = [[ThreadParameters alloc] init];
-		
-		[threadParameters setLockCondition:i];
-		if(i+1 == threads) {
-			[threadParameters setReleaseCondition:0];
-		} else {
-			[threadParameters setReleaseCondition:i+1];
-		}
-		[threadParameters setConditionLock:lock];
-		[threadParameters setEndLock:endLock];
-		
-		ProgressDetails *progressDict = [progressObjects objectAtIndex:i];
-
-		[progressDict setThread:[NSNumber numberWithInt:i]]; 		
-		[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
-		
-		[endLock release];
+	[taskProgressWindow setTitle:@"Rendering Movie..."];	
+	[taskProgressWindow makeKeyAndOrderFront:self];
 
 	
-		flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-														  pixelsWide:cps->width
-														  pixelsHigh:cps->height
-													   bitsPerSample:8
-													 samplesPerPixel:channels
-															hasAlpha:channels == 4 ? YES : NO 
-															isPlanar:NO
-													  colorSpaceName:NSDeviceRGBColorSpace
-														bitmapFormat:0
-														 bytesPerRow:channels*cps->width
-														bitsPerPixel:8*channels];
-		image =[flameRep bitmapData];
-		
-		flameImage = [[NSImage alloc] init];
-		[flameImage addRepresentation:flameRep];
-		
-		flam3_frame *frame = (flam3_frame *)malloc(sizeof(flam3_frame));
-		/* no need for a deep copy */
-		*frame = f; 
-		frame->progress_parameter = progressDict;
-		
-
-		
-		[threadParameters setFrames:frame];
-		[threadParameters setImage:flameImage];
-		[threadParameters setImageRep:flameRep];
-		
-
-
-		[paramArray addObject:threadParameters];
-	}
-	
-
-	
-	f.verbose = 0;
-	
-	[frameIndicator setMaxValue:(last_frame - first_frame) / dtime];
-	frameCount = 0;
-	[frameIndicator setIntValue:0];
-	
-	[progressWindow setTitle:@"Rendering Movie..."];	
-	[progressWindow makeKeyAndOrderFront:self];
-
-	
-
-//	for (ftime = first_frame; ftime <= last_frame; ftime += dtime) {
-
-	ftime = first_frame;
-	
-	for(i=0; i<threads; i++) {
-		[[[paramArray objectAtIndex:i] getEndLock] lock];
-	
-		[[paramArray objectAtIndex:i] setFirstFrame:ftime];
-		[NSThread detachNewThreadSelector:@selector(threadedMovieRender:)  toTarget:self withObject:[paramArray objectAtIndex:i]];
-		ftime += dtime;
-	}
-
 	NSDate *start = [NSDate date];
 	
-	while ([[paramArray objectAtIndex:0] getFirstFrame] <= last_frame) {
-		for(i=0; i<threads; i++) {
-			[[[paramArray objectAtIndex:i] getEndLock] lock];
-			[frameIndicator setIntValue:[frameIndicator intValue]+1];
-				ProgressDetails *progressDict = [_progressInd objectAtIndex:i];	
-				[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
-			
-			if([[paramArray objectAtIndex:i] getFirstFrame] <= last_frame) {
-				[frameIndicator displayIfNeeded];
-				[qtController addNSBitmapImageRepToMovie:[[paramArray objectAtIndex:i] getImageRep]];
-				[[paramArray objectAtIndex:i] setFirstFrame:ftime];
-				
+	NSData *xml = [Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO];
 
-				
-				[NSThread detachNewThreadSelector:@selector(threadedMovieRender:)  toTarget:self withObject:[paramArray objectAtIndex:i]];
-				ftime += dtime;
-			} else {
-				[[paramArray objectAtIndex:i] setFirstFrame:ftime];
-				[[[paramArray objectAtIndex:i] getEndLock] unlock];
-			}
-		}
-	}
+	int imgRepresentationIndex;
+	NSArray *repArray;
 		
-	[progressWindow setTitle:@"Writing Movie to Disk..."];
+	for (ftime = first_frame; ftime <= last_frame; ftime += dtime) {
+
+/* set time for environment */
+		[taskEnvironment setObject:[NSNumber numberWithInt:ftime] forKey:@"frame"];
+
+		[taskAllFramesIndicator setDoubleValue:progressValue];
+
+		int returnCode = [self runFlam3MovieFrameRenderAsTask:xml withEnvironment:taskEnvironment];
+
+		if (returnCode == 0) {
+			NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:pngFileName]];
+
+			repArray = [flameImage representations];
+			for (imgRepresentationIndex = 0; imgRepresentationIndex < [repArray count]; ++imgRepresentationIndex) {
+				if ([[repArray objectAtIndex:imgRepresentationIndex] isKindOfClass:[NSBitmapImageRep class]]) {
+					[qtController addNSBitmapImageRepToMovie:[repArray objectAtIndex:imgRepresentationIndex]];
+					break;
+				}
+			}
+			
+		} else {
+			
+			NSLog(@"Render Failed");
+			
+		}
+		
+		progressValue += dtime;
+	}
+
+	[taskProgressWindow setTitle:@"Writing Movie to Disk..."];
 	
 	[qtController performSelectorOnMainThread:@selector(saveMovie) withObject:nil waitUntilDone:YES];
 
-
-	[progressWindow setIsVisible:NO];
+	[taskProgressWindow setIsVisible:NO];
+	
+	if ([fileManager fileExistsAtPath:pngFileName]) {
+		BOOL returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
+		returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
+	}
 	
 	NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
 									  defaultButton:@"Close"
@@ -518,575 +400,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 }
 
 
-- (BOOL)EnvironmentInit:(flam3_frame *)f threadCount:(int)threads {
-
-	verbose = 0;
-	transparency = 1;
-	qs = environment->qualityScale;
-	ss = environment->sizeScale;
-	bits = [environment getIntBits];
-	seed = environment->seed;
-	pixel_aspect = [environment doubleAspect];
-	channels = 3;
-	if(environment->useAlpha == YES) {
-		channels = 4;
-	} else {
-		channels = 3;
-	}
-	
-	f->bits = bits;
-
-	srandom(seed);
-	
-		
-	if (getenv("nstrips")) {
-		nstrips = atoi(getenv("nstrips"));
-	} else {
-		nstrips = calc_nstrips(f, threads);
-	}
-
-	if(0 != setenv("shift", [[NSString stringWithFormat:@"%f", environment->colourShift] cStringUsingEncoding:NSUTF8StringEncoding] , 1))
-		perror("shift not set");
-
-	
-	return TRUE;
-
-}
-
-- (BOOL)loadFlam3File:(NSString *)filename intoCGenomes:(flam3_genome **)genomes returningCountInto:(int *)count {
-
-	char *utf8Filename;
-
-	
-	utf8Filename = strdup([filename cStringUsingEncoding:NSUTF8StringEncoding]);
-	
-	FILE *flam3;
-	
-	flam3 = fopen(utf8Filename, "rb");
-	if (NULL == flam3) {
-		perror(utf8Filename);
-		return FALSE;
-	}
-	
-	*genomes = flam3_parse_from_file(flam3, utf8Filename, flam3_defaults_on, count);
-	if (NULL == *genomes) {
-		return NO;
-	}
-	
-//	flam3_print(stderr, *genomes, NULL);
-	return YES; 
-
-}
-
-- (BOOL)generateAllThumbnailsForGenome:(flam3_genome *)cps withCount:(int)ncps inContext:(NSManagedObjectContext *)thisMoc {
-
-
-	Genome *genomeDetails;
-	NSDictionary *dict;
-	
-	dict = [[NSMutableDictionary alloc] initWithCapacity:2];
-	genomeDetails = [[Genome alloc] init];
-	
-	
-	[genomeDetails setCGenome:cps];
-	[genomeDetails setManagedObjectContext:thisMoc];
-	
-	[dict setValue:genomeDetails forKey:@"genome"];
-	[dict setValue:[NSNumber numberWithInt:ncps] forKey:@"genome_count"];
-	
-	[NSThread detachNewThreadSelector:@selector(generateAllThumbnailsForGenomeInThread:) 
-							 toTarget:self 
-						   withObject:dict];
-	
-	[dict autorelease];
-	[genomeDetails autorelease];
-	
-	return TRUE;
-
-	
-}
-
-
-- (void)generateAllThumbnailsForGenomeInThread:(NSDictionary *)dict {
-	
-	NSBitmapImageRep *flameRep;
-	NSImage *flameImage;
-    NSManagedObjectContext *thisMoc;
-
-	flam3_genome *cps;
-    int ncps;
-	int i;
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	
-	[dict retain];
-	
-	ncps = [[dict valueForKey:@"genome_count"] intValue];
-	thisMoc = [[dict valueForKey:@"genome"] getManagedObjectContext];
-	[thisMoc lock];
-	cps = [[dict valueForKey:@"genome"] getCGenome];
-	progress = 0.0;
-	
-	[frameIndicator setMaxValue:ncps];
-	[progressWindow setTitle:@"Rendering Thumbnails..."];
-	
-	[progressWindow makeKeyAndOrderFront:self];
-	
-	for (i = 0; i < ncps; i++) {
-		
-		[frameIndicator setIntValue:i+1];	
-		[frameIndicator displayIfNeeded];
-		
-		flameRep = [self renderThumbnail:cps+i];
-		flameImage = [[NSImage alloc] init];
-		[flameImage addRepresentation:flameRep];
-		[[dict valueForKey:@"genome"] setCGenome:cps+i];
-		[[dict valueForKey:@"genome"] setImage:flameImage];
-		[[dict valueForKey:@"genome"] setIndex:i];
-		
-		[[dict valueForKey:@"genome"] performSelectorOnMainThread:@selector(createGenomeEntity) withObject:nil waitUntilDone:YES];
-		
-//		[flames addFlameData:flameImage genome:cps+i atIndex:i inContext:thisMoc];  
-		
-		
-		[flameImage release];
-		[flameRep release];
-		
-	}
-	
-	
-	//	[flameImages reloadData];
-	[progressWindow setIsVisible:FALSE];
-	
-	[thisMoc performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
-	[thisMoc unlock];
-
-	[dict release];
-
-	xmlFreeDoc(cps->edits);
-	free(cps);
-
-	
-	[pool release];
-
-	
-	return;
-	
-}
-
-
--(NSBitmapImageRep *)renderThumbnail:(flam3_genome *)cps {
-
-	NSBitmapImageRep *flameRep;
-	
-	flam3_frame frame;
-	
-	int realHeight, realWidth;
-	double realScale;
-
-	double scaleFactor;
-	
-	
-	realHeight = cps->height;
-	realWidth = cps->width;
-	realScale = cps->pixels_per_unit;
-	
-	scaleFactor = realHeight > realWidth ? 128.0 / realHeight : 128.0 / realWidth; 
-	
-	cps->height *= scaleFactor;
-	cps->width *= scaleFactor;
-	cps->pixels_per_unit *= scaleFactor;
-
-	frame.genomes = cps;
-	[self EnvironmentInit:&frame threadCount:[defaults integerForKey:@"threads" ]];
-	
-	frame.time = 0.0;
-	frame.temporal_filter_radius = 0.0;
-	frame.ngenomes = 1;
-	
-	progress = 0.0;
-	
-	flameRep = [self renderSingleFrame:&frame withGemone:cps];
-	
-	cps->height = realHeight;
-	cps->width = realWidth;
-	cps-> pixels_per_unit = realScale;
-	
-	return flameRep;
-}
-
-- (IBAction)openFile:(id)sender {
-
-	NSOpenPanel *op;
-	flam3_genome *genomes = NULL;
-	int runResult;
-	BOOL boolResult;
-	int genomeCount;
-
-	/* create or get the shared instance of NSSavePanel */
-	op = [NSOpenPanel openPanel];
-	/* set up new attributes */
-	[op setRequiredFileType:@"flam3"];
-	
-	/* display the NSOpenPanel */
-	runResult = [op runModal];
-	/* if successful, save file under designated name */
-	if(runResult == NSOKButton && [op filename] != nil) {
-		[self deleteOldGenomes];
-		boolResult = [self loadFlam3File:[op filename] intoCGenomes:&genomes returningCountInto:&genomeCount ];
-		if(boolResult == YES) {
-
-			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
-			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
-			[moc save:nil];
-
-		}
-
-
-	} 
-
-	[self setCurrentFilename:[op filename]];
-		
-	return;
-	
-}
-
-- (NSString *) currentFilename {
-	
-	return _currentFilename;
-}
-
-
-- (void) setCurrentFilename:(NSString *)filename {
-	
-	[filename retain];
-	
-	if(_currentFilename != nil) {
-		
-		[_currentFilename release];
-	}
-	
-	_currentFilename = filename;
-	
-	return;
-}
-
-- (IBAction)appendFile:(id)sender {
-
-	NSOpenPanel *op;
-	flam3_genome *genomes = NULL;
-	int runResult, lastTime, i;
-	BOOL boolResult;
-	int genomeCount;
-
-	/* create or get the shared instance of NSSavePanel */
-	op = [NSOpenPanel openPanel];
-	/* set up new attributes */
-	[op setRequiredFileType:@"flam3"];
-	
-	/* display the NSOpenPanel */
-	runResult = [op runModal];
-	/* if successful, save file under designated name */
-	if(runResult == NSOKButton && [op filename] != nil) {
-	
-		/* get the current flames and find the max time */
-		NSArray *genomeArray;
-				
-		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-
-		[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
-		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
-		NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
-		[fetch setSortDescriptors: sortDescriptors];
-		
-		genomeArray = [moc executeFetchRequest:fetch error:nil];
-	
-		if(genomeArray != nil && [genomeArray count] > 0) {
-
-			lastTime = [[[genomeArray objectAtIndex:0] valueForKey:@"time"] intValue];
-			lastTime += 50;
-			
-		} else {
-			
-			lastTime = 0;
-		}
-
-		[genomeArray release];
-		
-
-		boolResult = [self loadFlam3File:[op filename] intoCGenomes:&genomes returningCountInto:&genomeCount ];
-		
-		for(i=0; i<genomeCount; i++) {
-			genomes[i].time += lastTime;
-		}
-		
-		if(boolResult == YES) {
-			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
-			[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
-			[moc save:nil];
-
-//			[flames setCurrentFlameForIndex:0];
-		}
-		
-//		xmlFreeDoc(genomes->edits);
-//		free(genomes);
-
-		[fetch release];	  
-		[sort release];
-
-	} 
-	
-	return;
-}
-
-
-
-int calc_nstrips(flam3_frame *spec, int threads) {
-  double mem_required;
-  double mem_available;
-  int nstrips;
-
-#ifdef __APPLE__
-
- unsigned int physmem;
-  size_t len = sizeof(physmem);
-  static int mib[2] = { CTL_HW, HW_PHYSMEM };
-
-  if(sysctl(mib, 2,  &physmem, &len, NULL, 0) == 0 && len ==  sizeof(physmem)) {
-	  mem_available = (double )physmem;
-  } else {
-	  fprintf(stderr, "warning: unable to determine physical memory.\n");
-	  mem_available = 2e9;
-  }  
-
-#else
-	  fprintf(stderr, "warning: unable to determine physical memory.\n");
-	  mem_available = 2e9;
-  
- 	  
-#endif
- 
-  mem_available *= 0.8;
-  mem_required = flam3_render_memory_required(spec);
-  mem_required *= threads;
-  
-  if (mem_available >= mem_required) {
-	  return 1;
-  }
-  
-  nstrips = (int) ceil(mem_required / mem_available);
-  
-  return nstrips;
-}
-
-- (void)renderFlames:(flam3_genome *)cps numberOfFlames:(int)ncps {
-
-	NSBitmapImageRep *flameRep;
-	
-	flam3_frame frame;
-	
-	int i;
-
-
-	frame.genomes = cps;
-
-	[self EnvironmentInit:&frame threadCount:[defaults integerForKey:@"threads" ]];
-	
-	frame.time = 0.0;
-	frame.temporal_filter_radius = 0.0;
-	frame.ngenomes = 1;
-
-
-	for (i = 0; i < ncps; i++) {
-		
-		flameRep = [self renderSingleFrame:&frame withGemone:cps+i];
-		[[flameRep representationUsingType:NSPNGFileType properties:nil] writeToFile:@"testOutput.png" atomically:YES];								 		
-		[flameRep release];
-
-	}
-	
-	return;
-
-}
-
-
- - (NSBitmapImageRep *)renderSingleFrame:(flam3_frame *)f withGemone:(flam3_genome *)cps {
-
-	
-	unsigned char *image;
-	int strip, thread, i;
-	double center_y, center_base;
-	double zoom_scale;
-
-	ThreadParameters *threadParameters;
- 
-	int threads = 1;  //[defaults integerForKey:@"threads" ];
-	
-	/* replace this next group with values from EnvironmentController */
-
-	
-//	NSImage *flameImage;
-	NSBitmapImageRep *flameRep;
-	
-	flam3_print(stderr, cps, NULL);
-	
-	
-	cps->sample_density *= qs;
-	cps->height = (int)(cps->height * ss);
-	cps->width = (int)(cps->width * ss);
-	cps->pixels_per_unit *= ss;
-	
-	int real_height;
-	
-	f->genomes = cps;
-	f->verbose = verbose;
-	f->bits = bits;
-	f->pixel_aspect_ratio = pixel_aspect;
-	f->progress = printProgress;
-	
-	nstrips = 1;
-	
-	if(threads < cps->height) {
-		if (threads > nstrips) {
-			nstrips = threads; 
-		}
-	}
-	
-	
-	NSLog(@"nstrips: %ld", nstrips); 
-	
-	if (nstrips > cps->height) {
-		fprintf(stderr, "cannot have more strips than rows but %d>%d.\n",
-				nstrips, cps->height);
-		exit(1);
-	}
-	
-	flameRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-													  pixelsWide:cps->width
-													  pixelsHigh:cps->height
-												   bitsPerSample:8
-												 samplesPerPixel:channels
-														hasAlpha:channels == 4 ? YES : NO 
-														isPlanar:NO
-												  colorSpaceName:NSDeviceRGBColorSpace
-													bitmapFormat:0
-													 bytesPerRow:channels*cps->width
-													bitsPerPixel:8*channels];
-	image =[flameRep bitmapData];
-
-	cps->sample_density *= nstrips;
-	real_height = cps->height;
-	cps->height = (int) ceil(cps->height / (double) nstrips);
-	center_y = cps->center[1];
-	zoom_scale = pow(2.0, cps->zoom);
-	center_base = center_y - ((nstrips - 1) * cps->height) /
-		(2 * cps->pixels_per_unit * zoom_scale);
-
-	NSMutableArray *paramArray = [[NSMutableArray alloc] initWithCapacity:threads]; 
-
-	[self performSelectorOnMainThread:@selector(initProgressController:) withObject:[NSNumber numberWithInt:threads] waitUntilDone:YES];
-
-	
-	NSArray *progressObjects = [progressController arrangedObjects];
-	
-	for(i=0; i<threads; i++) {
-	
-		ProgressDetails *progressDict = [progressObjects objectAtIndex:i];
-
-		NSConditionLock *endLock = [[NSConditionLock alloc] initWithCondition:0];
-
-		flam3_frame *frame = (flam3_frame *)malloc(sizeof(flam3_frame));
-
-		
-		/* no need for a deep copy apart from cps */
-		*frame = *f; 
-		frame->genomes = malloc(sizeof(flam3_genome));
-		*(frame->genomes) = *cps;
-		frame->progress_parameter = progressDict;
-		
-		threadParameters = [[ThreadParameters alloc] init];
-		[threadParameters setFrames:frame];
-		[threadParameters setEndLock:endLock];
-		[paramArray addObject:threadParameters];
-										
-		[endLock release];
-	}
-	
-
-	[progessTable reloadData];
-	[progessTable displayIfNeeded];
-	
-	
-	for (strip = 0; strip < nstrips; ) {
-		
-		for (thread = 0; thread < threads; thread++) {
-
-			[[[paramArray objectAtIndex:thread] getEndLock] lock];
-
-
-			if(strip < nstrips) {	
-
-				flam3_frame *threadFlame = [[paramArray objectAtIndex:thread] getFrames];
-
-				unsigned char *strip_start =
-					image + threadFlame->genomes->height * strip * threadFlame->genomes->width * channels;
-
-				threadFlame->genomes->center[1] = center_base +
-					threadFlame->genomes->height * (double) strip /
-					(threadFlame->genomes->pixels_per_unit * zoom_scale);
-				
-				if ((threadFlame->genomes->height * (strip + 1)) > real_height) {
-					int oh = threadFlame->genomes->height;
-					threadFlame->genomes->height = real_height - oh * strip;
-					threadFlame->genomes->center[1] -= 
-						(oh - threadFlame->genomes->height) * 0.5 /
-						(threadFlame->genomes->pixels_per_unit * zoom_scale);
-				}
-				
-				if (verbose && nstrips > 1) {
-					fprintf(stderr, "strip = %d/%d\n", strip+1, nstrips);
-				}
-				
-				 [[paramArray objectAtIndex:thread] setStripStart:strip_start];
-				
-				
-				[NSThread detachNewThreadSelector:@selector(threadedStillRender:)  toTarget:self withObject:[paramArray objectAtIndex:thread]];
-
-				
-			} else {
-				[[[paramArray objectAtIndex:thread] getEndLock] unlock];
-			}
-
-			strip++;
-			
-		}
-		
-		
-	}
-	
-	for (thread = 0; thread < threads; thread++) {
-			[[[paramArray objectAtIndex:thread] getEndLock] lock];
-			[[[paramArray objectAtIndex:thread] getEndLock] unlock];
-	};
-
-		  
-	/* restore the cps values to their original values */
-	cps->sample_density /= nstrips;
-	cps->height = real_height;
-	cps->center[1] = center_y;
-	
-	
-	if (verbose) {
-		fprintf(stderr, "done.\n");
-	}
-		
-	[paramArray release];
-	
-	return flameRep;
-
-}
-
- 
  
 - (IBAction)previewCurrentFlame:(id)sender {
 
@@ -1098,34 +411,54 @@ int calc_nstrips(flam3_frame *spec, int threads) {
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
-	NSBitmapImageRep *flameRep;
-	NSImage *flameImage;
-	flam3_genome *flame = (flam3_genome *)malloc(sizeof(flam3_genome));
 	NSError *error;
+	
 	BOOL worked = [moc save:&error];
-	
-	[Genome populateCGenome:flame FromEntity:[flames getSelectedGenome] fromContext:moc];
 
-	[frameIndicator setMaxValue:1];
-	[progressWindow setTitle:@"Rendering Preview..."];
+	/* generate a temp folder */
 	
-	[progressWindow makeKeyAndOrderFront:self];
+		
+	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
+		NSTemporaryDirectory(),
+		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+		nil]];
+	
+	NSLog(previewFolder);	
 
+	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
-	flameRep = [self renderThumbnail:flame];
+	[fileManager createDirectoryAtPath:previewFolder attributes:nil];
 	
-	[progressWindow setIsVisible:NO];
+	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"preview.png", nil]];
 
-	flameImage = [[NSImage alloc] init];
-	[flameImage addRepresentation:flameRep];
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];	
+	[taskEnvironment setObject:pngFileName forKey:@"out"];
+	
+	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
+	
+	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
+	
+	if (returnCode == 0) {
 
-	[flames setPreviewForCurrentFlame:flameImage];
+		
+		[flames performSelectorOnMainThread:@selector(setPreviewForCurrentFlameFromFile:) withObject:pngFileName waitUntilDone:YES];
+		
+		
+		BOOL returnBool;
+		
+		if ([fileManager fileExistsAtPath:pngFileName]) {
+			returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
+			returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
+		}
+		
+	} else {
+		
+		NSLog(@"Render Failed");
+		
+	}
 	
-	[flameImage release];
-//	[flameRep release];
-	free(flame);		
-	
-	
+		
 	[pool release];	
 
 }
@@ -1250,68 +583,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 }
 
 
-- (void) threadedMovieRender:(id) lockParameters {
-
-	flam3_frame *frames = [lockParameters getFrames];
-	unsigned char *image = [[lockParameters getImageRep] bitmapData];
-	int width = frames->genomes[0].width;
-
-
-	NSAutoreleasePool *subPool = [[NSAutoreleasePool alloc] init];
-
-	frames->time =  [lockParameters getFirstFrame];
-		
-	if(frames->time <= last_frame) {
-		flam3_render(frames, image, width, flam3_field_both, channels, transparency);		
-	}
-//		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
-
-	[[lockParameters getEndLock] unlock];
-	
-
-	
-	[subPool release];
-
-
-	
-}	
-
-- (void) threadedStillRender:(id) lockParameters {
-
-	NSAutoreleasePool *subPool = [[NSAutoreleasePool alloc] init];
-	
-	[NSThread setThreadPriority:0];
-
-	flam3_frame *orig, copy;
-	
-	orig = [lockParameters getFrames];
-	copy = *orig;
-	
-	copy.genomes = calloc(sizeof(flam3_genome), 1);
-	
-	flam3_copy(copy.genomes, orig->genomes);
-	
-	unsigned char *image = [lockParameters getStripStart];
-	
-	int width = copy.genomes[0].width;
-	int localFields = flam3_field_both;
-	int localChannels = channels;
-	int localTrans = transparency;
-
-	flam3_render(&copy, image, width, localFields, localChannels, localTrans);		
-
-		  //		fprintf(stderr, "time = %d/%d/%d\n", ftime, last_frame, dtime);
-
-	[[lockParameters getEndLock] unlock];
-	
-
-	
-	[subPool release];
-
-
-	
-}	
-
 
 - (IBAction)editGenomes:(id)sender {
 
@@ -1341,9 +612,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	[context lock];
 	
-	[progressWindow performSelectorOnMainThread:@selector(setTitle:) withObject:@"Creating Random Genome" waitUntilDone:YES];	
-	[progressWindow performSelectorOnMainThread:@selector(makeKeyAndOrderFront:) withObject:self waitUntilDone:YES];	
-
 	NSManagedObject *genome = [self createRandomGenomeInContext:context];
 	[genome retain];
 
@@ -1361,132 +629,20 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 - (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context {
 
-	flam3_genome cp_orig, cp_save;
-	NSManagedObject *genomeEntity;
-
-	int sym = 0;
-
-	int ivars[flam3_nvariations];
-	int num_ivars = 0;
-	int i;
-	int count = 0;
-	int ntries = 10;
+	/* generate random XML */
+	NSData *newGenome = [BreedingController createRandomGenomeXMLwithEnvironment:[self environmentDictionary]];
 	
-	double avg_pix, fraction_black, fraction_white;
-	double avg_thresh = 20.0;
-	double black_thresh = 0.01;
-	double white_limit =  0.05;
+	NSArray *genomeEntity = [Genome createGenomeEntitiesFromXML:newGenome inContext:context];	
 
-	flam3_frame f;
-	char action[1024];  /* Ridiculously large, but still not that big */
-
-	unsigned char *image;
-
-
-	memset(&cp_orig, 0, sizeof(flam3_genome));
-	memset(&cp_save, 0, sizeof(flam3_genome));
-
-	test_cp(&cp_orig);  // just for the width & height
-	image = (unsigned char *) malloc(3 * cp_orig.width * cp_orig.height);
-
-
-	srandom(time(0) + getpid());
-
-	f.temporal_filter_radius = 0.0;
-	f.bits = 33;
-	f.verbose = 0;
-	f.genomes = &cp_orig;
-	f.ngenomes = 1;
-	f.pixel_aspect_ratio = 1.0;
-	f.progress = 0;
-	test_cp(&cp_orig);  // just for the width & height
-	image = (unsigned char *) malloc(3 * cp_orig.width * cp_orig.height);
-
-	/* Set first var to -1 for totally random */
-	ivars[0] = -1;
-	num_ivars = 1;
-
-	f.time = (double) 0.0;
+	/* fix up a few values before rendering the flame */
 	
-	do {
-		sprintf(action,"random");
-		flam3_random(&cp_orig, ivars, num_ivars, sym, 0);
-
-		cp_orig.spatial_filter_func = Gaussian_filter;
-		cp_orig.spatial_filter_support = Gaussian_support;
-
-		double bmin[2], bmax[2];
-		flam3_estimate_bounding_box(&cp_orig, 0.001, 100000, bmin, bmax);
-		cp_orig.center[0] = (bmin[0] + bmax[0]) / 2.0;
-		cp_orig.center[1] = (bmin[1] + bmax[1]) / 2.0;
-		cp_orig.pixels_per_unit = cp_orig.width / (bmax[0] - bmin[0]);
-		strcat(action," reframed");
-		
-		
-		truncate_variations(&cp_orig, 5, action);
-		cp_orig.edits = create_new_editdoc(action, NULL, NULL);
-		flam3_copy(&cp_save, &cp_orig);
-		test_cp(&cp_orig);
-		flam3_render(&f, image, cp_orig.width, flam3_field_both, 3, 0);
-		
-		int n, tot, totb, totw;
-		n = 3 * cp_orig.width * cp_orig.height;
-		tot = 0;
-		totb = 0;
-		totw = 0;
-		for (i = 0; i < n; i++) {
-			tot += image[i];
-			if (0 == image[i]) totb++;
-			if (255 == image[i]) totw++;
-			
-			// printf("%d ", image[i]);
-		}
-		
-		avg_pix = (tot / (double)n);
-		fraction_black = totb / (double)n;
-		fraction_white = totw / (double)n;
-		count++;
-	} while ((avg_pix < avg_thresh ||
-			  fraction_black < black_thresh ||
-			  fraction_white > white_limit) &&
-			 count < ntries);
-		
-	genomeEntity = [flames getSelectedGenome];
-	if(genomeEntity != nil) {
-		cp_orig.width = [[genomeEntity valueForKey:@"width"] intValue];
-		cp_orig.height = [[genomeEntity valueForKey:@"height"] intValue];
-	}
-
-	NSBitmapImageRep *flameRep = [self renderThumbnail:&cp_orig];
-
-
-	NSImage *flameImage = [[NSImage alloc] init];
-	[flameImage addRepresentation:flameRep];
-
-	Genome *tmpGenome = [[Genome alloc] init];
+	[[genomeEntity objectAtIndex:0] setValue:[NSNumber numberWithInt:50] forKey:@"quality"];
 	
-	[tmpGenome setCGenome:&cp_orig];
-	[tmpGenome setImage:flameImage];
-	[tmpGenome setManagedObjectContext:context];  
-
-	[tmpGenome performSelectorOnMainThread:@selector(createGenomeEntity) withObject:nil waitUntilDone:YES]; 
-
-	[self performSelectorOnMainThread:@selector(hideProgressWindow) withObject:nil waitUntilDone:YES];
+	[self generateAllThumbnailsForGenomesInThread:genomeEntity];	
+	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
 	
-	genomeEntity = [tmpGenome getGenomeEntity];
-
-	/* Free created documents */
-	/* (Only free once, since the copy is a ptr to the original) */
-	xmlFreeDoc(cp_orig.edits);
-
-
-	if (verbose) {
-	   fprintf(stderr, "\ndone.  action = %s\n", action);
-	}
-
-	[tmpGenome release];
 	[genomeEntity autorelease];
-	return genomeEntity;
+	return [genomeEntity objectAtIndex:0];
 
 
 }
@@ -1532,12 +688,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	NSArray *genomes;
 	
 	int runResult;
-	int i;
-	
-	const char *fileNameChar;
-	FILE *flam3File;
-
-	flam3_genome *cps;
 
 	if(_currentFilename != nil && ![_currentFilename isEqualToString:@""]) {
 		filename = _currentFilename;
@@ -1557,14 +707,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		[self setCurrentFilename:[savePanel filename]];
 	}
 
-	fileNameChar = [filename cStringUsingEncoding:NSUTF8StringEncoding];
-	flam3File = fopen(fileNameChar, "wb");
-	if(flam3File == NULL) {
-		NSAlert *alert = [NSAlert alertWithMessageText:[NSString stringWithFormat:@"Could not open file %@",  filename] defaultButton:@"Close" alternateButton:nil otherButton:nil informativeTextWithFormat:@"Could not open selected file, %@",  filename]; 
-		[alert runModal];
-		return;
-	} 
-
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
 
 	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
@@ -1574,35 +716,25 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	genomes = [moc executeFetchRequest:fetch error:nil];
 	[fetch release];	  
+	
+	[[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO] writeToFile:[savePanel filename] atomically:YES];
+		
+	
+	if(_saveThumbnail) {
+		NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+		[taskEnvironment retain];
+		[taskEnvironment setObject:[[savePanel filename] stringByAppendingString:@"_"] forKey:@"prefix"];
 			
-	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
-
-	if([genomes count] > 1) {
-		fprintf(flam3File, "<oxidizer>\n");
-	}
-	
-	for(i=0; i<[genomes count]; i++) {
-	
-		flam3_print(flam3File, cps + i, NULL);
-		if(_saveThumbnail) {
-			NSImage *thumbnail = [[genomes objectAtIndex:i] valueForKey:@"image"];
-			NSData *tiffData = [[NSData alloc] initWithData:[thumbnail TIFFRepresentation]];
-			NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithData:tiffData];
-			[[bitmap representationUsingType:NSPNGFileType properties:nil] 
-                 writeToFile:[filename stringByAppendingString:[NSString stringWithFormat:@"_%d.png", i]] 
-				  atomically:YES];
+			int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
 			
-		}
+			if (returnCode != 0) {
+					
+				NSLog(@"Render Failed");
+				
+			}
+			
+		
 	}
-
-	if([genomes count] > 1) {
-		fprintf(flam3File, "</oxidizer>\n");
-	}
-	
-	fclose(flam3File);
-
-//	NSBeep();
-
 
 	return;
 }
@@ -1632,23 +764,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 }
 
 
-- (BOOL)openRecentFile:(NSString *)filename {
-	
-	flam3_genome *genomes = NULL;
-	BOOL boolResult;
-	int genomeCount;
-	
-	[self deleteOldGenomes];
-	boolResult = [self loadFlam3File:filename intoCGenomes:&genomes returningCountInto:&genomeCount ];
-	if(boolResult == YES) {
-		[self generateAllThumbnailsForGenome:genomes withCount:genomeCount inContext:moc];
-	}
-	
-	[self setCurrentFilename:filename];
-	
-	return boolResult;
-	
-}
+
 
 
 - (void)hideProgressWindow {
@@ -1692,56 +808,381 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
-- (flam3_frame *)getFlam3Frame {
-	
-	
-	flam3_genome *cps;
-	flam3_frame *f = (flam3_frame *)malloc(sizeof(flam3_frame));	
-	int ncps = 0;
-	
-	NSArray *genomes;
-	
-	
-	
-	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-	
-	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
-	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
-	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
-	[fetch setSortDescriptors: sortDescriptors];
-	
-	genomes = [moc executeFetchRequest:fetch error:nil];
-	[fetch release];	  
-	
-  	ncps = [genomes count];
-	
-	if(ncps == 0) {
-		return NULL;
-	}
-	cps = [Genome populateAllCGenomesFromEntities:genomes fromContext:moc];
-	
-	f->genomes = cps;
-	[self EnvironmentInit:f threadCount:1];
-	
-	
-	f->temporal_filter_radius = 0.5;
-	f->pixel_aspect_ratio = pixel_aspect;
-	f->genomes = cps;
-	f->ngenomes = ncps;
-	f->verbose = verbose;
-	f->bits = bits;
-	f->progress = 0;
-	f->progress = printProgress;
-	
-	return f;
-}
 
-- (void)setFlam3Frame:(flam3_frame *)frame {
+
+- (IBAction)openFile:(id)sender {
 	
-	[self deleteOldGenomes];
-	[self generateAllThumbnailsForGenome:frame->genomes withCount:frame->ngenomes inContext:moc];
+	NSOpenPanel *op;
+	
+	/* create or get the shared instance of NSSavePanel */
+	op = [NSOpenPanel openPanel];
+	/* set up new attributes */
+	[op setRequiredFileType:@"flam3"];
+	
+	/* display the NSOpenPanel */
+	int runResult = [op runModal];
+	/* if successful, save file under designated name */
+	if(runResult == NSOKButton && [op filename] != nil) {
+		[self deleteOldGenomes];
+		[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
+		[self createGenomesFromXMLFile:[op filename] inContext:moc];
+		
+	} 
+	
+	[self setCurrentFilename:[op filename]];
 	[moc save:nil];
 	
+	return;
+	
+}
+
+
+- (IBAction)appendFile:(id)sender {
+	
+	NSOpenPanel *op;
+	int runResult, lastTime;
+	BOOL boolResult;
+	
+	/* create or get the shared instance of NSSavePanel */
+	op = [NSOpenPanel openPanel];
+	/* set up new attributes */
+	[op setRequiredFileType:@"flam3"];
+	
+	/* display the NSOpenPanel */
+	runResult = [op runModal];
+	/* if successful, save file under designated name */
+	if(runResult == NSOKButton && [op filename] != nil) {
+		
+		/* get the current flames and find the max time */
+		NSArray *genomeArray;
+		
+		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+		
+		[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+		NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+		[fetch setSortDescriptors: sortDescriptors];
+		
+		genomeArray = [moc executeFetchRequest:fetch error:nil];
+		
+		if(genomeArray != nil && [genomeArray count] > 0) {
+			
+			lastTime = [[[genomeArray objectAtIndex:0] valueForKey:@"time"] intValue];
+			lastTime += 50;
+			
+		} else {
+			
+			lastTime = 0;
+		}
+		
+		[genomeArray release];
+			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
+			[self appendGenomesFromXMLFile:[op filename] fromTime:lastTime inContext:moc];
+			[moc save:nil];
+		
+		
+		[fetch release];	  
+		[sort release];
+		
+	} 
+	
+	return;
+}
+
+- (BOOL)openRecentFile:(NSString *)filename {
+	
+	
+	[self deleteOldGenomes];
+	
+	[self createGenomesFromXMLFile:filename inContext:moc];
+	[self setCurrentFilename:filename];
+	[moc save:nil];
+	
+	return TRUE;
+	
+}
+
+
+- (NSString *) currentFilename {
+	
+	return _currentFilename;
+}
+
+
+- (void) setCurrentFilename:(NSString *)filename {
+	
+	[filename retain];
+	
+	if(_currentFilename != nil) {
+		
+		[_currentFilename release];
+	}
+	
+	_currentFilename = filename;
+	
+	return;
+}
+
+- (void)generateAllThumbnailsForGenomes:(NSArray *)genomes {
+	
+	
+	[NSThread detachNewThreadSelector:@selector(generateAllThumbnailsForGenomesInThread:) 
+							 toTarget:self 
+						   withObject:genomes];
+	
+	
+	return ;
+	
+	
+}
+
+
+
+- (void)generateAllThumbnailsForGenomesInThread:(NSArray *)genomes {
+	
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	
+	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
+		NSTemporaryDirectory(),
+		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+		nil]];
+	
+	NSLog(previewFolder);	
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	[fileManager createDirectoryAtPath:previewFolder attributes:nil];
+	
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];
+
+	
+	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"preview.png", nil]];
+	[taskEnvironment setObject:pngFileName forKey:@"out"];
+		
+	NSManagedObjectContext *thisMoc = [[genomes objectAtIndex:0] managedObjectContext];
+	
+	int i;
+	for(i=0; i<[genomes count]; i++) {
+		
+		NSArray *genome = [NSArray arrayWithObject:[genomes objectAtIndex:i]];
+		
+		int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:thisMoc forThumbnail:YES] withEnvironment:taskEnvironment];
+		
+		if (returnCode == 0) {
+			
+			NSDictionary *genomeDict = [NSDictionary dictionaryWithObjectsAndKeys:[genomes objectAtIndex:i], @"genome", pngFileName, @"filename", nil];
+			[FlameController performSelectorOnMainThread:@selector(attachImageToGenomeFromDictionary:) withObject:genomeDict waitUntilDone:YES];
+			
+			
+		} else {
+			
+			NSLog(@"Render Failed");
+			
+		}
+		
+	}
+	
+	
+	BOOL returnBool;
+	
+	if ([fileManager fileExistsAtPath:pngFileName]) {
+		returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
+		returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
+	}
+
+	[taskEnvironment release];
+	[pool release];
+	
+}
+
+- (void)renderStillUsingFlam3 {
+	
+	
+	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
+	
+	[NSThread detachNewThreadSelector:@selector(runFlam3RenderAsTask:) 
+						     toTarget:self 
+						   withObject:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:NO]];
+
+	
+}
+
+
+- (void)runFlam3RenderAsTask:(NSData *) xml{
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	[xml retain];
+	
+	NSTask *task;
+    task = [[NSTask alloc] init];
+
+	NSString *prefix = [NSString pathWithComponents:[NSArray arrayWithObjects:
+		                                                     NSTemporaryDirectory(),
+															[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+														    nil]];
+	NSLog(prefix);	
+	
+	[[NSFileManager defaultManager] createDirectoryAtPath:prefix attributes:nil];
+		
+	
+	NSDictionary *environmentDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
+		                                       [NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]], @"flam3_palettes", 
+											   [NSString stringWithFormat:@"%@/", prefix], @"prefix",
+											   nil];
+
+    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render", [[ NSBundle mainBundle ] resourcePath ]]];
+	[task setEnvironment:environmentDictionary]; 
+	
+    NSPipe *stdErrPipe = [NSPipe pipe];
+    [task setStandardError:stdErrPipe];
+    NSFileHandle *flam3Output = [stdErrPipe fileHandleForReading];
+
+	
+    NSPipe *stdInPipe = [NSPipe pipe];
+    [task setStandardInput:stdInPipe];
+    NSFileHandle *flam3Input = [stdInPipe fileHandleForWriting];
+	
+	[task launch];
+	
+	[flam3Input writeData:xml];
+	[flam3Input closeFile];
+	
+	
+	[taskAllFramesIndicator setMaxValue:1.0];
+	[taskAllFramesIndicator setDoubleValue:1.0];
+	[taskFrameIndicator setMaxValue:100.0];
+	[taskFrameIndicator setDoubleValue:0.0];
+//	[taskFrameIndicator startAnimation:self];
+
+	[taskProgressWindow setTitle:@"Rendering Image"];
+	[taskProgressWindow makeKeyAndOrderFront:self];
+	
+	
+	NSData *data = [flam3Output availableData];
+	
+	double progressValue;	
+		
+	while([data length] > 0) {
+		NSString *string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
+ //		NSLog (@"got:%@\n", string);
+		
+		if([string hasPrefix:@"\rchaos: "]) {
+			
+			progressValue = [[string substringFromIndex:7] floatValue];
+			[self performSelectorOnMainThread:@selector(setTaskFrameProgress:) withObject:[NSNumber numberWithDouble:progressValue] waitUntilDone:NO];
+			
+		}
+		
+		[string release];
+		data = [flam3Output availableData];
+	} 
+
+
+	[taskProgressWindow setIsVisible:NO];
+
+	[xml release];
+
+	[pool release];
+	
+	return;
+	
+}
+
+
+
+- (int)runFlam3StillRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
+
+
+	[taskAllFramesIndicator setMaxValue:1.0];
+	[taskAllFramesIndicator setDoubleValue:1.0];
+
+	[taskProgressWindow setTitle:@"Rendering Image"];
+	[taskProgressWindow makeKeyAndOrderFront:self];
+	
+	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
+	
+
+	int returnValue =  [Flam3Task runFlam3RenderAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator];
+	
+	[taskProgressWindow setIsVisible:NO];
+
+	return returnValue;
+
+}
+
+
+- (int)runFlam3MovieFrameRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
+
+	return [Flam3Task runFlamAnimateAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator];
+
+}
+
+
+
+- (void) setTaskFrameProgress:(NSNumber *)value {
+
+	[taskFrameIndicator setDoubleValue:[value doubleValue]];
+	[taskFrameIndicator displayIfNeeded];
+	
+}  
+
+
+
+- (void) createGenomesFromXMLFile:(NSString *)xmlFileName inContext:(NSManagedObjectContext *)thisMoc {
+	
+
+	NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:xmlFileName] inContext:thisMoc]; 
+	
+	[moc performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
+	
+	[self generateAllThumbnailsForGenomes:newGenomes];
+	
+	
+}
+
+
+- (void) appendGenomesFromXMLFile:(NSString *)xmlFileName fromTime:(int)time inContext:(NSManagedObjectContext *)thisMoc{
+		
+
+	NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:xmlFileName] inContext:thisMoc];
+	NSEnumerator *genomeEnumerator = [newGenomes objectEnumerator];
+	NSManagedObject *genome;
+	while ((genome = [genomeEnumerator nextObject])) {
+		[genome setValue:[NSNumber numberWithInt:[[genome valueForKey:@"time"] intValue]+time] forKey:@"time"];
+	}
+	[self generateAllThumbnailsForGenomes:newGenomes];
+	
+	
+}
+
+- (NSMutableDictionary *)environmentDictionary {
+
+	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
+	
+	[env setObject:[NSNumber numberWithInt:1] forKey:@"verbose"];
+	[env setObject:[NSNumber numberWithInt:environment->qualityScale] forKey:@"qs"];
+	[env setObject:[NSNumber numberWithInt:environment->sizeScale] forKey:@"ss"];
+	[env setObject:[NSNumber numberWithInt:[environment getIntBits]] forKey:@"bits"];
+	[env setObject:[NSNumber numberWithInt:environment->seed] forKey:@"seed"];
+	[env setObject:[NSNumber numberWithInt:environment->seed] forKey:@"isaac_seed"];
+	[env setObject:[NSNumber numberWithDouble:[environment doubleAspect]] forKey:@"pixel_aspect"];
+	
+	if(environment->useAlpha == YES) {
+		[env setObject:[NSNumber numberWithInt:1] forKey:@"transparency"];
+	} else {
+		[env setObject:[NSNumber numberWithInt:0] forKey:@"transparency"];
+	}
+
+	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
+	
+	[env autorelease];
+	
+	return env;
+
 }
 
 @end
