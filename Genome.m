@@ -1470,5 +1470,138 @@ NSString *variationName[1+flam3_nvariations] = {
 } 
 
 
++ (NSMutableDictionary *)createDictionaryFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc {
+	
+	NSMutableDictionary *genome = [NSMutableDictionary  dictionaryWithCapacity:20];
+	
+	NSArray *cmaps;
+	NSArray *sortDescriptors;
+	NSArray *xforms; 
+	
+	NSFetchRequest *fetch;
+	NSPredicate *predicate;						 
+	NSSortDescriptor *sort;
+	NSString *tempString;
+	
+	float red, green, blue;
+	int i;
+	
+	
+	tempString = [genomeEntity valueForKey:@"name"];
+	if(tempString != nil) {
+		[genome setObject:tempString forKey:@"name"];
+	} else {
+		[genome setObject:@"" forKey:@"name"];
+	}
+
+	[genome setObject:[genomeEntity valueForKey:@"time"] forKey:@"time"];
+	[genome setObject:[genomeEntity valueForKey:@"width"] forKey:@"width"];
+	[genome setObject:[genomeEntity valueForKey:@"height"] forKey:@"height"];
+	[genome setObject:[genomeEntity valueForKey:@"zoom"] forKey:@"zoom"];
+	[genome setObject:[genomeEntity valueForKey:@"oversample"] forKey:@"oversample"];
+	[genome setObject:[genomeEntity valueForKey:@"quality"] forKey:@"quality"];
+	[genome setObject:[genomeEntity valueForKey:@"batches"] forKey:@"passes"];
+	[genome setObject:[genomeEntity valueForKey:@"jitter"] forKey:@"temporal_samples"];
+	[genome setObject:[genomeEntity valueForKey:@"de_max_filter"] forKey:@"estimator_radius"];
+	[genome setObject:[genomeEntity valueForKey:@"de_min_filter"] forKey:@"estimator_minimum"];
+	[genome setObject:[genomeEntity valueForKey:@"de_alpha"] forKey:@"estimator_curve"];
+	[genome setObject:[genomeEntity valueForKey:@"gamma"] forKey:@"gamma"];
+	[genome setObject:[genomeEntity valueForKey:@"gamma_threshold"] forKey:@"gamma_threshold"];		
+
+	
+	[[genomeEntity valueForKey:@"background"] getRed:&red green:&green blue:&blue alpha:NULL];
+
+	NSMutableDictionary *background = [NSMutableDictionary dictionaryWithCapacity:3];
+	
+	[background setObject:[NSNumber numberWithInt:(int)(red * 255)] forKey:@"red"];		
+	[background setObject:[NSNumber numberWithInt:(int)(green * 255)] forKey:@"green"];		
+	[background setObject:[NSNumber numberWithInt:(int)(blue * 255)] forKey:@"blue"];
+	
+	[genome setObject:background forKey:@"background"];		
+
+	[genome setObject:[genomeEntity valueForKey:@"hue"] forKey:@"hue"];
+	[genome setObject:[genomeEntity valueForKey:@"vibrancy"] forKey:@"vibrancy"];
+	[genome setObject:[genomeEntity valueForKey:@"brightness"] forKey:@"brightness"];
+	[genome setObject:[genomeEntity valueForKey:@"rotate"] forKey:@"rotate"];
+	[genome setObject:[genomeEntity valueForKey:@"contrast"] forKey:@"contrast"];
+
+	[genome setObject:[genomeEntity valueForKey:@"symmetry"] forKey:@"symmetry"];
+
+	[genome setObject:[genomeEntity valueForKey:@"interpolation"] forKey:@"interpolation"];
+	[genome setObject:[genomeEntity valueForKey:@"motion_exp"] forKey:@"motion_exponent"];
+	[genome setObject:[genomeEntity valueForKey:@"spatial_filter_radius"] forKey:@"filter"];
+	
+	if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"B-Spline"]) {
+		[genome setObject:@"bspline" forKey:@"filter_shape"];
+	} else {
+		[genome setObject:[[genomeEntity valueForKey:@"spatial_filter_func"] lowercaseString] forKey:@"filter_shape"];
+	}
+
+/*	
+	[Genome createXMLForEditElement:genome usingEntity:genomeEntity];
+	
+	
+	if([[genomeEntity valueForKey:@"use_palette"] boolValue] == FALSE) {
+		
+		predicate = [NSPredicate predicateWithFormat:@"parent_genome == %@", genomeEntity];
+							 
+		sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+		sortDescriptors = [NSArray arrayWithObject: sort];
+		
+		fetch = [[NSFetchRequest alloc] init];
+		[fetch setEntity:[NSEntityDescription entityForName:@"CMap" inManagedObjectContext:moc]];
+		[fetch setPredicate: predicate];
+		[fetch setSortDescriptors: sortDescriptors];
+		
+		cmaps = [moc executeFetchRequest:fetch error:nil];
+		[sort release];
+		[fetch release];	
+	//	 use the cmap 
+		if([cmaps count] < 256) {
+			NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
+			[newCmaps retain];
+			[Genome createXMLForCMap:newCmaps forElement:genome];
+			[newCmaps release];
+		} else {
+			[Genome createXMLForCMap:cmaps forElement:genome];
+		}
+	} else {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"palette" stringValue:[[genomeEntity valueForKey:@"palette"] stringValue]]];
+	}
+	
+	
+	// xforms 
+	
+	predicate = [NSPredicate predicateWithFormat:@"parent_genome == %@", genomeEntity];
+	
+	sort = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+	sortDescriptors = [NSArray arrayWithObject: sort];
+	
+	fetch = [[NSFetchRequest alloc] init];
+	[fetch setEntity:[NSEntityDescription entityForName:@"XForm" inManagedObjectContext:moc]];
+	[fetch setPredicate: predicate];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	xforms = [moc executeFetchRequest:fetch error:nil];
+	[sort release];
+	[fetch release];
+	
+	int old_num_xforms = [xforms count];
+	
+	for(i=0; i < old_num_xforms; i++) {
+		
+		[genome addChild:[Genome createXMLForXFormFromEntity:[xforms objectAtIndex:i] fromContext:moc]];
+		if([[[xforms objectAtIndex:i] valueForKey:@"final_xform"] boolValue] == YES) {
+			//			newGenome->final_xform_index = i+newGenome->num_xforms;
+		}
+		
+	}
+	
+*/	
+	
+	return genome;
+	
+}
+
 @end
 

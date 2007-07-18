@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 85 tasks, 198 threads, 2 processors
-Load average: 1.31, Mach factor: 1.11
+Default processor set: 85 tasks, 208 threads, 2 processors
+Load average: 1.08, Mach factor: 1.15
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -431,7 +431,7 @@ configure:6974: result: strip
 configure:7260: checking if gcc supports -fno-rtti -fno-exceptions
 configure:7281: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
-cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
+c1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C 
 configure:7285: $? = 0
 configure:7295: result: no
 configure:7310: checking for gcc option to produce PIC
@@ -493,7 +493,7 @@ configure:19595: checking malloc.h usability
 configure:19612: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  conftest.c >&5
 conftest.c:55:20: error: malloc.h: No such file or directory
 conftest.c:55:20: error: malloc.h: No such file or directory
-lipo: can't figure out the architecture type of: /var/tmp//cc6JVK3e.out
+lipo: can't figure out the architecture type of: /var/tmp//ccXOZN34.out
 configure:19618: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -644,7 +644,7 @@ pnggccrd.c:376: error: assignment of read-only variable '_mask48_3'
 pnggccrd.c:377: error: assignment of read-only variable '_mask48_2'
 pnggccrd.c:378: error: assignment of read-only variable '_mask48_1'
 pnggccrd.c:379: error: assignment of read-only variable '_mask48_0'
-lipo: can't figure out the architecture type of: /var/tmp//ccG0gpvS.out
+lipo: can't figure out the architecture type of: /var/tmp//cca4sR2d.out
 configure:20576: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */

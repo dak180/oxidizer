@@ -58,7 +58,7 @@
 + (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc;
 
-/* Core data code */
-
+/* lua interface */
++ (NSMutableDictionary *)createDictionaryFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc;
   
 @end

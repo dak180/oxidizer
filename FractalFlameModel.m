@@ -1185,6 +1185,12 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
+- (NSMutableDictionary *)passSelectedGenomeToLua {
+	
+	return [Genome createDictionaryFromGenomeEntity:[flames getSelectedGenome] fromContext:moc];
+	
+}
+
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {

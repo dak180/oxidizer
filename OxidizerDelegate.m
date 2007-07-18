@@ -1,7 +1,5 @@
 #import "OxidizerDelegate.h"
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
+#include "LuaObjCBridge/LuaObjCBridge.h"
 
 @implementation OxidizerDelegate 
 
@@ -202,45 +200,39 @@
 
 }
 
-/*
+
 
 - (IBAction)runLuaScript:(id)sender {
 	
-	lua_State *L;
+	lua_State* interpreter=lua_objc_init();
+		
+	lua_objc_pushid(interpreter,ffm);
+	lua_setglobal(interpreter, "oxidizer");
 	
-	L=lua_open();
-	luaopen_base(L);	// load basic libs (eg. print)
+	lua_objc_pushpropertylist(interpreter,[ffm passSelectedGenomeToLua]);
+	lua_setglobal(interpreter, "selected_flame");
 	
-	Flam3_Init(L);	// load the wrappered module
 	
-	int err = luaL_loadfile(L, "/Users/vargol/Source/oxidizer/test.lua"); 
-	if (err == 0) {
-
-		lua_pcall(L,0,0,0);
-
-	} 	else {
-
-		NSLog(@"unable to load %s\n", "/Users/vargol/Source/oxidizer/test.lua");
-
-	}
-
-	lua_close(L);
+	NSString *luaScript = [NSString stringWithContentsOfFile:@"/Users/vargol/Source/oxidizer/test.lua"];
+	
+	int luaScriptLength = [luaScript lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+	
+	luaL_loadbuffer(interpreter,[luaScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
+	lua_pcall(interpreter,0,0,0);
+	
+	//
+	// Put further C code which you want to test here
+	//
+	
+	
+	
+	//
+	// Clean up and exit
+	//
+	
+	lua_close(interpreter);
 	return;
 	
 }
-
-- (flam3_frame *)getFlam3Frame {
-	
-	return [ffm getFlam3Frame];
-	
-}
-
-- (void)setFlam3Frame:(flam3_frame *)frame {
-
-	[ffm setFlam3Frame:frame];
-
-	return;
-}
-*/
 
 @end

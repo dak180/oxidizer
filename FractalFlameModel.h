@@ -147,5 +147,6 @@
 - (IBAction)openFile:(id)sender;
 - (IBAction)appendFile:(id)sender;
 
-
+/* lua interface */
+- (NSMutableDictionary *)passSelectedGenomeToLua;
 @end
