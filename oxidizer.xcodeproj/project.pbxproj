@@ -138,9 +138,7 @@
 		A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreaterThanThreeTransformer.m; sourceTree = "<group>"; };
 		A4FDAB280A4EBA9400910299 /* DnDArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDArrayController.h; sourceTree = "<group>"; };
 		A4FDAB290A4EBA9400910299 /* DnDArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DnDArrayController.m; sourceTree = "<group>"; };
-		A4FDD8710B56B95C0089AE35 /* flam3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "flam3-Info.plist"; sourceTree = "<group>"; };
 		A4FDD9380B56C1960089AE35 /* swig_interface.i */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.interfacer; path = swig_interface.i; sourceTree = "<group>"; };
-		A4FDD97A0B56D4A70089AE35 /* lua-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "lua-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,8 +237,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				A4FDD8710B56B95C0089AE35 /* flam3-Info.plist */,
-				A4FDD97A0B56D4A70089AE35 /* lua-Info.plist */,
 			);
 			name = oxidizer;
 			sourceTree = "<group>";
