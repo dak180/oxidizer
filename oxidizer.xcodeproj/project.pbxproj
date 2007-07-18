@@ -51,7 +51,6 @@
 		A4F49CF00AAB1D5400FA4BE8 /* oxidizer_dna.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */; };
 		A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */; };
 		A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FDAB290A4EBA9400910299 /* DnDArrayController.m */; };
-		A4FDD9390B56C1960089AE35 /* swig_interface.i in Resources */ = {isa = PBXBuildFile; fileRef = A4FDD9380B56C1960089AE35 /* swig_interface.i */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -138,7 +137,6 @@
 		A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreaterThanThreeTransformer.m; sourceTree = "<group>"; };
 		A4FDAB280A4EBA9400910299 /* DnDArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDArrayController.h; sourceTree = "<group>"; };
 		A4FDAB290A4EBA9400910299 /* DnDArrayController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DnDArrayController.m; sourceTree = "<group>"; };
-		A4FDD9380B56C1960089AE35 /* swig_interface.i */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.interfacer; path = swig_interface.i; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,7 +257,6 @@
 				A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */,
 				A41CF2DB0C340B44001582CC /* libpng.dylib */,
 				A41CF2D80C340AFE001582CC /* flam3-render */,
-				A4FDD9380B56C1960089AE35 /* swig_interface.i */,
 				A4E52D560A0141A400382558 /* flam3-palettes.xml */,
 				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -373,7 +370,6 @@
 				A4F3EF200AB5DE3B00A282F2 /* video-x-generic.png in Resources */,
 				A422B9A10B162E7800019559 /* GenePool.nib in Resources */,
 				A44201EE0B21E551000B94D9 /* genepool.png in Resources */,
-				A4FDD9390B56C1960089AE35 /* swig_interface.i in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
