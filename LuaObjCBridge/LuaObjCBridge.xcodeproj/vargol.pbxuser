@@ -1,0 +1,180 @@
+// !$*UTF8*$!
+{
+	4B1114C00828E15C007DD523 /* LuaObjCBridge.m */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1046, 34720}}";
+			sepNavSelRange = "{2968, 70}";
+			sepNavVisRect = "{{0, 1246}, {582, 182}}";
+		};
+	};
+	4B277B330A7E9EF00051C47A /* Test */ = {
+		activeExec = 0;
+		executables = (
+			A4327A7F0C4E53C400B1D18D /* Test */,
+		);
+	};
+	4B4FE4BE0827873F007685F3 /* Project object */ = {
+		activeBuildConfigurationName = Debug;
+		activeExecutable = A4327A7E0C4E53C400B1D18D /* lua */;
+		activeTarget = 4B4FE50E08278784007685F3 /* LuaObjCBridge.framework */;
+		breakpointsGroup = A4327AA50C4E55A700B1D18D /* XCBreakpointsBucket */;
+		codeSenseManager = A4327A870C4E53ED00B1D18D /* Code sense */;
+		executables = (
+			A4327A7E0C4E53C400B1D18D /* lua */,
+			A4327A7F0C4E53C400B1D18D /* Test */,
+		);
+		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					243,
+					20,
+					48,
+					43,
+					43,
+					20,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+					PBXFileDataSource_Target_ColumnID,
+				);
+			};
+			PBXConfiguration.PBXFileTableDataSource3.PBXFindDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFindDataSource_LocationID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					120,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFindDataSource_MessageID,
+					PBXFindDataSource_LocationID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 206475543;
+			PBXWorkspaceStateSaveDate = 206475543;
+		};
+		perUserProjectItems = {
+			A4327B1A0C4E912B00B1D18D /* PBXTextBookmark */ = A4327B1A0C4E912B00B1D18D /* PBXTextBookmark */;
+			A4327B930C4E97F000B1D18D /* PBXTextBookmark */ = A4327B930C4E97F000B1D18D /* PBXTextBookmark */;
+		};
+		sourceControlManager = A4327A860C4E53ED00B1D18D /* Source Control */;
+		userBuildSettings = {
+			SYMROOT = ../build;
+		};
+	};
+	4B4FE50E08278784007685F3 /* LuaObjCBridge.framework */ = {
+		activeExec = 0;
+	};
+	4B4FE516082787AB007685F3 /* lua */ = {
+		activeExec = 0;
+		executables = (
+			A4327A7E0C4E53C400B1D18D /* lua */,
+		);
+	};
+	4B897657090BE6D1006A3DF7 /* liblua.dylib */ = {
+		activeExec = 0;
+	};
+	4BAA6C4A0851051E00FA8A60 /* objc.dylib */ = {
+		activeExec = 0;
+	};
+	4BCA7A3609E39213008E078D /* lua.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1073, 5390}}";
+			sepNavSelRange = "{7961, 13}";
+			sepNavVisRect = "{{0, 3527}, {1073, 646}}";
+			sepNavWindowFrame = "{{134, -53}, {1118, 775}}";
+		};
+	};
+	4BDB57490854EA0400798A4F /* Everything */ = {
+		activeExec = 0;
+	};
+	A4327A7E0C4E53C400B1D18D /* lua */ = {
+		isa = PBXExecutable;
+		activeArgIndex = 2147483647;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = lua;
+		sourceDirectories = (
+		);
+	};
+	A4327A7F0C4E53C400B1D18D /* Test */ = {
+		isa = PBXExecutable;
+		activeArgIndex = 2147483647;
+		activeArgIndices = (
+		);
+		argumentStrings = (
+		);
+		autoAttachOnCrash = 1;
+		configStateDict = {
+		};
+		customDataFormattersEnabled = 1;
+		debuggerPlugin = GDBDebugging;
+		disassemblyDisplayState = 0;
+		enableDebugStr = 1;
+		environmentEntries = (
+		);
+		executableSystemSymbolLevel = 0;
+		executableUserSymbolLevel = 0;
+		libgmallocEnabled = 0;
+		name = Test;
+		sourceDirectories = (
+		);
+	};
+	A4327A860C4E53ED00B1D18D /* Source Control */ = {
+		isa = PBXSourceControlManager;
+		fallbackIsa = XCSourceControlManager;
+		isSCMEnabled = 0;
+		scmConfiguration = {
+		};
+		scmType = "";
+	};
+	A4327A870C4E53ED00B1D18D /* Code sense */ = {
+		isa = PBXCodeSenseManager;
+		indexTemplatePath = "";
+	};
+	A4327AA50C4E55A700B1D18D /* XCBreakpointsBucket */ = {
+		isa = XCBreakpointsBucket;
+		name = "Project Breakpoints";
+		objects = (
+		);
+	};
+	A4327B1A0C4E912B00B1D18D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4BCA7A3609E39213008E078D /* lua.h */;
+		rLen = 13;
+		rLoc = 7961;
+		rType = 0;
+	};
+	A4327B930C4E97F000B1D18D /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4BCA7A3609E39213008E078D /* lua.h */;
+		name = lua_setglobal;
+		rLen = 13;
+		rLoc = 7961;
+		rType = 0;
+		vrLen = 1408;
+		vrLoc = 7099;
+	};
+}
