@@ -549,12 +549,7 @@
 			[[genome objectAtIndex:0] setValue:flameImage forKey:@"image"];
 			[flameImage release];
 
-		} else {
-			
-			NSLog(@"Render Failed");
-			
-		}
-		
+		}		
 	}
 	
 	

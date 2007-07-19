@@ -207,13 +207,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	if (returnCode != 0) {
 			
-
-		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render failed!" 
-												 defaultButton:@"Close"
-											   alternateButton:nil 
-												   otherButton:nil 
-									 informativeTextWithFormat:nil];
-		[finishedPanel runModal];		
+		[moc unlock];
+		[taskEnvironment release];
+		[pool release];
+		return;
 	}	
 	
 	[moc unlock];
@@ -369,7 +366,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 			
 		} else {
 			
-			NSLog(@"Render Failed");
+			[taskProgressWindow setIsVisible:NO];
+			[pool release];
+			return;
 			
 		}
 		
@@ -641,7 +640,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[self generateAllThumbnailsForGenomesInThread:genomeEntity];	
 	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
 	
-	[genomeEntity autorelease];
 	return [genomeEntity objectAtIndex:0];
 
 
