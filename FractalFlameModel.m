@@ -1189,6 +1189,37 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 }
 
+- (NSArray *)passGenomesToLua {
+
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	NSArray *genomes = [moc executeFetchRequest:fetch error:nil];
+	[fetch release];	  
+	[sort release];	  
+	
+	
+	return [Genome createArrayFromEntities:genomes fromContext:moc];
+	
+}
+
+
+- (void)createGenomeFromLua:(NSDictionary *)genomeDictionary {
+	
+	NSManagedObject *newGenome = [Genome createGenomeEntityFromDictionary:genomeDictionary inContext:moc];
+	
+	[self generateAllThumbnailsForGenomes:[NSArray arrayWithObject:newGenome]];
+	
+//	NSLog(@"%@", newGenome);
+	
+}
+
+
 @end
 
 int printProgress(void *nslPtr, double progress, int stage) {

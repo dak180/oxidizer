@@ -149,4 +149,7 @@
 
 /* lua interface */
 - (NSMutableDictionary *)passSelectedGenomeToLua;
+- (NSArray *)passGenomesToLua;
+- (void)createGenomeFromLua:(NSDictionary *)genomeDictionary;
+
 @end

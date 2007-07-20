@@ -375,7 +375,7 @@ static double *_paletteData = NULL;
 	
 	/* add the first colour from the array */
 	newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
-	[newColour setObject:[NSNumber numberWithInt:i] forKey:@"index"];
+	[newColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];
 	[newColour setObject:[NSNumber numberWithInt:round(red * 255)] forKey:@"red"];
 	[newColour setObject:[NSNumber numberWithInt:round(green * 255)] forKey:@"green"];
 	[newColour setObject:[NSNumber numberWithInt:round(blue * 255)] forKey:@"blue"];

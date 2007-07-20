@@ -54,11 +54,23 @@
 + (NSMutableSet *)createVariationEntitiesFromElement:(NSXMLElement *)xform inContext:(NSManagedObjectContext *)moc;
 + (NSManagedObject *)createVariationEntityFromElement:(NSXMLElement *)xform ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc;
 
-+ (NSManagedObject *)createDefaultGenomeEntityFromInContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createDefaultGenomeEntityInContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc;
 
 /* lua interface */
++ (NSArray *)createArrayFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc;
 + (NSMutableDictionary *)createDictionaryFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc;
-  
++ (NSMutableDictionary *)createDictionaryFromTransformEntity:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
++ (NSMutableArray *)creatArrayForTransformVariations:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
++ (NSMutableArray *)createArrayForCMap:(NSArray *)cmaps;
++ (NSMutableDictionary *) createDictionaryForEditUsingEntity:(NSManagedObject *)genome;
+
++ (NSArray *)createGenomeEntitiesFromArray:(NSArray *)genomeArray inContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createGenomeEntityFromDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createTransformEntitiesFromArray:(NSArray *)xforms inContext:(NSManagedObjectContext *)moc;
++ (NSMutableSet *)createVariationEntitiesFromArray:(NSArray *)variations inContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createVariationEntityFromDictionary:(NSDictionary *)variationDictionary ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)mocPasteboardType;
++ (void) createColourMapFromArray:(NSArray *)colourMap forGenome:(NSManagedObject *)genomeEntity inContext:(NSManagedObjectContext *)moc;
+
 @end

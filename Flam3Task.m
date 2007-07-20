@@ -233,7 +233,6 @@
 	
 	while([data length] > 0) {
 		NSString *string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
-				NSLog (@"got:%@\n", string);
 		
 		if([string hasPrefix:@"\rchaos: "]) {
 			
