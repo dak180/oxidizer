@@ -839,7 +839,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	NSOpenPanel *op;
 	int runResult, lastTime;
-	BOOL boolResult;
 	
 	/* create or get the shared instance of NSSavePanel */
 	op = [NSOpenPanel openPanel];
@@ -1101,7 +1100,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskProgressWindow setTitle:@"Rendering Image"];
 	[taskProgressWindow makeKeyAndOrderFront:self];
 	
-	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
+//	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
 	
 
 	int returnValue =  [Flam3Task runFlam3RenderAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator];
@@ -1183,11 +1182,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 }
 
-- (NSMutableDictionary *)passSelectedGenomeToLua {
-	
-	return [Genome createDictionaryFromGenomeEntity:[flames getSelectedGenome] fromContext:moc];
-	
-}
+
 
 - (NSArray *)passGenomesToLua {
 
@@ -1203,17 +1198,21 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[fetch release];	  
 	[sort release];	  
 	
+	if ([genomes count] == 0  ) {
+		return [NSArray array];
+	}
 	
 	return [Genome createArrayFromEntities:genomes fromContext:moc];
 	
 }
 
 
-- (void)createGenomeFromLua:(NSDictionary *)genomeDictionary {
+- (void)createGenomesFromLua:(NSArray *)genomeArray {
 	
-	NSManagedObject *newGenome = [Genome createGenomeEntityFromDictionary:genomeDictionary inContext:moc];
+
+	NSArray *newGenomes = [Genome createGenomeEntitiesFromArray:genomeArray inContext:moc];
 	
-	[self generateAllThumbnailsForGenomes:[NSArray arrayWithObject:newGenome]];
+	[self generateAllThumbnailsForGenomes:newGenomes];
 	
 //	NSLog(@"%@", newGenome);
 	
@@ -1222,14 +1221,4 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 @end
 
-int printProgress(void *nslPtr, double progress, int stage) {
-	
-	ProgressDetails *md = nslPtr;
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-	[md performSelectorOnMainThread:@selector(setProgress:) withObject:[NSNumber numberWithDouble:(100.0 * progress)] waitUntilDone:NO];
-//	[md setProgress:[NSNumber numberWithDouble:(100.0 * progress)]];
-	[pool release];
-	
-	return 0;
-}
 

@@ -323,32 +323,51 @@ void print_stack(lua_State* interpreter){
 
 - (IBAction)runLuaScript:(id)sender {
 	
+	
+	NSOpenPanel *op;
+	
+	/* create or get the shared instance of NSSavePanel */
+	op = [NSOpenPanel openPanel];
+	/* set up new attributes */
+	[op setRequiredFileType:@"lua"];
+	
+	/* display the NSOpenPanel */
+	int runResult = [op runModal];
+	/* if successful, save file under designated name */
+	if(runResult == NSCancelButton || [op filename] == nil) {
+		return;	
+	} 
+	
+	NSString *luaScript = [NSString stringWithContentsOfFile:[op filename]] ;
+	int luaScriptLength = [luaScript lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+	
 	lua_State* interpreter=lua_objc_init();
 		
 	lua_objc_pushid(interpreter,ffm);
 	lua_setglobal(interpreter, "oxidizer");
-	
-	lua_objc_pushpropertylist(interpreter,[ffm passSelectedGenomeToLua]);
-	lua_setglobal(interpreter, "selected_flame");
-	
+
 	lua_objc_pushpropertylist(interpreter,[ffm passGenomesToLua]);
 	lua_setglobal(interpreter, "oxidizer_genomes");
 	
-	NSString *luaScript = [NSString stringWithContentsOfFile:@"/Users/vargol/Source/oxidizer/test.lua"];
-	
-	int luaScriptLength = [luaScript lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	
 	luaL_loadbuffer(interpreter,[luaScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
 	lua_pcall(interpreter,0,0,0);
-	
-	/* get the return values */
-	lua_getglobal(interpreter, "return_flame");
-	
-	NSDictionary *returnDictionary = lua_objc_topropertylist(interpreter, 1);
-	
-	[ffm createGenomeFromLua:returnDictionary]; 
+
+	lua_getglobal(interpreter, "oxidizer_genomes");
+	NSObject *returnObject = lua_objc_topropertylist(interpreter, 1);
+	if ([returnObject isKindOfClass:[NSArray class]]) {
+		[ffm createGenomesFromLua:(NSArray *)returnObject]; 
+	} else if ([returnObject isKindOfClass:[NSString class]]) {
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:(NSString *)returnObject];
+		[finishedPanel runModal];	
+	}
 	
 	lua_close(interpreter);
+	
 	return;
 	
 }

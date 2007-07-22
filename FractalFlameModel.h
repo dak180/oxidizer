@@ -148,8 +148,7 @@
 - (IBAction)appendFile:(id)sender;
 
 /* lua interface */
-- (NSMutableDictionary *)passSelectedGenomeToLua;
 - (NSArray *)passGenomesToLua;
-- (void)createGenomeFromLua:(NSDictionary *)genomeDictionary;
+- (void)createGenomesFromLua:(NSArray *)genomeArray;
 
 @end
