@@ -5,6 +5,8 @@
 
 --check for genomes by looking at the size of the table. 
 if #oxidizer_genomes == 0 then
+	-- as there is one fixed return type we can assign a string to oxidizer_genomes
+	-- to return an error message
 	oxidizer_genomes = "This script requires a loaded genome"
 	return;
 end 
