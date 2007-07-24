@@ -101,7 +101,7 @@
 	// determine a valid name for the file to write to
 	fm = [NSFileManager defaultManager];
 
-	basePath = [[dropDestination path] stringByAppendingPathComponent:@"Oxidxier"];
+	basePath = [[dropDestination path] stringByAppendingPathComponent:@"Oxidizer"];
 	path = [basePath stringByAppendingPathExtension:@"png"];
 	
 	int i = 1;

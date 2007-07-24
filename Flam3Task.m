@@ -86,12 +86,11 @@
 	}	
 	
 	NSData *genomeXML = [flam3Output readDataToEndOfFile];
-	NSData *errorData = [flam3Error readDataToEndOfFile];
 		
 	[task waitUntilExit];
 	
-	[flam3Output closeFile];	
-	[flam3Error closeFile];	
+	[flam3Output closeFile];
+	
 	if(xml != nil) {		
 		[stdInPipe release];
 	}
@@ -122,6 +121,9 @@
 		[string release];
 		
 	}
+
+	[flam3Error closeFile];	
+
 	
 	[task release];
 	

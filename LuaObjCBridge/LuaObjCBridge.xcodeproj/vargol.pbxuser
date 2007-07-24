@@ -4,7 +4,7 @@
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1046, 34720}}";
 			sepNavSelRange = "{2968, 70}";
-			sepNavVisRect = "{{0, 1246}, {582, 182}}";
+			sepNavVisRect = "{{0, 1247}, {582, 182}}";
 		};
 	};
 	4B277B330A7E9EF00051C47A /* Test */ = {
@@ -24,6 +24,20 @@
 			A4327A7F0C4E53C400B1D18D /* Test */,
 		);
 		perUserDictionary = {
+			PBXConfiguration.PBXFileTableDataSource3.PBXBookmarksDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXBookmarksDataSource_NameID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					200,
+					200,
+					57.5835,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXBookmarksDataSource_LocationID,
+					PBXBookmarksDataSource_NameID,
+					PBXBookmarksDataSource_CommentsID,
+				);
+			};
 			PBXConfiguration.PBXFileTableDataSource3.PBXFileTableDataSource = {
 				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
@@ -58,16 +72,11 @@
 					PBXFindDataSource_LocationID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 206475543;
-			PBXWorkspaceStateSaveDate = 206475543;
-		};
-		perUserProjectItems = {
-			A4327B1A0C4E912B00B1D18D /* PBXTextBookmark */ = A4327B1A0C4E912B00B1D18D /* PBXTextBookmark */;
-			A4327B930C4E97F000B1D18D /* PBXTextBookmark */ = A4327B930C4E97F000B1D18D /* PBXTextBookmark */;
+			PBXPerProjectTemplateStateSaveDate = 206990360;
+			PBXWorkspaceStateSaveDate = 206990360;
 		};
 		sourceControlManager = A4327A860C4E53ED00B1D18D /* Source Control */;
 		userBuildSettings = {
-			SYMROOT = ../build;
 		};
 	};
 	4B4FE50E08278784007685F3 /* LuaObjCBridge.framework */ = {
@@ -159,22 +168,5 @@
 		name = "Project Breakpoints";
 		objects = (
 		);
-	};
-	A4327B1A0C4E912B00B1D18D /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4BCA7A3609E39213008E078D /* lua.h */;
-		rLen = 13;
-		rLoc = 7961;
-		rType = 0;
-	};
-	A4327B930C4E97F000B1D18D /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 4BCA7A3609E39213008E078D /* lua.h */;
-		name = lua_setglobal;
-		rLen = 13;
-		rLoc = 7961;
-		rType = 0;
-		vrLen = 1408;
-		vrLoc = 7099;
 	};
 }

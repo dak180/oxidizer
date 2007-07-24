@@ -19,21 +19,20 @@
 /*	flam3_genome **genomes;
 */
 	NSMutableArray     *genomes;
-	bool         *genomeCanBreed;
+	NSMutableArray     *genomeImages;
+	unsigned int       *buttonState;
+	bool         *hasGenome;
 	unsigned int genomeCount;					
 }
 
-//+ (NSString *)createTemporaryPathWithFileName:(NSString *)fileName;
-
-- (bool) canGenomeBreed:(int)index;
-
 - (NSImage *) setGenome:(NSData *)genome forIndex:(int)index;
 - (NSData *) getGenomeForIndex:(int)index;
+- (bool) hasGenomeForIndex:(int)index;
 
-- (NSImage *) createRandomGenome:(int)index;
 - (NSImage *) makeImageForGenome:(int)index;
+- (NSImage *) getImageForGenome:(int)index;
 
-- (void)toggleGenome:(int)index;
+- (void)setButton:(int)index toState:(unsigned int)state;
 - (void) setGenomeCount:(unsigned int)count;
 - (bool) breed;
 - (bool) fill;

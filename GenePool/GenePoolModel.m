@@ -19,19 +19,17 @@
     if (self = [super init]) {
 
 		genomes = [[NSMutableArray alloc] initWithCapacity:16];
-		genomeCanBreed = NULL;
-	
+		genomeImages = [[NSMutableArray alloc] initWithCapacity:16];
+		buttonState = NULL;
+		hasGenome = NULL;
 	}
 	
 	return self;
 }
 
 
-- (bool) canGenomeBreed:(int)index {
-	
-	return genomeCanBreed[index];
-	
-}
+
+/*
 
 - (NSImage *) createRandomGenome:(int)index {
 	
@@ -57,8 +55,7 @@
 	
 	
 }
-
-
+*/
 - (NSImage *) makeImageForGenome:(int)index {
 	
 	srandom(time(NULL));
@@ -81,15 +78,26 @@
 
 	[Flam3Task deleteTemporaryPathAndFile:pngFileName];
 	
-	[flameImage autorelease];
+	[genomeImages replaceObjectAtIndex:index withObject:flameImage];
+	
+	[flameImage release];
 	[pngFileName release];
-	return flameImage;
+	return [genomeImages objectAtIndex:index];
 }	
 	
-- (void)toggleGenome:(int)index  {
+- (NSImage *) getImageForGenome:(int)index {
+	if(index < [genomeImages count]) {
+		return [genomeImages objectAtIndex:index];		
+	} 	
+	
+	return nil;
+}
+
+
+- (void)setButton:(int)index toState:(unsigned int)state {
 	
 	
-	genomeCanBreed[index] = genomeCanBreed[index] ? FALSE:TRUE;
+	buttonState[index] = state;
 	
 }
 
@@ -97,13 +105,20 @@
 	
 	int i;
 	
-	if(genomeCanBreed != NULL) {
-		free(genomeCanBreed);
+	if(buttonState != NULL) {
+		free(buttonState);
 	}
-	genomeCanBreed = (bool *)malloc(sizeof(bool) * count);
+	buttonState = (unsigned int *)malloc(sizeof(unsigned int) * count);
+
+	if(hasGenome != NULL) {
+		free(hasGenome);
+	}
+	hasGenome = (bool *)malloc(sizeof(bool) * count);
+	
 	
 	for(i=0; i<count; i++) {		
-		genomeCanBreed[i] = NO;
+		buttonState[i] = NSOnState;
+		hasGenome[i] = NO;
 	}
 	
 	[genomes removeAllObjects];
@@ -112,6 +127,12 @@
 		[genomes addObject:[[NSData alloc] init]];
 	}	
 
+	
+	[genomeImages removeAllObjects];
+	
+	for(i=0; i<count; i++) {		
+		[genomeImages addObject:[[NSImage alloc] init]];
+	}	
 	genomeCount = count;
 	
 } 
@@ -123,7 +144,7 @@
 	fillCount = 0;
 	
 	for(i=0; i<genomeCount; i++) {
-		if (genomeCanBreed[i] == NO) {
+		if (buttonState[i] == NSOnState) {
 			fillCount++;
 		}
 	}
@@ -145,14 +166,14 @@
 	
 	
 	for(i=0; i<genomeCount; i++) {
-		if (genomeCanBreed[i] == NO) {
+		if (buttonState[i] == NSOnState) {
 			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Creating new Genome %d", i]];
 			[genePoolProgressText displayIfNeeded];
 			NSData *newGenome = [BreedingController createRandomGenomeXMLwithEnvironment:env];
 			[genomes replaceObjectAtIndex:i withObject:newGenome];
 			[genePoolProgress incrementBy:1.0];
 			[genePoolProgress displayIfNeeded];
-
+			hasGenome[i] = YES; 
 		}
 	}
 	
@@ -168,7 +189,7 @@
 
 	for(i=0; i<genomeCount; i++) {
 		
-		if(genomeCanBreed[i] == YES) {
+		if(buttonState[i] == NSOffState) {
 			breedingCount++;	
 		}
 		
@@ -199,7 +220,7 @@
 	
 	for(i=0; i<genomeCount; i++) {
 		
-		if(genomeCanBreed[i] == YES) {
+		if(buttonState[i] == NSOffState) {
 			breedingOrder[index] = i;
 			order[index] = index;
 			index++;
@@ -270,6 +291,11 @@
 
 	[genomes removeAllObjects];
 	[genomes addObjectsFromArray:newGenomes];
+	
+	for(i=0; i<genomeCount; i++) {		
+		hasGenome[i] = YES;
+	}
+	
 	[newGenomes removeAllObjects];
 	[newGenomes release];
 	
@@ -296,11 +322,21 @@
 
 - (NSData *) getGenomeForIndex:(int)index {
 	
-	return [genomes objectAtIndex:index];
+	if(index < [genomeImages count]) {
+		return [genomes objectAtIndex:index];		
+	} 
 	
-				
+	return nil;			
 }
 
+- (bool) hasGenomeForIndex:(int)index {
+	
+	if(index < genomeCount) {
+		return hasGenome[index];		
+	} 
+	
+	return NO;			
+}
 
 @end
 

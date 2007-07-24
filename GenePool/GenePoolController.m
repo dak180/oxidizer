@@ -23,8 +23,14 @@
 	NSButton *button = (NSButton *)sender;
 	
 	int index = [button tag];
-	
-	[model toggleGenome:index];
+
+	if ([button state] == NSOffState) {
+		[button setImage:[model getImageForGenome:index]];
+	} else {
+		[button setImage:nil];			
+	}
+
+	[model setButton:index toState:[button state]];
 	
 //	NSLog(@"pressed button %d, %d", index, [button state]);
 }
@@ -38,14 +44,14 @@
 		
 	}
 	
+	/* after breeding all genome can breed so set all buttons on */
+	
 	int i;
 	
 	for(i=0; i<[genePoolButtons count]; i++) {
 		[self setButtonImage:[model makeImageForGenome:i] forIndex:i];
-		if ([model canGenomeBreed:i] == YES) {
-			[model toggleGenome:i];
-			[[genePoolButtons objectAtIndex:i] setNextState];
-		}
+		[[genePoolButtons objectAtIndex:i] setState:NSOffState];
+		[model setButton:i toState:NSOffState];
 	}
 	
 }
@@ -57,9 +63,17 @@
 	
 	if([model fill]) {
 		
+		/* after filling genomes set to no-breed but have genomes are new */ 
+		
 		for(i=0; i<[genePoolButtons count]; i++) {
-			if ([model canGenomeBreed:i] == NO) {
+			
+			if ([model hasGenomeForIndex:i]) {
 				[self setButtonImage:[model makeImageForGenome:i] forIndex:i];
+				[[genePoolButtons objectAtIndex:i] setState:NSOffState];
+				[model setButton:i toState:NSOffState];
+			} else {
+				[[genePoolButtons objectAtIndex:i] setState:NSOnState];				
+				[model setButton:i toState:NSOnState];				
 			}
 		}
 		
@@ -102,10 +116,17 @@
 - (IBAction)toggleButtons:(id)sender  {
 	
 	int i;
+	NSButton *tempButton;
 	
 	for(i=0; i<[genePoolButtons count]; i++) {
-		[model toggleGenome:i];
-		[[genePoolButtons objectAtIndex:i] setNextState];
+		tempButton = [genePoolButtons objectAtIndex:i];  
+		if ([tempButton state] == NSOnState) {
+			[tempButton setImage:[model getImageForGenome:i]];
+		} else {
+			[tempButton setImage:nil];			
+		}
+		[tempButton setNextState];
+		[model setButton:i toState:[tempButton state]];
 	}
 	
 	//	NSLog(@"pressed button %d, %d", index, [button state]);

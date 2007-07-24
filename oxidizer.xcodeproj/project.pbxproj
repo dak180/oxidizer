@@ -25,6 +25,7 @@
 		A422B9AB0B1631A000019559 /* GenePoolModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9AA0B1631A000019559 /* GenePoolModel.m */; };
 		A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4233E9309EFF3010047DC34 /* QuickTimeController.m */; };
 		A42608A50C41111100DDB92E /* flam3-animate in Resources */ = {isa = PBXBuildFile; fileRef = A42608820C41109600DDB92E /* flam3-animate */; };
+		A42963140C5685B100D56561 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = A42963130C5685B100D56561 /* Credits.html */; };
 		A4327AB20C4E58B600B1D18D /* LuaObjCBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */; };
 		A4327AE90C4E58E400B1D18D /* LuaObjCBridge.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */; };
 		A44201EE0B21E551000B94D9 /* genepool.png in Resources */ = {isa = PBXBuildFile; fileRef = A44201ED0B21E551000B94D9 /* genepool.png */; };
@@ -99,7 +100,8 @@
 		A4233E9209EFF3000047DC34 /* QuickTimeController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuickTimeController.h; sourceTree = "<group>"; };
 		A4233E9309EFF3010047DC34 /* QuickTimeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickTimeController.m; sourceTree = "<group>"; };
 		A42608820C41109600DDB92E /* flam3-animate */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-animate"; path = "flam3/flam3-animate"; sourceTree = SOURCE_ROOT; };
-		A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = LuaObjCBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A42963130C5685B100D56561 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; path = Credits.html; sourceTree = SOURCE_ROOT; };
+		A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = LuaObjCBridge.framework; path = LuaObjCBridge/build/Release/LuaObjCBridge.framework; sourceTree = "<group>"; };
 		A44201ED0B21E551000B94D9 /* genepool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = genepool.png; path = icons/genepool.png; sourceTree = "<group>"; };
 		A4421BE409CF3CE900E9D39F /* oxidizer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = oxidizer.icns; sourceTree = "<group>"; };
 		A46A71560A72B44E0026DFD6 /* ProgressDetails.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = ProgressDetails.h; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */,
 				A41A06CA0975BE5E0063196F /* QTKit.framework */,
 				A41A053309758FA10063196F /* QuickTime.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
@@ -227,7 +230,6 @@
 		29B97314FDCFA39411CA2CEA /* oxidizer */ = {
 			isa = PBXGroup;
 			children = (
-				A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */,
 				A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */,
 				A4E641F5096DA554002DE446 /* Models */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -252,6 +254,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A42963130C5685B100D56561 /* Credits.html */,
 				A47ABF1D0C425EF9007F1047 /* flam3-genome */,
 				A42608820C41109600DDB92E /* flam3-animate */,
 				A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */,
@@ -370,6 +373,7 @@
 				A4F3EF200AB5DE3B00A282F2 /* video-x-generic.png in Resources */,
 				A422B9A10B162E7800019559 /* GenePool.nib in Resources */,
 				A44201EE0B21E551000B94D9 /* genepool.png in Resources */,
+				A42963140C5685B100D56561 /* Credits.html in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +391,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd LuaObjCBridge\n\nxcodebuild -configuration $CONFIGURATION\n\ncd ../libpng\necho \"Building libpng\"\nenv CFLAGS=\"-O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd`\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir lib\nmkdir bin\nmkdir include\nmkdir man\nmkdir man/man1\n\nenv CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386\" CFLAGS=\"-O3 -g\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd` --enable-shared\nln -s /usr/bin/glibtool ./libtool\nmake install\n\necho \"Building flam3\"\ncd ../flam3\nenv CFLAGS=\"-O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include\" LDFLAGS=\"-arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib\" \\\n  ./configure  --disable-dependency-tracking --prefix=`pwd`\nmake\ninstall_name_tool -change `otool -L flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-render\ninstall_name_tool -change `otool -L flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-render\n\ninstall_name_tool -change `otool -L flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-animate\ninstall_name_tool -change `otool -L flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-animate\n\ninstall_name_tool -change `otool -L flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-genome\ninstall_name_tool -change `otool -L flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-genome\n";
+			shellScript = "cd LuaObjCBridge\n\nxcodebuild -configuration Release\n\ncd ../libpng\necho \"Building libpng\"\n#env CFLAGS=\"-O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd`\n#make install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir lib\nmkdir bin\nmkdir include\nmkdir man\nmkdir man/man1\n\n#env CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386\" CFLAGS=\"-O3 -g\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd` --enable-shared\n#ln -s /usr/bin/glibtool ./libtool\n#make install\n\necho \"Building flam3\"\ncd ../flam3\n#env CFLAGS=\"-O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include\" LDFLAGS=\"-arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib\" \\\n#  ./configure  --disable-dependency-tracking --prefix=`pwd`\n#make\ninstall_name_tool -change `otool -L flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-render\ninstall_name_tool -change `otool -L flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-render\n\ninstall_name_tool -change `otool -L flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-animate\ninstall_name_tool -change `otool -L flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-animate\n\ninstall_name_tool -change `otool -L flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-genome\ninstall_name_tool -change `otool -L flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-genome\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -451,11 +455,8 @@
 					i386,
 				);
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -477,11 +478,8 @@
 					ppc,
 					i386,
 				);
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(FRAMEWORK_SEARCH_PATHS_QUOTED_1)",
-				);
-				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/build/Release\"";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
+				FRAMEWORK_SEARCH_PATHS_QUOTED_1 = "";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
@@ -500,6 +498,7 @@
 					ppc,
 					i386,
 				);
+				FRAMEWORK_SEARCH_PATHS = LuaObjCBridge/build/Debug;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_SSE3_EXTENSIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
@@ -521,6 +520,7 @@
 					ppc,
 					i686,
 				);
+				FRAMEWORK_SEARCH_PATHS = LuaObjCBridge/build/Release;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DEBUGGING_SYMBOLS = default;
 				GCC_DYNAMIC_NO_PIC = YES;
