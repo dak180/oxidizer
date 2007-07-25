@@ -25,6 +25,24 @@ http://sourceforge.net/cvs/?group_id=159210
 Open the project in XCode 2.4 and compile. Note that attempting to open the project
 in older version of XCode may or may not work. It definitely does not work in 2.0.
 
+Note that if while building you get an error message :- 
+Command /bin/sh failed with exit code 1
+
+You can fix it by following these instructions.
+ 
+In the XCode tree view there's an item called Targets. 
+Open that up and there should be a child item for Oxidizer. 
+Open that up and double click on the "Run Script" item You should get a window with a CLI script that starts like this....
+
+cd LuaObjCBridge
+
+#xcodebuild -configuration Release
+
+cd ../libpng
+echo "Building libpng"
+
+Remove any # characters at the start of any line, like the xcodebuild line above, and build again.
+
 To keep the CVS repository up to date use the following command from the oxidizer folder
 created by CVS...
 
