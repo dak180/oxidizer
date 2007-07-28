@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 85 tasks, 203 threads, 2 processors
-Load average: 2.99, Mach factor: 0.37
+Default processor set: 81 tasks, 191 threads, 2 processors
+Load average: 1.09, Mach factor: 0.89
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -461,255 +461,6 @@ configure:10191: result: yes
 configure:10194: checking whether to build static libraries
 configure:10198: result: yes
 configure:10290: creating libtool
-configure:10878: checking for ld used by g++
-configure:10945: result: /usr/bin/ld
-configure:10954: checking if the linker (/usr/bin/ld) is GNU ld
-configure:10969: result: no
-configure:11020: checking whether the g++ linker (/usr/bin/ld) supports shared libraries
-configure:11954: result: yes
-configure:11972: g++ -c -g -O2  conftest.cpp >&5
-configure:11975: $? = 0
-configure:12094: checking for g++ option to produce PIC
-configure:12368: result: -fno-common
-configure:12376: checking if g++ PIC flag -fno-common works
-configure:12397: g++ -c -g -O2  -fno-common -DPIC conftest.cpp >&5
-configure:12401: $? = 0
-configure:12411: result: yes
-configure:12439: checking if g++ static flag -static works
-configure:12467: result: no
-configure:12477: checking if g++ supports -c -o file.o
-configure:12501: g++ -c -g -O2  -o out/conftest2.o conftest.cpp >&5
-configure:12505: $? = 0
-configure:12524: result: yes
-configure:12550: checking whether the g++ linker (/usr/bin/ld) supports shared libraries
-configure:12575: result: yes
-configure:12642: checking dynamic linker characteristics
-configure:13230: result: darwin8.10.1 dyld
-configure:13239: checking how to hardcode library paths into programs
-configure:13264: result: immediate
-configure:19406: checking for ANSI C header files
-configure:19567: result: yes
-configure:19595: checking malloc.h usability
-configure:19612: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  conftest.c >&5
-conftest.c:55:20: error: malloc.h: No such file or directory
-conftest.c:55:20: error: malloc.h: No such file or directory
-lipo: can't figure out the architecture type of: /var/tmp//ccd85pgU.out
-configure:19618: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| #define PACKAGE_NAME "libpng"
-| #define PACKAGE_TARNAME "libpng"
-| #define PACKAGE_VERSION "1.2.18"
-| #define PACKAGE_STRING "libpng 1.2.18"
-| #define PACKAGE_BUGREPORT "png-mng-implement@lists.sourceforge.net"
-| #define PACKAGE "libpng"
-| #define VERSION "1.2.18"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #define STDC_HEADERS 1
-| /* end confdefs.h.  */
-| #include <stdio.h>
-| #ifdef HAVE_SYS_TYPES_H
-| # include <sys/types.h>
-| #endif
-| #ifdef HAVE_SYS_STAT_H
-| # include <sys/stat.h>
-| #endif
-| #ifdef STDC_HEADERS
-| # include <stdlib.h>
-| # include <stddef.h>
-| #else
-| # ifdef HAVE_STDLIB_H
-| #  include <stdlib.h>
-| # endif
-| #endif
-| #ifdef HAVE_STRING_H
-| # if !defined STDC_HEADERS && defined HAVE_MEMORY_H
-| #  include <memory.h>
-| # endif
-| # include <string.h>
-| #endif
-| #ifdef HAVE_STRINGS_H
-| # include <strings.h>
-| #endif
-| #ifdef HAVE_INTTYPES_H
-| # include <inttypes.h>
-| #endif
-| #ifdef HAVE_STDINT_H
-| # include <stdint.h>
-| #endif
-| #ifdef HAVE_UNISTD_H
-| # include <unistd.h>
-| #endif
-| #include <malloc.h>
-configure:19632: result: no
-configure:19636: checking malloc.h presence
-configure:19651: gcc -E  conftest.c
-conftest.c:22:20: error: malloc.h: No such file or directory
-configure:19657: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| #define PACKAGE_NAME "libpng"
-| #define PACKAGE_TARNAME "libpng"
-| #define PACKAGE_VERSION "1.2.18"
-| #define PACKAGE_STRING "libpng 1.2.18"
-| #define PACKAGE_BUGREPORT "png-mng-implement@lists.sourceforge.net"
-| #define PACKAGE "libpng"
-| #define VERSION "1.2.18"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #define STDC_HEADERS 1
-| /* end confdefs.h.  */
-| #include <malloc.h>
-configure:19671: result: no
-configure:19704: checking for malloc.h
-configure:19712: result: no
-configure:19585: checking for stdlib.h
-configure:19591: result: yes
-configure:19585: checking for string.h
-configure:19591: result: yes
-configure:19585: checking for strings.h
-configure:19591: result: yes
-configure:19727: checking for an ANSI C-conforming const
-configure:19802: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  conftest.c >&5
-configure:19808: $? = 0
-configure:19823: result: yes
-configure:19833: checking for size_t
-configure:19863: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  conftest.c >&5
-configure:19869: $? = 0
-configure:19884: result: yes
-configure:19896: checking whether struct tm is in sys/time.h or time.h
-configure:19926: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  conftest.c >&5
-configure:19932: $? = 0
-configure:19947: result: time.h
-configure:19959: checking for working strtod
-configure:20010: gcc -o conftest -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  -arch i386 -arch ppc conftest.c  >&5
-configure:20013: $? = 0
-configure:20019: ./conftest
-configure:20022: $? = 0
-configure:20038: result: yes
-configure:20206: checking for memset
-configure:20262: gcc -o conftest -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  -arch i386 -arch ppc conftest.c  >&5
-conftest.c:48: warning: conflicting types for built-in function 'memset'
-conftest.c:48: warning: conflicting types for built-in function 'memset'
-configure:20268: $? = 0
-configure:20286: result: yes
-configure:20304: checking for pow
-configure:20360: gcc -o conftest -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  -arch i386 -arch ppc conftest.c  >&5
-conftest.c:49: warning: conflicting types for built-in function 'pow'
-conftest.c:49: warning: conflicting types for built-in function 'pow'
-configure:20366: $? = 0
-configure:20384: result: yes
-configure:20471: checking for zlibVersion in -lz
-configure:20506: gcc -o conftest -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  -arch i386 -arch ppc conftest.c -lz   >&5
-configure:20512: $? = 0
-configure:20530: result: yes
-configure:20547: checking if assembler code in pnggccrd.c can be compiled without PNG_NO_MMX_CODE
-configure:20570: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  conftest.c >&5
-In file included from conftest.c:28:
-pnggccrd.c: In function 'png_squelch_warnings':
-pnggccrd.c:362: error: assignment of read-only variable '_const4'
-pnggccrd.c:363: error: assignment of read-only variable '_const6'
-pnggccrd.c:364: error: assignment of read-only variable '_mask8_0'
-pnggccrd.c:365: error: assignment of read-only variable '_mask16_1'
-pnggccrd.c:366: error: assignment of read-only variable '_mask16_0'
-pnggccrd.c:367: error: assignment of read-only variable '_mask24_2'
-pnggccrd.c:368: error: assignment of read-only variable '_mask24_1'
-pnggccrd.c:369: error: assignment of read-only variable '_mask24_0'
-pnggccrd.c:370: error: assignment of read-only variable '_mask32_3'
-pnggccrd.c:371: error: assignment of read-only variable '_mask32_2'
-pnggccrd.c:372: error: assignment of read-only variable '_mask32_1'
-pnggccrd.c:373: error: assignment of read-only variable '_mask32_0'
-pnggccrd.c:374: error: assignment of read-only variable '_mask48_5'
-pnggccrd.c:375: error: assignment of read-only variable '_mask48_4'
-pnggccrd.c:376: error: assignment of read-only variable '_mask48_3'
-pnggccrd.c:377: error: assignment of read-only variable '_mask48_2'
-pnggccrd.c:378: error: assignment of read-only variable '_mask48_1'
-pnggccrd.c:379: error: assignment of read-only variable '_mask48_0'
-lipo: can't figure out the architecture type of: /var/tmp//cci4B3tu.out
-configure:20576: $? = 1
-configure: failed program was:
-| /* confdefs.h.  */
-| #define PACKAGE_NAME "libpng"
-| #define PACKAGE_TARNAME "libpng"
-| #define PACKAGE_VERSION "1.2.18"
-| #define PACKAGE_STRING "libpng 1.2.18"
-| #define PACKAGE_BUGREPORT "png-mng-implement@lists.sourceforge.net"
-| #define PACKAGE "libpng"
-| #define VERSION "1.2.18"
-| #define STDC_HEADERS 1
-| #define HAVE_SYS_TYPES_H 1
-| #define HAVE_SYS_STAT_H 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_MEMORY_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_INTTYPES_H 1
-| #define HAVE_STDINT_H 1
-| #define HAVE_UNISTD_H 1
-| #define HAVE_DLFCN_H 1
-| #define STDC_HEADERS 1
-| #define HAVE_STDLIB_H 1
-| #define HAVE_STRING_H 1
-| #define HAVE_STRINGS_H 1
-| #define HAVE_MEMSET 1
-| #define HAVE_POW 1
-| #define HAVE_LIBZ 1
-| /* end confdefs.h.  */
-| #include "pnggccrd.c"
-| int
-| main ()
-| {
-| return 0;
-|   ;
-|   return 0;
-| }
-configure:20588: result: no
-configure:20598: checking if libraries can be versioned
-configure:20607: result: no
-configure:20609: WARNING: *** You have not enabled versioned symbols.
-configure:20641: pkgconfig directory is ${libdir}/pkgconfig
-configure:20820: creating ./config.status
-
-## ---------------------- ##
-## Running config.status. ##
-## ---------------------- ##
-
-This file was extended by libpng config.status 1.2.18, which was
-generated by GNU Autoconf 2.61.  Invocation command line was
-
-  CONFIG_FILES    = 
-  CONFIG_HEADERS  = 
-  CONFIG_LINKS    = 
-  CONFIG_COMMANDS = 
-  $ ./config.status 
-
-on cpc2-mfld3-0-0-cust488.nott.cable.ntl.com
-
-config.status:677: creating Makefile
-config.status:677: creating libpng.pc
-config.status:677: creating libpng-config
-config.status:677: creating config.h
-config.status:905: config.h is unchanged
-config.status:951: executing depfiles commands
 
 ## ---------------- ##
 ## Cache variables. ##
@@ -717,7 +468,6 @@ config.status:951: executing depfiles commands
 
 ac_cv_build=i386-apple-darwin8.10.1
 ac_cv_c_compiler_gnu=yes
-ac_cv_c_const=yes
 ac_cv_cxx_compiler_gnu=yes
 ac_cv_env_CCC_set=
 ac_cv_env_CCC_value=
@@ -750,12 +500,8 @@ ac_cv_env_host_alias_value=
 ac_cv_env_target_alias_set=
 ac_cv_env_target_alias_value=
 ac_cv_f77_compiler_gnu=no
-ac_cv_func_memset=yes
-ac_cv_func_pow=yes
-ac_cv_func_strtod=yes
 ac_cv_header_dlfcn_h=yes
 ac_cv_header_inttypes_h=yes
-ac_cv_header_malloc_h=no
 ac_cv_header_memory_h=yes
 ac_cv_header_stdc=yes
 ac_cv_header_stdint_h=yes
@@ -766,7 +512,6 @@ ac_cv_header_sys_stat_h=yes
 ac_cv_header_sys_types_h=yes
 ac_cv_header_unistd_h=yes
 ac_cv_host=i386-apple-darwin8.10.1
-ac_cv_lib_z_zlibVersion=yes
 ac_cv_objext=o
 ac_cv_path_EGREP='/usr/bin/grep -E'
 ac_cv_path_GREP=/usr/bin/grep
@@ -785,8 +530,6 @@ ac_cv_prog_cc_g=yes
 ac_cv_prog_cxx_g=yes
 ac_cv_prog_f77_g=no
 ac_cv_prog_make_make_set=yes
-ac_cv_struct_tm=time.h
-ac_cv_type_size_t=yes
 am_cv_CC_dependencies_compiler_type=none
 am_cv_CXX_dependencies_compiler_type=none
 lt_cv_deplibs_check_method=pass_all
@@ -795,20 +538,16 @@ lt_cv_file_magic_test_file=
 lt_cv_ld_reload_flag=-r
 lt_cv_objdir=.libs
 lt_cv_path_LD=/usr/bin/ld
-lt_cv_path_LDCXX=/usr/bin/ld
 lt_cv_path_NM='/usr/bin/nm -p'
 lt_cv_path_SED=/usr/bin/sed
 lt_cv_prog_compiler_c_o=yes
-lt_cv_prog_compiler_c_o_CXX=yes
 lt_cv_prog_compiler_rtti_exceptions=no
 lt_cv_prog_gnu_ld=no
-lt_cv_prog_gnu_ldcxx=no
 lt_cv_sys_global_symbol_pipe='sed -n -e '\''s/^.*[ 	]\([BCDEGRST][BCDEGRST]*\)[ 	][ 	]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p'\'''
 lt_cv_sys_global_symbol_to_c_name_address='sed -n -e '\''s/^: \([^ ]*\) $/  {\"\1\", (lt_ptr) 0},/p'\'' -e '\''s/^[BCDEGRST] \([^ ]*\) \([^ ]*\)$/  {"\2", (lt_ptr) \&\2},/p'\'''
 lt_cv_sys_global_symbol_to_cdecl='sed -n -e '\''s/^. .* \(.*\)$/extern int \1;/p'\'''
 lt_cv_sys_max_cmd_len=196608
 lt_lt_cv_prog_compiler_c_o='"yes"'
-lt_lt_cv_prog_compiler_c_o_CXX='"yes"'
 lt_lt_cv_sys_global_symbol_pipe='"sed -n -e '\''s/^.*[ 	]\\([BCDEGRST][BCDEGRST]*\\)[ 	][ 	]*_\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 _\\2 \\2/p'\''"'
 lt_lt_cv_sys_global_symbol_to_c_name_address='"sed -n -e '\''s/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p'\'' -e '\''s/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'\''"'
 lt_lt_cv_sys_global_symbol_to_cdecl='"sed -n -e '\''s/^. .* \\(.*\\)\$/extern int \\1;/p'\''"'
@@ -837,7 +576,7 @@ CXXCPP='g++ -E'
 CXXDEPMODE='depmode=none'
 CXXFLAGS='-g -O2'
 CYGPATH_W='echo'
-DEFS='-DHAVE_CONFIG_H'
+DEFS=''
 DEPDIR='.deps'
 ECHO='echo'
 ECHO_C=''
@@ -849,17 +588,17 @@ F77=''
 FFLAGS=''
 GREP='/usr/bin/grep'
 HAVE_LD_VERSION_SCRIPT_FALSE=''
-HAVE_LD_VERSION_SCRIPT_TRUE='#'
+HAVE_LD_VERSION_SCRIPT_TRUE=''
 INSTALL_DATA='${INSTALL} -m 644'
 INSTALL_PROGRAM='${INSTALL}'
 INSTALL_SCRIPT='${INSTALL}'
 INSTALL_STRIP_PROGRAM='${SHELL} $(install_sh) -c -s'
 LDFLAGS='-arch i386 -arch ppc'
 LIBOBJS=''
-LIBPNG_DEFINES='-DPNG_CONFIGURE_LIBPNG -DPNG_NO_MMX_CODE'
-LIBPNG_NO_MMX='-DPNG_NO_MMX_CODE'
-LIBS='-lz '
-LIBTOOL='$(SHELL) $(top_builddir)/libtool'
+LIBPNG_DEFINES=''
+LIBPNG_NO_MMX=''
+LIBS=''
+LIBTOOL=''
 LN_S='ln -s'
 LTLIBOBJS=''
 MAINT='#'
@@ -897,19 +636,19 @@ am__leading_dot='.'
 am__quote=''
 am__tar='${AMTAR} chof - "$$tardir"'
 am__untar='${AMTAR} xf -'
-binconfigs='${binconfigs}'
+binconfigs=''
 bindir='${exec_prefix}/bin'
 build='i386-apple-darwin8.10.1'
 build_alias=''
 build_cpu='i386'
 build_os='darwin8.10.1'
 build_vendor='apple'
-compatlib='libpng.la'
+compatlib=''
 datadir='${datarootdir}'
 datarootdir='${prefix}/share'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
 dvidir='${docdir}'
-exec_prefix='${prefix}'
+exec_prefix='NONE'
 host='i386-apple-darwin8.10.1'
 host_alias=''
 host_cpu='i386'
@@ -927,7 +666,7 @@ mandir='${datarootdir}/man'
 mkdir_p='$(mkinstalldirs)'
 oldincludedir='/usr/include'
 pdfdir='${docdir}'
-pkgconfigdir='${libdir}/pkgconfig'
+pkgconfigdir=''
 prefix='/Users/vargol/Source/oxidizer/libpng'
 program_transform_name='s,x,x,'
 psdir='${docdir}'
@@ -958,12 +697,5 @@ target_alias=''
 #define HAVE_STDINT_H 1
 #define HAVE_UNISTD_H 1
 #define HAVE_DLFCN_H 1
-#define STDC_HEADERS 1
-#define HAVE_STDLIB_H 1
-#define HAVE_STRING_H 1
-#define HAVE_STRINGS_H 1
-#define HAVE_MEMSET 1
-#define HAVE_POW 1
-#define HAVE_LIBZ 1
 
-configure: exit 0
+configure: exit 1

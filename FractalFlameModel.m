@@ -1185,18 +1185,8 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 
 - (NSArray *)passGenomesToLua {
-
 	
-	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-	
-	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
-	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
-	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
-	[fetch setSortDescriptors: sortDescriptors];
-	
-	NSArray *genomes = [moc executeFetchRequest:fetch error:nil];
-	[fetch release];	  
-	[sort release];	  
+	NSArray *genomes = [self fetchGenomes];
 	
 	if ([genomes count] == 0  ) {
 		return [NSArray array];
@@ -1218,7 +1208,53 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 }
 
+- (BOOL)renderGenomeToPng:(NSString *)pngFileName {
+	
+	[moc lock];
+		
 
+	NSArray *genomes;
+	
+	genomes = [self fetchGenomes];
+	if([genomes count] != 1) {
+		return NO;
+	}
+				
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];	
+	[taskEnvironment setObject:pngFileName forKey:@"out"];
+	
+	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO] withEnvironment:taskEnvironment];
+	
+	[moc unlock];
+	[taskEnvironment release];
+
+	if (returnCode != 0) {
+		
+		return NO;
+	}	
+	
+	return YES;	
+}
+
+- (NSArray *)fetchGenomes {
+	
+	NSArray *genomes;
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomes = [moc executeFetchRequest:fetch error:nil];
+	
+	[fetch release];	  
+	
+	return genomes;
+	
+}
 @end
 
 

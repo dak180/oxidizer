@@ -142,6 +142,7 @@
 - (void)appendGenomesFromXMLFile:(NSString *)xmlFileName fromTime:(int)time inContext:(NSManagedObjectContext *)thisMoc;
 
 - (NSMutableDictionary *)environmentDictionary;
+- (NSArray *)fetchGenomes;
 
 - (BOOL)openRecentFile:(NSString *)filename;
 - (IBAction)openFile:(id)sender;
@@ -150,5 +151,6 @@
 /* lua interface */
 - (NSArray *)passGenomesToLua;
 - (void)createGenomesFromLua:(NSArray *)genomeArray;
+- (BOOL)renderGenomeToPng:(NSString *)pngFileName;
 
 @end

@@ -5,6 +5,7 @@
 #import "BreedingController.h"
 #import "GenePoolController.h"
 #import "GenePoolNibController.h"
+#include "LuaObjCBridge/LuaObjCBridge.h"
 
 @interface OxidizerDelegate : NSObject {
 	
@@ -17,7 +18,7 @@
 	
 	GenePoolController *gpc;
 	GenePoolNibController *gpnc;
-
+	lua_State* interpreter;
 	
 }
 
@@ -45,8 +46,9 @@
 - (IBAction)renderMovie:(id)sender;
 - (IBAction)renderStillToWindow:(id)sender;	
 - (IBAction)renderStillUsingFlam3:(id)sender;
-/*
+
 - (IBAction)runLuaScript:(id)sender;
-*/
+- (int) renderFromLua:(NSArray *) genomes;
+- (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename;
 
 @end

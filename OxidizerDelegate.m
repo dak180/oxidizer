@@ -1,5 +1,4 @@
 #import "OxidizerDelegate.h"
-#include "LuaObjCBridge/LuaObjCBridge.h"
 
 
 //
@@ -341,7 +340,7 @@ void print_stack(lua_State* interpreter){
 	NSString *luaScript = [NSString stringWithContentsOfFile:[op filename]] ;
 	int luaScriptLength = [luaScript lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	
-	lua_State* interpreter=lua_objc_init();
+	interpreter=lua_objc_init();
 		
 	lua_objc_pushid(interpreter,ffm);
 	lua_setglobal(interpreter, "oxidizer");
@@ -349,6 +348,8 @@ void print_stack(lua_State* interpreter){
 	lua_objc_pushpropertylist(interpreter,[ffm passGenomesToLua]);
 	lua_setglobal(interpreter, "oxidizer_genomes");
 	
+	lua_objc_pushid(interpreter,self);
+	lua_setglobal(interpreter, "oxidizer_delegate");
 	
 	luaL_loadbuffer(interpreter,[luaScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
 	lua_pcall(interpreter,0,0,0);
@@ -356,6 +357,7 @@ void print_stack(lua_State* interpreter){
 	lua_getglobal(interpreter, "oxidizer_genomes");
 	NSObject *returnObject = lua_objc_topropertylist(interpreter, 1);
 	if ([returnObject isKindOfClass:[NSArray class]]) {
+		[ffm deleteOldGenomes];
 		[ffm createGenomesFromLua:(NSArray *)returnObject]; 
 	} else if ([returnObject isKindOfClass:[NSString class]]) {
 		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
@@ -368,9 +370,29 @@ void print_stack(lua_State* interpreter){
 	
 	lua_close(interpreter);
 	
+	interpreter = nil;
+	
 	return;
 	
 }
+
+- (int) renderFromLua:(NSArray *) genomes {
+	
+		[ffm deleteOldGenomes];
+		[ffm createGenomesFromLua:genomes]; 
+		[ffm renderStill];
+
+	return 0;
+	
+} 
+
+- (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename {
+	
+	[ffm deleteOldGenomes];
+	[ffm createGenomesFromLua:genomes]; 
+	return [ffm renderGenomeToPng:filename] ? 0 : 1;
+}
+
 
 @end
 
