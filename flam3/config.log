@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 84 tasks, 206 threads, 2 processors
-Load average: 1.69, Mach factor: 0.57
+Default processor set: 82 tasks, 195 threads, 2 processors
+Load average: 1.41, Mach factor: 0.91
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -130,7 +130,7 @@ configure:2459: result: none needed
 configure:2477: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
 conftest.c:2: error: parse error before 'me'
 conftest.c:2: error: parse error before 'me'
-lipo: can't figure out the architecture type of: /var/tmp//ccnsFWka.out
+lipo: can't figure out the architecture type of: /var/tmp//ccM1Tqc6.out
 configure:2483: $? = 1
 configure: failed program was:
 | #ifndef __cplusplus

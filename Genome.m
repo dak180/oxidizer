@@ -239,6 +239,13 @@ NSString *variationName[1+flam3_nvariations] = {
 		[sort release];
 		[fetch release];	
 		/* use the cmap */
+
+		NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
+		[newCmaps retain];
+		[Genome createXMLForCMap:newCmaps forElement:genome];
+		[newCmaps release];
+		
+/*		
 		if([cmaps count] < 256) {
 			NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
 			[newCmaps retain];
@@ -247,6 +254,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		} else {
 			[Genome createXMLForCMap:cmaps forElement:genome];
 		}
+*/		
 	} else {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"palette" stringValue:[[genomeEntity valueForKey:@"palette"] stringValue]]];
 	}
@@ -491,18 +499,19 @@ NSString *variationName[1+flam3_nvariations] = {
 			
 		[colourElement addAttribute:[NSXMLNode attributeWithName:@"index" stringValue:[NSString stringWithFormat:@"%d", i]]];
 		
-			if ([[colour valueForKey:@"red"]   doubleValue] > 1.0) {
+			if ([[colour valueForKey:@"red"]   intValue] > 255 || [[colour valueForKey:@"red"]   intValue] < 0) {
 				NSLog(@"colour failed");
 			}
-		
-		[colourElement addAttribute:[NSXMLNode attributeWithName:@"rgb" 
-											   stringValue:[NSString stringWithFormat:@"%d %d %d", 
-												   (int)([[colour valueForKey:@"red"]   doubleValue] * 255),
-												   (int)([[colour valueForKey:@"green"]   doubleValue] * 255),
-												   (int)([[colour valueForKey:@"blue"]   doubleValue] * 255)]]];
-		
-		
-		[genome addChild:colourElement];
+
+
+			[colourElement addAttribute:[NSXMLNode attributeWithName:@"rgb" 
+														 stringValue:[NSString stringWithFormat:@"%d %d %d", 
+															 [[colour valueForKey:@"red"]   intValue],
+															 [[colour valueForKey:@"green"]   intValue],
+															 [[colour valueForKey:@"blue"]   intValue]]]];
+			
+			
+			[genome addChild:colourElement];
 		
 	}
 	
@@ -1586,6 +1595,12 @@ NSString *variationName[1+flam3_nvariations] = {
 		[sort release];
 		[fetch release];	
 	//	 use the cmap 
+		
+		NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
+		[newCmaps retain];
+		[genome setObject:[Genome createArrayForCMap:newCmaps] forKey:@"colors"];
+		[newCmaps release];
+		/*
 		if([cmaps count] < 256) {
 			NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
 			[newCmaps retain];
@@ -1594,6 +1609,8 @@ NSString *variationName[1+flam3_nvariations] = {
 		} else {
 			[genome setObject:[Genome createArrayForCMap:cmaps] forKey:@"colors"];
 		}
+		*/ 
+		 
 	} else {
 		[genome setObject:[genomeEntity valueForKey:@"palette"] forKey:@"palette"];
 	}
@@ -1845,9 +1862,10 @@ NSString *variationName[1+flam3_nvariations] = {
 		NSMutableDictionary *colourDictionary = [NSMutableDictionary dictionaryWithCapacity:4];
 
 		[colourDictionary setObject:[NSNumber numberWithInt:i] forKey:@"index"];		
-		[colourDictionary setObject:[NSNumber numberWithInt:(int)([[colour valueForKey:@"red"]  doubleValue] * 255.0)] forKey:@"red"];		
-		[colourDictionary setObject:[NSNumber numberWithInt:(int)([[colour valueForKey:@"green"]   doubleValue] * 255.0)] forKey:@"green"];		
-		[colourDictionary setObject:[NSNumber numberWithInt:(int)([[colour valueForKey:@"blue"]   doubleValue] * 255.0)] forKey:@"blue"];
+		[colourDictionary setObject:[colour valueForKey:@"red"] forKey:@"red"];		
+		[colourDictionary setObject:[colour valueForKey:@"green"] forKey:@"green"];		
+		[colourDictionary setObject:[colour valueForKey:@"blue"] forKey:@"blue"];
+//      [colourDictionary setObject:[NSNumber numberWithInt:(int)([[colour valueForKey:@"blue"]   doubleValue] * 255.0)] forKey:@"blue"];
 		
 		[colourArray insertObject:colourDictionary atIndex:i];
 		

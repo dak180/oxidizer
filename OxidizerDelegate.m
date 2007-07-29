@@ -357,8 +357,10 @@ void print_stack(lua_State* interpreter){
 	lua_getglobal(interpreter, "oxidizer_genomes");
 	NSObject *returnObject = lua_objc_topropertylist(interpreter, 1);
 	if ([returnObject isKindOfClass:[NSArray class]]) {
-		[ffm deleteOldGenomes];
-		[ffm createGenomesFromLua:(NSArray *)returnObject]; 
+		if([(NSArray *)returnObject count] > 0) {
+			[ffm deleteOldGenomes];
+			[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+		}
 	} else if ([returnObject isKindOfClass:[NSString class]]) {
 		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
 												 defaultButton:@"Close"
