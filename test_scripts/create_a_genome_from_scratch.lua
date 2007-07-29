@@ -52,6 +52,7 @@ new_genome["edit"]=edit
 --        filter=1
 --        gamma_threshold=0.01
 --        hue=0
+--        palette=1
 --        motion_exponent=0
 --        time=0
 --        contrast=1
