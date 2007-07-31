@@ -45,7 +45,7 @@
 - (IBAction)renderStill:(id)sender;
 - (IBAction)renderMovie:(id)sender;
 - (IBAction)renderStillToWindow:(id)sender;	
-- (IBAction)renderStillUsingFlam3:(id)sender;
+- (IBAction)renderStills:(id)sender;
 
 - (IBAction)runLuaScript:(id)sender;
 - (int) renderFromLua:(NSArray *) genomes;

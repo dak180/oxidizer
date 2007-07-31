@@ -13,6 +13,7 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; };
 		A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */; };
+		A41963670C5E484B002EDD7B /* FileViews.nib in Resources */ = {isa = PBXBuildFile; fileRef = A41963660C5E484B002EDD7B /* FileViews.nib */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
 		A41B415D0C439EA1000130DE /* NSProgressIndicatorUpdateOnMainThread.m in Sources */ = {isa = PBXBuildFile; fileRef = A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */; };
@@ -81,6 +82,7 @@
 		8D1107320486CEB800E47090 /* Oxidizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oxidizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragDropAndSaveImageView.h; sourceTree = "<group>"; };
 		A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DragDropAndSaveImageView.m; sourceTree = "<group>"; };
+		A41963660C5E484B002EDD7B /* FileViews.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = FileViews.nib; path = FileViews/FileViews.nib; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		A41B414D0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = NSProgressIndicatorUpdateOnMainThread.h; sourceTree = "<group>"; };
@@ -263,6 +265,7 @@
 				A4E52D560A0141A400382558 /* flam3-palettes.xml */,
 				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
+				A41963660C5E484B002EDD7B /* FileViews.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				A422B9A00B162E7800019559 /* GenePool.nib */,
 				A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */,
@@ -374,6 +377,7 @@
 				A422B9A10B162E7800019559 /* GenePool.nib in Resources */,
 				A44201EE0B21E551000B94D9 /* genepool.png in Resources */,
 				A42963140C5685B100D56561 /* Credits.html in Resources */,
+				A41963670C5E484B002EDD7B /* FileViews.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -391,7 +395,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd LuaObjCBridge\n\nxcodebuild -configuration Release\n\ncd ../libpng\necho \"Building libpng\"\nenv CFLAGS=\"-O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd`\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir lib\nmkdir bin\nmkdir include\nmkdir man\nmkdir man/man1\n\nenv CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386\" CFLAGS=\"-O3 -g\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd` --enable-shared\nln -s /usr/bin/glibtool ./libtool\nmake install\n\necho \"Building flam3\"\ncd ../flam3\nenv CFLAGS=\"-O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include\" LDFLAGS=\"-arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib\" \\\n  ./configure  --disable-dependency-tracking --prefix=`pwd`\nmake\ninstall_name_tool -change `otool -L flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-render\ninstall_name_tool -change `otool -L flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-render\n\ninstall_name_tool -change `otool -L flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-animate\ninstall_name_tool -change `otool -L flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-animate\n\ninstall_name_tool -change `otool -L flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-genome\ninstall_name_tool -change `otool -L flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-genome\n";
+			shellScript = "cd LuaObjCBridge\n\n#xcodebuild -configuration Release\n\ncd ../libpng\necho \"Building libpng\"\n#env CFLAGS=\"-O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd`\n#make install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir lib\nmkdir bin\nmkdir include\nmkdir man\nmkdir man/man1\n\n#env CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386\" CFLAGS=\"-O3 -g\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=`pwd` --enable-shared\n#ln -s /usr/bin/glibtool ./libtool\n#make install\n\necho \"Building flam3\"\ncd ../flam3\n#env CFLAGS=\"-O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include\" LDFLAGS=\"-arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib\" \\\n#  ./configure  --disable-dependency-tracking --prefix=`pwd`\n#make\ninstall_name_tool -change `otool -L flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-render\ninstall_name_tool -change `otool -L flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-render\n\ninstall_name_tool -change `otool -L flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-animate\ninstall_name_tool -change `otool -L flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-animate\n\ninstall_name_tool -change `otool -L flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib flam3-genome\ninstall_name_tool -change `otool -L flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib flam3-genome\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

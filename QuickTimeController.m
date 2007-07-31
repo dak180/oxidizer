@@ -216,6 +216,26 @@
 	return YES;
 }
 
+- (BOOL) showQuickTimeFileStillsDialogue {
+	
+	int runResult;
+	
+	useDefaultSettings = YES;
+	
+	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	[savePanel setAccessoryView:stillsExportPanel];
+	runResult = [savePanel runModal];
+	
+	if(runResult == NSOKButton && [savePanel filename] != nil) {
+		filename = [savePanel filename];
+		[filename retain];
+	} else {
+		filename = nil;
+		return NO;
+	}
+	
+	return YES;
+}
 
 - (void) availableComponentsForMovie {
 	
@@ -592,6 +612,11 @@
 			return;
 		}
  
+}
+
+
+- (NSString *) fileName {
+	return filename;
 }
 
 + (FSSpec)getToFSSpecFromPath:(NSString *)path { 

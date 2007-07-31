@@ -160,7 +160,7 @@
                 renderMovie = id; 
                 renderStill = id; 
                 renderStillToWindow = id; 
-                renderStillUsingFlam3 = id; 
+                renderStills = id; 
                 runLuaScript = id; 
                 saveAsFlam3 = id; 
                 saveFlam3 = id; 
@@ -205,6 +205,7 @@
                 movieComponents = NSMutableArray; 
                 movieExportController = NSArrayController; 
                 movieExportPanel = NSView; 
+                stillsExportPanel = NSView; 
             }; 
             SUPERCLASS = NSObject; 
         }, 

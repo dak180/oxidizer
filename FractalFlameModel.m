@@ -39,6 +39,14 @@ int printProgress(void *nslPtr, double progress, int stage);
 	NSString *threads;
 		 
     if (self = [super init]) {
+		
+		_stillsParameters = [[NSMutableDictionary alloc] initWithCapacity:2];
+		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"first_frame"];
+		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"last_frame"];
+
+		[NSBundle loadNibNamed:@"FileViews" owner:self];
+
+		
 		GreaterThanThreeTransformer *gttt;
 		
 	// create an autoreleased instance of our value transformer
@@ -131,6 +139,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 			                                           @"B-Spline", @"Mitchell", @"Blackman", @"Catrom", @"Hanning", 
 			                                           @"Hamming", @"Lanczos2", @"Lanczos3", @"Quadratic", nil];	
 	
+		
+		
 	}
 	
     return self;
@@ -143,6 +153,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[previewWindow setLevel:NSFloatingWindowLevel];
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];
+
+	
+	
 }
 
 
@@ -267,11 +280,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 	if(doRender == NO) {
 		return;
 	}
-   [NSThread detachNewThreadSelector:@selector(renderAnimationInNewThread) toTarget:self withObject:nil];
+	[NSThread detachNewThreadSelector:@selector(renderAnimationInNewThread) toTarget:self withObject:nil];
 
 }
 
-- (IBAction)renderAnimationInNewThread {
+- (void)renderAnimationInNewThread {
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
@@ -399,7 +412,134 @@ int printProgress(void *nslPtr, double progress, int stage);
 }
 
 
- 
+
+
+- (void)renderAnimationStills {
+
+	
+	NSArray *genomes = [self fetchGenomes];
+	
+	
+	NSManagedObject *genome = [genomes objectAtIndex:0];
+	
+	[self willChangeValueForKey:@"first_frame"];
+	[_stillsParameters setObject:[genome valueForKey:@"time"] forKey:@"first_frame"];
+	[self didChangeValueForKey:@"first_frame"];
+	
+	genome = [genomes lastObject];
+
+	[self willChangeValueForKey:@"last_frame"];
+	[_stillsParameters setObject:[genome valueForKey:@"time"] forKey:@"last_frame"];
+	[self didChangeValueForKey:@"last_frame"];
+
+	BOOL doRender = [qtController showQuickTimeFileStillsDialogue];
+
+	[self didChangeValueForKey:@"prefix"];
+	[_stillsParameters setObject:[qtController fileName] forKey:@"prefix"];
+	[self didChangeValueForKey:@"prefix"];
+	
+	if(doRender == NO) {
+		return;
+	}
+	
+	
+	
+	
+	[NSThread detachNewThreadSelector:@selector(renderAnimationStillsInNewThread:) toTarget:self withObject:_stillsParameters];
+	
+	
+}
+
+- (void)renderAnimationStillsInNewThread:(NSDictionary *)parameters {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[parameters retain];
+	
+	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
+		NSTemporaryDirectory(),
+		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+		nil]];
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	[fileManager createDirectoryAtPath:previewFolder attributes:nil];
+	
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];
+	
+	
+	[taskEnvironment setObject:[parameters objectForKey:@"prefix"] forKey:@"prefix"];
+	
+	
+	int ftime;
+	
+	double progressValue;
+	
+	NSArray *genomes = [self fetchGenomes];
+	
+	
+	NSManagedObject *genome = [genomes objectAtIndex:0];
+	
+	
+	
+	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] width:[[genome valueForKey:@"width"] intValue]];
+	BOOL doRender = [qtController CreateMovieGWorld];
+	
+	
+	dtime = 1;
+	
+	first_frame = (int) [[parameters valueForKey:@"first_frame"] intValue];
+	last_frame = (int) [[parameters valueForKey:@"last_frame"] intValue] - 1;
+	
+	if (last_frame < first_frame) {
+		last_frame = first_frame;
+	}
+	
+	progressValue = 0.0;
+	
+	[taskAllFramesIndicator setMaxValue:(last_frame - first_frame) / dtime];
+	[taskAllFramesIndicator setDoubleValue:progressValue];
+	
+	[taskProgressWindow setTitle:@"Rendering Movie..."];	
+	[taskProgressWindow makeKeyAndOrderFront:self];
+	
+	
+	NSDate *start = [NSDate date];
+	
+	NSData *xml = [Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO];
+	
+	
+	for (ftime = first_frame; ftime <= last_frame; ftime += dtime) {
+		
+		/* set time for environment */
+		[taskEnvironment setObject:[NSNumber numberWithInt:ftime] forKey:@"frame"];
+		
+		[taskAllFramesIndicator setDoubleValue:progressValue];
+		
+		int returnCode = [self runFlam3MovieFrameRenderAsTask:xml withEnvironment:taskEnvironment];
+
+		progressValue += dtime;
+	}
+	
+	
+	[taskProgressWindow setIsVisible:NO];
+		
+	NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
+											 defaultButton:@"Close"
+										   alternateButton:nil 
+											   otherButton:nil 
+								 informativeTextWithFormat:@"Time for render: %.2f seconds", -[start timeIntervalSinceNow]];
+	NSBeep();
+	[finishedPanel runModal];
+	
+	[parameters release];
+
+	[pool release];
+}
+
+
+
 - (IBAction)previewCurrentFlame:(id)sender {
 
 	[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread) toTarget:self withObject:nil]; 

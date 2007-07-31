@@ -303,9 +303,9 @@ void print_stack(lua_State* interpreter){
 	[ffm renderStill];
 }
 
-- (IBAction)renderStillUsingFlam3:(id)sender {
+- (IBAction)renderStills:(id)sender {
 	
-	[ffm renderStillUsingFlam3];
+	[ffm renderAnimationStills];
 }
 
 - (IBAction)renderStillToWindow:(id)sender {

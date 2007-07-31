@@ -1,0 +1,54 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                appendFile = id; 
+                changePaletteAndHidePaletteWindow = id; 
+                editGenomes = id; 
+                openFile = id; 
+                previewCurrentFlame = id; 
+                showPreferencesWindow = id; 
+            }; 
+            CLASS = FractalFlameModel; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                environment = EnvironmentController; 
+                flameController = NSArrayController; 
+                flameTable = NSTableView; 
+                flames = FlameController; 
+                frameIndicator = NSLevelIndicator; 
+                oxidizerWindow = NSWindow; 
+                palette = PaletteController; 
+                preferencesWindow = NSWindow; 
+                previewView = NSImageView; 
+                previewWindow = NSWindow; 
+                progessTable = NSTableView; 
+                progressController = NSArrayController; 
+                progressWindow = NSWindow; 
+                qtController = QuickTimeController; 
+                saveThumbnailsView = NSView; 
+                taskAllFramesIndicator = NSProgressIndicator; 
+                taskFrameIndicator = NSProgressIndicator; 
+                taskProgressWindow = NSWindow; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {getImageExportSettings = id; getMovieExportSettings = id; }; 
+            CLASS = QuickTimeController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                imageComponents = NSMutableArray; 
+                imageExportController = NSArrayController; 
+                imageExportPanel = NSView; 
+                movieComponents = NSMutableArray; 
+                movieExportController = NSArrayController; 
+                movieExportPanel = NSView; 
+                stillsExportPanel = NSView; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}

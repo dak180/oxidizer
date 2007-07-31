@@ -175,11 +175,11 @@
 
 	switch([arrangedObjects count]) {
 
-		case 0:
+		case 1:
 			[genomeEntity setValue:[NSNumber numberWithInt:0] forKey:@"time"];
 			newIndex = 0;
 			break;
-		case 1:
+		case 2:
 			time = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
 			[genomeEntity setValue:[NSNumber numberWithInt:time+50] forKey:@"time"];
 			newIndex = 1;
@@ -191,7 +191,7 @@
 				// last object is selected
 				time2 = time + 100;
 			} else {
-				time2 = [[[arrangedObjects objectAtIndex:newIndex] valueForKey:@"time"] intValue];
+				time2 = [[[arrangedObjects objectAtIndex:newIndex+1] valueForKey:@"time"] intValue];
 			}
 			[genomeEntity setValue:[NSNumber numberWithInt:time + ((time2 - time) / 2)] forKey:@"time"];
 			break;

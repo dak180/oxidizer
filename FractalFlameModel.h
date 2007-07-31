@@ -26,7 +26,7 @@
 #import "QuickTimeController.h"
 
 
-@interface FractalFlameModel : NSObject
+@interface FractalFlameModel : NSObjectController
 {
     IBOutlet EnvironmentController *environment;
     IBOutlet FlameController *flames;
@@ -70,6 +70,8 @@
 	NSPersistentStoreCoordinator *coordinator;
 	
 	NSString *_currentFilename;
+	
+	NSMutableDictionary *_stillsParameters;
 
 	int verbose;
 	int bits;
@@ -127,6 +129,7 @@
 
 - (void)renderStill;
 - (void)renderAnimation;
+- (void)renderAnimationStills; 
 - (void)renderStillToWindow;
 
 /* NSTask based version */

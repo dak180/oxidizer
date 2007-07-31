@@ -70,17 +70,20 @@
 	IBOutlet NSMutableArray *imageComponents;
 	IBOutlet NSArrayController *imageExportController;
 	IBOutlet NSView *imageExportPanel;
+	IBOutlet NSView *stillsExportPanel;
 	
 }
 
 - (BOOL) showQuickTimeFileMovieDialogue;
 - (BOOL) showQuickTimeFileImageDialogue; 
--(BOOL) CreateMovieGWorld;
+- (BOOL) showQuickTimeFileStillsDialogue;
+- (BOOL) CreateMovieGWorld;
 - (void) availableComponentsForMovie;
 - (void) availableComponentsForImage;
 - (void) saveMovie;
 - (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) addNSBitmapImageRepToMovie:(NSBitmapImageRep *)imageRepresentation;
+- (NSString *) fileName;
 
 - (IBAction) getMovieExportSettings:(id )sender;
 - (IBAction) getImageExportSettings:(id )sender;
