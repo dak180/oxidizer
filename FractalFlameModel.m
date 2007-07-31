@@ -44,6 +44,25 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"first_frame"];
 		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"last_frame"];
 
+		defaults = [NSUserDefaults standardUserDefaults];
+		
+		
+		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+			NSUserName(),  @"nick",
+ 		    @"http://oxidizer.sf.net", @"url",
+			@"Made by Oxidizer", @"comment",
+			threads, @"threads",
+			[NSNumber numberWithBool:NO], @"save_thumbnails",
+			[NSNumber numberWithBool:NO], @"show_render",
+			nil]
+			];
+		
+		
+		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
+		
+		_showRender = [defaults boolForKey:@"show_render"];
+		
+		
 		[NSBundle loadNibNamed:@"FileViews" owner:self];
 
 		
@@ -66,19 +85,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		  } else {
 			  threads = @"1";
 		}  
-  
-		defaults = [NSUserDefaults standardUserDefaults];
-		
-		
-		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-			NSUserName(),  @"nick",
-			@"http://oxidizer.sf.net", @"url",
-			@"Made by Oxidizer", @"comment",
-			threads, @"threads",
-			[NSNumber numberWithBool:NO], @"save_thumbnails",
-			[NSNumber numberWithBool:NO], @"show_render",
-			nil]
-			];
+  		
 		
 		moc = [[NSManagedObjectContext alloc] init];
 		

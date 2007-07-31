@@ -13,6 +13,8 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; };
 		A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */; };
+		A410568E0C5F760A0075334E /* stills.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568C0C5F760A0075334E /* stills.png */; };
+		A410568F0C5F760A0075334E /* text-x-script.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568D0C5F760A0075334E /* text-x-script.png */; };
 		A41963670C5E484B002EDD7B /* FileViews.nib in Resources */ = {isa = PBXBuildFile; fileRef = A41963660C5E484B002EDD7B /* FileViews.nib */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
@@ -82,6 +84,8 @@
 		8D1107320486CEB800E47090 /* Oxidizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oxidizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragDropAndSaveImageView.h; sourceTree = "<group>"; };
 		A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DragDropAndSaveImageView.m; sourceTree = "<group>"; };
+		A410568C0C5F760A0075334E /* stills.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stills.png; path = icons/Tango/stills.png; sourceTree = SOURCE_ROOT; };
+		A410568D0C5F760A0075334E /* text-x-script.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "text-x-script.png"; path = "icons/Tango/text-x-script.png"; sourceTree = SOURCE_ROOT; };
 		A41963660C5E484B002EDD7B /* FileViews.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = FileViews.nib; path = FileViews/FileViews.nib; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
@@ -256,6 +260,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A410568C0C5F760A0075334E /* stills.png */,
+				A410568D0C5F760A0075334E /* text-x-script.png */,
 				A42963130C5685B100D56561 /* Credits.html */,
 				A47ABF1D0C425EF9007F1047 /* flam3-genome */,
 				A42608820C41109600DDB92E /* flam3-animate */,
@@ -369,6 +375,8 @@
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */,
+				A410568E0C5F760A0075334E /* stills.png in Resources */,
+				A410568F0C5F760A0075334E /* text-x-script.png in Resources */,
 				A4F49CEC0AAB1D3C00FA4BE8 /* document-open.png in Resources */,
 				A4F49CEE0AAB1D4B00FA4BE8 /* document-save.png in Resources */,
 				A4F49CF00AAB1D5400FA4BE8 /* oxidizer_dna.png in Resources */,

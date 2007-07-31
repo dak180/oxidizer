@@ -155,6 +155,12 @@ void print_stack(lua_State* interpreter){
 		[item setImage:[NSImage imageNamed:@"video-x-generic"]];
 		[item setTarget:self];
 		[item setAction:@selector(renderMovie:)];
+    } else if ( [itemIdentifier isEqualToString:@"render_stills"] ) {
+		[item setLabel:@"Stills"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"stills"]];
+		[item setTarget:self];
+		[item setAction:@selector(renderStills:)];
     } else if ( [itemIdentifier isEqualToString:@"breed_flam3"] ) {
 		[item setLabel:@"Breeder"];
 		[item setPaletteLabel:[item label]];
@@ -167,6 +173,12 @@ void print_stack(lua_State* interpreter){
 		[item setImage:[NSImage imageNamed:@"genepool"]];
 		[item setTarget:self];
 		[item setAction:@selector(showGenePoolWindow:)];
+	} else if ( [itemIdentifier isEqualToString:@"lua_script"] ) {
+		[item setLabel:@"Lua Script"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"text-x-script"]];
+		[item setTarget:self];
+		[item setAction:@selector(runLuaScript:)];
 	}
 	
 	return [item autorelease];
@@ -180,9 +192,12 @@ void print_stack(lua_State* interpreter){
 									 NSToolbarSeparatorItemIdentifier,
 								     @"render_still", 
 									 @"render_movie", 
+									 @"render_stills", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"breed_flam3", 
 									 @"gene_pool", 
+									 NSToolbarSeparatorItemIdentifier,
+									 @"lua_script", 
 									 nil
 		];
 	
@@ -195,9 +210,12 @@ void print_stack(lua_State* interpreter){
 									 NSToolbarSeparatorItemIdentifier,
 									 @"render_still", 
 									 @"render_movie", 
+									 @"render_stills", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"breed_flam3", 
 									 @"gene_pool", 
+									 NSToolbarSeparatorItemIdentifier,
+									 @"lua_script", 
 									 nil
 		];
 	
