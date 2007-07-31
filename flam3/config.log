@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 80 tasks, 196 threads, 2 processors
-Load average: 1.38, Mach factor: 1.02
+Default processor set: 82 tasks, 189 threads, 2 processors
+Load average: 2.14, Mach factor: 0.53
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -130,7 +130,7 @@ configure:2459: result: none needed
 configure:2477: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
 conftest.c:2: error: parse error before 'me'
 conftest.c:2: error: parse error before 'me'
-lipo: can't figure out the architecture type of: /var/tmp//ccgILtKG.out
+lipo: can't figure out the architecture type of: /var/tmp//ccX4p2mJ.out
 configure:2483: $? = 1
 configure: failed program was:
 | #ifndef __cplusplus
@@ -162,7 +162,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "flam3"
-| #define VERSION "2.7.3"
+| #define VERSION "2.7.4"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
 configure:3070: result: gcc -E
@@ -180,7 +180,7 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "flam3"
-| #define VERSION "2.7.3"
+| #define VERSION "2.7.4"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
 configure:3182: checking for egrep
@@ -480,7 +480,7 @@ RANLIB='ranlib'
 SET_MAKE=''
 SHELL='/bin/sh'
 STRIP=''
-VERSION='2.7.3'
+VERSION='2.7.4'
 XML2_CONFIG='/usr/bin/xml2-config'
 ac_ct_CC='gcc'
 ac_ct_RANLIB='ranlib'
@@ -533,6 +533,6 @@ target_alias=''
 #define PACKAGE_VERSION ""
 #define STDC_HEADERS 1
 #define TIME_WITH_SYS_TIME 1
-#define VERSION "2.7.3"
+#define VERSION "2.7.4"
 
 configure: exit 0

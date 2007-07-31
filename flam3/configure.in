@@ -1,9 +1,9 @@
-dnl $Id: configure.in,v 1.1 2007/07/15 13:42:19 vargol Exp $
+dnl $Id: configure.in,v 1.2 2007/07/31 17:57:13 vargol Exp $
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(flam3-animate.c)
 AM_CONFIG_HEADER(config.h)
-AM_INIT_AUTOMAKE(flam3,"2.7.3")
+AM_INIT_AUTOMAKE(flam3,"2.7.4")
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET

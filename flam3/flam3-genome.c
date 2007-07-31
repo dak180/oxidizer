@@ -18,7 +18,7 @@
 */
 
 static char *flam3_genome_c_id =
-"@(#) $Id: flam3-genome.c,v 1.1 2007/07/15 13:42:21 vargol Exp $";
+"@(#) $Id: flam3-genome.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
 
 #include "private.h"
 #include "isaacs.h"
@@ -73,8 +73,8 @@ void test_cp(flam3_genome *cp) {
    cp->height = 128;
    cp->spatial_oversample = 1;
    cp->spatial_filter_radius = 0.5;
-   cp->spatial_filter_func = Gaussian_filter;
-   cp->spatial_filter_support = Gaussian_support;
+   cp->spatial_filter_func = gaussian_filter;
+   cp->spatial_filter_support = gaussian_support;
    cp->zoom = 0.0;
    cp->sample_density = 1;
    cp->nbatches = 1;
@@ -569,6 +569,7 @@ main(argc, argv)
    int parent0_n, parent1_n;
    int num_threads = 1;
    int ncp;
+   char default_duv[30]="31,34,35,36,38,43,44,48";
 
    int ivars[max_specified_vars];
    int novars[max_specified_vars];
@@ -644,6 +645,11 @@ main(argc, argv)
    if (use_vars && dont_use_vars) {
       fprintf(stderr,"use_vars and dont_use_vars cannot both be specified.  Terminating.\n");
       exit(-1);
+   }
+   
+   /* Specify reasonable defaults if nothing is specified */
+   if (!use_vars && !dont_use_vars) {
+      dont_use_vars = default_duv;
    }
    
    if (use_vars) {
@@ -1289,19 +1295,45 @@ main(argc, argv)
                   }
                }
 
-               /* find the last xform */
-/*               nxf = 0;
-               for (i = 0; i < cp_orig.num_xforms; i++) {
-                  if (cp_orig.xform[i].density > 0.0) {
-                     nxf = i;
-                  }
-               }
-*/
                /* reset color coords */
                if (cp_orig.num_xforms > 0) {
                   for (i = 0; i < cp_orig.num_xforms; i++) {
                      cp_orig.xform[i].color[0] = i&1;
                      cp_orig.xform[i].color[1] = (i&2)>>1;
+                  }
+               }
+               
+               /* Potentially genetically cross the two colormaps together */
+               if (flam3_random01() < 0.4) {
+                              
+                  /* Select the starting parent */
+                  int startParent=flam3_random_isaac_bit(&f.rc);
+                  int ci;
+                  
+                  if (debug)
+                     fprintf(stderr,"crossing maps...\n");
+                  
+                  strcat(action," cmap_cross");
+                  sprintf(ministr," %d:",startParent);
+                  strcat(action,ministr);
+                  
+                  /* Loop over the entries, switching to the other parent 1% of the time */
+                  for (ci=0;ci<256;ci++) {
+                     if (flam3_random_isaac_01(&f.rc)<.01) {
+                        startParent = 1-startParent;
+                        sprintf(ministr," %d",ci);
+                        strcat(action,ministr);
+                     }
+                     
+                     if (startParent==0) {
+                        cp_orig.palette[ci][0] = parent0[i0].palette[ci][0];
+                        cp_orig.palette[ci][1] = parent0[i0].palette[ci][1];
+                        cp_orig.palette[ci][2] = parent0[i0].palette[ci][2];
+                     } else {
+                        cp_orig.palette[ci][0] = parent1[i1].palette[ci][0];
+                        cp_orig.palette[ci][1] = parent1[i1].palette[ci][1];
+                        cp_orig.palette[ci][2] = parent1[i1].palette[ci][2];
+                     }
                   }
                }
 
@@ -1333,19 +1365,20 @@ main(argc, argv)
 
             if (1) {
                int n, tot, totb, totw;
-               n = 3 * cp_orig.width * cp_orig.height;
+               n = cp_orig.width * cp_orig.height;
                tot = 0;
                totb = 0;
                totw = 0;
-               for (i = 0; i < n; i++) {
-                  tot += image[i];
-                  if (0 == image[i]) totb++;
-                  if (255 == image[i]) totw++;
+               for (i = 0; i < 3*n; i+=3) {
+               
+                  tot += (image[i]+image[i+1]+image[i+2]);
+                  if (0 == image[i] && 0 == image[i+1] && 0 == image[i+2]) totb++;
+                  if (255 == image[i] && 255 == image[i+1] && 255 == image[i+2]) totw++;
 
                   // printf("%d ", image[i]);
                }
 
-               avg_pix = (tot / (double)n);
+               avg_pix = (tot / (double)(3*n));
                fraction_black = totb / (double)n;
                fraction_white = totw / (double)n;
 

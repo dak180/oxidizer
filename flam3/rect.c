@@ -221,7 +221,8 @@ static void *iter_thread(void *fth) {
 static void render_rectangle(flam3_frame *spec, unsigned char *out,
 			     int out_width, int field, int nchan,
 			     int transp, stat_struct *stats) {
-   int i, j, k, nbuckets, batch_num, temporal_sample_num;
+   long nbuckets;
+   int i, j, k, batch_num, temporal_sample_num;
    double nsamples, batch_size, sub_batch;
    bucket  *buckets;
    abucket *accumulate;
@@ -439,17 +440,17 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    fic.height = oversample * image_height + 2 * gutter_width;
    fic.width  = oversample * image_width  + 2 * gutter_width;
 
-   nbuckets = fic.width * fic.height;
+   nbuckets = (long)fic.width * (long)fic.height;
    if (1) {
 
      char *last_block = NULL;
-     int memory_rqd = (sizeof(bucket) * nbuckets +
+     size_t memory_rqd = (sizeof(bucket) * nbuckets +
              sizeof(abucket) * nbuckets +
-             4 * sizeof(double) * SUB_BATCH_SIZE * spec->nthreads); /* SUB BATCH SIZE per thread */
+             4 * sizeof(double) * (size_t)SUB_BATCH_SIZE * spec->nthreads);
      last_block = (char *) malloc(memory_rqd);
      if (NULL == last_block) {
-       fprintf(stderr, "render_rectangle: cannot malloc %d bytes.\n", memory_rqd);
-       fprintf(stderr, "render_rectangle: h=%d w=%d nb=%d.\n", fic.width, fic.height, nbuckets);
+       fprintf(stderr, "render_rectangle: cannot malloc %ld bytes.\n", memory_rqd);
+       fprintf(stderr, "render_rectangle: h=%d w=%d nb=%ld.\n", fic.width, fic.height, nbuckets);
        exit(1);
      }
      /* else fprintf(stderr, "render_rectangle: mallocked %dMb.\n", Mb); */
@@ -548,11 +549,11 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
          /*    num filters = (de_max_width / de_min_width)^(1/estimator_curve)    */
          /*                                                                       */
          num_de_filters_d = pow( comp_max_radius/comp_min_radius, (1.0/cp.estimator_curve) );
-         num_de_filters = keep_thresh + ceil(num_de_filters_d);
+         num_de_filters = ceil(num_de_filters_d);
          
          /* Condense the smaller kernels to save space */
          if (num_de_filters>keep_thresh) 
-	   de_max_ind = ceil(keep_thresh + pow(num_de_filters-keep_thresh,cp.estimator_curve));
+	   de_max_ind = ceil(keep_thresh + pow(num_de_filters-keep_thresh,cp.estimator_curve))+1;
          else
             de_max_ind = num_de_filters;
 
@@ -592,8 +593,16 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
             for (dej=-de_half_size; dej<=de_half_size; dej++) {
                for (dek=-de_half_size; dek<=de_half_size; dek++) {
                   de_filt_d = sqrt( (double)(dej*dej+dek*dek) ) / de_filt_h;
-                  if (de_filt_d<=1)
+
+                  if (de_filt_d <= 1.0) {
+if (1) {
+                     /* Gaussian */
+                     de_filt_sum += gaussian_filter(gaussian_support*de_filt_d);
+} else {
+                     /* Epanichnikov */
                      de_filt_sum += (1.0 - (de_filt_d * de_filt_d));
+}
+                  }
                }
             }
 
@@ -604,10 +613,18 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
                for (dek=0; dek<=dej; dek++) {
                   de_filt_d = sqrt( (double)(dej*dej+dek*dek) ) / de_filt_h;
 
-                  if (de_filt_d>1)
+                  if (de_filt_d>1.0)
                      de_filter_coefs[filter_coef_idx] = 0.0;
-                  else
+                  else {
+if (1) {
+                     /* Gaussian */
+                     de_filter_coefs[filter_coef_idx] = gaussian_filter(gaussian_support*de_filt_d)/de_filt_sum;
+} else {
+                     /* Epanichnikov */
                      de_filter_coefs[filter_coef_idx] = (1.0 - (de_filt_d * de_filt_d))/de_filt_sum;
+}
+                  }
+                  
                   filter_coef_idx ++;
                }
             }
@@ -711,9 +728,9 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
 
          }
 
-         nsamples = sample_density * (double) nbuckets / (oversample * oversample);
+         nsamples = sample_density * nbuckets / (oversample * oversample);
 #if 0
-         fprintf(stderr, "sample_density=%g nsamples=%g nbuckets=%d time=%g\n",
+         fprintf(stderr, "sample_density=%g nsamples=%g nbuckets=%ld time=%g\n",
        sample_density, nsamples, nbuckets, temporal_sample_time);
 #endif
 
@@ -1144,9 +1161,11 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    cp.num_xforms=0;
    if (fname) free(cmap2);
 
-   if (0) {
+   if (getenv("insert_palette")) {
+     int ph = 100;
+     if (ph >= image_height) ph = image_height;
      /* insert the palette into the image */
-     for (j = 0; j < 100; j++) {
+     for (j = 0; j < ph; j++) {
        for (i = 0; i < image_width; i++) {
 	 unsigned char *p = out + nchan * (i + j * out_width);
 	 p[0] = cmap[i * 256 / image_width][0];

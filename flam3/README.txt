@@ -83,6 +83,7 @@ use_mem         auto            floating point number of bytes of memory to use 
 nthreads        auto            number of threads to use (render and animate)
 noedits         unset           omit edit tags from output (genome only)
 intpalette      unset           round palette entries for importing into older Apophysis versions (genome only)
+insert_palette  unset		insert the palette into the image.
 
 for example:
 
@@ -245,6 +246,17 @@ todo:  eliminate all static storage.
 ======================================
 
 changelog:
+
+07/12/07 fixed bug in split variation, now compatible with both
+    versions of Apo.  added insert_palette option.  switched density
+    estimation kernel from Epanichnikov to Gaussian.  genetic cross
+    now crosses palettes rather than selecting one of the parent 
+    palettes.  remove noisy variations from random generation if 
+    use_vars or dont_use_vars not specified.  fixed metrics calculated
+    on small test render for genetic operations.  reduced memory 
+    requirements for density estimation filters.  64-bit linux distros
+    now supported.  release 2.7.4.
+
 
 06/21/07 flam3 version, rendered genome, some render statistics and
     optionally nick/url stored in jpeg/png headers.  fixed two bugs

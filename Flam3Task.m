@@ -52,8 +52,6 @@
 + (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
 	
 	
-	/* we need an auto release pool for the NSPipes do not get released and we run out of file descriptors */
-	
 	NSTask *task;
     task = [[NSTask alloc] init];
 	

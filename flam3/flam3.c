@@ -18,7 +18,7 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.1 2007/07/15 13:42:22 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
 
 
 #include "private.h"
@@ -1260,18 +1260,20 @@ static void var54_split (void *helper, double weight) {
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
    double sgnx,sgny;
 
-   if (cos(f->tx*f->xform->split_xsize*M_PI)>=0)
+   if (cos(f->tx*f->xform->split_xsize*M_PI)*(1-f->xform->split_shift) + 
+         sin(f->tx*f->xform->split_xsize*M_PI)*(f->xform->split_shift) >= 0)
       sgny = 1.0;
    else
       sgny = -1.0;
       
-   if (cos(f->ty*f->xform->split_ysize*M_PI)>=0)
+   if (cos(f->ty*f->xform->split_ysize*M_PI)*(1-f->xform->split_shift) + 
+         sin(f->ty*f->xform->split_ysize*M_PI)*(f->xform->split_shift) >= 0)
       sgnx = 1.0;
    else
-      sgnx = -1.0;
+      sgnx = -1.0;      
       
-   f->p0 += weight * f->ty * sgny;
-   f->p1 += weight * f->tx * sgnx;
+   f->p0 += weight * f->tx * sgnx;
+   f->p1 += weight * f->ty * sgny;
 
 }
 
@@ -2162,6 +2164,7 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
       INTERP(xform[i].parabola_width);      
       INTERP(xform[i].split_xsize);
       INTERP(xform[i].split_ysize);
+      INTERP(xform[i].split_shift);
       INTERP(xform[i].move_x);
       INTERP(xform[i].move_y);
 
@@ -2404,6 +2407,7 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
        thiscp->xform[i].parabola_width = 0.0;
        thiscp->xform[i].split_xsize = 0.0;
        thiscp->xform[i].split_ysize = 0.0;
+       thiscp->xform[i].split_shift = 0.0;
        thiscp->xform[i].move_x = 0.0;
        thiscp->xform[i].move_y = 0.0;
 
@@ -2534,6 +2538,7 @@ void flam3_copy_params(flam3_xform *dest, flam3_xform *src, int varn) {
       /* Split */
       dest->split_xsize = src->split_xsize;
       dest->split_ysize = src->split_ysize;
+      dest->split_shift = src->split_shift;
    } else if (varn==55) {
       /* Move */
       dest->move_x = src->move_x;
@@ -2705,8 +2710,8 @@ static void clear_cp(flam3_genome *cp, int default_flag) {
        cp->motion_exp = 0.0;
        cp->nbatches = 1;
        cp->ntemporal_samples = 60;
-       cp->spatial_filter_func = Gaussian_filter;
-       cp->spatial_filter_support = Gaussian_support;
+       cp->spatial_filter_func = gaussian_filter;
+       cp->spatial_filter_support = gaussian_support;
 
     } else {
        /* Defaults are off, so set to UN-reasonable values. */
@@ -3002,8 +3007,8 @@ static void parse_flame_element(xmlNode *flame_node) {
          cp->spatial_filter_radius = atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"filter_shape")) {
          if (!strcmp("gaussian", att_str)) {
-            cp->spatial_filter_func = Gaussian_filter;
-            cp->spatial_filter_support = Gaussian_support;
+            cp->spatial_filter_func = gaussian_filter;
+            cp->spatial_filter_support = gaussian_support;
          } else if (!strcmp("hermite", att_str)) {
             cp->spatial_filter_func = hermite_filter;
             cp->spatial_filter_support = hermite_support;
@@ -3017,29 +3022,29 @@ static void parse_flame_element(xmlNode *flame_node) {
             cp->spatial_filter_func = bell_filter;
             cp->spatial_filter_support = bell_support;
          } else if (!strcmp("bspline", att_str)) {
-            cp->spatial_filter_func = B_spline_filter;
-            cp->spatial_filter_support = B_spline_support;
+            cp->spatial_filter_func = b_spline_filter;
+            cp->spatial_filter_support = b_spline_support;
          } else if (!strcmp("mitchell", att_str)) {
-            cp->spatial_filter_func = Mitchell_filter;
-            cp->spatial_filter_support = Mitchell_support;
+            cp->spatial_filter_func = mitchell_filter;
+            cp->spatial_filter_support = mitchell_support;
          } else if (!strcmp("blackman", att_str)) {
-            cp->spatial_filter_func = Blackman_filter;
-            cp->spatial_filter_support = Blackman_support;
+            cp->spatial_filter_func = blackman_filter;
+            cp->spatial_filter_support = blackman_support;
          } else if (!strcmp("catrom", att_str)) {
-            cp->spatial_filter_func = Catrom_filter;
-            cp->spatial_filter_support = Catrom_support;
+            cp->spatial_filter_func = catrom_filter;
+            cp->spatial_filter_support = catrom_support;
          } else if (!strcmp("hanning", att_str)) {
-            cp->spatial_filter_func = Hanning_filter;
-            cp->spatial_filter_support = Hanning_support;
+            cp->spatial_filter_func = hanning_filter;
+            cp->spatial_filter_support = hanning_support;
          } else if (!strcmp("hamming", att_str)) {
-            cp->spatial_filter_func = Hamming_filter;
-            cp->spatial_filter_support = Hamming_support;
+            cp->spatial_filter_func = hamming_filter;
+            cp->spatial_filter_support = hamming_support;
          } else if (!strcmp("lanczos3", att_str)) {
-            cp->spatial_filter_func = Lanczos3_filter;
-            cp->spatial_filter_support = Lanczos3_support;
+            cp->spatial_filter_func = lanczos3_filter;
+            cp->spatial_filter_support = lanczos3_support;
          } else if (!strcmp("lanczos2", att_str)) {
-            cp->spatial_filter_func = Lanczos2_filter;
-            cp->spatial_filter_support = Lanczos2_support;
+            cp->spatial_filter_func = lanczos2_filter;
+            cp->spatial_filter_support = lanczos2_support;
          } else if (!strcmp("quadratic", att_str)) {
             cp->spatial_filter_func = quadratic_filter;
             cp->spatial_filter_support = quadratic_support;
@@ -3458,6 +3463,8 @@ static void parse_flame_element(xmlNode *flame_node) {
                cp->xform[xf].split_xsize = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"split_ysize")) {
                cp->xform[xf].split_ysize = atof(att_str);
+            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"split_shift")) {
+               cp->xform[xf].split_shift = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"move_x")) {
                cp->xform[xf].move_x = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"move_y")) {
@@ -3959,7 +3966,7 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes, int print_ed
    fprintf(f, " filter=\"%g\"", cp->spatial_filter_radius);
 
    /* Need to print the correct kernel to use */
-   if (cp->spatial_filter_func == Gaussian_filter)
+   if (cp->spatial_filter_func == gaussian_filter)
       fprintf(f, " filter_shape=\"gaussian\"");
    else if (cp->spatial_filter_func == hermite_filter)
       fprintf(f, " filter_shape=\"hermite\"");
@@ -3969,21 +3976,21 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes, int print_ed
       fprintf(f, " filter_shape=\"triangle\"");
    else if (cp->spatial_filter_func == bell_filter)
       fprintf(f, " filter_shape=\"bell\"");
-   else if (cp->spatial_filter_func == B_spline_filter)
+   else if (cp->spatial_filter_func == b_spline_filter)
       fprintf(f, " filter_shape=\"bspline\"");
-   else if (cp->spatial_filter_func == Mitchell_filter)
+   else if (cp->spatial_filter_func == mitchell_filter)
       fprintf(f, " filter_shape=\"mitchell\"");
-   else if (cp->spatial_filter_func == Blackman_filter)
+   else if (cp->spatial_filter_func == blackman_filter)
       fprintf(f, " filter_shape=\"blackman\"");
-   else if (cp->spatial_filter_func == Catrom_filter)
+   else if (cp->spatial_filter_func == catrom_filter)
       fprintf(f, " filter_shape=\"catrom\"");
-   else if (cp->spatial_filter_func == Hanning_filter)
+   else if (cp->spatial_filter_func == hanning_filter)
       fprintf(f, " filter_shape=\"hanning\"");
-   else if (cp->spatial_filter_func == Hamming_filter)
+   else if (cp->spatial_filter_func == hamming_filter)
       fprintf(f, " filter_shape=\"hamming\"");
-   else if (cp->spatial_filter_func == Lanczos3_filter)
+   else if (cp->spatial_filter_func == lanczos3_filter)
       fprintf(f, " filter_shape=\"lanczos3\"");
-   else if (cp->spatial_filter_func == Lanczos2_filter)
+   else if (cp->spatial_filter_func == lanczos2_filter)
       fprintf(f, " filter_shape=\"lanczos2\"");
    else if (cp->spatial_filter_func == quadratic_filter)
       fprintf(f, " filter_shape=\"quadratic\"");
@@ -4189,6 +4196,7 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes, int print_ed
          if (split_var==1) {
             fprintf(f, "split_xsize=\"%g\" ", cp->xform[i].split_xsize);
             fprintf(f, "split_ysize=\"%g\" ", cp->xform[i].split_ysize);
+            fprintf(f, "split_shift=\"%g\" ", cp->xform[i].split_shift);
          }
 
          if (move_var==1) {
@@ -4740,6 +4748,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          /* Create random params for split */
          cp->xform[i].split_xsize = 2 * flam3_random11();
          cp->xform[i].split_ysize = 2 + flam3_random11();
+         cp->xform[i].split_shift = flam3_random01();
       }
 
       if (cp->xform[i].var[55] > 0) {
@@ -5051,7 +5060,7 @@ double bell_filter(double t) {
    return(0.0);
 }
 
-double B_spline_filter(double t) {
+double b_spline_filter(double t) {
 
    /* box (*) box (*) box (*) box */
    double tt;
@@ -5073,11 +5082,11 @@ double sinc(double x) {
    return(1.0);
 }
 
-double Blackman_filter(double x) {
+double blackman_filter(double x) {
   return(0.42+0.5*cos(M_PI*x)+0.08*cos(2*M_PI*x));
 }
 
-double Catrom_filter(double x) {
+double catrom_filter(double x) {
   if (x < -2.0)
     return(0.0);
   if (x < -1.0)
@@ -5091,47 +5100,47 @@ double Catrom_filter(double x) {
   return(0.0);
 }
 
-double Mitchell_filter(double t) {
+double mitchell_filter(double t) {
    double tt;
 
    tt = t * t;
    if(t < 0) t = -t;
    if(t < 1.0) {
-      t = (((12.0 - 9.0 * Mitchell_B - 6.0 * Mitchell_C) * (t * tt))
-         + ((-18.0 + 12.0 * Mitchell_B + 6.0 * Mitchell_C) * tt)
-         + (6.0 - 2 * Mitchell_B));
+      t = (((12.0 - 9.0 * mitchell_b - 6.0 * mitchell_c) * (t * tt))
+         + ((-18.0 + 12.0 * mitchell_b + 6.0 * mitchell_c) * tt)
+         + (6.0 - 2 * mitchell_b));
       return(t / 6.0);
    } else if(t < 2.0) {
-      t = (((-1.0 * Mitchell_B - 6.0 * Mitchell_C) * (t * tt))
-         + ((6.0 * Mitchell_B + 30.0 * Mitchell_C) * tt)
-         + ((-12.0 * Mitchell_B - 48.0 * Mitchell_C) * t)
-         + (8.0 * Mitchell_B + 24 * Mitchell_C));
+      t = (((-1.0 * mitchell_b - 6.0 * mitchell_c) * (t * tt))
+         + ((6.0 * mitchell_b + 30.0 * mitchell_c) * tt)
+         + ((-12.0 * mitchell_b - 48.0 * mitchell_c) * t)
+         + (8.0 * mitchell_b + 24 * mitchell_c));
       return(t / 6.0);
    }
    return(0.0);
 }
 
-double Hanning_filter(double x) {
+double hanning_filter(double x) {
   return(0.5+0.5*cos(M_PI*x));
 }
 
-double Hamming_filter(double x) {
+double hamming_filter(double x) {
   return(0.54+0.46*cos(M_PI*x));
 }
 
-double Lanczos3_filter(double t) {
+double lanczos3_filter(double t) {
    if(t < 0) t = -t;
    if(t < 3.0) return(sinc(t) * sinc(t/3.0));
    return(0.0);
 }
 
-double Lanczos2_filter(double t) {
+double lanczos2_filter(double t) {
    if(t < 0) t = -t;
    if(t < 2.0) return(sinc(t) * sinc(t/2.0));
    return(0.0);
 }
 
-double Gaussian_filter(double x) {
+double gaussian_filter(double x) {
   return(exp((-2.0*x*x))*sqrt(2.0/M_PI));
 }
 

@@ -312,7 +312,7 @@
 	/* fiddle symmetry to be a value between -8 and -1 and 1 and 8 */
 	int symmetry;
 	
-	if (random() & 2) {
+	if (random() & 3) {
 		symmetry = 1;
 	} else {
 		symmetry = random() & 7;
@@ -323,10 +323,21 @@
 		
 	}
 	
+	NSData *templateData = [[NSData alloc] initWithBytes:"<flame quality=\"50\"/>" length:21];
+	NSString *template = [Flam3Task createTemporaryPathWithFileName:@"template"];
+
+	[templateData writeToFile:template atomically:YES];
+
+	[environmentDictionary setObject:template forKey:@"template"];
+	
 	[environmentDictionary setValue:[NSNumber numberWithInt:symmetry] forKey:@"symmetry"];
 	
 	NSData *newGenome = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:environmentDictionary];
 	[newGenome retain];
+
+	[template release];
+	[templateData release];
+	
 	[newGenome autorelease];
 	
 	return newGenome;
@@ -414,7 +425,7 @@
 	/* fiddle symmetry to be a value between -8 and -1 and 1 and 8 */
 	int symmetry;
 	
-	if (random() & 2) {
+	if (random() & 3) {
 		symmetry = 1;
 	} else {
 		symmetry = random() & 7;
@@ -469,7 +480,7 @@
 	/* fiddle symmetry to be a value between -8 and -1 and 1 and 8 */
 	int symmetry;
 	
-	if (random() & 2) {
+	if (random() & 3) {
 		symmetry = 1;
 	} else {
 		symmetry = random() & 7;

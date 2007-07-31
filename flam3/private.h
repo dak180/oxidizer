@@ -63,4 +63,66 @@ extern int getpid();
 #define argf(s,d)   ((ai = getenv(s)) ? atof(ai) : (d))
 #define args(s,d)   ((ai = getenv(s)) ? ai : (d))
 
+/* Spatial Filter Kernels */
+#define  hermite_support      (1.0)
+#define  box_support      (0.5)
+#define  triangle_support   (1.0)
+#define  bell_support      (1.5)
+#define  b_spline_support   (2.0)
+#define  mitchell_support   (2.0)
+#define  mitchell_b   (1.0 / 3.0)
+#define  mitchell_c   (1.0 / 3.0)
+#define  blackman_support  (1.0)
+#define  catrom_support    (2.0)
+#define  hanning_support   (1.0)
+#define  hamming_support   (1.0)
+#define  lanczos3_support  (3.0)
+#define  lanczos2_support  (2.0)
+#define  gaussian_support  (1.8)
+#define  quadratic_support (1.5)
+
+double hermite_filter(double t);
+double box_filter(double t);
+double triangle_filter(double t);
+double bell_filter(double t);
+double b_spline_filter(double t);
+double sinc(double x);
+double lanczos3_filter(double t);
+double lanczos2_filter(double t);
+double mitchell_filter(double t);
+double blackman_filter(double x);
+double catrom_filter(double x);
+double hamming_filter(double x);
+double hanning_filter(double x);
+double gaussian_filter(double x);
+double quadratic_filter(double x);
+
 void docstring();
+
+/* Structures for passing parameters to iteration threads */
+typedef struct {
+   char *xform_distrib;    /* Distribution of xforms based on weights */
+   flam3_frame *spec; /* Frame contains timing information */
+   double bounds[4]; /* Corner coords of viewable area */
+   double rot[2][2]; /* Rotation transformation */
+   double size[2];
+   int width, height; /* buffer width/height */
+   double ws0, wb0s0, hs1, hb1s1; /* shortcuts for indexing */
+   int fname_specified; /* Set to 1 if there was a filename specified for colormap */
+   void *cmap; /* Points to bucket-based cmap if standard, uchar if fname specified */
+   double color_scalar; /* <1.0 if non-uniform motion blur is set */
+   void *buckets; /* Points to the first accumulator */
+   double badvals; /* accumulates all badvalue resets */
+   double batch_size;
+   int temporal_sample_num,ntemporal_samples;
+   int batch_num, nbatches, aborted;
+} flam3_iter_constants;
+
+typedef struct {
+   double *iter_storage; /* Storage for iteration coordinates */
+   randctx rc; /* Thread-unique ISAAC seed */
+   flam3_genome cp; /* Full copy of genome for use by the thread */
+   int thread_verbose;
+   int timer_initialize;
+   flam3_iter_constants *fic; /* Constants for render */
+} flam3_thread_helper;
