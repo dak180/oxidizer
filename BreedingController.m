@@ -335,7 +335,6 @@
 	NSData *newGenome = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:environmentDictionary];
 	[newGenome retain];
 
-	[template release];
 	[templateData release];
 	
 	[newGenome autorelease];

@@ -109,7 +109,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	[xmlDoc autorelease];
 
-	return [xmlDoc XMLDataWithOptions:NSXMLDocumentTidyXML];
+	return [xmlDoc XMLDataWithOptions:NSXMLNodePrettyPrint|NSXMLNodeCompactEmptyElement];
 
 }
 
@@ -173,7 +173,9 @@ NSString *variationName[1+flam3_nvariations] = {
 										[[genomeEntity valueForKey:@"centre_x"] doubleValue], 
 										[[genomeEntity valueForKey:@"centre_y"] doubleValue]]]];
 
-	[genome addAttribute:[NSXMLNode attributeWithName:@"zoom" stringValue:[[genomeEntity valueForKey:@"zoom"] stringValue]]];
+	if ([[genomeEntity valueForKey:@"zoom"] doubleValue] != 0.0) {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"zoom" stringValue:[[genomeEntity valueForKey:@"zoom"] stringValue]]];
+	}	
 	[genome addAttribute:[NSXMLNode attributeWithName:@"oversample" stringValue:[[genomeEntity valueForKey:@"oversample"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"quality" stringValue:[[genomeEntity valueForKey:@"quality"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"passes" stringValue:[[genomeEntity valueForKey:@"batches"] stringValue]]];
@@ -199,19 +201,25 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome addAttribute:[NSXMLNode attributeWithName:@"rotate" stringValue:[[genomeEntity valueForKey:@"rotate"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"contrast" stringValue:[[genomeEntity valueForKey:@"contrast"] stringValue]]];
 
-	NSXMLElement *symmetryElement = (NSXMLElement *)[NSXMLNode elementWithName:@"symmetry"];
-	[symmetryElement addAttribute:[NSXMLNode attributeWithName:@"kind" 
-										           stringValue:[NSString stringWithFormat:@"%d",  [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]]]]];
+	if ( [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]] != 0) {
+		NSXMLElement *symmetryElement = (NSXMLElement *)[NSXMLNode elementWithName:@"symmetry"];
+		[symmetryElement addAttribute:[NSXMLNode attributeWithName:@"kind" 
+													   stringValue:[NSString stringWithFormat:@"%d",  [Genome getIntSymmetry:[genomeEntity valueForKey:@"symmetry"]]]]];
+		[genome addChild:symmetryElement];
+	}
 
-	[genome addChild:symmetryElement];
 	
 	if([[genomeEntity valueForKey:@"interpolation"] intValue] == 1) {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"interpolation" stringValue:@"smooth"]];		
-	} else {
+	} /* else {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"interpolation" stringValue:@"linear"]];			
-	}
+	} */
 	
-	[genome addAttribute:[NSXMLNode attributeWithName:@"motion_exponent" stringValue:[[genomeEntity valueForKey:@"motion_exp"] stringValue]]];
+
+	if ([[genomeEntity valueForKey:@"motion_exp"] doubleValue] != 0.0) {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"motion_exponent" stringValue:[[genomeEntity valueForKey:@"motion_exp"] stringValue]]];
+	}
+
 	[genome addAttribute:[NSXMLNode attributeWithName:@"filter" stringValue:[[genomeEntity valueForKey:@"spatial_filter_radius"] stringValue]]];
 	
 	if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"B-Spline"]) {
@@ -556,7 +564,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	if(oldDocAsXML != nil && [oldDocAsXML compare:@""] != NSOrderedSame) {
 		
-		oldDoc = [[NSXMLDocument alloc] initWithXMLString:oldDocAsXML options:NSXMLDocumentTidyXML error:&xmlError];
+		oldDoc = [[NSXMLDocument alloc] initWithXMLString:oldDocAsXML options:NSXMLNodePrettyPrint|NSXMLNodeCompactEmptyElement|NSXMLNodeCompactEmptyElement error:&xmlError];
 		if(oldDoc == nil) {
 			NSLog(@"%@\n", [xmlError localizedDescription]);
 			[xmlError release];
@@ -841,6 +849,10 @@ NSString *variationName[1+flam3_nvariations] = {
 			[newXformEntity setValue:[NSNumber numberWithInt:[newTransforms count]] forKey:@"order"];
 			[newTransforms addObject:newXformEntity];
 			[newXformEntity release];
+		} else if([[child name] isEqualToString:@"edit"]) {
+			NSAttributedString *edits = [[NSAttributedString alloc] initWithString:[child XMLStringWithOptions:NSXMLNodePrettyPrint|NSXMLNodeCompactEmptyElement]];
+			[newGenomeEntity setValue:edits forKey:@"edits"];
+			[edits release];
 		}
 	
 		

@@ -62,6 +62,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		_showRender = [defaults boolForKey:@"show_render"];
 		
+		_currentFilename = nil;
 		
 		[NSBundle loadNibNamed:@"FileViews" owner:self];
 
@@ -135,8 +136,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 		docController = [NSDocumentController sharedDocumentController];
 		
 		_progressInd = [[NSMutableArray alloc] initWithCapacity:2];
-
-		_currentFilename = nil;
 
 		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
 		
@@ -868,7 +867,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	if(_saveThumbnail) {
 		NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
 		[taskEnvironment retain];
-		[taskEnvironment setObject:[[savePanel filename] stringByAppendingString:@"_"] forKey:@"prefix"];
+		[taskEnvironment setObject:[filename stringByAppendingString:@"_"] forKey:@"prefix"];
 			
 			int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
 			
@@ -1019,10 +1018,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 			lastTime = 0;
 		}
 		
-		[genomeArray release];
-			[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
-			[self appendGenomesFromXMLFile:[op filename] fromTime:lastTime inContext:moc];
-			[moc save:nil];
+		[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
+		[self appendGenomesFromXMLFile:[op filename] fromTime:lastTime inContext:moc];
+		[moc save:nil];
 		
 		
 		[fetch release];	  
@@ -1062,7 +1060,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		[_currentFilename release];
 	}
 	
+	[self willChangeValueForKey:@"_currentFilename"];
 	_currentFilename = filename;
+	[self didChangeValueForKey:@"_currentFilename"];
 	
 	return;
 }
@@ -1298,6 +1298,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	while ((genome = [genomeEnumerator nextObject])) {
 		[genome setValue:[NSNumber numberWithInt:[[genome valueForKey:@"time"] intValue]+time] forKey:@"time"];
 	}
+	[moc performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
 	[self generateAllThumbnailsForGenomes:newGenomes];
 	
 	
