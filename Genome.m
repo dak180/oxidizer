@@ -1960,6 +1960,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	    [newGenomeEntity setValue:tempObject  forKey:@"time"];
 	}
 	
+	[newGenomeEntity setValue:[NSNumber numberWithBool:NO] forKey:@"aspect_lock"];
 	tempObject = [genome objectForKey:@"width"];
 	if(tempObject != nil) {
 	    [newGenomeEntity setValue:tempObject forKey:@"width"];
@@ -1968,6 +1969,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	if(tempObject != nil) {
 	    [newGenomeEntity setValue:tempObject forKey:@"height"];
 	}		
+	[newGenomeEntity setValue:[NSNumber numberWithBool:YES] forKey:@"aspect_lock"];
 	
 	tempObject = [genome objectForKey:@"scale"];
 	if(tempObject != nil) {
@@ -2132,6 +2134,17 @@ NSString *variationName[1+flam3_nvariations] = {
 	if (colourMap != nil) {
 		[Genome createColourMapFromArray:colourMap forGenome:newGenomeEntity inContext:moc];
 	}
+	
+	
+	NSDictionary *edits = [genome objectForKey:@"edit"];
+	NSAttributedString *previousEdits = [[NSAttributedString alloc] initWithString:[edits objectForKey:@"previous_edits"]];
+	[newGenomeEntity setValue:previousEdits forKey:@"edits"];
+
+	[newGenomeEntity setValue:[edits objectForKey:@"nick"] forKey:@"nick"];
+	[newGenomeEntity setValue:[edits objectForKey:@"url"] forKey:@"url"];
+	[newGenomeEntity setValue:[edits objectForKey:@"comment"] forKey:@"comment"];
+	[previousEdits release];
+	
 	
 	[newGenomeEntity setValue:newTransforms forKey:@"xforms"];	
 	[newGenomeEntity autorelease];
@@ -2376,7 +2389,7 @@ NSString *variationName[1+flam3_nvariations] = {
 			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
 			
 			[variation setValue:[variationDictionary objectForKey:@"juliascope_dist"] forKey:@"parameter_1"];
-			[variation setValue:[variationDictionary objectForKey:@"juliascope_dist"] forKey:@"parameter_2"];			
+			[variation setValue:[variationDictionary objectForKey:@"juliascope_power"] forKey:@"parameter_2"];			
 			
 			[variation setValue:@"JS Distance:" forKey:@"parameter_1_name"];
 			[variation setValue:@"Power:" forKey:@"parameter_2_name"];
