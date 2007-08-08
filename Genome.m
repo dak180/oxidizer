@@ -192,7 +192,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	[[genomeEntity valueForKey:@"background"] getRed:&red green:&green blue:&blue alpha:NULL];
 
 	[genome addAttribute:[NSXMLNode attributeWithName:@"background" 
-									stringValue:[NSString stringWithFormat:@"%d %d %d", red * 255, blue * 255, green * 255]]];
+									stringValue:[NSString stringWithFormat:@"%d %d %d", (int)(red * 255.0), (int)(green * 255.0), (int)(blue * 255.0)]]];
 
 	[genome addAttribute:[NSXMLNode attributeWithName:@"hue" stringValue:[[genomeEntity valueForKey:@"hue"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"vibrancy" stringValue:[[genomeEntity valueForKey:@"vibrancy"] stringValue]]];
@@ -382,15 +382,13 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	NSManagedObject *variation;
 	
-	NSMutableString *weights = [NSMutableString stringWithCapacity:256];
-	
 	for(i=0; i<[variations count]; i++) {
 		variation = [variations objectAtIndex:i];
 		
 		if([[variation valueForKey:@"in_use"] boolValue] == YES) {
-			[weights appendString:[[variation valueForKey:@"weight"] stringValue]];
-			[weights appendString:@" "];
-		
+
+			[xform addAttribute:[NSXMLNode attributeWithName:variationName[i] stringValue:[[variation valueForKey:@"weight"] stringValue]]];
+			
 			switch(i) {
 				case 23:
 					[xform addAttribute:[NSXMLNode attributeWithName:@"blob_high" stringValue:[[variation valueForKey:@"parameter_1"] stringValue]]];
@@ -480,14 +478,10 @@ NSString *variationName[1+flam3_nvariations] = {
 					break;
 			}
 		
-		} else {
-			[weights appendString:@"0 "];
-		}
+		} 
 		
 		
 	}
-
-	[xform addAttribute:[NSXMLNode attributeWithName:@"var" stringValue:weights]];
 
 	return;
 }
@@ -637,9 +631,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	tempAttribute = [genome attributeForName:@"size"];
 	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO] forKey:@"aspect_lock"];
 		NSArray *split = [[tempAttribute stringValue] componentsSeparatedByString:@" "];
 	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[split objectAtIndex:0] intValue]] forKey:@"width"];
 	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[split objectAtIndex:1] intValue]] forKey:@"height"];
+	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES] forKey:@"aspect_lock"];
 	}		
 	
 	tempAttribute = [genome attributeForName:@"scale"];
@@ -1087,7 +1083,7 @@ NSString *variationName[1+flam3_nvariations] = {
 						 forKey:@"parameter_1"];
 			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"blob_low"] stringValue] doubleValue]] 
 						 forKey:@"parameter_2"];
-			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"blob_wave"] stringValue] doubleValue]] 
+			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"blob_waves"] stringValue] doubleValue]] 
 						 forKey:@"parameter_3"];
 			
 
@@ -2311,7 +2307,7 @@ NSString *variationName[1+flam3_nvariations] = {
 			
 			[variation setValue:[variationDictionary objectForKey:@"blob_high"] forKey:@"parameter_1"];
 			[variation setValue:[variationDictionary objectForKey:@"blob_low"] forKey:@"parameter_2"];
-			[variation setValue:[variationDictionary objectForKey:@"blob_wave"] forKey:@"parameter_3"];		
+			[variation setValue:[variationDictionary objectForKey:@"blob_waves"] forKey:@"parameter_3"];		
 			
 			[variation setValue:@"Blob High:" forKey:@"parameter_1_name"];
 			[variation setValue:@"Blob Low:" forKey:@"parameter_2_name"];
