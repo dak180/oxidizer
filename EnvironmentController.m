@@ -24,12 +24,15 @@
 - init
 {
     if (self = [super init]) {
-		aspect = @"1.0";
-		bits = @"Float";
-		qualityScale = 1;
-		sizeScale = 1;
+
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		
+		aspect = [defaults stringForKey:@"aspect"];
+		bits = [defaults stringForKey:@"buffer_type"];
+		qualityScale = [defaults integerForKey:@"qs"];
+		sizeScale = [defaults integerForKey:@"ss"];
 		seed = time(NULL);
-		useAlpha = NO;	
+		useAlpha = [defaults boolForKey:@"use_alpha"];	
 		colourShift = 0.0;	
 		
 		srandom(time(NULL) + getpid()) ;

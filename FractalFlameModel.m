@@ -54,6 +54,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 			threads, @"threads",
 			[NSNumber numberWithBool:NO], @"save_thumbnails",
 			[NSNumber numberWithBool:NO], @"show_render",
+			[NSNumber numberWithInt:1], @"qs",
+			[NSNumber numberWithInt:1], @"ss",
+			@"PAL 4:3", @"aspect",
+			@"Double", @"buffer_type",
+			[NSNumber numberWithBool:NO], @"use_alpha",
 			nil]
 			];
 		
@@ -772,6 +777,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 - (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context {
 
+	[taskProgressWindow setTitle:@"Generating Random Genome"];
+	[taskProgressWindow makeKeyAndOrderFront:self];
+	
 	/* generate random XML */
 	NSData *newGenome = [BreedingController createRandomGenomeXMLwithEnvironment:[self environmentDictionary]];
 	
