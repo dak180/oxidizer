@@ -224,6 +224,7 @@
 	
 	[taskFrameIndicator setMaxValue:100.0];
 	[taskFrameIndicator setDoubleValue:0.0];
+
 	
 	NSData *data = [flam3Error availableData];
 	NSMutableString *errorMessage = [NSMutableString stringWithCapacity:1000];

@@ -159,8 +159,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[previewWindow setLevel:NSFloatingWindowLevel];
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];
-
-	
 	
 }
 
@@ -1200,7 +1198,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskAllFramesIndicator setDoubleValue:1.0];
 	[taskFrameIndicator setMaxValue:100.0];
 	[taskFrameIndicator setDoubleValue:0.0];
-//	[taskFrameIndicator startAnimation:self];
 
 	[taskProgressWindow setTitle:@"Rendering Image"];
 	[taskProgressWindow makeKeyAndOrderFront:self];

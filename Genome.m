@@ -773,8 +773,9 @@ NSString *variationName[1+flam3_nvariations] = {
 		} else {
 			[newGenomeEntity setValue:[spatial_filter_func capitalizedString]  forKey:@"spatial_filter_func"];		
 		}
-		
+
 	}
+
 
 	NSMutableSet *newColours = nil;
 
