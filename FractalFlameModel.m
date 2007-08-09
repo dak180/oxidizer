@@ -1247,7 +1247,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskProgressWindow setTitle:@"Rendering Image"];
 	[taskProgressWindow makeKeyAndOrderFront:self];
 	
-//	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
+	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
 	
 
 	int returnValue =  [Flam3Task runFlam3RenderAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator];

@@ -968,7 +968,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	attribute = [xform attributeForName:@"symmetry"];
 	if (attribute != nil) {
-		[xFormEntity setValue:[NSNumber numberWithDouble:[[attribute stringValue] intValue]] forKey:@"symmetry"];
+		[xFormEntity setValue:[NSNumber numberWithDouble:[[attribute stringValue] doubleValue]] forKey:@"symmetry"];
 	}
 						
 	if([[xform name] isEqualToString:@"finalxform"]) {
