@@ -92,8 +92,6 @@
 	if(xml != nil) {		
 		[stdInPipe release];
 	}
-	[stdOutPipe release];
-	[stdErrPipe release];
 	
 	int taskStatus = [task terminationStatus];
 	
@@ -121,6 +119,8 @@
 	}
 
 	[flam3Error closeFile];	
+	[stdOutPipe release];
+	[stdErrPipe release];
 
 	
 	[task release];
@@ -146,7 +146,7 @@
     [task setStandardInput:stdInPipe];
     NSFileHandle *flam3Input = [stdInPipe fileHandleForWriting];
 
-	NSPipe *stdErrPipe =  [[NSPipe alloc] init];
+	NSPipe *stdErrPipe =  [NSPipe pipe];
     [task setStandardError:stdErrPipe];
     NSFileHandle *flam3Error = [stdErrPipe fileHandleForReading];
 	
@@ -185,9 +185,7 @@
 	[flam3Output closeFile];	
 	[flam3Error closeFile];	
 
-	[stdInPipe release];
-	[stdOutPipe release];
-	[stdErrPipe release];
+	[task release];
 	
 	return taskStatus;
 	
@@ -207,7 +205,7 @@
     [task setStandardOutput:stdOutPipe];
     NSFileHandle *flam3Output = [stdOutPipe fileHandleForReading];
 
-	NSPipe *stdErrPipe =  [[NSPipe alloc] init];
+	NSPipe *stdErrPipe =  [NSPipe pipe];
     [task setStandardError:stdErrPipe];
     NSFileHandle *flam3Error = [stdErrPipe fileHandleForReading];
 	
@@ -265,10 +263,8 @@
 	
 	[flam3Output closeFile];	
 	[flam3Error closeFile];	
-	
-	[stdInPipe release];
-	[stdOutPipe release];
-	[stdErrPipe release];
+		
+	[task release];
 	
 	return taskStatus;	
 }
@@ -348,6 +344,8 @@
 	[stdInPipe release];
 	[stdOutPipe release];
 	[stdErrPipe release];
+
+	[task release];
 	
 	return taskStatus;		
 }

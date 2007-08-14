@@ -82,6 +82,8 @@
 	
 	[flameImage release];
 	[pngFileName release];
+	[env release];
+	
 	return [genomeImages objectAtIndex:index];
 }	
 	
