@@ -21,30 +21,48 @@
 
 @implementation EnvironmentController
 
-- init
-{
-    if (self = [super init]) {
 
-		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-		
-		aspect = [defaults stringForKey:@"aspect"];
-		bits = [defaults stringForKey:@"buffer_type"];
-		qualityScale = [defaults integerForKey:@"qs"];
-		sizeScale = [defaults integerForKey:@"ss"];
-		seed = time(NULL);
-		useAlpha = [defaults boolForKey:@"use_alpha"];	
-		colourShift = 0.0;	
-		
-		srandom(time(NULL) + getpid()) ;
-		
-    }
-    return self;
+- (void)awakeFromNib {
+
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+	[self willChangeValueForKey:@"aspect"];
+	aspect = [defaults stringForKey:@"aspect"];
+	[self didChangeValueForKey:@"aspect"];
+
+	[self willChangeValueForKey:@"bits"];
+	bits = [defaults stringForKey:@"buffer_type"];
+	[self didChangeValueForKey:@"bits"];
+
+	[self willChangeValueForKey:@"qualityScale"];
+	qualityScale = [defaults integerForKey:@"qs"];
+	[self didChangeValueForKey:@"qualityScale"];
+
+	[self willChangeValueForKey:@"sizeScale"];
+	sizeScale = [defaults integerForKey:@"ss"];
+	[self didChangeValueForKey:@"sizeScale"];
+
+	[self willChangeValueForKey:@"seed"];
+	seed = time(NULL);
+	[self didChangeValueForKey:@"seed"];
+
+	[self willChangeValueForKey:@"useAlpha"];
+	useAlpha = [defaults boolForKey:@"use_alpha"];	
+	[self didChangeValueForKey:@"useAlpha"];
+
+	[self willChangeValueForKey:@"colourShift"];
+	colourShift = 0.0;	
+	[self didChangeValueForKey:@"colourShift"];
+	
+	srandom(seed) ;
+	
 }
-
 
 - (IBAction) randomSeed:(id)sender {
 
+	[self willChangeValueForKey:@"seed"];
 	seed = random();
+	[self didChangeValueForKey:@"seed"];
 	
 	[seedTextField setIntValue:seed];
 

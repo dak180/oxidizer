@@ -1,4 +1,5 @@
 #import "OxidizerDelegate.h"
+#import <sys/sysctl.h>
 
 
 //
@@ -120,6 +121,39 @@ void print_stack(lua_State* interpreter){
 
 
 @implementation OxidizerDelegate 
+
++ (void)initialize {
+
+	unsigned int cpuCount ;
+	size_t len = sizeof(cpuCount);
+	static int mib[2] = { CTL_HW, HW_NCPU };
+	
+	NSString *threads;
+	
+	if(sysctl(mib, 2,  &cpuCount, &len, NULL, 0) == 0 && len ==  sizeof(cpuCount)) {
+		threads = [NSString stringWithFormat:@"%ld", cpuCount];
+	} else {
+		threads = @"1";
+	}  
+	
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];		
+	
+	[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+		NSUserName(),  @"nick",
+		@"http://oxidizer.sf.net", @"url",
+		@"Made by Oxidizer", @"comment",
+		threads, @"threads",
+		[NSNumber numberWithBool:NO], @"save_thumbnails",
+		[NSNumber numberWithBool:NO], @"show_render",
+		@"1", @"qs",
+		@"1", @"ss",
+		@"PAL 4:3", @"aspect",
+		@"Double", @"buffer_type",
+		[NSNumber numberWithBool:NO], @"use_alpha",
+		nil]
+		];
+
+}
 
 - (void) awakeFromNib {
 	

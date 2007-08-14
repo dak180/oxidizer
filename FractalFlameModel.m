@@ -17,7 +17,7 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#import <sys/sysctl.h>
+//#import <sys/sysctl.h>
 #import "FractalFlameModel.h"
 #import "BreedingController.h"
 #import "Flam3Task.h"
@@ -44,7 +44,21 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"first_frame"];
 		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"last_frame"];
 
+
 		defaults = [NSUserDefaults standardUserDefaults];
+		
+/*		
+		
+		unsigned int cpuCount ;
+		size_t len = sizeof(cpuCount);
+		static int mib[2] = { CTL_HW, HW_NCPU };
+		
+		if(sysctl(mib, 2,  &cpuCount, &len, NULL, 0) == 0 && len ==  sizeof(cpuCount)) {
+			threads = [NSString stringWithFormat:@"%ld", cpuCount];
+		} else {
+			threads = @"1";
+		}  
+	
 		
 		
 		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
@@ -61,7 +75,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 			[NSNumber numberWithBool:NO], @"use_alpha",
 			nil]
 			];
-		
+*/		
 		
 		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
 		
@@ -81,16 +95,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[NSValueTransformer setValueTransformer:gttt
                                 forName:@"GreaterThanThree"];
 
-		
-		 unsigned int cpuCount ;
-		  size_t len = sizeof(cpuCount);
-		  static int mib[2] = { CTL_HW, HW_NCPU };
 
-		  if(sysctl(mib, 2,  &cpuCount, &len, NULL, 0) == 0 && len ==  sizeof(cpuCount)) {
-			  threads = [NSString stringWithFormat:@"%ld", cpuCount];
-		  } else {
-			  threads = @"1";
-		}  
   		
 		
 		moc = [[NSManagedObjectContext alloc] init];
