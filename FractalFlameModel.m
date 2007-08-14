@@ -17,7 +17,6 @@
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-//#import <sys/sysctl.h>
 #import "FractalFlameModel.h"
 #import "BreedingController.h"
 #import "Flam3Task.h"
@@ -36,7 +35,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 - init
 {
 	NSSortDescriptor *sort;
-	NSString *threads;
 		 
     if (self = [super init]) {
 		
@@ -47,36 +45,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 		defaults = [NSUserDefaults standardUserDefaults];
 		
-/*		
-		
-		unsigned int cpuCount ;
-		size_t len = sizeof(cpuCount);
-		static int mib[2] = { CTL_HW, HW_NCPU };
-		
-		if(sysctl(mib, 2,  &cpuCount, &len, NULL, 0) == 0 && len ==  sizeof(cpuCount)) {
-			threads = [NSString stringWithFormat:@"%ld", cpuCount];
-		} else {
-			threads = @"1";
-		}  
 	
-		
-		
-		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-			NSUserName(),  @"nick",
- 		    @"http://oxidizer.sf.net", @"url",
-			@"Made by Oxidizer", @"comment",
-			threads, @"threads",
-			[NSNumber numberWithBool:NO], @"save_thumbnails",
-			[NSNumber numberWithBool:NO], @"show_render",
-			[NSNumber numberWithInt:1], @"qs",
-			[NSNumber numberWithInt:1], @"ss",
-			@"PAL 4:3", @"aspect",
-			@"Double", @"buffer_type",
-			[NSNumber numberWithBool:NO], @"use_alpha",
-			nil]
-			];
-*/		
-		
 		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
 		
 		_showRender = [defaults boolForKey:@"show_render"];

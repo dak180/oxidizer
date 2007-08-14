@@ -18,8 +18,8 @@
 		breakpoints = (
 			A43319880C4F82F400737560 /* malloc_printf */,
 			A4222AE30C64CE5E00FA461C /* -[_NSZombie release] */,
-			A4204A530C69F6C8002BB2E2 /* FractalFlameModel.m:845 */,
-			A4204A590C69F743002BB2E2 /* FractalFlameModel.m:875 */,
+			A4204A530C69F6C8002BB2E2 /* FractalFlameModel.m:814 */,
+			A4204A590C69F743002BB2E2 /* FractalFlameModel.m:844 */,
 			A4F939180C6A650D0041EF26 /* Genome.m:2141 */,
 			A41D65500C6BC843004F3389 /* EnvironmentController.m:27 */,
 			A4F83D680C71EE160042A59B /* OxidizerDelegate.m:127 */,
@@ -654,7 +654,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = predi;
 		rLen = 0;
-		rLoc = 12183;
+		rLoc = 11336;
 		rType = 0;
 		vrLen = 831;
 		vrLoc = 8528;
@@ -859,7 +859,7 @@
 		vrLen = 940;
 		vrLoc = 0;
 	};
-	A4204A530C69F6C8002BB2E2 /* FractalFlameModel.m:845 */ = {
+	A4204A530C69F6C8002BB2E2 /* FractalFlameModel.m:814 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -869,12 +869,12 @@
 		fileReference = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		functionName = "-saveFlam3WithThumbnail";
 		hitCount = 1;
-		lineNumber = 845;
+		lineNumber = 814;
 		location = Oxidizer;
 		modificationTime = 208793560.574988;
 		state = 1;
 	};
-	A4204A590C69F743002BB2E2 /* FractalFlameModel.m:875 */ = {
+	A4204A590C69F743002BB2E2 /* FractalFlameModel.m:844 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -884,7 +884,7 @@
 		fileReference = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		functionName = "-saveFlam3WithThumbnail";
 		hitCount = 1;
-		lineNumber = 875;
+		lineNumber = 844;
 		location = Oxidizer;
 		modificationTime = 208793560.575049;
 		state = 1;
@@ -1220,7 +1220,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: printProgress";
 		rLen = 0;
-		rLoc = 35734;
+		rLoc = 34887;
 		rType = 0;
 		vrLen = 1381;
 		vrLoc = 30739;
@@ -1572,7 +1572,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 59";
 		rLen = 0;
-		rLoc = 2235;
+		rLoc = 1486;
 		rType = 0;
 		vrLen = 1310;
 		vrLoc = 842;
@@ -1973,8 +1973,8 @@
 		objects = (
 			A43319880C4F82F400737560 /* malloc_printf */,
 			A4222AE30C64CE5E00FA461C /* -[_NSZombie release] */,
-			A4204A530C69F6C8002BB2E2 /* FractalFlameModel.m:845 */,
-			A4204A590C69F743002BB2E2 /* FractalFlameModel.m:875 */,
+			A4204A530C69F6C8002BB2E2 /* FractalFlameModel.m:814 */,
+			A4204A590C69F743002BB2E2 /* FractalFlameModel.m:844 */,
 			A4F939180C6A650D0041EF26 /* Genome.m:2141 */,
 			A41D65500C6BC843004F3389 /* EnvironmentController.m:27 */,
 			A41D65630C6BC94B004F3389 /* EnvironmentController.m:24 */,
@@ -2169,7 +2169,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 20";
 		rLen = 0;
-		rLoc = 821;
+		rLoc = 819;
 		rType = 0;
 		vrLen = 1380;
 		vrLoc = 436;
@@ -2219,7 +2219,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 78";
 		rLen = 0;
-		rLoc = 2329;
+		rLoc = 1486;
 		rType = 0;
 		vrLen = 1315;
 		vrLoc = 1391;
@@ -2259,7 +2259,7 @@
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 20";
 		rLen = 0;
-		rLoc = 821;
+		rLoc = 819;
 		rType = 0;
 		vrLen = 1380;
 		vrLoc = 436;
