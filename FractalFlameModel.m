@@ -135,7 +135,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 - (void)awakeFromNib {
 	
 	[previewWindow center];
-	[previewWindow setLevel:NSFloatingWindowLevel];
+	[taskProgressWindow center];
+	
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];
 	
@@ -224,7 +225,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[previewView setImage:flameImage];
 		[previewView setToolTip:@"Preview: This is the image you have just rendered. You can save a copy by dragging the image to the finder/desktop."];
 
-		[previewWindow makeKeyAndOrderFront:self];
+		[self showPreviewWindow];
 		
 
 	}
@@ -1380,6 +1381,16 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[fetch release];	  
 	
 	return genomes;
+	
+}
+
+- (void) showPreviewWindow {
+	
+	if([[NSUserDefaults standardUserDefaults] boolForKey:@"float_preview"]) {		
+		[previewWindow setLevel:NSFloatingWindowLevel];
+	} 
+	
+	[previewWindow makeKeyAndOrderFront:self];
 	
 }
 @end

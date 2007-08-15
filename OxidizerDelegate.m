@@ -150,6 +150,7 @@ void print_stack(lua_State* interpreter){
 		@"PAL 4:3", @"aspect",
 		@"Double", @"buffer_type",
 		[NSNumber numberWithBool:NO], @"use_alpha",
+		[NSNumber numberWithBool:YES], @"float_preview",
 		nil]
 		];
 
