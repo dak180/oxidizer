@@ -18,7 +18,7 @@
 */
 
 static char *flam3_genome_c_id =
-"@(#) $Id: flam3-genome.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: flam3-genome.c,v 1.3 2007/08/18 15:04:59 vargol Exp $";
 
 #include "private.h"
 #include "isaacs.h"
@@ -342,6 +342,17 @@ spin_inter(int frame, double blend, flam3_genome *parents, flam3_genome *templ)
   free(result.xform);
 }
 
+void add_to_action(char *action, char *addtoaction) {
+
+   int alen = strlen(action);
+   int addlen = strlen(addtoaction);
+
+   if (alen+addlen < flam3_max_action_length)
+      strcat(action,addtoaction);
+   else
+      fprintf(stderr,"action string too long, truncating...\n");
+}
+
 void truncate_variations(flam3_genome *g, int max_vars, char *action) {
    int i, j, nvars, smallest;
    double sv;
@@ -354,7 +365,8 @@ void truncate_variations(flam3_genome *g, int max_vars, char *action) {
 
       if (d < 0.001 && (g->final_xform_index != i)) {
          sprintf(trunc_note," trunc_density %d",i);
-         strcat(action,trunc_note);
+         //strcat(action,trunc_note);
+         add_to_action(action,trunc_note);
          flam3_delete_xform(g, i);
 
 /*         g->xform[i].density = 0.0;
@@ -376,7 +388,8 @@ void truncate_variations(flam3_genome *g, int max_vars, char *action) {
             }
             if (nvars > max_vars) {
                sprintf(trunc_note," trunc %d %d",i,smallest);
-               strcat(action,trunc_note);
+               //strcat(action,trunc_note);
+               add_to_action(action,trunc_note);
                g->xform[i].var[smallest] = 0.0;
             }
          } while (nvars > max_vars);
@@ -525,6 +538,13 @@ static void rotate_by(double *p, double *center, double by) {
     p[1] = r[1] + center[1];
 }
 
+void exception_handler(int SIG_TYPE) {
+	
+	fprintf(stderr, "caught an unexpected exception %d\n", SIG_TYPE);
+	fprintf(stdout, "caught an unexpected exception %d\n", SIG_TYPE);
+	exit(99);
+}
+
 int
 main(argc, argv)
    int argc;
@@ -579,13 +599,15 @@ main(argc, argv)
    long int default_isaac_seed = time(0);
 
    flam3_frame f;
-   char action[1024];  /* Ridiculously large, but still not that big */
+   char action[flam3_max_action_length];  
    
    stat_struct stats;
 
    char *slashloc;
    char exepath[256];
    char palpath[256];
+
+   for(i=0; i<32; i++) signal(i, exception_handler);
 
 
 #ifdef WIN32
@@ -1151,14 +1173,16 @@ main(argc, argv)
                   cp_orig.rot_center[0] = cp_orig.center[0];
                   cp_orig.rot_center[1] = cp_orig.center[1];
                   cp_orig.pixels_per_unit = cp_orig.width / (bmax[0] - bmin[0]);
-                  strcat(action," reframed");
+                  //strcat(action," reframed");
+                  add_to_action(action," reframed");
+                  
                }
 
             } else if (cross0) {
                int nxf;
                int i0, i1, rb, used_parent;
                char ministr[10];
-               char trystr[1000];
+
 
                if (NULL == getenv("method")) {
                   double s = flam3_random01();
@@ -1195,9 +1219,14 @@ main(argc, argv)
 
                if (!strcmp(method, "alternate")) {
          int got0, got1;
+         char *trystr;
+
+         trystr = calloc(4 * (parent1[i1].num_xforms + parent0[i0].num_xforms), sizeof(char));
+
                   /* each xform from a random parent,
                   possible for one to be excluded */
          do {
+
              trystr[0] = 0;
              got0 = got1 = 0;
              rb = rbit();
@@ -1252,7 +1281,9 @@ main(argc, argv)
             strcat(trystr,ministr);
              }
          } while ((i > 1) && !(got0 && got1));
-         strcat(action, trystr);
+
+         add_to_action(action,trystr);
+         free(trystr);
 
                } else if (!strcmp(method, "interpolate")) {
                   /* linearly interpolate somewhere between the two */
@@ -1263,7 +1294,8 @@ main(argc, argv)
 
 
                   sprintf(ministr," %g",t);
-                  strcat(action,ministr);
+                  //strcat(action,ministr);
+                  add_to_action(action,ministr);
 
                   flam3_copy(&(parents[0]), &(parent0[i0]));
                   flam3_copy(&(parents[1]), &(parent1[i1]));
@@ -1274,7 +1306,8 @@ main(argc, argv)
                   /* except pick a simple palette */
                   rb = rbit();
                   sprintf(ministr," %d",rb);
-                  strcat(action,ministr);
+                  //strcat(action,ministr);
+                  add_to_action(action,ministr);
                   cp_orig.palette_index = rb ? parent1[i1].palette_index : parent0[i0].palette_index;
 
                   free(parents[0].xform);
@@ -1313,16 +1346,19 @@ main(argc, argv)
                   if (debug)
                      fprintf(stderr,"crossing maps...\n");
                   
-                  strcat(action," cmap_cross");
+                  //strcat(action," cmap_cross");
+                  add_to_action(action," cmap_cross");
                   sprintf(ministr," %d:",startParent);
-                  strcat(action,ministr);
+                  //strcat(action,ministr);
+                  add_to_action(action,ministr);
                   
                   /* Loop over the entries, switching to the other parent 1% of the time */
                   for (ci=0;ci<256;ci++) {
                      if (flam3_random_isaac_01(&f.rc)<.01) {
                         startParent = 1-startParent;
                         sprintf(ministr," %d",ci);
-                        strcat(action,ministr);
+                        //strcat(action,ministr);
+                        add_to_action(action,ministr);
                      }
                      
                      if (startParent==0) {
@@ -1350,7 +1386,7 @@ main(argc, argv)
                   cp_orig.rot_center[0] = cp_orig.center[0];
                   cp_orig.rot_center[1] = cp_orig.center[1];
                   cp_orig.pixels_per_unit = cp_orig.width / (bmax[0] - bmin[0]);
-                  strcat(action," reframed");
+                  add_to_action(action," reframed");
                }
 
                aselp0 = NULL;
@@ -1358,6 +1394,15 @@ main(argc, argv)
             }
 
             truncate_variations(&cp_orig, 5, action);
+
+	    if (!did_color && random()&1) {
+	        if (debug)
+	           fprintf(stderr,"improving colors...\n");
+	        improve_colors(&cp_orig, 100, 0, 10);
+	        //strcat(action," improved colors");
+	        add_to_action(action," improved colors");
+	    }
+
             cp_orig.edits = create_new_editdoc(action, aselp0, aselp1);
             flam3_copy(&cp_save, &cp_orig);
             test_cp(&cp_orig);
@@ -1403,12 +1448,6 @@ main(argc, argv)
             fprintf(stderr, "warning: reached maximum attempts, giving up.\n");
          }
 
-         if (!did_color && random()&1) {
-            if (debug)
-               fprintf(stderr,"improving colors...\n");
-            improve_colors(&cp_orig, 100, 0, 10);
-            strcat(action," improved colors");
-         }
       }
 
       if (templ)

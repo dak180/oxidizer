@@ -19,7 +19,7 @@
 
 
 static char *jpeg_c_id =
-"@(#) $Id: png.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: png.c,v 1.3 2007/08/18 15:05:01 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,16 +29,18 @@ static char *jpeg_c_id =
 #include "config.h"
 #include "img.h"
 #include "flam3.h"
+#include "private.h"
 
 void write_png(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc) {
   png_structp  png_ptr;
   png_infop    info_ptr;
-  int          png_com=7;
-  png_text     text[png_com];
+  png_text     text[FLAM3_PNG_COM];
   int          i;
   unsigned char **rows = malloc(sizeof(unsigned char *) * height);
   char *nick = getenv("nick");
   char *url = getenv("url");
+  char *ai; /* For argi */
+  int pngcom_enable = argi("enable_png_comments", 1);
 
   text[0].compression = PNG_TEXT_COMPRESSION_NONE;
   text[0].key = "flam3_version";
@@ -89,7 +91,8 @@ void write_png(FILE *file, unsigned char *image, int width, int height, flam3_im
 	       PNG_COMPRESSION_TYPE_BASE,
 	       PNG_FILTER_TYPE_BASE);
 
-  png_set_text(png_ptr, info_ptr, text, png_com);
+  if (pngcom_enable==1)
+	  png_set_text(png_ptr, info_ptr, text, FLAM3_PNG_COM);
 
   png_write_info(png_ptr, info_ptr);
   png_write_image(png_ptr, (png_bytepp) rows);

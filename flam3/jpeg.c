@@ -19,7 +19,7 @@
 
 
 static char *jpeg_c_id =
-"@(#) $Id: jpeg.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: jpeg.c,v 1.3 2007/08/18 15:05:01 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -29,6 +29,7 @@ static char *jpeg_c_id =
 #include "config.h"
 #include "img.h"
 #include "flam3.h"
+#include "private.h"
 
 void
 write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc) {
@@ -37,6 +38,9 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
    int i;
    char *nick = getenv("nick");
    char *url = getenv("url");
+   char *ai; /* For argi */
+   int jpegcom_enable = argi("enable_jpeg_comments",1);
+
    char nick_string[64], url_string[128], bv_string[64],ni_string[64],rt_string[64];
    char genome_string[65536], ver_string[64];
    
@@ -64,22 +68,24 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
    jpeg_start_compress(&info, TRUE);
     
    /* Write comments to jpeg */
-   jpeg_write_marker(&info, JPEG_COM, ver_string, strlen(ver_string));
+   if (jpegcom_enable==1) {
+        jpeg_write_marker(&info, JPEG_COM, ver_string, strlen(ver_string));
 
-   if (0 != nick) {
-      snprintf(nick_string,64,"flam3_nickname: %s",nick);
-      jpeg_write_marker(&info, JPEG_COM, nick_string, strlen(nick_string));
-   }
-    
-   if (0 != url) {
-      snprintf(url_string,128,"flam3_url: %s",url);
-      jpeg_write_marker(&info, JPEG_COM, url_string, strlen(url_string));
-   }
+        if (0 != nick) {
+            snprintf(nick_string,64,"flam3_nickname: %s",nick);
+            jpeg_write_marker(&info, JPEG_COM, nick_string, strlen(nick_string));
+        }
 
-   jpeg_write_marker(&info, JPEG_COM, bv_string, strlen(bv_string));
-   jpeg_write_marker(&info, JPEG_COM, ni_string, strlen(ni_string));
-   jpeg_write_marker(&info, JPEG_COM, rt_string, strlen(rt_string));
-   jpeg_write_marker(&info, JPEG_COM, genome_string, strlen(genome_string));
+        if (0 != url) {
+            snprintf(url_string,128,"flam3_url: %s",url);
+            jpeg_write_marker(&info, JPEG_COM, url_string, strlen(url_string));
+        }
+
+        jpeg_write_marker(&info, JPEG_COM, bv_string, strlen(bv_string));
+        jpeg_write_marker(&info, JPEG_COM, ni_string, strlen(ni_string));
+        jpeg_write_marker(&info, JPEG_COM, rt_string, strlen(rt_string));
+        jpeg_write_marker(&info, JPEG_COM, genome_string, strlen(genome_string));
+    }
 
     for (i = 0; i < height; i++) {
 	JSAMPROW row_pointer[1];

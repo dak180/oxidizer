@@ -28,40 +28,13 @@
 }
 
 
-
-/*
-
-- (NSImage *) createRandomGenome:(int)index {
-	
-	if(genomeCanBreed[index] == NO) {
-		
-				
-		srandom(time(NULL));
-		
-		NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
-		
-		[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
-		[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
-		[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
-		
-		[genomes replaceObjectAtIndex:index withObject:[BreedingController createRandomGenomeXMLwithEnvironment:env]];
-
-		return [self makeImageForGenome:index];
-		
-	} else {
-		
-		return nil;
-	}
-	
-	
-}
-*/
 - (NSImage *) makeImageForGenome:(int)index {
 	
 	srandom(time(NULL));
 	
 	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
-	
+
+	[env setObject:[NSNumber numberWithInt:64] forKey:@"bits"];
 	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
 	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
@@ -260,9 +233,18 @@
 				}	
 				
 				for(i=0; i+1<breedingCount && newGenomeCount < genomeCount; i+=2) {
-					index = abs(random() % breedingCount);
+					index = abs(random() % 3);
 					[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Breeding Genome %d with Genome %d", breedingOrder[order[i]], breedingOrder[order[i+1]]]];
 					[genePoolProgressText displayIfNeeded];
+					
+					/*
+						If the genomes are big avoid union as the genome lengths get added together and before you 
+					    know it they are taking Gigabytes to breed
+					*/
+					if ([[genomes objectAtIndex:breedingOrder[order[i]]] length] > 100 * 1024 && 
+						[[genomes objectAtIndex:breedingOrder[order[i+1]]] length] > 100 * 1204) {
+						index = (random() & 1) + 1;
+					} 
 					switch(index) {
 						case 1:
 							/* interpolate */

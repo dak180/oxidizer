@@ -417,6 +417,8 @@
 
 	srandom(time(NULL));
 	
+	[env setObject:[NSNumber numberWithInt:33] forKey:@"bits"];
+	[env setObject:[NSNumber numberWithInt:3] forKey:@"print_edit_depth"];
 	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
 	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];	
@@ -439,7 +441,12 @@
 	
 	NSData *newGenome = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:env];
 	 
-	 [newGenome retain];
+	if(newGenome == nil || [newGenome length] == 0) {
+		NSLog(@"%@", [NSString stringWithContentsOfFile:file0]);
+		NSLog(@"%@", [NSString stringWithContentsOfFile:file1]);
+	}
+
+	[newGenome retain];
 	 
 	 [Flam3Task deleteTemporaryPathAndFile:file0];
 	 [Flam3Task deleteTemporaryPathAndFile:file1];

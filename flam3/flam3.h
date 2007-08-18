@@ -27,7 +27,7 @@
 
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.3 2007/08/18 15:05:01 vargol Exp $";
 
 char *flam3_version();
 
@@ -63,7 +63,7 @@ extern char *flam3_variation_names[];
 #define flam3_palette_interpolation_hsv   0
 #define flam3_palette_interpolation_sweep 1
 
-
+#define flam3_max_action_length 10000
 
 typedef void (*flam3_iterator)(void *, double);
 
@@ -323,7 +323,7 @@ void flam3_copy(flam3_genome *dest, flam3_genome *src);
 void flam3_copyx(flam3_genome *dest, flam3_genome *src, int num_std, int num_final);
 void flam3_copy_params(flam3_xform *dest, flam3_xform *src, int varn);
 
-void flam3_create_xform_distrib(flam3_genome *cp, char *xform_distrib);
+void flam3_create_xform_distrib(flam3_genome *cp, unsigned short *xform_distrib);
 
 /* samples is array nsamples*4 long of x,y,color triples.
    using (samples[0], samples[1]) as starting XY point and
@@ -331,7 +331,7 @@ void flam3_create_xform_distrib(flam3_genome *cp, char *xform_distrib);
    perform fuse iterations and throw them away, then perform
    nsamples iterations and save them in the samples array */
 int flam3_iterate(flam3_genome *g, int nsamples, int fuse, double *samples,
-                     char *xform_distrib, randctx *rc);
+                     unsigned short *xform_distrib, randctx *rc);
 
 /* genomes is array ngenomes long, with times set and in ascending order.
    interpolate to the requested time and return in result */
@@ -402,6 +402,6 @@ int flam3_random_bit();
 /* ISAAC random numbers */
 double flam3_random_isaac_01(randctx *);
 double flam3_random_isaac_11(randctx *);
-
+int flam3_random_isaac_bit(randctx *);
 
 #endif

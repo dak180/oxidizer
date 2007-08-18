@@ -18,7 +18,7 @@
 */
 
 static char *flam3_render_c_id =
-"@(#) $Id: flam3-render.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: flam3-render.c,v 1.3 2007/08/18 15:05:00 vargol Exp $";
 
 #ifdef WIN32
 #define WINVER 0x0500
@@ -339,6 +339,5 @@ int main(int argc, char **argv) {
          fprintf(stderr, "total time = %d seconds\n", total_time);
    }
    free(image);
-   pthread_exit(NULL);
    return 0;
 }

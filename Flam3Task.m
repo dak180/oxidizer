@@ -49,8 +49,34 @@
 	return;
 } 
 
+
++ (NSString *)createTemporaryPath {
+	
+	
+	NSString *folder = [NSString pathWithComponents:[NSArray arrayWithObjects:
+		NSTemporaryDirectory(),
+		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+		nil]];
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	[fileManager createDirectoryAtPath:folder attributes:nil];
+	
+	return folder;
+} 
+
+
 + (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
 	
+	
+	NSString *tempPath = [self createTemporaryPath];
+	NSString *stdoutFile = [tempPath  stringByAppendingPathComponent:@"stdoutFile"];
+	NSString *stderrFile = [tempPath  stringByAppendingPathComponent:@"stderrFile"];
+	[stdoutFile retain];
+	[stderrFile retain];
+    [[NSFileManager defaultManager] createFileAtPath:stdoutFile contents:nil attributes:nil];
+    [[NSFileManager defaultManager] createFileAtPath:stderrFile contents:nil attributes:nil];
+
 	
 	NSTask *task;
     task = [[NSTask alloc] init];
@@ -58,14 +84,11 @@
     [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-genome", [[ NSBundle mainBundle ] resourcePath ]]];
 	[task setEnvironment:environmentDictionary]; 
 	
-    NSPipe *stdErrPipe =  [[NSPipe alloc] init];
-    [task setStandardError:stdErrPipe];
-    NSFileHandle *flam3Error = [stdErrPipe fileHandleForReading];
+	NSFileHandle *flam3Error = [NSFileHandle fileHandleForWritingAtPath:stderrFile];
+    [task setStandardError:flam3Error];
 	
-    NSPipe *stdOutPipe =  [[NSPipe alloc] init];
-    [task setStandardOutput:stdOutPipe];
-    NSFileHandle *flam3Output = [stdOutPipe fileHandleForReading];
-	
+	NSFileHandle *flam3Output = [NSFileHandle fileHandleForWritingAtPath:stdoutFile];
+    [task setStandardOutput:flam3Output];
 	
 	NSPipe *stdInPipe;
 	NSFileHandle *flam3Input;
@@ -82,13 +105,10 @@
 		[flam3Input writeData:xml];
 		[flam3Input closeFile];
 	}	
+			
 	
-	NSData *genomeXML = [flam3Output readDataToEndOfFile];
-		
 	[task waitUntilExit];
-	
-	[flam3Output closeFile];
-	
+
 	if(xml != nil) {		
 		[stdInPipe release];
 	}
@@ -98,7 +118,7 @@
 	if(taskStatus != 0) {
 		
 		NSString *string;
-		NSData *errorData = [flam3Error readDataToEndOfFile];
+		NSData *errorData = [NSData dataWithContentsOfFile:stderrFile];
 		
 		if ([errorData length] != 0) {
 			string = [[NSString alloc] initWithData: errorData encoding: NSUTF8StringEncoding];
@@ -112,18 +132,27 @@
 											   alternateButton:nil 
 												   otherButton:nil 
 									 informativeTextWithFormat:string];
+		NSLog(@"env: %@", environmentDictionary);		
+		
 		[finishedPanel runModal];	
 		
 		[string release];
 		
 	}
-
-	[flam3Error closeFile];	
-	[stdOutPipe release];
-	[stdErrPipe release];
+	
 
 	
 	[task release];
+	
+	
+	NSData *genomeXML = [NSData dataWithContentsOfFile:stdoutFile];
+
+	[Flam3Task deleteTemporaryPathAndFile:stderrFile];
+	[Flam3Task deleteTemporaryPathAndFile:stdoutFile];
+
+	[stderrFile release];
+	[stdoutFile release];
+	
 	
 	return genomeXML;
 }
@@ -137,16 +166,16 @@
     [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render", [[ NSBundle mainBundle ] resourcePath ]]];
 	[task setEnvironment:environmentDictionary]; 
 	
-    NSPipe *stdOutPipe = [NSPipe pipe];
+	NSPipe *stdOutPipe = [[NSPipe alloc] init];
     [task setStandardOutput:stdOutPipe];
     NSFileHandle *flam3Output = [stdOutPipe fileHandleForReading];
 	
 	
-    NSPipe *stdInPipe = [NSPipe pipe];
+    NSPipe *stdInPipe = [[NSPipe alloc] init];
     [task setStandardInput:stdInPipe];
     NSFileHandle *flam3Input = [stdInPipe fileHandleForWriting];
 
-	NSPipe *stdErrPipe =  [NSPipe pipe];
+	NSPipe *stdErrPipe = [[NSPipe alloc] init];
     [task setStandardError:stdErrPipe];
     NSFileHandle *flam3Error = [stdErrPipe fileHandleForReading];
 	
@@ -185,6 +214,10 @@
 	[flam3Output closeFile];	
 	[flam3Error closeFile];	
 
+	[stdInPipe release];
+	[stdOutPipe release];
+	[stdErrPipe release];
+
 	[task release];
 	
 	return taskStatus;
@@ -201,16 +234,16 @@
     [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render", [[ NSBundle mainBundle ] resourcePath ]]];
 	[task setEnvironment:environmentDictionary]; 
 	
-    NSPipe *stdOutPipe = [NSPipe pipe];
+    NSPipe *stdOutPipe = [[NSPipe alloc] init];
     [task setStandardOutput:stdOutPipe];
     NSFileHandle *flam3Output = [stdOutPipe fileHandleForReading];
 
-	NSPipe *stdErrPipe =  [NSPipe pipe];
+	NSPipe *stdErrPipe =  [[NSPipe alloc] init];
     [task setStandardError:stdErrPipe];
     NSFileHandle *flam3Error = [stdErrPipe fileHandleForReading];
 	
 	
-    NSPipe *stdInPipe = [NSPipe pipe];
+    NSPipe *stdInPipe = [[NSPipe alloc] init];
     [task setStandardInput:stdInPipe];
     NSFileHandle *flam3Input = [stdInPipe fileHandleForWriting];
 	
@@ -264,6 +297,11 @@
 	[flam3Output closeFile];	
 	[flam3Error closeFile];	
 		
+		
+	[stdInPipe release];
+	[stdOutPipe release];
+	[stdErrPipe release];
+
 	[task release];
 	
 	return taskStatus;	
@@ -279,7 +317,7 @@
     [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-animate", [[ NSBundle mainBundle ] resourcePath ]]];
 	[task setEnvironment:environmentDictionary]; 
 	
-    NSPipe *stdOutPipe = [NSPipe pipe];
+    NSPipe *stdOutPipe = [[NSPipe alloc] init];
     [task setStandardOutput:stdOutPipe];
     NSFileHandle *flam3Output = [stdOutPipe fileHandleForReading];
 
@@ -287,7 +325,7 @@
     [task setStandardError:stdErrPipe];
     NSFileHandle *flam3Error = [stdErrPipe fileHandleForReading];	
 	
-    NSPipe *stdInPipe = [NSPipe pipe];
+    NSPipe *stdInPipe = [[NSPipe  alloc] init];
     [task setStandardInput:stdInPipe];
     NSFileHandle *flam3Input = [stdInPipe fileHandleForWriting];
 	

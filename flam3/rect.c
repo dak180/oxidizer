@@ -43,9 +43,10 @@
 #define WHITE_LEVEL 255
 #define SUB_BATCH_SIZE 10000
 
-
-/* mutex for bucket accumulator */
-pthread_mutex_t bucket_mutex;
+#ifdef HAVE_LIBPTHREAD
+  /* mutex for bucket accumulator */
+  pthread_mutex_t bucket_mutex;
+#endif
 
 static void *iter_thread(void *fth) {
    double sub_batch;
@@ -112,10 +113,18 @@ static void *iter_thread(void *fth) {
 	  if ((*ficp->spec->progress)(ficp->spec->progress_parameter,
 				      sub_batch/(double)ficp->batch_size, 0)) {
 	    ficp->aborted = 1;
-	    pthread_exit((void *)0);
+            #ifdef HAVE_LIBPTHREAD
+	      pthread_exit((void *)0);
+            #else
+              return;
+            #endif
 	  }
 	} else {
-	  if (ficp->aborted) pthread_exit((void *)0);
+          #ifdef HAVE_LIBPTHREAD
+	    if (ficp->aborted) pthread_exit((void *)0);
+          #else
+            if (ficp->aborted) return;
+          #endif
 	}
       }
 
@@ -128,8 +137,10 @@ static void *iter_thread(void *fth) {
       /* Execute iterations */
       badcount = flam3_iterate(&(fthp->cp), sub_batch_size, FUSE, fthp->iter_storage, ficp->xform_distrib, &(fthp->rc));
 
-      /* Lock mutex for access to accumulator */
-      pthread_mutex_lock(&bucket_mutex);
+      #ifdef HAVE_LIBPTHREAD
+        /* Lock mutex for access to accumulator */
+        pthread_mutex_lock(&bucket_mutex);
+      #endif
 
       /* Add the badcount to the counter */
       ficp->badvals += badcount;
@@ -209,13 +220,16 @@ static void *iter_thread(void *fth) {
             }
          }
       }
-
-      /* Release mutex */
-      pthread_mutex_unlock(&bucket_mutex);
+      
+      #ifdef HAVE_LIBPTHREAD
+        /* Release mutex */
+        pthread_mutex_unlock(&bucket_mutex);
+      #endif
 
    }
-
-   pthread_exit((void *)0);
+   #ifdef HAVE_LIBPTHREAD
+     pthread_exit((void *)0);
+   #endif
 }
 
 static void render_rectangle(flam3_frame *spec, unsigned char *out,
@@ -253,12 +267,14 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    char *fname = getenv("image");
    int gnm_idx,max_gnm_de_fw,de_offset;
    flam3_genome cp;
-   char xform_distrib[CHOOSE_XFORM_GRAIN];
+   unsigned short xform_distrib[CHOOSE_XFORM_GRAIN];
    char *ai;
    flam3_iter_constants fic;
    flam3_thread_helper *fth;
+#ifdef HAVE_LIBPTHREAD
    pthread_attr_t pt_attr;
    pthread_t *myThreads;
+#endif
    int thread_status;
    int thi;
    time_t tstart,tend;
@@ -790,6 +806,7 @@ if (1) {
 
          }
 
+#ifdef HAVE_LIBPTHREAD
          /* Let's make some threads */
          myThreads = (pthread_t *)malloc(spec->nthreads * sizeof(pthread_t));
 
@@ -804,11 +821,14 @@ if (1) {
          pthread_attr_destroy(&pt_attr);
 
          /* Wait for them to return */
-         for (thi=0; thi <spec->nthreads; thi ++)
+         for (thi=0; thi < spec->nthreads; thi++)
             pthread_join(myThreads[thi], (void **)&thread_status);
 
          pthread_mutex_destroy(&bucket_mutex);
-
+#else
+         for (thi=0; thi < spec->nthreads; thi++)
+            iter_thread( (void *)(&(fth[thi])) );
+#endif         
 	 if (fic.aborted) {
 	   if (verbose) fprintf(stderr, "\naborted!\n");
 	   goto done;
@@ -1152,8 +1172,9 @@ if (1) {
    free(temporal_filter);
    free(temporal_deltas);
    free(motion_filter);
+#ifdef HAVE_LIBPTHREAD
    free(myThreads);
-
+#endif
    free(filter);
    free(buckets);
    /* Free the xform in cp */

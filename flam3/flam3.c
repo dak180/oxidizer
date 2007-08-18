@@ -18,13 +18,17 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.3 2007/08/18 15:05:00 vargol Exp $";
 
 
 #include "private.h"
 #include "img.h"
 #include <limits.h>
 #include <math.h>
+
+#ifdef HAVE_LIBPTHREAD
+#include <pthread.h>
+#endif
 
 #ifdef __APPLE__
 #include <mach/mach.h>
@@ -1566,7 +1570,7 @@ void write_color(double c) {
     fprintf(cout, "%.30f\n", c);
 }
 
-void flam3_create_xform_distrib(flam3_genome *cp, char *xform_distrib) {
+void flam3_create_xform_distrib(flam3_genome *cp, unsigned short *xform_distrib) {
 
    /* Xform distrib is a preallocated array of CHOOSE_XFORM_GRAIN chars */
    /* address of array is passed in, contents are modified              */
@@ -1608,7 +1612,7 @@ void flam3_create_xform_distrib(flam3_genome *cp, char *xform_distrib) {
  */
 
 
-int flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, char *xform_distrib, randctx *rc) {
+int flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, unsigned short *xform_distrib, randctx *rc) {
    int i;
    double p[4], q[4];
    int consec = 0;
@@ -1620,8 +1624,7 @@ int flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, char *xfo
    p[3] = samples[3];
 
    for (i = -4*fuse; i < 4*n; i+=4) {
-      //int fn = xform_distrib[random() % CHOOSE_XFORM_GRAIN];
-      int fn = xform_distrib[irand(rc) % CHOOSE_XFORM_GRAIN];
+      int fn = xform_distrib[abs((int)irand(rc)) % CHOOSE_XFORM_GRAIN];
       double tx, ty;
 
       if (1) {
@@ -1778,7 +1781,7 @@ double flam3_dimension(flam3_genome *cp, int ntries, int clip_to_camera) {
   while (got < 2*ntries) {
     double subb[4*SUB_BATCH_SIZE];
     int i4, clipped;
-    char xform_distrib[CHOOSE_XFORM_GRAIN];
+    unsigned short xform_distrib[CHOOSE_XFORM_GRAIN];
     subb[0] = flam3_random_isaac_11(&rc);
     subb[1] = flam3_random_isaac_11(&rc);
     subb[2] = 0.0;
@@ -1849,7 +1852,7 @@ double flam3_lyapunov(flam3_genome *cp, int ntries) {
   double eps = 1e-5;
   int i;
   double sum = 0.0;
-  char xform_distrib[CHOOSE_XFORM_GRAIN];
+  unsigned short xform_distrib[CHOOSE_XFORM_GRAIN];
 
   int lp;
   long int default_isaac_seed = time(0);
@@ -3515,6 +3518,10 @@ static void parse_flame_element(xmlNode *flame_node) {
 
 int flam3_count_nthreads(void) {
    int nthreads;
+#ifndef HAVE_LIBPTHREAD
+   return(1);
+#endif
+
 #ifdef WIN32
    SYSTEM_INFO sysInfo;
    GetSystemInfo(&sysInfo);
@@ -3754,8 +3761,13 @@ static void flam3_edit_print(FILE *f, xmlNodePtr editNode, int tabs, int formatt
    xmlAttrPtr att_ptr=NULL,cur_att=NULL;
    xmlNodePtr chld_ptr=NULL, cur_chld=NULL;
    int edit_or_sheep = 0, indent_printed = 0;
+   char *ai;
+   int tablim = argi("print_edit_depth",0);
 
    char *att_str,*cont_str,*cpy_string;
+
+   if (tablim>0 && tabs>tablim)
+	return;
 
    /* If this node is an XML_ELEMENT_NODE, print it and it's attributes */
    if (editNode->type==XML_ELEMENT_NODE) {
@@ -3790,7 +3802,7 @@ static void flam3_edit_print(FILE *f, xmlNodePtr editNode, int tabs, int formatt
       }
 
       /* Does this node have children? */
-      if (!editNode->children) {
+      if (!editNode->children || (tablim>0 && tabs>tablim)) {
          /* Close the tag and subtract the tab */
          fprintf(f,"/>");
          if (formatting)
@@ -4798,7 +4810,7 @@ void flam3_estimate_bounding_box(flam3_genome *cp, double eps, int nsamples,
    int low_target, high_target;
    double min[2], max[2];
    double *points;
-   char xform_distrib[CHOOSE_XFORM_GRAIN];
+   unsigned short xform_distrib[CHOOSE_XFORM_GRAIN];
 
    if (nsamples <= 0) nsamples = 10000;
    low_target = (int)(nsamples * eps);

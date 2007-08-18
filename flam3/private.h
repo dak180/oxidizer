@@ -27,7 +27,6 @@
 #include <time.h>
 #include <string.h>
 #include <libxml/parser.h>
-#include <pthread.h>
 
 #ifndef WIN32
 #include <unistd.h>
@@ -51,8 +50,9 @@ extern void hsv2rgb(double *hsv, double *rgb);
 
 
 #ifdef WIN32
-//#define M_PI   3.1415926536
-//#define M_1_PI 0.3183098862
+#define M_PI   3.1415926536
+#define M_1_PI 0.3183098862
+#define M_PI_4 0.7853981634
 #define random()  (rand() ^ (rand()<<15))
 #define srandom(x)  (srand(x))
 extern int getpid();
@@ -101,7 +101,7 @@ void docstring();
 
 /* Structures for passing parameters to iteration threads */
 typedef struct {
-   char *xform_distrib;    /* Distribution of xforms based on weights */
+   unsigned short *xform_distrib;    /* Distribution of xforms based on weights */
    flam3_frame *spec; /* Frame contains timing information */
    double bounds[4]; /* Corner coords of viewable area */
    double rot[2][2]; /* Rotation transformation */

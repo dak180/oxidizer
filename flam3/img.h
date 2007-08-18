@@ -19,10 +19,16 @@
 
 
 static char *jpeg_h_id =
-"@(#) $Id: img.h,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: img.h,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 #include <stdio.h>
 #include "flam3.h"
+
+#define FLAM3_PNG_COM 7
+
+#ifdef WIN32
+   #define snprintf _snprintf
+#endif
 
 void write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc);
 void write_png(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc);

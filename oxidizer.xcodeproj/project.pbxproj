@@ -11,7 +11,7 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; };
+		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; settings = {COMPILER_FLAGS = "-fobjc-exceptions"; }; };
 		A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */; };
 		A410568E0C5F760A0075334E /* stills.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568C0C5F760A0075334E /* stills.png */; };
 		A410568F0C5F760A0075334E /* text-x-script.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568D0C5F760A0075334E /* text-x-script.png */; };

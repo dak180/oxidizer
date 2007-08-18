@@ -18,7 +18,7 @@
 */
 
 static char *docstring_c_id =
-"@(#) $Id: docstring.c,v 1.2 2007/07/31 17:57:13 vargol Exp $";
+"@(#) $Id: docstring.c,v 1.3 2007/08/18 15:04:59 vargol Exp $";
 
 #include "config.h"
 #include "flam3.h"
@@ -90,8 +90,11 @@ static char *the_docstring =
 "use_mem      auto      floating point number of bytes of memory to use (render only)\n"
 "write_genome   0      write out genome associated with center of motion blur window (animate only)\n"
 "noedits        unset           omit edit tags from output (genome only)\n"
+"print_edit_depth 0             depth to truncate <edit> tag structure.  0 prints all <edit> tags (genome only)\n"
 "intpalette     unset           round palette entries for importing into older Apophysis versions (genome only)\n"
-"insert_palette unset		insert the palette into the image.\n"
+"insert_palette unset           insert the palette into the image.\n"
+"enable_jpeg_comments   1       enables comments in the jpeg header (render and animate)\n"
+"enable_png_comments    1       enables comments in the png header (render and animate)\n"
 "\n"
 "\n"
 "for example:\n"

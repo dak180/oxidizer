@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 81 tasks, 194 threads, 2 processors
-Load average: 2.53, Mach factor: 0.39
+Default processor set: 82 tasks, 188 threads, 2 processors
+Load average: 1.32, Mach factor: 0.83
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -46,113 +46,113 @@ PATH: /sbin
 ## Core tests. ##
 ## ----------- ##
 
-configure:1343: checking for a BSD-compatible install
-configure:1398: result: /usr/bin/install -c
-configure:1409: checking whether build environment is sane
-configure:1452: result: yes
-configure:1485: checking for gawk
-configure:1514: result: no
-configure:1485: checking for mawk
-configure:1514: result: no
-configure:1485: checking for nawk
-configure:1514: result: no
-configure:1485: checking for awk
-configure:1501: found /usr/bin/awk
-configure:1511: result: awk
-configure:1521: checking whether make sets $(MAKE)
-configure:1541: result: yes
-configure:1732: checking for gcc
-configure:1748: found /usr/bin/gcc
-configure:1758: result: gcc
-configure:2002: checking for C compiler version
-configure:2005: gcc --version </dev/null >&5
+configure:1349: checking for a BSD-compatible install
+configure:1404: result: /usr/bin/install -c
+configure:1415: checking whether build environment is sane
+configure:1458: result: yes
+configure:1491: checking for gawk
+configure:1520: result: no
+configure:1491: checking for mawk
+configure:1520: result: no
+configure:1491: checking for nawk
+configure:1520: result: no
+configure:1491: checking for awk
+configure:1507: found /usr/bin/awk
+configure:1517: result: awk
+configure:1527: checking whether make sets $(MAKE)
+configure:1547: result: yes
+configure:1738: checking for gcc
+configure:1754: found /usr/bin/gcc
+configure:1764: result: gcc
+configure:2008: checking for C compiler version
+configure:2011: gcc --version </dev/null >&5
 i686-apple-darwin8-gcc-4.0.1 (GCC) 4.0.1 (Apple Computer, Inc. build 5367)
 Copyright (C) 2005 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-configure:2008: $? = 0
-configure:2010: gcc -v </dev/null >&5
+configure:2014: $? = 0
+configure:2016: gcc -v </dev/null >&5
 Using built-in specs.
 Target: i686-apple-darwin8
 Configured with: /private/var/tmp/gcc/gcc-5367.obj~1/src/configure --disable-checking -enable-werror --prefix=/usr --mandir=/share/man --enable-languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/$/-4.0/ --with-gxx-include-dir=/include/c++/4.0.0 --with-slibdir=/usr/lib --build=powerpc-apple-darwin8 --with-arch=nocona --with-tune=generic --program-prefix= --host=i686-apple-darwin8 --target=i686-apple-darwin8
 Thread model: posix
 gcc version 4.0.1 (Apple Computer, Inc. build 5367)
-configure:2013: $? = 0
-configure:2015: gcc -V </dev/null >&5
+configure:2019: $? = 0
+configure:2021: gcc -V </dev/null >&5
 gcc: argument to `-V' is missing
-configure:2018: $? = 1
-configure:2041: checking for C compiler default output file name
-configure:2044: gcc -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c  >&5
-configure:2047: $? = 0
-configure:2093: result: a.out
-configure:2098: checking whether the C compiler works
-configure:2104: ./a.out
-configure:2107: $? = 0
-configure:2124: result: yes
-configure:2131: checking whether we are cross compiling
-configure:2133: result: no
-configure:2136: checking for suffix of executables
-configure:2138: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c  >&5
-configure:2141: $? = 0
-configure:2166: result: 
-configure:2172: checking for suffix of object files
-configure:2193: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:2196: $? = 0
-configure:2218: result: o
-configure:2222: checking whether we are using the GNU C compiler
-configure:2246: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:2252: $? = 0
-configure:2256: test -z 
+configure:2024: $? = 1
+configure:2047: checking for C compiler default output file name
+configure:2050: gcc -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c  >&5
+configure:2053: $? = 0
+configure:2099: result: a.out
+configure:2104: checking whether the C compiler works
+configure:2110: ./a.out
+configure:2113: $? = 0
+configure:2130: result: yes
+configure:2137: checking whether we are cross compiling
+configure:2139: result: no
+configure:2142: checking for suffix of executables
+configure:2144: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c  >&5
+configure:2147: $? = 0
+configure:2172: result: 
+configure:2178: checking for suffix of object files
+configure:2199: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:2202: $? = 0
+configure:2224: result: o
+configure:2228: checking whether we are using the GNU C compiler
+configure:2252: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:2258: $? = 0
+configure:2262: test -z 
 			 || test ! -s conftest.err
-configure:2259: $? = 0
-configure:2262: test -s conftest.o
 configure:2265: $? = 0
-configure:2278: result: yes
-configure:2284: checking whether gcc accepts -g
-configure:2305: gcc -c -g  conftest.c >&5
-configure:2311: $? = 0
-configure:2315: test -z 
+configure:2268: test -s conftest.o
+configure:2271: $? = 0
+configure:2284: result: yes
+configure:2290: checking whether gcc accepts -g
+configure:2311: gcc -c -g  conftest.c >&5
+configure:2317: $? = 0
+configure:2321: test -z 
 			 || test ! -s conftest.err
-configure:2318: $? = 0
-configure:2321: test -s conftest.o
 configure:2324: $? = 0
-configure:2335: result: yes
-configure:2352: checking for gcc option to accept ANSI C
-configure:2422: gcc  -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:2428: $? = 0
-configure:2432: test -z 
+configure:2327: test -s conftest.o
+configure:2330: $? = 0
+configure:2341: result: yes
+configure:2358: checking for gcc option to accept ANSI C
+configure:2428: gcc  -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:2434: $? = 0
+configure:2438: test -z 
 			 || test ! -s conftest.err
-configure:2435: $? = 0
-configure:2438: test -s conftest.o
 configure:2441: $? = 0
-configure:2459: result: none needed
-configure:2477: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:2444: test -s conftest.o
+configure:2447: $? = 0
+configure:2465: result: none needed
+configure:2483: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
 conftest.c:2: error: parse error before 'me'
 conftest.c:2: error: parse error before 'me'
-lipo: can't figure out the architecture type of: /var/tmp//ccDOmToP.out
-configure:2483: $? = 1
+lipo: can't figure out the architecture type of: /var/tmp//cc0foZVt.out
+configure:2489: $? = 1
 configure: failed program was:
 | #ifndef __cplusplus
 |   choke me
 | #endif
-configure:2635: checking for style of include used by make
-configure:2663: result: GNU
-configure:2691: checking dependency style of gcc
-configure:2753: result: none
-configure:2771: checking for a BSD-compatible install
-configure:2826: result: /usr/bin/install -c
-configure:2837: checking whether make sets $(MAKE)
-configure:2857: result: yes
-configure:2907: checking for ranlib
-configure:2923: found /usr/bin/ranlib
-configure:2934: result: ranlib
-configure:2952: checking how to run the C preprocessor
-configure:2987: gcc -E  conftest.c
-configure:2993: $? = 0
-configure:3025: gcc -E  conftest.c
+configure:2641: checking for style of include used by make
+configure:2669: result: GNU
+configure:2697: checking dependency style of gcc
+configure:2759: result: none
+configure:2777: checking for a BSD-compatible install
+configure:2832: result: /usr/bin/install -c
+configure:2843: checking whether make sets $(MAKE)
+configure:2863: result: yes
+configure:2913: checking for ranlib
+configure:2929: found /usr/bin/ranlib
+configure:2940: result: ranlib
+configure:2958: checking how to run the C preprocessor
+configure:2993: gcc -E  conftest.c
+configure:2999: $? = 0
+configure:3031: gcc -E  conftest.c
 conftest.c:11:28: error: ac_nonexistent.h: No such file or directory
-configure:3031: $? = 1
+configure:3037: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
 | 
@@ -162,15 +162,15 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "flam3"
-| #define VERSION "2.7.4"
+| #define VERSION "2.7.5"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:3070: result: gcc -E
-configure:3094: gcc -E  conftest.c
-configure:3100: $? = 0
-configure:3132: gcc -E  conftest.c
+configure:3076: result: gcc -E
+configure:3100: gcc -E  conftest.c
+configure:3106: $? = 0
+configure:3138: gcc -E  conftest.c
 conftest.c:11:28: error: ac_nonexistent.h: No such file or directory
-configure:3138: $? = 1
+configure:3144: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
 | 
@@ -180,185 +180,185 @@ configure: failed program was:
 | #define PACKAGE_STRING ""
 | #define PACKAGE_BUGREPORT ""
 | #define PACKAGE "flam3"
-| #define VERSION "2.7.4"
+| #define VERSION "2.7.5"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:3182: checking for egrep
-configure:3192: result: grep -E
-configure:3197: checking for ANSI C header files
-configure:3222: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3228: $? = 0
-configure:3232: test -z 
+configure:3188: checking for egrep
+configure:3198: result: grep -E
+configure:3203: checking for ANSI C header files
+configure:3228: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3234: $? = 0
+configure:3238: test -z 
 			 || test ! -s conftest.err
-configure:3235: $? = 0
-configure:3238: test -s conftest.o
 configure:3241: $? = 0
-configure:3327: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c  >&5
+configure:3244: test -s conftest.o
+configure:3247: $? = 0
+configure:3333: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c  >&5
 conftest.c: In function 'main':
 conftest.c:28: warning: incompatible implicit declaration of built-in function 'exit'
 conftest.c: In function 'main':
 conftest.c:28: warning: incompatible implicit declaration of built-in function 'exit'
-configure:3330: $? = 0
-configure:3332: ./conftest
-configure:3335: $? = 0
-configure:3350: result: yes
-configure:3360: checking for an ANSI C-conforming const
-configure:3427: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3433: $? = 0
-configure:3437: test -z 
+configure:3336: $? = 0
+configure:3338: ./conftest
+configure:3341: $? = 0
+configure:3356: result: yes
+configure:3366: checking for an ANSI C-conforming const
+configure:3433: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3439: $? = 0
+configure:3443: test -z 
 			 || test ! -s conftest.err
-configure:3440: $? = 0
-configure:3443: test -s conftest.o
 configure:3446: $? = 0
-configure:3457: result: yes
-configure:3481: checking for sys/types.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3449: test -s conftest.o
+configure:3452: $? = 0
+configure:3463: result: yes
+configure:3487: checking for sys/types.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for sys/stat.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for sys/stat.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for stdlib.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for stdlib.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for string.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for string.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for memory.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for memory.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for strings.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for strings.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for inttypes.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for inttypes.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for stdint.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for stdint.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3481: checking for unistd.h
-configure:3497: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3503: $? = 0
-configure:3507: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3487: checking for unistd.h
+configure:3503: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3509: $? = 0
+configure:3513: test -z 
 			 || test ! -s conftest.err
-configure:3510: $? = 0
-configure:3513: test -s conftest.o
 configure:3516: $? = 0
-configure:3527: result: yes
-configure:3539: checking for size_t
-configure:3563: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3569: $? = 0
-configure:3573: test -z 
+configure:3519: test -s conftest.o
+configure:3522: $? = 0
+configure:3533: result: yes
+configure:3545: checking for size_t
+configure:3569: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3575: $? = 0
+configure:3579: test -z 
 			 || test ! -s conftest.err
-configure:3576: $? = 0
-configure:3579: test -s conftest.o
 configure:3582: $? = 0
-configure:3593: result: yes
-configure:3605: checking whether time.h and sys/time.h may both be included
-configure:3630: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
-configure:3636: $? = 0
-configure:3640: test -z 
+configure:3585: test -s conftest.o
+configure:3588: $? = 0
+configure:3599: result: yes
+configure:3611: checking whether time.h and sys/time.h may both be included
+configure:3636: gcc -c -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  conftest.c >&5
+configure:3642: $? = 0
+configure:3646: test -z 
 			 || test ! -s conftest.err
-configure:3643: $? = 0
-configure:3646: test -s conftest.o
 configure:3649: $? = 0
-configure:3660: result: yes
-configure:3671: checking for deflateInit_ in -lz
-configure:3701: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lz   >&5
-configure:3707: $? = 0
-configure:3711: test -z 
+configure:3652: test -s conftest.o
+configure:3655: $? = 0
+configure:3666: result: yes
+configure:3677: checking for deflateInit_ in -lz
+configure:3707: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lz   >&5
+configure:3713: $? = 0
+configure:3717: test -z 
 			 || test ! -s conftest.err
-configure:3714: $? = 0
-configure:3717: test -s conftest
 configure:3720: $? = 0
-configure:3733: result: yes
-configure:3749: checking for png_write_image in -lpng
-configure:3779: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lpng  -lz  >&5
-configure:3785: $? = 0
-configure:3789: test -z 
+configure:3723: test -s conftest
+configure:3726: $? = 0
+configure:3739: result: yes
+configure:3755: checking for png_write_image in -lpng
+configure:3785: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lpng  -lz  >&5
+configure:3791: $? = 0
+configure:3795: test -z 
 			 || test ! -s conftest.err
-configure:3792: $? = 0
-configure:3795: test -s conftest
 configure:3798: $? = 0
-configure:3811: result: yes
-configure:3827: checking for xmlParseFile in -lxml2
-configure:3857: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lxml2  -lpng -lz  >&5
-configure:3863: $? = 0
-configure:3867: test -z 
+configure:3801: test -s conftest
+configure:3804: $? = 0
+configure:3817: result: yes
+configure:3833: checking for xmlParseFile in -lxml2
+configure:3863: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lxml2  -lpng -lz  >&5
+configure:3869: $? = 0
+configure:3873: test -z 
 			 || test ! -s conftest.err
-configure:3870: $? = 0
-configure:3873: test -s conftest
 configure:3876: $? = 0
-configure:3889: result: yes
-configure:3905: checking for pthread_create in -lpthread
-configure:3935: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lpthread  -lxml2 -lpng -lz  >&5
-configure:3941: $? = 0
-configure:3945: test -z 
+configure:3879: test -s conftest
+configure:3882: $? = 0
+configure:3895: result: yes
+configure:3917: checking for pthread_create in -lpthread
+configure:3947: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -lpthread  -lxml2 -lpng -lz  >&5
+configure:3953: $? = 0
+configure:3957: test -z 
 			 || test ! -s conftest.err
-configure:3948: $? = 0
-configure:3951: test -s conftest
-configure:3954: $? = 0
-configure:3967: result: yes
-configure:3983: checking for jpeg_start_compress in -ljpeg
-configure:4013: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -ljpeg  -lpthread -lxml2 -lpng -lz  >&5
-configure:4019: $? = 0
-configure:4023: test -z 
+configure:3960: $? = 0
+configure:3963: test -s conftest
+configure:3966: $? = 0
+configure:3979: result: yes
+configure:3995: checking for jpeg_start_compress in -ljpeg
+configure:4025: gcc -o conftest -O3 -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include  -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib conftest.c -ljpeg  -lpthread -lxml2 -lpng -lz  >&5
+configure:4031: $? = 0
+configure:4035: test -z 
 			 || test ! -s conftest.err
-configure:4026: $? = 0
-configure:4029: test -s conftest
-configure:4032: $? = 0
-configure:4045: result: yes
-configure:4062: checking for xml2-config
-configure:4081: found /usr/bin/xml2-config
-configure:4094: result: /usr/bin/xml2-config
-configure:4210: creating ./config.status
+configure:4038: $? = 0
+configure:4041: test -s conftest
+configure:4044: $? = 0
+configure:4057: result: yes
+configure:4074: checking for xml2-config
+configure:4093: found /usr/bin/xml2-config
+configure:4106: result: /usr/bin/xml2-config
+configure:4222: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##
@@ -480,7 +480,7 @@ RANLIB='ranlib'
 SET_MAKE=''
 SHELL='/bin/sh'
 STRIP=''
-VERSION='2.7.4'
+VERSION='2.7.5'
 XML2_CONFIG='/usr/bin/xml2-config'
 ac_ct_CC='gcc'
 ac_ct_RANLIB='ranlib'
@@ -533,6 +533,6 @@ target_alias=''
 #define PACKAGE_VERSION ""
 #define STDC_HEADERS 1
 #define TIME_WITH_SYS_TIME 1
-#define VERSION "2.7.4"
+#define VERSION "2.7.5"
 
 configure: exit 0

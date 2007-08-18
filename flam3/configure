@@ -845,6 +845,7 @@ if test -n "$ac_init_help"; then
 Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-pthread       compile flam3 with threads enabled (enabled by default)
   --disable-dependency-tracking Speeds up one-time builds
   --enable-dependency-tracking  Do not reject slow dependency extractors
 
@@ -1301,6 +1302,11 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+# Check whether --enable-pthread or --disable-pthread was given.
+if test "${enable_pthread+set}" = set; then
+  enableval="$enable_pthread"
+
+fi;
 am__api_version="1.6"
 ac_aux_dir=
 for ac_dir in $srcdir $srcdir/.. $srcdir/../..; do
@@ -1557,7 +1563,7 @@ fi
 
 # Define the identity of the package.
  PACKAGE=flam3
- VERSION="2.7.4"
+ VERSION="2.7.5"
 
 
 cat >>confdefs.h <<_ACEOF
@@ -3905,6 +3911,12 @@ echo "$as_me: error: The xml2 library is required." >&2;}
 fi
 
 
+if test "${enable_pthread}" = "" ; then
+  enable_pthread=yes
+fi
+
+if test "${enable_pthread}" = "yes" ; then
+
 echo "$as_me:$LINENO: checking for pthread_create in -lpthread" >&5
 echo $ECHO_N "checking for pthread_create in -lpthread... $ECHO_C" >&6
 if test "${ac_cv_lib_pthread_pthread_create+set}" = set; then
@@ -3977,11 +3989,11 @@ _ACEOF
   LIBS="-lpthread $LIBS"
 
 else
-  { { echo "$as_me:$LINENO: error: The pthread library is required." >&5
-echo "$as_me: error: The pthread library is required." >&2;}
-   { (exit 1); exit 1; }; }
+  { echo "$as_me:$LINENO: WARNING: Pthread library not found - threads disabled." >&5
+echo "$as_me: WARNING: Pthread library not found - threads disabled." >&2;}
 fi
 
+fi
 
 echo "$as_me:$LINENO: checking for jpeg_start_compress in -ljpeg" >&5
 echo $ECHO_N "checking for jpeg_start_compress in -ljpeg... $ECHO_C" >&6

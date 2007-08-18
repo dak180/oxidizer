@@ -82,8 +82,11 @@ comment         ""              comment string for <edit> tags (genome only)
 use_mem         auto            floating point number of bytes of memory to use (render only)
 nthreads        auto            number of threads to use (render and animate)
 noedits         unset           omit edit tags from output (genome only)
+print_edit_depth 0              depth to truncate <edit> tag structure.  0 prints all <edit> tags (genome only)
 intpalette      unset           round palette entries for importing into older Apophysis versions (genome only)
-insert_palette  unset		insert the palette into the image.
+insert_palette  unset           insert the palette into the image.
+enable_jpeg_comments  1         enables comments in the jpeg header (render and animate)
+enable_png_comments   1         enables comments in the png header (render and animate)
 
 for example:
 
@@ -246,6 +249,16 @@ todo:  eliminate all static storage.
 ======================================
 
 changelog:
+
+08/17/07 fixed action string overflow when many xforms are present.
+    added 'print_edit_depth' env var to control how many levels of
+    <edit> tags are saved when using flam3-genome.  Fixed wrong 
+    placement of random improve_colors code in flam3-genome. 
+
+08/14/07 various code updates to assist with compiling under msvc++.
+    now can specify --disable-pthread or --enable-pthread to configure
+    to better control compilation.  fixed bug preventing renders of
+    flames with more than 128 xforms.  release 2.7.5.
 
 07/12/07 fixed bug in split variation, now compatible with both
     versions of Apo.  added insert_palette option.  switched density
