@@ -163,8 +163,8 @@
 	unsigned int breedingCount = 0;
 
 	for(i=0; i<genomeCount; i++) {
-		
-		if(buttonState[i] == NSOffState) {
+		NSData *genomeCheck = [genomes objectAtIndex:i];
+		if(buttonState[i] == NSOffState && [genomeCheck length] > 0) {
 			breedingCount++;	
 		}
 		
@@ -195,7 +195,8 @@
 	
 	for(i=0; i<genomeCount; i++) {
 		
-		if(buttonState[i] == NSOffState) {
+		NSData *genomeCheck = [genomes objectAtIndex:i];
+		if(buttonState[i] == NSOffState && [genomeCheck length] > 0) {
 			breedingOrder[index] = i;
 			order[index] = index;
 			index++;

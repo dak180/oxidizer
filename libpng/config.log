@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 83 tasks, 189 threads, 2 processors
-Load average: 0.71, Mach factor: 1.33
+Default processor set: 84 tasks, 212 threads, 2 processors
+Load average: 1.30, Mach factor: 0.81
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -430,7 +430,8 @@ configure:6963: found /usr/bin/strip
 configure:6974: result: strip
 configure:7260: checking if gcc supports -fno-rtti -fno-exceptions
 configure:7281: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  -fno-rtti -fno-exceptions conftest.c >&5
-cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C                                                                                   
+cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
+cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
 configure:7285: $? = 0
 configure:7295: result: no
 configure:7310: checking for gcc option to produce PIC
@@ -492,7 +493,7 @@ configure:19595: checking malloc.h usability
 configure:19612: gcc -c -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  conftest.c >&5
 conftest.c:55:20: error: malloc.h: No such file or directory
 conftest.c:55:20: error: malloc.h: No such file or directory
-lipo: can't figure out the architecture type of: /var/tmp//ccvxMdwx.out
+lipo: can't figure out the architecture type of: /var/tmp//cc2dO79w.out
 configure:19618: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -607,7 +608,8 @@ configure:20022: $? = 0
 configure:20038: result: yes
 configure:20206: checking for memset
 configure:20262: gcc -o conftest -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc  -arch i386 -arch ppc conftest.c  >&5
-Binary file conftest.er1 matches
+conftest.c:48: warning: conflicting types for built-in function 'memset'
+conftest.c:48: warning: conflicting types for built-in function 'memset'
 configure:20268: $? = 0
 configure:20286: result: yes
 configure:20304: checking for pow
@@ -642,7 +644,7 @@ pnggccrd.c:376: error: assignment of read-only variable '_mask48_3'
 pnggccrd.c:377: error: assignment of read-only variable '_mask48_2'
 pnggccrd.c:378: error: assignment of read-only variable '_mask48_1'
 pnggccrd.c:379: error: assignment of read-only variable '_mask48_0'
-lipo: can't figure out the architecture type of: /var/tmp//ccGF71sP.out
+lipo: can't figure out the architecture type of: /var/tmp//ccyDOYGw.out
 configure:20576: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
