@@ -151,6 +151,8 @@
 		tmpButton = [genePoolButtons objectAtIndex:i];
 		if (button == tmpButton) {
 			[self setButtonImage:[model setGenome:genome forIndex:i] forIndex:i];
+			[tmpButton setNextState];
+			[model setButton:i toState:[tmpButton state]];
 		}
 	}
 	
