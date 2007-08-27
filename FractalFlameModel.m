@@ -312,7 +312,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	genome = [genomes objectAtIndex:0];
 	
 	
-	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] width:[[genome valueForKey:@"width"] intValue]];
+	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] * environment->sizeScale 
+						   width:[[genome valueForKey:@"width"] intValue] * environment->sizeScale];
 	BOOL doRender = [qtController CreateMovieGWorld];
 
 	
@@ -465,9 +466,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	NSManagedObject *genome = [genomes objectAtIndex:0];
 	
+//	double qs = [[NSUserDefaults standardUserDefaults] do]
 	
 	
-	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] width:[[genome valueForKey:@"width"] intValue]];
+	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] * environment->sizeScale 
+						   width:[[genome valueForKey:@"width"] intValue] * environment->sizeScale];
 	BOOL doRender = [qtController CreateMovieGWorld];
 	
 	

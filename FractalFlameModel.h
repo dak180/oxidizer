@@ -146,6 +146,7 @@
 
 - (NSMutableDictionary *)environmentDictionary;
 - (NSArray *)fetchGenomes;
+- (void) showPreviewWindow;
 
 - (BOOL)openRecentFile:(NSString *)filename;
 - (IBAction)openFile:(id)sender;
