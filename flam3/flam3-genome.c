@@ -18,7 +18,7 @@
 */
 
 static char *flam3_genome_c_id =
-"@(#) $Id: flam3-genome.c,v 1.3 2007/08/18 15:04:59 vargol Exp $";
+"@(#) $Id: flam3-genome.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
 
 #include "private.h"
 #include "isaacs.h"
@@ -538,13 +538,6 @@ static void rotate_by(double *p, double *center, double by) {
     p[1] = r[1] + center[1];
 }
 
-void exception_handler(int SIG_TYPE) {
-	
-	fprintf(stderr, "caught an unexpected exception %d\n", SIG_TYPE);
-	fprintf(stdout, "caught an unexpected exception %d\n", SIG_TYPE);
-	exit(99);
-}
-
 int
 main(argc, argv)
    int argc;
@@ -573,7 +566,6 @@ main(argc, argv)
    char *rotate = getenv("rotate");
    char *strip = getenv("strip");
    char *sequence = getenv("sequence");
-   char *isaac_seed = args("isaac_seed",NULL);
    int loops = argi("loops", 1);
    int frame = argi("frame", 0);
    int rep, repeat = argi("repeat", 1);
@@ -596,7 +588,6 @@ main(argc, argv)
    int num_ivars = 0;
    int num_novars = 0;
    char *var_tok;
-   long int default_isaac_seed = time(0);
 
    flam3_frame f;
    char action[flam3_max_action_length];  
@@ -606,8 +597,6 @@ main(argc, argv)
    char *slashloc;
    char exepath[256];
    char palpath[256];
-
-   for(i=0; i<32; i++) signal(i, exception_handler);
 
 
 #ifdef WIN32
@@ -636,20 +625,8 @@ main(argc, argv)
        exit(0);
    }
 
-   /* Set up the isaac rng */
-   memset(f.rc.randrsl, 0, RANDSIZ*sizeof(ub4));
-   if (NULL == isaac_seed) {
-      int lp;
-      /* No isaac seed specified.  Use the system time to initialize. */
-      for (lp = 0; lp < RANDSIZ; lp++)
-         f.rc.randrsl[lp] = default_isaac_seed;
-   } else {
-      /* Use the specified string */
-      strncpy((char *)&f.rc.randrsl,(const char *)isaac_seed, RANDSIZ*sizeof(ub4));
-   }
-
-   irandinit(&f.rc,1);
-
+   /* Init random number generators */
+   flam3_init_frame(&f);
    srandom(seed ? seed : (time(0) + getpid()));
 
    f.temporal_filter_radius = 0.0;

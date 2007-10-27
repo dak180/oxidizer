@@ -19,7 +19,7 @@
 
 
 static char *jpeg_c_id =
-"@(#) $Id: png.c,v 1.3 2007/08/18 15:05:01 vargol Exp $";
+"@(#) $Id: png.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -108,7 +108,7 @@ unsigned char *read_png(FILE *ifp, int *width, int *height) {
   png_struct *png_ptr;
   png_info *info_ptr;
   png_byte **png_image = NULL;
-  int linesize, x, y;
+  unsigned int linesize, x, y;
   unsigned char *p, *q;
 
   if (fread (sig_buf, 1, SIG_CHECK_SIZE, ifp) != SIG_CHECK_SIZE) {
@@ -133,7 +133,7 @@ unsigned char *read_png(FILE *ifp, int *width, int *height) {
      }
      png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
      perror("reading file");
-     return;
+     return 0;
   }
   info_ptr = png_create_info_struct (png_ptr);
   if (info_ptr == NULL) {

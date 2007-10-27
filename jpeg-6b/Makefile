@@ -9,7 +9,7 @@
 srcdir = .
 
 # Where to install the programs and man pages.
-prefix = /Users/vargol/Source/oxidizer/jpeg-6b
+prefix = /Users/vargol/Source/oxidizer/jpeg-6b/../build_folder_for_flam3
 exec_prefix = ${prefix}
 bindir = $(exec_prefix)/bin
 libdir = $(exec_prefix)/lib

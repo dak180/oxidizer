@@ -18,7 +18,7 @@
 */
 
 static char *cmap_c_id =
-"@(#) $Id: flam3-palettes.c,v 1.3 2007/08/18 15:04:59 vargol Exp $";
+"@(#) $Id: flam3-palettes.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 
 #include "private.h"
@@ -121,7 +121,7 @@ static int init_palettes(char *filename) {
    fclose(fp);
    s[i] = 0;
    
-   doc = xmlReadMemory(s, strlen(s), filename, NULL, XML_PARSE_NONET);
+   doc = xmlReadMemory(s, (int)strlen(s), filename, NULL, XML_PARSE_NONET);
    if (NULL == doc) {
        fprintf(stderr, "error parsing %s (%s).\n", filename, s);
        exit(1);
@@ -132,6 +132,7 @@ static int init_palettes(char *filename) {
    parse_palettes(rootnode);
    xmlFreeDoc(doc);
    free(s);
+   return(1);
 }
 
 int flam3_get_palette(int n, flam3_palette c, double hue_rotation) {

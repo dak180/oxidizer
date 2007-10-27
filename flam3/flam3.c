@@ -18,7 +18,7 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.3 2007/08/18 15:05:00 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
 
 
 #include "private.h"
@@ -742,7 +742,7 @@ static void var32_juliaN_generic (void *helper, double weight) {
    /* juliaN (03/06) */
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
 
-   int t_rnd = (f->xform->juliaN_rN)*flam3_random_isaac_01(f->rc);
+   int t_rnd = (int)((f->xform->juliaN_rN)*flam3_random_isaac_01(f->rc));
    
    double tmpr = (f->precalc_atanyx + 2 * M_PI * t_rnd) / f->xform->juliaN_power;
 
@@ -759,7 +759,7 @@ static void var33_juliaScope_generic (void *helper, double weight) {
    /* juliaScope (03/06) */
    flam3_iter_helper *f = (flam3_iter_helper *)helper;
 
-   int t_rnd = (f->xform->juliaScope_rN) * flam3_random_isaac_01(f->rc);
+   int t_rnd = (int)((f->xform->juliaScope_rN) * flam3_random_isaac_01(f->rc));
 
    double tmpr, r;
    double sina, cosa;
@@ -928,7 +928,6 @@ static void var39_curl(void *helper, double weight)
 
 static void var40_rectangles(void *helper, double weight)
 {
-    double tmp;
     flam3_iter_helper *f = (flam3_iter_helper *) helper;
 
     if (f->xform->rectangles_x==0)
@@ -1197,11 +1196,11 @@ static void var50_supershape(void *helper, double weight) {
    double myrnd;
 
    theta = f->xform->supershape_pm_4 * f->precalc_atanyx + M_PI_4;
-   t1 = fabs(sin(theta));
-   t2 = fabs(cos(theta));
 
+   t1 = fabs(cos(theta));
    t1 = pow(t1,f->xform->supershape_n2);
 
+   t2 = fabs(sin(theta));
    t2 = pow(t2,f->xform->supershape_n3);
    
    myrnd = f->xform->supershape_rnd;
@@ -1306,7 +1305,6 @@ static void juliaScope_precalc(flam3_xform *xf) {
 }
 
 static void radial_blur_precalc(flam3_xform *xf) {
-   int j;
    xf->radialBlur_spinvar = sin(xf->radialBlur_angle * M_PI / 2);
    xf->radialBlur_zoomvar = cos(xf->radialBlur_angle * M_PI / 2);
 }
@@ -1625,8 +1623,7 @@ int flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, unsigned 
 
    for (i = -4*fuse; i < 4*n; i+=4) {
       int fn = xform_distrib[abs((int)irand(rc)) % CHOOSE_XFORM_GRAIN];
-      double tx, ty;
-
+      
       if (1) {
          if (apply_xform(cp, fn, p, q, rc)>0) {
             //fprintf(stdout,"bad result from xform %d\n",fn);
@@ -1741,7 +1738,7 @@ double flam3_dimension(flam3_genome *cp, int ntries, int clip_to_camera) {
   double bmax[2];
   double d2max;
   int lp;
-  long int default_isaac_seed = time(0);
+  long int default_isaac_seed = (long int)time(0);
   randctx rc;
   int i, n1=0, n2=0, got, nclipped;
 
@@ -1855,7 +1852,7 @@ double flam3_lyapunov(flam3_genome *cp, int ntries) {
   unsigned short xform_distrib[CHOOSE_XFORM_GRAIN];
 
   int lp;
-  long int default_isaac_seed = time(0);
+  long int default_isaac_seed = (long int)time(0);
   randctx rc;
 
   /* Set up the isaac rng */
@@ -2054,7 +2051,6 @@ static void interpolate_catmull_rom(flam3_genome cps[], double t, flam3_genome *
 void flam3_interpolate_n(flam3_genome *result, int ncp,
           flam3_genome *cpi, double *c) {
     int i, j, k;
-    int imid;
     if (flam3_palette_interpolation_hsv ==
    cpi[0].palette_interpolation) {
    for (i = 0; i < 256; i++) {
@@ -2245,12 +2241,12 @@ static void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc) {
  */
 void flam3_interpolate(flam3_genome cps[], int ncps,
              double time, flam3_genome *result) {
-   int i, j, i1, i2;
+   int i1, i2;
    double c[2];
    flam3_genome cpi[4];
-   int cpi1_std, cpi1_final;
-   int cpi2_std, cpi2_final;
-   int total_std, total_final;
+//   int cpi1_std, cpi1_final;
+//   int cpi2_std, cpi2_final;
+//   int total_std, total_final;
 
    if (1 == ncps) {
       flam3_copy(result, &(cps[0]));
@@ -2670,8 +2666,6 @@ static int xml_all_ncps;
 /*static int xml_num_images;*/
 
 static void clear_cp(flam3_genome *cp, int default_flag) {
-    int i, j;
-
     cp->palette_index = flam3_palette_random;
     cp->center[0] = 0.0;
     cp->center[1] = 0.0;
@@ -2982,7 +2976,7 @@ static void parse_flame_element(xmlNode *flame_node) {
      }
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"name")) {
          strncpy(cp->flame_name, att_str, flam3_name_len);
-         i = strlen(cp->flame_name)-1;
+         i = (int)strlen(cp->flame_name)-1;
          while(i-->0) {
             if (isspace(cp->flame_name[i]))
                cp->flame_name[i] = '_';
@@ -3132,9 +3126,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
          int count;
          int c_idx=0;
-         int r,g,b;
          int col_count=0;
-         int sscanf_ret;
 
          /* Loop through the attributes of the colors element */
          att_ptr = chld_node->properties;
@@ -3569,7 +3561,7 @@ def:
 static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int default_flag) {
 
    xmlNode *this_node = NULL;
-   size_t f3_storage,im_storage;
+   size_t f3_storage; //,im_storage;
 
    /* Loop over this level of elements */
    for (this_node=cur_node; this_node; this_node = this_node->next) {
@@ -3620,11 +3612,11 @@ flam3_genome *flam3_parse_xml2(char *xmldata, char *xmlfilename, int default_fla
    xmlDocPtr doc; /* Parsed XML document tree */
    xmlNode *rootnode;
    char *bn;
-   int i,j,k;
+   int i;
 
    /* Parse XML string into internal document */
    /* Forbid network access during read       */
-   doc = xmlReadMemory(xmldata, strlen(xmldata), xmlfilename, NULL, XML_PARSE_NONET);
+   doc = xmlReadMemory(xmldata, (int)strlen(xmldata), xmlfilename, NULL, XML_PARSE_NONET);
 
    /* Check for errors */
    if (doc==NULL) {
@@ -3879,7 +3871,7 @@ static void flam3_edit_print(FILE *f, xmlNodePtr editNode, int tabs, int formatt
       while (isspace(*cpy_string))
          cpy_string++;
 
-      strl = strlen(cont_str)-1;
+      strl = (int)strlen(cont_str)-1;
 
       while (isspace(cont_str[strl]))
          strl--;
@@ -3940,7 +3932,7 @@ void flam3_apply_template(flam3_genome *cp, flam3_genome *templ) {
 
 }
 
-char *flam3_genome2string(flam3_genome *cp) {
+char *flam3_print_to_string(flam3_genome *cp) {
 
    FILE *tmpflame;
    long stringbytes;
@@ -4266,6 +4258,31 @@ double flam3_random11() {
    return ((random() & 0xfffffff) - 0x7ffffff) / (double) 0x7ffffff;
 }
 
+/* This function must be called prior to rendering a frame */
+void flam3_init_frame(flam3_frame *f) {
+
+   char *ai;
+   char *isaac_seed = args("isaac_seed",NULL);
+   long int default_isaac_seed = (long int)time(0);  
+
+   /* Clear out the isaac state */
+   memset(f->rc.randrsl, 0, RANDSIZ*sizeof(ub4));
+
+   /* Set the isaac seed */
+   if (NULL == isaac_seed) {
+      int lp;
+      /* No isaac seed specified.  Use the system time to initialize. */
+      for (lp = 0; lp < RANDSIZ; lp++)
+         f->rc.randrsl[lp] = default_isaac_seed;
+   } else {
+      /* Use the specified string */
+      strncpy((char *)&f->rc.randrsl,(const char *)isaac_seed, RANDSIZ*sizeof(ub4));
+   }
+
+   /* Initialize the random number generator */
+   irandinit(&f->rc,1);
+}
+
 /* returns uniform variable from ISAAC rng */
 double flam3_random_isaac_01(randctx *ct) {
    return ((int)irand(ct) & 0xfffffff) / (double) 0xfffffff;
@@ -4449,7 +4466,7 @@ static int random_varn(int n) {
 void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_xforms) {
 
    /** NEED TO ADD FINAL XFORM TO RANDOMNESS **/
-   int i, nxforms, var, samed, multid, samepost, postid, varloop, addfinal=0;
+   int i, nxforms, var, samed, multid, samepost, postid, addfinal=0;
    int finum = -1;
    int n;
    double sum;
@@ -5227,3 +5244,54 @@ void b64decode(char* instr, char *outstr)
     }
 }
 
+/* Helper functions for After Effects Plugin */
+/* Function to calculate the size of a 'flattened' genome (required by AE API) */
+size_t flam3_size_flattened_genome(flam3_genome *cp) {
+
+   size_t flatsize;
+   
+   flatsize = sizeof(flam3_genome);
+   flatsize += cp->num_xforms * sizeof(flam3_xform);
+   
+   return(flatsize);
+}
+
+/* Function to flatten the contents of a genome into a buffer */
+void flam3_flatten_genome(flam3_genome *cp, void *buf) {
+
+   int i;
+   char *bufoff;
+
+   /* Copy genome first */
+   memcpy(buf, (const void *)cp, sizeof(flam3_genome));
+   
+   /* Copy the xforms */
+   bufoff = (char *)buf + sizeof(flam3_genome);
+   for (i=0; i<cp->num_xforms; i++) {
+      memcpy(bufoff, (const void *)(&cp->xform[i]), sizeof(flam3_xform));
+      bufoff += sizeof(flam3_xform);
+   }
+}
+
+/* Function to unflatten a genome buffer */
+void flam3_unflatten_genome(void *buf, flam3_genome *cp) {
+
+   int i;
+   char *bufoff;
+   
+   /* Copy out the genome */
+   memcpy((void *)cp, (const void *)buf, sizeof(flam3_genome));
+   
+   /* Allocate space for the xforms */
+   cp->xform = (flam3_xform *)malloc(cp->num_xforms * sizeof(flam3_xform));
+   
+   /* Initialize the xforms (good habit to be in) */
+   initialize_xforms(cp, 0);
+   
+   /* Copy out the xforms from the buffer */
+   bufoff = (char *)buf + sizeof(flam3_genome);
+   for (i=0; i<cp->num_xforms; i++) {
+      memcpy(bufoff, (const void *)(&cp->xform[i]), sizeof(flam3_xform));
+      bufoff += sizeof(flam3_xform);
+   }
+}

@@ -156,7 +156,7 @@ AUTOMAKE = ${SHELL} /Users/vargol/Source/oxidizer/libpng/missing --run automake-
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=none
-CFLAGS = -O -g -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc
+CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CXX = g++
@@ -181,7 +181,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = ${SHELL} $(install_sh) -c -s
-LDFLAGS = -arch i386 -arch ppc
+LDFLAGS = 
 LIBOBJS = 
 LIBPNG_DEFINES = -DPNG_CONFIGURE_LIBPNG -DPNG_NO_MMX_CODE
 LIBPNG_NO_MMX = -DPNG_NO_MMX_CODE
@@ -260,7 +260,7 @@ pdfdir = ${docdir}
 # pkg-config stuff, note that libpng.pc is always required in order
 # to get the correct library
 pkgconfigdir = ${libdir}/pkgconfig
-prefix = /Users/vargol/Source/oxidizer/libpng
+prefix = /Users/vargol/Source/oxidizer/libpng/../build_folder_for_flam3
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin

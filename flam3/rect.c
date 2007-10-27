@@ -48,7 +48,7 @@
   pthread_mutex_t bucket_mutex;
 #endif
 
-static void *iter_thread(void *fth) {
+static void iter_thread(void *fth) {
    double sub_batch;
    int j;
    flam3_thread_helper *fthp = (flam3_thread_helper *)fth;
@@ -237,7 +237,7 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
 			     int transp, stat_struct *stats) {
    long nbuckets;
    int i, j, k, batch_num, temporal_sample_num;
-   double nsamples, batch_size, sub_batch;
+   double nsamples, batch_size;
    bucket  *buckets;
    abucket *accumulate;
    double *points;
@@ -458,22 +458,28 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
 
    nbuckets = (long)fic.width * (long)fic.height;
    if (1) {
-
-     char *last_block = NULL;
-     size_t memory_rqd = (sizeof(bucket) * nbuckets +
-             sizeof(abucket) * nbuckets +
-             4 * sizeof(double) * (size_t)SUB_BATCH_SIZE * spec->nthreads);
-     last_block = (char *) malloc(memory_rqd);
-     if (NULL == last_block) {
-       fprintf(stderr, "render_rectangle: cannot malloc %ld bytes.\n", memory_rqd);
-       fprintf(stderr, "render_rectangle: h=%d w=%d nb=%ld.\n", fic.width, fic.height, nbuckets);
+     
+     /* Allocate buckets */
+     buckets = (bucket *)malloc(sizeof(bucket) * nbuckets);
+     if (NULL == buckets) {
+       fprintf(stderr,"render_rectangle (bucket): cannot malloc %ld bytes\n",sizeof(bucket)*nbuckets);
        exit(1);
      }
-     /* else fprintf(stderr, "render_rectangle: mallocked %dMb.\n", Mb); */
+            
+     /* Allocate accumulator */
+     accumulate = (abucket *)malloc(sizeof(abucket) * nbuckets);
+     if (NULL == accumulate) {
+       fprintf(stderr,"render_rectangle (abucket): cannot malloc %ld bytes\n",sizeof(abucket)*nbuckets);
+       exit(1);
+     }
+     
+     /* Allocate iteration storage */
+     points = (double *)malloc(4 * sizeof(double) * SUB_BATCH_SIZE * spec->nthreads);
+     if (NULL == points) {
+       fprintf(stderr,"render_rectangle (points): cannot malloc %ld bytes\n",4*sizeof(double)*SUB_BATCH_SIZE*spec->nthreads);
+       exit(1);
+     }
 
-     buckets = (bucket *) last_block;
-     accumulate = (abucket *) (last_block + sizeof(bucket) * nbuckets);
-     points = (double *)  (last_block + (sizeof(bucket) + sizeof(abucket)) * nbuckets);
    }
 
    if (verbose) {
@@ -482,7 +488,7 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    }
 
    if (fname) {
-      int len = strlen(fname);
+      int len = (int)strlen(fname);
       FILE *fin = fopen(fname, "rb");
       int w, h;
       cmap2 = NULL;
@@ -816,7 +822,7 @@ if (1) {
          pthread_attr_setdetachstate(&pt_attr,PTHREAD_CREATE_JOINABLE);
 
          for (thi=0; thi <spec->nthreads; thi ++)
-            pthread_create(&myThreads[thi], &pt_attr, iter_thread, (void *)(&(fth[thi])));
+            pthread_create(&myThreads[thi], &pt_attr, (void *)iter_thread, (void *)(&(fth[thi])));
 
          pthread_attr_destroy(&pt_attr);
 
@@ -888,7 +894,7 @@ if (1) {
          }
       } else {
       
-         int ss = floor(oversample / 2.0);
+         int ss = (int)floor(oversample / 2.0);
          int scf = !((int)oversample & 1);
          double scfact = pow(oversample/(oversample+1.0), 2.0);
          
@@ -925,8 +931,8 @@ if (1) {
                if (f_select<=keep_thresh)
                   f_select_int = (int)ceil(f_select)-1;
                else
-		 f_select_int = keep_thresh +
-		   floor(pow(f_select-keep_thresh,cp.estimator_curve));
+		 f_select_int = (int)keep_thresh +
+		   (int)floor(pow(f_select-keep_thresh,cp.estimator_curve));
 
                /* If the filter selected below the min specified clamp it to the min */
                if (f_select_int >= de_cutoff_val)
@@ -1177,6 +1183,8 @@ if (1) {
 #endif
    free(filter);
    free(buckets);
+   free(accumulate);
+   free(points);
    /* Free the xform in cp */
    free(cp.xform);
    cp.num_xforms=0;
@@ -1189,14 +1197,14 @@ if (1) {
      for (j = 0; j < ph; j++) {
        for (i = 0; i < image_width; i++) {
 	 unsigned char *p = out + nchan * (i + j * out_width);
-	 p[0] = cmap[i * 256 / image_width][0];
-	 p[1] = cmap[i * 256 / image_width][1];
-	 p[2] = cmap[i * 256 / image_width][2];
+	 p[0] = (unsigned char)cmap[i * 256 / image_width][0];
+	 p[1] = (unsigned char)cmap[i * 256 / image_width][1];
+	 p[2] = (unsigned char)cmap[i * 256 / image_width][2];
        }
      }
    }
 
    tend = time(NULL);
-   stats->render_seconds = tend-tstart;
+   stats->render_seconds = (int)(tend-tstart);
 
 }

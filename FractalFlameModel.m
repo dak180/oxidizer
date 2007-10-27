@@ -557,6 +557,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"preview.png", nil]];
 
+//	NSLog(@"%@", pngFileName);
+	
 	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
 	[taskEnvironment retain];	
 	[taskEnvironment setObject:pngFileName forKey:@"out"];
@@ -1264,6 +1266,20 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:xmlFileName] inContext:thisMoc]; 
 	
+	if ([newGenomes count] == 0) {
+
+		NSBeep();
+		
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Open failed, please check the file is a flam3 XML file!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:xmlFileName];
+		[finishedPanel runModal];	
+		
+		return;
+	}
+	
 	[moc performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
 	
 	[self generateAllThumbnailsForGenomes:newGenomes];
@@ -1276,6 +1292,22 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		
 
 	NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:xmlFileName] inContext:thisMoc];
+
+	if ([newGenomes count] == 0) {
+		
+		NSBeep();
+		
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Open failed, please check the file is a flam3 XML file!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:xmlFileName];
+		[finishedPanel runModal];	
+		
+		return;
+	}
+	
+	
 	NSEnumerator *genomeEnumerator = [newGenomes objectEnumerator];
 	NSManagedObject *genome;
 	while ((genome = [genomeEnumerator nextObject])) {

@@ -18,14 +18,14 @@
 */
 
 static char *docstring_c_id =
-"@(#) $Id: docstring.c,v 1.3 2007/08/18 15:04:59 vargol Exp $";
+"@(#) $Id: docstring.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
 
 #include "config.h"
 #include "flam3.h"
 
 
 static char *the_docstring =
-"flam3 - cosmic recursive fractal flames version " VERSION "\n"
+"FLAM3 - cosmic recursive fractal flames version " VERSION "\n"
 "This software is licensed under the GPL.  You should have access\n"
 "to the source code; see http://www.fsf.org/licenses/gpl.html.\n"
 "\n"

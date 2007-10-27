@@ -27,7 +27,7 @@
 
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.3 2007/08/18 15:05:01 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.4 2007/10/27 15:39:27 vargol Exp $";
 
 char *flam3_version();
 
@@ -279,7 +279,7 @@ typedef struct {
    double zoom;                  /* effects ppu, sample density, scale */
    double pixels_per_unit;       /* vertically */
    double spatial_filter_radius; /* radius of spatial filter */
-   double (*spatial_filter_func)(); /* spatial filter kernel function */
+   double (*spatial_filter_func)(double); /* spatial filter kernel function */
    double spatial_filter_support; /* size of standard kernel for specific function */
    double sample_density;        /* samples per pixel (not bucket) */
    /* in order to motion blur more accurately we compute the logs of the
@@ -342,7 +342,7 @@ void flam3_interpolate_n(flam3_genome *result, int ncp, flam3_genome *cpi, doubl
 
 /* print genome to given file with extra_attributes if not NULL */
 void flam3_print(FILE *f, flam3_genome *g, char *extra_attributes, int print_edits);
-char *flam3_genome2string(flam3_genome *cp);
+char *flam3_print_to_string(flam3_genome *cp);
 
 /* ivars is a list of variations to use, or flam3_variation_random     */
 /* ivars_n is the number of values in ivars to select from.            */
@@ -403,5 +403,12 @@ int flam3_random_bit();
 double flam3_random_isaac_01(randctx *);
 double flam3_random_isaac_11(randctx *);
 int flam3_random_isaac_bit(randctx *);
+
+void flam3_init_frame(flam3_frame *f);
+
+/* AE Plugin helper functions */
+size_t flam3_size_flattened_genome(flam3_genome *cp);
+void flam3_flatten_genome(flam3_genome *cp, void *buf);
+void flam3_unflatten_genome(void *buf, flam3_genome *cp);
 
 #endif

@@ -34,12 +34,12 @@ To test it, run
 
     flam3-render < test.flam3
 
-and it should produce 0000.jpg and 0001.jpg, one image for each
+and it should produce 00000.jpg and 00001.jpg, one image for each
 <flame> element in the parameter file.  To make an animation run
 
     flam3-animate < test.flam3
 
-and it should produce 100 files named 0000.jpg through 0099.jpg that
+and it should produce 100 files named 00000.jpg through 00099.jpg that
 interpolate between the two <flame> elements.
 
 Both programs get their options through environment variables.  An
@@ -250,10 +250,12 @@ todo:  eliminate all static storage.
 
 changelog:
 
-08/17/07 fixed action string overflow when many xforms are present.
+10/20/07 fixed action string overflow when many xforms are present.
     added 'print_edit_depth' env var to control how many levels of
-    <edit> tags are saved when using flam3-genome.  Fixed wrong 
-    placement of random improve_colors code in flam3-genome. 
+    <edit> tags are saved when using flam3-genome.  Fixed wrong
+    placement of random improve_colors code in flam3-genome.  go to
+    five digit filenames.  fixed bug in supershape variation.  API
+    cleanup, thanks to david bitseff.  release 2.7.6.
 
 08/14/07 various code updates to assist with compiling under msvc++.
     now can specify --disable-pthread or --enable-pthread to configure

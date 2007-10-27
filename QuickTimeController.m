@@ -73,6 +73,7 @@
 	useDefaultSettings = YES;
 
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	[savePanel setPrompt:@"Render"];
 	[savePanel setAccessoryView:movieExportPanel];
 	runResult = [savePanel runModal];
 	
@@ -202,6 +203,7 @@
 	useDefaultSettings = YES;
 
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	[savePanel setPrompt:@"Render"];
 	[savePanel setAccessoryView:imageExportPanel];
 	runResult = [savePanel runModal];
 	
@@ -223,6 +225,7 @@
 	useDefaultSettings = YES;
 	
 	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	[savePanel setPrompt:@"Render"];
 	[savePanel setAccessoryView:stillsExportPanel];
 	runResult = [savePanel runModal];
 	

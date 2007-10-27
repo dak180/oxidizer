@@ -273,7 +273,13 @@
 			[taskFrameIndicator setDoubleValueInMainThread:[NSNumber numberWithDouble:progressValue]];
 		}
 		
-		[errorMessage appendString:string];
+		if([errorMessage length] > 256) {
+			[errorMessage setString:string];
+			
+		} else {
+			[errorMessage appendString:string];
+		}
+
 		[string release];
 		data = [flam3Error availableData];
 	} 
@@ -284,6 +290,8 @@
 	
 	if(taskStatus != 0) {
 		
+		NSLog(@"flam3 Error message: %@", errorMessage);		
+
 		
 		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render failed!" 
 												 defaultButton:@"Close"

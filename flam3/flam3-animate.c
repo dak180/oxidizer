@@ -19,7 +19,7 @@
 
 
 static char *flam3_animate_c_id =
-"@(#) $Id: flam3-animate.c,v 1.3 2007/08/18 15:04:59 vargol Exp $";
+"@(#) $Id: flam3-animate.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
 
 #include "private.h"
 #include "img.h"
@@ -39,7 +39,6 @@ int main(int argc, char **argv) {
   char *format = getenv("format");
   int verbose = argi("verbose", 1);
   int transparency = argi("transparency", 0);
-  char *isaac_seed = args("isaac_seed",NULL);
   int bits = argi("bits", 33);
   int seed = argi("seed", 0);
   int ftime, channels;
@@ -51,7 +50,6 @@ int main(int argc, char **argv) {
   int num_threads = argi("nthreads",0);
   FILE *in,*fp,*genfp;
   flam3_frame f;
-  long int default_isaac_seed = time(0);
   flam3_img_comments fpc;
   stat_struct stats,stats2;
 
@@ -83,20 +81,8 @@ int main(int argc, char **argv) {
       exit(0);
   }
 
-   /* Set up the isaac rng */
-   memset(f.rc.randrsl, 0, RANDSIZ*sizeof(ub4));
-   if (NULL == isaac_seed) {
-      int lp;
-      /* No isaac seed specified.  Use the system time to initialize. */
-      for (lp = 0; lp < RANDSIZ; lp++)
-         f.rc.randrsl[lp] = default_isaac_seed;
-   } else {
-      /* Use the specified string */
-      strncpy((char *)&f.rc.randrsl,(const char *)isaac_seed, RANDSIZ*sizeof(ub4));
-   }
-
-   irandinit(&f.rc,1);
-
+   /* Init random number generators */
+   flam3_init_frame(&f);
    srandom(seed ? seed : (time(0) + getpid()));
 
    /* Set the number of threads */
@@ -231,7 +217,7 @@ int main(int argc, char **argv) {
     if (getenv("out"))
        fname = getenv("out");
     else
-       sprintf(fname, "%s%04d.%s", prefix, ftime, format);
+       sprintf(fname, "%s%05d.%s", prefix, ftime, format);
 
     if (verbose)
        fprintf(stderr, "writing %s...", fname);
@@ -264,7 +250,7 @@ int main(int argc, char **argv) {
     flam3_interpolate(f.genomes, f.ngenomes, f.time, &center_cp);
    
     /* Convert to string */
-    fpc.genome = flam3_genome2string(&center_cp);      
+    fpc.genome = flam3_print_to_string(&center_cp);      
     sprintf(badval_string, "%g",stats.badvals/(double)stats.num_iters);
     fpc.badvals = badval_string;
     sprintf(numiter_string,"%g",(double)stats.num_iters);

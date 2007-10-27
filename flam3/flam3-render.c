@@ -18,7 +18,7 @@
 */
 
 static char *flam3_render_c_id =
-"@(#) $Id: flam3-render.c,v 1.3 2007/08/18 15:05:00 vargol Exp $";
+"@(#) $Id: flam3-render.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
 
 #ifdef WIN32
 #define WINVER 0x0500
@@ -28,6 +28,9 @@ static char *flam3_render_c_id =
 #ifdef __APPLE__
 #include <sys/sysctl.h>
 #endif
+
+#include <limits.h>
+
 
 #include "private.h"
 #include "img.h"
@@ -41,9 +44,10 @@ int calc_nstrips(flam3_frame *spec) {
 #ifdef WIN32
   MEMORYSTATUS stat;
   stat.dwLength = sizeof(stat);
-  GlobalMemoryStatus(&stat);
+  GlobalMemoryStatus(&stat); // may want to go to GlobalMemoryStatusEx eventually
   mem_available = (double)stat.dwTotalPhys;
-  if (mem_available > 1e9) mem_available = 1e9;
+//  fprintf(stderr,"%lu bytes free memory...\n",(size_t)stat.dwAvailPhys);
+//  if (mem_available > 1e9) mem_available = 1e9;
 #elif defined(_SC_PHYS_PAGES) && defined(_SC_PAGESIZE)
   mem_available =
       (double)sysconf(_SC_PHYS_PAGES) * sysconf(_SC_PAGESIZE);
@@ -60,6 +64,10 @@ int calc_nstrips(flam3_frame *spec) {
 #else
   fprintf(stderr, "warning: unable to determine physical memory.\n");
   mem_available = 2e9;
+#endif
+#if 0
+  fprintf(stderr,"available phyical memory is %lu\n",
+	  (unsigned long)mem_available);
 #endif
   mem_available *= 0.8;
   if (getenv("use_mem")) {
@@ -85,7 +93,8 @@ int main(int argc, char **argv) {
    unsigned char *image;
    FILE *fp;
    char fname[256];
-   int this_size, last_size = -1;
+   size_t this_size, last_size = -1;
+   double imgmem;
    int strip;
    double center_y, center_base;
    int nstrips;
@@ -95,19 +104,17 @@ int main(int argc, char **argv) {
    int verbose = argi("verbose", 1);
    int bits = argi("bits", 33);
    int seed = argi("seed", 0);
-   char *isaac_seed = args("isaac_seed",NULL);
    int transparency = argi("transparency", 0);
    char *inf = getenv("in");
    double qs = argf("qs", 1.0);
    double ss = argf("ss", 1.0);
    double pixel_aspect = argf("pixel_aspect", 1.0);
-   int name_enable = argi("name_enable",0.0);
+   int name_enable = argi("name_enable",0);
    int num_threads = argi("nthreads",0);
    FILE *in;
    double zoom_scale;
    int channels;
-   int start_time = time(0);
-   long int default_isaac_seed = time(0);  
+   long start_time = (long)time(0);
    flam3_img_comments fpc;
    stat_struct stats;
    char numiter_string[64];
@@ -136,21 +143,10 @@ int main(int argc, char **argv) {
      exit(0);
    }
 
-   /* Set up the isaac rng */
-   memset(f.rc.randrsl, 0, RANDSIZ*sizeof(ub4));
-   if (NULL == isaac_seed) {
-      int lp;
-      /* No isaac seed specified.  Use the system time to initialize. */
-      for (lp = 0; lp < RANDSIZ; lp++)
-         f.rc.randrsl[lp] = default_isaac_seed;
-   } else {
-      /* Use the specified string */
-      strncpy((char *)&f.rc.randrsl,(const char *)isaac_seed, RANDSIZ*sizeof(ub4));
-   }
-
-   irandinit(&f.rc,1);
-
-   srandom(seed ? seed : (time(0) + getpid()));
+   /* Init random number generators */
+   /* MANDATORY! */
+   flam3_init_frame(&f);
+   srandom(seed ? seed : ((unsigned int)time(0) + getpid()));
 
    /* Set the number of threads */
    if (num_threads==0) {
@@ -236,13 +232,24 @@ int main(int argc, char **argv) {
          nstrips, cps[i].height);
          exit(1);
       }
+      
+      imgmem = (double)channels * (double)cps[i].width * (double)cps[i].height;
+      
+      if (imgmem > ULONG_MAX) {
+         fprintf(stderr,"Image size > ULONG_MAX.  Aborting.\n");
+         exit(1);
+      }
 
-      this_size = channels * cps[i].width * cps[i].height;
+      this_size = (size_t)channels * (size_t)cps[i].width * (size_t)cps[i].height;
       if (this_size != last_size) {
          if (last_size != -1)
             free(image);
          last_size = this_size;
          image = (unsigned char *) malloc(this_size);
+         if (NULL==image) {
+            fprintf(stderr,"Error allocating memory for image.  Aborting\n");
+            exit(1);
+         }
       } else {
          memset(image, 0, this_size);
       }
@@ -281,7 +288,7 @@ int main(int argc, char **argv) {
          } else if (name_enable && cps[i].flame_name[0]>0) {
             sprintf(fname, "%s.%s",cps[i].flame_name,format);
          } else {
-            sprintf(fname, "%s%04d.%s", prefix, i, format);
+            sprintf(fname, "%s%05d.%s", prefix, i, format);
          }
          if (verbose) {
         fprintf(stderr, "writing %s...", fname);
@@ -293,7 +300,7 @@ int main(int argc, char **argv) {
          }
 
          /* Generate temp file with genome */
-         fpc.genome = flam3_genome2string(f.genomes);
+         fpc.genome = flam3_print_to_string(f.genomes);
          
          sprintf(badval_string,"%g",stats.badvals/(double)stats.num_iters);
          fpc.badvals = badval_string;
@@ -331,12 +338,12 @@ int main(int argc, char **argv) {
       }
    }
    if (verbose && ((ncps > 1) || (nstrips > 1))) {
-      int total_time = time(0) - start_time;
+      long total_time = (long)time(0) - start_time;
 
       if (total_time > 100)
          fprintf(stderr, "total time = %.1f minutes\n", total_time / 60.0);
       else
-         fprintf(stderr, "total time = %d seconds\n", total_time);
+         fprintf(stderr, "total time = %ld seconds\n", total_time);
    }
    free(image);
    return 0;
