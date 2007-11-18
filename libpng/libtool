@@ -44,7 +44,7 @@ available_tags=" CXX"
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host cpc2-mfld3-0-0-cust488.nott.cable.ntl.com:
+# Libtool was configured on host imac.local:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -66,13 +66,13 @@ fast_install=needless
 
 # The host system.
 host_alias=
-host=i386-apple-darwin8.10.1
-host_os=darwin8.10.1
+host=i386-apple-darwin8.11.1
+host_os=darwin8.11.1
 
 # The build system.
 build_alias=
-build=i386-apple-darwin8.10.1
-build_os=darwin8.10.1
+build=i386-apple-darwin8.11.1
+build_os=darwin8.11.1
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -85,7 +85,7 @@ AR_FLAGS="cru"
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-g -O2"
+LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc"
 
 # A language-specific compiler.
 CC="gcc"
@@ -7321,7 +7321,7 @@ disable_libs=static
 # End:
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
-# Libtool was configured on host cpc2-mfld3-0-0-cust488.nott.cable.ntl.com:
+# Libtool was configured on host imac.local:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -7343,13 +7343,13 @@ fast_install=needless
 
 # The host system.
 host_alias=
-host=i386-apple-darwin8.10.1
-host_os=darwin8.10.1
+host=i386-apple-darwin8.11.1
+host_os=darwin8.11.1
 
 # The build system.
 build_alias=
-build=i386-apple-darwin8.10.1
-build_os=darwin8.10.1
+build=i386-apple-darwin8.11.1
+build_os=darwin8.11.1
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -7362,7 +7362,7 @@ AR_FLAGS="cru"
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-g -O2"
+LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc"
 
 # A language-specific compiler.
 CC="g++"

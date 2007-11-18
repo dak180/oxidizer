@@ -18,7 +18,7 @@ SHELL = /bin/sh
 srcdir = .
 top_srcdir = .
 
-prefix = /Users/vargol/Source/oxidizer/flam3/../build_folder_for_flam3
+prefix = /Users/vargol/Source/oxidizer/build_folder_for_flam3
 exec_prefix = ${prefix}
 
 bindir = ${exec_prefix}/bin
@@ -143,7 +143,7 @@ flam3_render_LDFLAGS =
 DEFS = -DHAVE_CONFIG_H
 DEFAULT_INCLUDES =  -I. -I$(srcdir) -I.
 CPPFLAGS = -I/usr/include/libxml2 
-LDFLAGS = -arch i386 -arch ppc -L../libpng/lib -L../jpeg-6b/lib
+LDFLAGS = -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib
 LIBS = -ljpeg -lpthread -lxml2 -lpng -lz 
 depcomp =
 am__depfiles_maybe =
@@ -151,7 +151,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -mdynamic-no-pic -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc -I../libpng/include -I../jpeg-6b/include
+CFLAGS = -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include
 DIST_SOURCES = $(libflam3_a_SOURCES) $(flam3_animate_SOURCES) \
 	$(flam3_convert_SOURCES) $(flam3_genome_SOURCES) \
 	$(flam3_render_SOURCES)

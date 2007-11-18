@@ -9,7 +9,7 @@
 srcdir = .
 
 # Where to install the programs and man pages.
-prefix = /Users/vargol/Source/oxidizer/jpeg-6b/../build_folder_for_flam3
+prefix = /Users/vargol/Source/oxidizer/build_folder_for_flam3
 exec_prefix = ${prefix}
 bindir = $(exec_prefix)/bin
 libdir = $(exec_prefix)/lib
@@ -23,7 +23,7 @@ mandir = $(prefix)/man/man$(manext)
 CC= gcc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386
 
 # You may need to adjust these cc options:
-CFLAGS= -O3 -g  -I$(srcdir)
+CFLAGS= -O3  -I$(srcdir)
 # Generally, we recommend defining any configuration symbols in jconfig.h,
 # NOT via -D switches here.
 # However, any special defines for ansi2knr.c may be included here:
