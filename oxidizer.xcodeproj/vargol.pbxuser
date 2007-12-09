@@ -9,7 +9,7 @@
 		};
 	};
 	29B97313FDCFA39411CA2CEA /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeBuildConfigurationName = Release;
 		activeExecutable = A4D6049809657B3E0001CD1D /* Oxidizer */;
 		activeTarget = 8D1107260486CEB800E47090 /* Oxidizer */;
 		addToTargets = (
@@ -295,6 +295,14 @@
 			A442C7970C525EEC00D8D6A3 = A442C7970C525EEC00D8D6A3 /* PBXTextBookmark */;
 			A44A89910D0C4F4D007CBD42 /* PBXTextBookmark */ = A44A89910D0C4F4D007CBD42 /* PBXTextBookmark */;
 			A44A89AE0D0C4FBC007CBD42 /* PBXTextBookmark */ = A44A89AE0D0C4FBC007CBD42 /* PBXTextBookmark */;
+			A44A89B30D0C504E007CBD42 /* PBXTextBookmark */ = A44A89B30D0C504E007CBD42 /* PBXTextBookmark */;
+			A44A89B50D0C507F007CBD42 /* PBXTextBookmark */ = A44A89B50D0C507F007CBD42 /* PBXTextBookmark */;
+			A44A89B60D0C507F007CBD42 /* PBXTextBookmark */ = A44A89B60D0C507F007CBD42 /* PBXTextBookmark */;
+			A44A89B70D0C509D007CBD42 /* PBXTextBookmark */ = A44A89B70D0C509D007CBD42 /* PBXTextBookmark */;
+			A44A89B80D0C509D007CBD42 /* PBXTextBookmark */ = A44A89B80D0C509D007CBD42 /* PBXTextBookmark */;
+			A44A89B90D0C509D007CBD42 /* PBXTextBookmark */ = A44A89B90D0C509D007CBD42 /* PBXTextBookmark */;
+			A44A89BA0D0C509D007CBD42 /* PBXTextBookmark */ = A44A89BA0D0C509D007CBD42 /* PBXTextBookmark */;
+			A44A89BB0D0C509D007CBD42 /* PBXTextBookmark */ = A44A89BB0D0C509D007CBD42 /* PBXTextBookmark */;
 			A4734E1D0C5555C9002C52F3 = A4734E1D0C5555C9002C52F3 /* PBXBookmark */;
 			A4734E1E0C5555C9002C52F3 = A4734E1E0C5555C9002C52F3 /* PBXTextBookmark */;
 			A4734E2A0C5556AE002C52F3 = A4734E2A0C5556AE002C52F3 /* PBXBookmark */;
@@ -849,9 +857,9 @@
 	};
 	A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1036, 670}}";
-			sepNavSelRange = "{574, 0}";
-			sepNavVisRect = "{{0, 0}, {1036, 670}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1036, 669}}";
+			sepNavSelRange = "{356, 112}";
+			sepNavVisRect = "{{0, 0}, {1036, 669}}";
 		};
 	};
 	A41C36DE0C45425D00482E48 /* PBXTextBookmark */ = {
@@ -1462,6 +1470,84 @@
 		vrLoc = 0;
 	};
 	A44A89AE0D0C4FBC007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = variations;
+		rLen = 10;
+		rLoc = 87774;
+		rType = 0;
+		vrLen = 1282;
+		vrLoc = 0;
+	};
+	A44A89B30D0C504E007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = variations;
+		rLen = 10;
+		rLoc = 87774;
+		rType = 0;
+		vrLen = 1282;
+		vrLoc = 0;
+	};
+	A44A89B50D0C507F007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "warning: 'NSProgressIndicator' may not respond to '-performSelectorOnMainThread:withObject:waitUntilDone:'";
+		fRef = A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */;
+		rLen = 1;
+		rLoc = 14;
+		rType = 1;
+	};
+	A44A89B60D0C507F007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */;
+		name = "[self performSelectorOnMainThread:@selector(__setDoubleValueInMainThread:) withObject:value waitUntilDone:NO];";
+		rLen = 112;
+		rLoc = 356;
+		rType = 0;
+		vrLen = 541;
+		vrLoc = 63;
+	};
+	A44A89B70D0C509D007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */;
+		name = "[self performSelectorOnMainThread:@selector(__setDoubleValueInMainThread:) withObject:value waitUntilDone:NO];";
+		rLen = 112;
+		rLoc = 356;
+		rType = 0;
+		vrLen = 610;
+		vrLoc = 0;
+	};
+	A44A89B80D0C509D007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = variations;
+		rLen = 10;
+		rLoc = 87774;
+		rType = 0;
+		vrLen = 1282;
+		vrLoc = 0;
+	};
+	A44A89B90D0C509D007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F333A1096C813B00230854 /* Genome.m */;
+		name = variations;
+		rLen = 10;
+		rLoc = 87774;
+		rType = 0;
+		vrLen = 1282;
+		vrLoc = 0;
+	};
+	A44A89BA0D0C509D007CBD42 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A41B414E0C439D9B000130DE /* NSProgressIndicatorUpdateOnMainThread.m */;
+		name = "[self performSelectorOnMainThread:@selector(__setDoubleValueInMainThread:) withObject:value waitUntilDone:NO];";
+		rLen = 112;
+		rLoc = 356;
+		rType = 0;
+		vrLen = 610;
+		vrLoc = 0;
+	};
+	A44A89BB0D0C509D007CBD42 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = A4F333A1096C813B00230854 /* Genome.m */;
 		name = variations;
