@@ -81,7 +81,8 @@
 - (void) availableComponentsForMovie;
 - (void) availableComponentsForImage;
 - (void) saveMovie;
-- (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
+- (void) saveNSImage:(NSImage *)image;
+//- (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) addNSBitmapImageRepToMovie:(NSBitmapImageRep *)imageRepresentation;
 - (NSString *) fileName;
 

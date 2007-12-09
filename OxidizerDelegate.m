@@ -404,24 +404,95 @@ void print_stack(lua_State* interpreter){
 	lua_objc_pushid(interpreter,self);
 	lua_setglobal(interpreter, "oxidizer_delegate");
 	
+	NSMutableDictionary *returnDictionary = [[NSMutableDictionary alloc] init];
+
+	[returnDictionary setValue:@"not_set" forKey:@"action"];
+	[returnDictionary setValue:[NSNumber numberWithInt:0] forKey:@"code"];
+	[returnDictionary setValue:@"" forKey:@"message"];
+
+	lua_objc_pushpropertylist(interpreter,returnDictionary);
+	lua_setglobal(interpreter, "oxidizer_status");
+
+	
 	luaL_loadbuffer(interpreter,[luaScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
 	lua_pcall(interpreter,0,0,0);
 
+	lua_getglobal(interpreter, "oxidizer_status");
+	NSDictionary *returnValues = (NSDictionary *)lua_objc_topropertylist(interpreter, 1);
+
 	lua_getglobal(interpreter, "oxidizer_genomes");
-	NSObject *returnObject = lua_objc_topropertylist(interpreter, 1);
-	if ([returnObject isKindOfClass:[NSArray class]]) {
-		if([(NSArray *)returnObject count] > 0) {
-			[ffm deleteOldGenomes];
-			[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+	NSObject *returnObject = lua_objc_topropertylist(interpreter, 2);
+
+	if ([[returnValues valueForKey:@"action"] isEqualToString:@"not_set"]) {
+		
+		
+		/* treat it like the pre 0.4.2 return */
+	
+		if ([returnObject isKindOfClass:[NSArray class]]) {
+			if([(NSArray *)returnObject count] > 0) {
+				[ffm deleteOldGenomes];
+				[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+			}
+		} else if ([returnObject isKindOfClass:[NSString class]] && (![(NSString *)returnObject isEqualToString:@""]) ) {
+			NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
+													 defaultButton:@"Close"
+												   alternateButton:nil 
+													   otherButton:nil 
+										 informativeTextWithFormat:(NSString *)returnObject];
+			[finishedPanel runModal];	
 		}
-	} else if ([returnObject isKindOfClass:[NSString class]]) {
-		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
+		
+	} else if ([[returnValues valueForKey:@"action"] isEqualToString:@"replace"]) {
+
+		/* action of replace, replaces the current genome with that generated from lua */
+	
+		if ([returnObject isKindOfClass:[NSArray class]]) {
+			if([(NSArray *)returnObject count] > 0) {
+				[ffm deleteOldGenomes];
+				[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+			}
+		}		
+	} else if ([[returnValues valueForKey:@"action"] isEqualToString:@"append"]) {
+		
+		/* action of append, append the genome from lua to the current genome */
+		
+		if ([returnObject isKindOfClass:[NSArray class]]) {
+			if([(NSArray *)returnObject count] > 0) {
+				[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+			}
+		}
+	} else if ([[returnValues valueForKey:@"action"] isEqualToString:@"warning"]) {
+		
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script warning!" 
 												 defaultButton:@"Close"
 											   alternateButton:nil 
 												   otherButton:nil 
-									 informativeTextWithFormat:(NSString *)returnObject];
+									 informativeTextWithFormat:(NSString *)[returnValues valueForKey:@"message"]];
+		[finishedPanel setAlertStyle:NSWarningAlertStyle];
 		[finishedPanel runModal];	
+		
+	} else if ([[returnValues valueForKey:@"action"] isEqualToString:@"error"]) {
+
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script error!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:(NSString *)[returnValues valueForKey:@"message"]];
+		[finishedPanel setAlertStyle:NSCriticalAlertStyle];
+		[finishedPanel runModal];			
+		
+	}  else if ([[returnValues valueForKey:@"action"] isEqualToString:@"message"]) {
+		
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script message" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:(NSString *)[returnValues valueForKey:@"message"]];
+		[finishedPanel setAlertStyle:NSInformationalAlertStyle];
+		[finishedPanel runModal];			
+		
 	}
+
 	
 	lua_close(interpreter);
 	

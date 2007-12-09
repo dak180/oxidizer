@@ -510,7 +510,7 @@
 	
 }
 
--(void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep {
+-(void) saveNSImage:(NSImage *)image {
 
 	Component c;
 	Component gec;
@@ -521,7 +521,7 @@
 	NSData *tiff;
 
 	
-	tiff = [[rep TIFFRepresentation] retain];
+	tiff = [[image TIFFRepresentation] retain];
 	
 	MovieImportComponent tiffImportComponent = OpenDefaultComponent( GraphicsImporterComponentType, kQTFileTypeTIFF );
 	

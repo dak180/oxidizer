@@ -18,7 +18,7 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.5 2007/11/18 19:54:44 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.6 2007/12/09 16:31:48 vargol Exp $";
 
 
 #include "private.h"
@@ -1622,7 +1622,7 @@ int flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, unsigned 
    p[3] = samples[3];
 
    for (i = -4*fuse; i < 4*n; i+=4) {
-      int fn = xform_distrib[abs((int)irand(rc) % CHOOSE_XFORM_GRAIN)];
+      int fn = xform_distrib[((unsigned)irand(rc)) % CHOOSE_XFORM_GRAIN];
       
       if (1) {
          if (apply_xform(cp, fn, p, q, rc)>0) {

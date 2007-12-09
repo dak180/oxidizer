@@ -216,7 +216,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 
 	if(qt != nil) {
-		[qt saveNSBitmapImageRep:[[flameImage representations] objectAtIndex:0]];		
+		[qt saveNSImage:flameImage];		
 	} 
 	
 	
@@ -888,10 +888,10 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	return;
 }
 
--(void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep {
+//-(void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep {
 
-	[qtController saveNSBitmapImageRep:rep]; 
-}
+//	[qtController saveNSBitmapImageRep:rep]; 
+//}
 
 
 

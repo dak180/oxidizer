@@ -2147,7 +2147,7 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	[newGenomeEntity setValue:[edits objectForKey:@"nick"] forKey:@"nick"];
 	[newGenomeEntity setValue:[edits objectForKey:@"url"] forKey:@"url"];
-	[newGenomeEntity setValue:[edits objectForKey:@"comment"] forKey:@"comment"];
+	[newGenomeEntity setValue:[edits objectForKey:@"comm"] forKey:@"comment"];
 	[previousEdits release];
 	
 	
