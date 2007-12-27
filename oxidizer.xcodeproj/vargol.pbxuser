@@ -20,7 +20,6 @@
 			A43319880C4F82F400737560 /* malloc_printf */,
 			A4222AE30C64CE5E00FA461C /* -[_NSZombie release] */,
 			A421F65D0C7739CB00D2C83A /* GenePoolModel.m:247 */,
-			A48CC43E0CC2A41100A5F8FB /* FractalFlameModel.m:1279 */,
 			A407805B0D0AEEA200535B29 /* OxidizerDelegate.m:436 */,
 			A404B3600D143ED800FE81AC /* RectangleView.m:22 */,
 			A4F7B53C0D156D0500FCF7EE /* NSProgressIndicatorUpdateOnMainThread.m:22 */,
@@ -208,17 +207,15 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 220460034;
-			PBXWorkspaceStateSaveDate = 220460034;
+			PBXPerProjectTemplateStateSaveDate = 220491783;
+			PBXWorkspaceStateSaveDate = 220491783;
 		};
 		perUserProjectItems = {
-			A474EE4A0D23F5DA0009816C /* PBXTextBookmark */ = A474EE4A0D23F5DA0009816C /* PBXTextBookmark */;
-			A474EE4B0D23F5DA0009816C /* PBXTextBookmark */ = A474EE4B0D23F5DA0009816C /* PBXTextBookmark */;
-			A474EE4C0D23F5DA0009816C /* PBXTextBookmark */ = A474EE4C0D23F5DA0009816C /* PBXTextBookmark */;
-			A474EE4D0D23F5DA0009816C /* PBXTextBookmark */ = A474EE4D0D23F5DA0009816C /* PBXTextBookmark */;
-			A474EE510D23F6020009816C /* PBXTextBookmark */ = A474EE510D23F6020009816C /* PBXTextBookmark */;
-			A474EE520D23F6080009816C /* PBXTextBookmark */ = A474EE520D23F6080009816C /* PBXTextBookmark */;
-			A474EE540D23F7390009816C /* PBXTextBookmark */ = A474EE540D23F7390009816C /* PBXTextBookmark */;
+			A474EE4A0D23F5DA0009816C = A474EE4A0D23F5DA0009816C /* PBXTextBookmark */;
+			A474EE4B0D23F5DA0009816C = A474EE4B0D23F5DA0009816C /* PBXTextBookmark */;
+			A474EE4C0D23F5DA0009816C = A474EE4C0D23F5DA0009816C /* PBXTextBookmark */;
+			A474EE560D24076E0009816C = A474EE560D24076E0009816C /* PBXTextBookmark */;
+			A49559FF0D24701100BE8B70 /* PBXTextBookmark */ = A49559FF0D24701100BE8B70 /* PBXTextBookmark */;
 		};
 		sourceControlManager = A4D604A709657B5D0001CD1D /* Source Control */;
 		userBookmarkGroup = A4E52D3F0A013F8400382558 /* PBXBookmarkGroup */;
@@ -407,7 +404,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = Foundation;
-		modificationTime = 220460549.699585;
+		modificationTime = 220460549.6995851;
 		state = 1;
 		symbolName = "-[_NSZombie release]";
 	};
@@ -563,37 +560,7 @@
 		vrLen = 702;
 		vrLoc = 7155;
 	};
-	A474EE4D0D23F5DA0009816C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
-		name = "FractalFlameModel.m: 1296";
-		rLen = 0;
-		rLoc = 34017;
-		rType = 0;
-		vrLen = 1250;
-		vrLoc = 32865;
-	};
-	A474EE510D23F6020009816C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
-		name = "FractalFlameModel.m: 1296";
-		rLen = 0;
-		rLoc = 34017;
-		rType = 0;
-		vrLen = 1250;
-		vrLoc = 32865;
-	};
-	A474EE520D23F6080009816C /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
-		name = "FractalFlameModel.m: 1296";
-		rLen = 0;
-		rLoc = 34017;
-		rType = 0;
-		vrLen = 1373;
-		vrLoc = 32865;
-	};
-	A474EE540D23F7390009816C /* PBXTextBookmark */ = {
+	A474EE560D24076E0009816C /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
 		name = "FractalFlameModel.m: 1296";
@@ -619,22 +586,15 @@
 			sepNavWindowFrame = "{{276, 205}, {1010, 790}}";
 		};
 	};
-	A48CC43E0CC2A41100A5F8FB /* FractalFlameModel.m:1279 */ = {
-		isa = PBXFileBreakpoint;
-		actions = (
-		);
-		breakpointStyle = 0;
-		continueAfterActions = 0;
-		countType = 0;
-		delayBeforeContinue = 0;
-		fileReference = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
-		functionName = "-createGenomesFromXMLFile:inContext:";
-		hitCount = 0;
-		ignoreCount = 0;
-		lineNumber = 1279;
-		location = Oxidizer;
-		modificationTime = 220460542.998439;
-		state = 1;
+	A49559FF0D24701100BE8B70 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 1296";
+		rLen = 0;
+		rLoc = 34017;
+		rType = 0;
+		vrLen = 1249;
+		vrLoc = 32867;
 	};
 	A4A3027B0A28995D002828D9 /* BreedingController.h */ = {
 		uiCtxt = {
@@ -994,9 +954,9 @@
 	};
 	A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1022, 21098}}";
+			sepNavIntBoundsRect = "{{0, 0}, {1022, 20580}}";
 			sepNavSelRange = "{34017, 0}";
-			sepNavVisRange = "{32865, 1373}";
+			sepNavVisRange = "{32867, 1249}";
 			sepNavVisRect = "{{0, 16823}, {1036, 669}}";
 			sepNavWindowFrame = "{{604, 29}, {1073, 999}}";
 		};

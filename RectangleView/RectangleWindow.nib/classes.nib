@@ -1,0 +1,19 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {showWindow = id; }; 
+            CLASS = RectangleController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {rectangleView = RectangleView; rectangleWindow = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            CLASS = RectangleView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {RectangleController = NSObject; }; 
+            SUPERCLASS = NSView; 
+        }
+    ); 
+    IBVersion = 1; 
+}
