@@ -1,225 +1,365 @@
-{
-    IBClasses = (
-        {CLASS = BlobVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
-        {
-            ACTIONS = {
-                alternate = id; 
-                clone = id; 
-                doUnion = id; 
-                interpolate = id; 
-                loadNewGenomeIntoMoc1 = id; 
-                loadNewGenomeIntoMoc2 = id; 
-                mutate = id; 
-                sendResultToEditor = id; 
-                showBreedingWindow = id; 
-            }; 
-            CLASS = BreedingController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                breedingWindow = NSWindow; 
-                flameModel = FractalFlameModel; 
-                genome1 = NSArrayController; 
-                genome2 = NSArrayController; 
-                genomeResult = NSArrayController; 
-                palette = PaletteController; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            CLASS = DnDArrayController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {tableView = NSTableView; }; 
-            SUPERCLASS = NSArrayController; 
-        }, 
-        {
-            CLASS = DnDButton; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {genePoolController = GenePoolController; }; 
-            SUPERCLASS = NSButton; 
-        }, 
-        {CLASS = DnDImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
-        {CLASS = DragDropAndSaveImageView; LANGUAGE = ObjC; SUPERCLASS = NSImageView; }, 
-        {
-            ACTIONS = {randomSeed = id; }; 
-            CLASS = EnvironmentController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {seedTextField = NSTextField; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = Fan2Variation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
-        {
-            ACTIONS = {"" = id; }; 
-            CLASS = FirstResponder; 
-            LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                changeColourMap = id; 
-                changeColourMapAndHideWindow = id; 
-                changePaletteAndHidePaletteWindow = id; 
-                showPaletteList = id; 
-                showXFormWindow = id; 
-            }; 
-            CLASS = FlameController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                cmapController = NSArrayController; 
-                cmapWindow = NSWindow; 
-                colourWell = NSColorWell; 
-                colourWithHue = NSImageView; 
-                flameValues = NSTableView; 
-                flameWindow = NSWindow; 
-                flames = NSTableView; 
-                genomeController = NSArrayController; 
-                paletteController = PaletteController; 
-                paletteWindow = NSWindow; 
-                paletteWithHue = NSImageView; 
-                xformController = NSArrayController; 
-                xformWindow = NSWindow; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                appendFile = id; 
-                changePaletteAndHidePaletteWindow = id; 
-                editGenomes = id; 
-                openFile = id; 
-                previewCurrentFlame = id; 
-                showPreferencesWindow = id; 
-            }; 
-            CLASS = FractalFlameModel; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                environment = EnvironmentController; 
-                flameController = NSArrayController; 
-                flameTable = NSTableView; 
-                flames = FlameController; 
-                frameIndicator = NSLevelIndicator; 
-                oxidizerWindow = NSWindow; 
-                palette = PaletteController; 
-                preferencesWindow = NSWindow; 
-                previewView = NSImageView; 
-                previewWindow = NSWindow; 
-                progessTable = NSTableView; 
-                progressController = NSArrayController; 
-                progressWindow = NSWindow; 
-                qtController = QuickTimeController; 
-                saveThumbnailsView = NSView; 
-                taskAllFramesIndicator = NSProgressIndicator; 
-                taskFrameIndicator = NSProgressIndicator; 
-                taskProgressWindow = NSWindow; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {
-                breedPool = id; 
-                fillPool = id; 
-                moveSelectedToEditor = id; 
-                showGenePoolWindow = id; 
-                toggleGenome = id; 
-            }; 
-            CLASS = GenePoolController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                ffm = FractalFlameModel; 
-                geneButton0 = NSButton; 
-                geneButton1 = NSButton; 
-                geneButton10 = NSButton; 
-                geneButton11 = NSButton; 
-                geneButton12 = NSButton; 
-                geneButton13 = NSButton; 
-                geneButton14 = NSButton; 
-                geneButton15 = NSButton; 
-                geneButton2 = NSButton; 
-                geneButton3 = NSButton; 
-                geneButton4 = NSButton; 
-                geneButton5 = NSButton; 
-                geneButton6 = NSButton; 
-                geneButton7 = NSButton; 
-                geneButton8 = NSButton; 
-                geneButton9 = NSButton; 
-                genePoolWindow = NSWindow; 
-                model = GenePoolModel; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = GenePoolModel; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = Genome; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = MyGenome; LANGUAGE = ObjC; SUPERCLASS = Genome; }, 
-        {CLASS = NSDatePicker; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
-        {CLASS = NSLevelIndicator; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
-        {CLASS = NSSegmentedControl; LANGUAGE = ObjC; SUPERCLASS = NSControl; }, 
-        {
-            ACTIONS = {
-                customizeToolbar = id; 
-                newFlame = id; 
-                openFile = id; 
-                renderMovie = id; 
-                renderStill = id; 
-                renderStillToWindow = id; 
-                renderStills = id; 
-                runLuaScript = id; 
-                saveAsFlam3 = id; 
-                saveFlam3 = id; 
-                showBreedingWindow = id; 
-                showGenePoolWindow = id; 
-            }; 
-            CLASS = OxidizerDelegate; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {bc = BreedingController; ffm = FractalFlameModel; oxidizerWindow = NSWindow; }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = PDJVariation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
-        {
-            ACTIONS = {
-                hidePaletteWindow = id; 
-                setEnabled = id; 
-                setNumber = id; 
-                showPaletteList = id; 
-            }; 
-            CLASS = PaletteController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                colourTable = NSTableView; 
-                palatteTable = NSTableView; 
-                palatteWindow = NSWindow; 
-                paletteList = NSArrayController; 
-                pickPalette = NSButton; 
-                textField = NSTextField; 
-                usePalette = NSButton; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = ProgressDetails; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {getImageExportSettings = id; getMovieExportSettings = id; }; 
-            CLASS = QuickTimeController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                imageComponents = NSMutableArray; 
-                imageExportController = NSArrayController; 
-                imageExportPanel = NSView; 
-                movieComponents = NSMutableArray; 
-                movieExportController = NSArrayController; 
-                movieExportPanel = NSView; 
-                stillsExportPanel = NSView; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = QuicktimeThreadParameters; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = Ring2Variation; LANGUAGE = ObjC; SUPERCLASS = Variation; }, 
-        {CLASS = SymmetryController; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {CLASS = Variation; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {setCurrentVariation = id; showXFormWindow = id; }; 
-            CLASS = XFormController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {xformWindow = NSWindow; xforms = NSTableView; }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>CLASS</key>
+			<string>NSLevelIndicator</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSControl</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSSegmentedControl</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSControl</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>DragDropAndSaveImageView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSImageView</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>alternate</key>
+				<string>id</string>
+				<key>clone</key>
+				<string>id</string>
+				<key>doUnion</key>
+				<string>id</string>
+				<key>interpolate</key>
+				<string>id</string>
+				<key>loadNewGenomeIntoMoc1</key>
+				<string>id</string>
+				<key>loadNewGenomeIntoMoc2</key>
+				<string>id</string>
+				<key>mutate</key>
+				<string>id</string>
+				<key>sendResultToEditor</key>
+				<string>id</string>
+				<key>showBreedingWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>BreedingController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>breedingWindow</key>
+				<string>NSWindow</string>
+				<key>flameModel</key>
+				<string>FractalFlameModel</string>
+				<key>genome1</key>
+				<string>NSArrayController</string>
+				<key>genome2</key>
+				<string>NSArrayController</string>
+				<key>genomeResult</key>
+				<string>NSArrayController</string>
+				<key>palette</key>
+				<string>PaletteController</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>getImageExportSettings</key>
+				<string>id</string>
+				<key>getMovieExportSettings</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>QuickTimeController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>imageComponents</key>
+				<string>NSMutableArray</string>
+				<key>imageExportController</key>
+				<string>NSArrayController</string>
+				<key>imageExportPanel</key>
+				<string>NSView</string>
+				<key>movieComponents</key>
+				<string>NSMutableArray</string>
+				<key>movieExportController</key>
+				<string>NSArrayController</string>
+				<key>movieExportPanel</key>
+				<string>NSView</string>
+				<key>stillsExportPanel</key>
+				<string>NSView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>changeColourMap</key>
+				<string>id</string>
+				<key>changeColourMapAndHideWindow</key>
+				<string>id</string>
+				<key>changePaletteAndHidePaletteWindow</key>
+				<string>id</string>
+				<key>showPaletteList</key>
+				<string>id</string>
+				<key>showXFormWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FlameController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>cmapController</key>
+				<string>NSArrayController</string>
+				<key>cmapWindow</key>
+				<string>NSWindow</string>
+				<key>colourWell</key>
+				<string>NSColorWell</string>
+				<key>colourWithHue</key>
+				<string>NSImageView</string>
+				<key>flameValues</key>
+				<string>NSTableView</string>
+				<key>flameWindow</key>
+				<string>NSWindow</string>
+				<key>flames</key>
+				<string>NSTableView</string>
+				<key>genomeController</key>
+				<string>NSArrayController</string>
+				<key>paletteController</key>
+				<string>PaletteController</string>
+				<key>paletteWindow</key>
+				<string>NSWindow</string>
+				<key>paletteWithHue</key>
+				<string>NSImageView</string>
+				<key>xformController</key>
+				<string>NSArrayController</string>
+				<key>xformWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>customizeToolbar</key>
+				<string>id</string>
+				<key>newFlame</key>
+				<string>id</string>
+				<key>openFile</key>
+				<string>id</string>
+				<key>renderMovie</key>
+				<string>id</string>
+				<key>renderStill</key>
+				<string>id</string>
+				<key>renderStillToWindow</key>
+				<string>id</string>
+				<key>renderStills</key>
+				<string>id</string>
+				<key>runLuaScript</key>
+				<string>id</string>
+				<key>saveAsFlam3</key>
+				<string>id</string>
+				<key>saveFlam3</key>
+				<string>id</string>
+				<key>showBreedingWindow</key>
+				<string>id</string>
+				<key>showGenePoolWindow</key>
+				<string>id</string>
+				<key>showRectangleWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>OxidizerDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>bc</key>
+				<string>BreedingController</string>
+				<key>ffm</key>
+				<string>FractalFlameModel</string>
+				<key>oxidizerWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>DnDArrayController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>tableView</key>
+				<string>NSTableView</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSArrayController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>randomSeed</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>EnvironmentController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>seedTextField</key>
+				<string>NSTextField</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>DnDImageView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSImageView</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>appendFile</key>
+				<string>id</string>
+				<key>changePaletteAndHidePaletteWindow</key>
+				<string>id</string>
+				<key>editGenomes</key>
+				<string>id</string>
+				<key>openFile</key>
+				<string>id</string>
+				<key>previewCurrentFlame</key>
+				<string>id</string>
+				<key>showPreferencesWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FractalFlameModel</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>environment</key>
+				<string>EnvironmentController</string>
+				<key>flameController</key>
+				<string>NSArrayController</string>
+				<key>flameTable</key>
+				<string>NSTableView</string>
+				<key>flames</key>
+				<string>FlameController</string>
+				<key>frameIndicator</key>
+				<string>NSLevelIndicator</string>
+				<key>oxidizerWindow</key>
+				<string>NSWindow</string>
+				<key>palette</key>
+				<string>PaletteController</string>
+				<key>preferencesWindow</key>
+				<string>NSWindow</string>
+				<key>previewView</key>
+				<string>NSImageView</string>
+				<key>previewWindow</key>
+				<string>NSWindow</string>
+				<key>progessTable</key>
+				<string>NSTableView</string>
+				<key>progressController</key>
+				<string>NSArrayController</string>
+				<key>progressWindow</key>
+				<string>NSWindow</string>
+				<key>qtController</key>
+				<string>QuickTimeController</string>
+				<key>saveThumbnailsView</key>
+				<string>NSView</string>
+				<key>taskAllFramesIndicator</key>
+				<string>NSProgressIndicator</string>
+				<key>taskFrameIndicator</key>
+				<string>NSProgressIndicator</string>
+				<key>taskProgressWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObjectController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>hidePaletteWindow</key>
+				<string>id</string>
+				<key>setEnabled</key>
+				<string>id</string>
+				<key>setNumber</key>
+				<string>id</string>
+				<key>showPaletteList</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>PaletteController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>colourTable</key>
+				<string>NSTableView</string>
+				<key>palatteTable</key>
+				<string>NSTableView</string>
+				<key>palatteWindow</key>
+				<string>NSWindow</string>
+				<key>paletteList</key>
+				<string>NSArrayController</string>
+				<key>pickPalette</key>
+				<string>NSButton</string>
+				<key>textField</key>
+				<string>NSTextField</string>
+				<key>usePalette</key>
+				<string>NSButton</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSProgressIndicator</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSView</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

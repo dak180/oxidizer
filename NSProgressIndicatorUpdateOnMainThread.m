@@ -7,7 +7,7 @@
 //
 
 #import "NSProgressIndicatorUpdateOnMainThread.h"
-
+ 
 @implementation NSProgressIndicator (NSProgressIndicatorUpdateOnMainThread) 
 
 - (void)setDoubleValueInMainThread:(NSNumber *)value {

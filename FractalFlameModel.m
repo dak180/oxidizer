@@ -25,6 +25,9 @@
 #import "ProgressDetails.h"
 #import "QuickTime/QuickTime.h"
 
+#include <sys/types.h>
+#include <sys/sysctl.h>
+
 
 int printProgress(void *nslPtr, double progress, int stage);
 
@@ -136,6 +139,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	[previewWindow center];
 	[taskProgressWindow center];
+	
+	if([FractalFlameModel useProgressBar]) {
+		[taskFrameIndicator setStyle:NSProgressIndicatorBarStyle];
+		[taskFrameIndicator setControlSize:NSRegularControlSize];
+		
+		[taskAllFramesIndicator setStyle:NSProgressIndicatorBarStyle];
+		[taskAllFramesIndicator setControlSize:NSRegularControlSize];
+	}
+	
 	
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];
@@ -1281,6 +1293,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	}
 	
 	[moc performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
+	[moc performSelectorOnMainThread:@selector(save:) withObject:nil waitUntilDone:YES];
 	
 	[self generateAllThumbnailsForGenomes:newGenomes];
 	
@@ -1365,6 +1378,8 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 	NSArray *newGenomes = [Genome createGenomeEntitiesFromArray:genomeArray inContext:moc];
 	
+	[moc save:nil];
+	
 	[self generateAllThumbnailsForGenomes:newGenomes];
 	
 //	NSLog(@"%@", newGenome);
@@ -1428,6 +1443,26 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[previewWindow makeKeyAndOrderFront:self];
 	
 }
+
+
++ (BOOL)useProgressBar
+{
+
+	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
+	NSString *versionString = [dict objectForKey:@"ProductVersion"];
+	NSArray *array = [versionString componentsSeparatedByString:@"."];
+	int count = [array count];
+	int major = (count >= 1) ? [[array objectAtIndex:0] intValue] : 0;
+	int minor = (count >= 2) ? [[array objectAtIndex:1] intValue] : 0;
+	
+	if (major > 10 || major == 10 && minor >= 5) {
+		return YES;
+	}
+	
+	return NO;
+	
+}
+
 @end
 
 

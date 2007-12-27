@@ -347,6 +347,16 @@ void print_stack(lua_State* interpreter){
 	[gpnc showGenePoolWindow:sender]; 
 }
 
+- (IBAction)showRectangleWindow:(id)sender {
+	
+	if(rc == nil) {
+		rc = [[RectangleController alloc] init];
+		[NSBundle loadNibNamed:@"RectangleWindow" owner:rc];
+	}
+	
+	[rc showWindow:sender]; 
+}
+
 - (IBAction)newFlame:(id)sender {
 	[ffm newFlame];
 }	

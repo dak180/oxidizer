@@ -5,6 +5,7 @@
 #import "BreedingController.h"
 #import "GenePoolController.h"
 #import "GenePoolNibController.h"
+#import "RectangleController.h"
 #include "LuaObjCBridge/LuaObjCBridge.h"
 
 @interface OxidizerDelegate : NSObject {
@@ -18,6 +19,7 @@
 	
 	GenePoolController *gpc;
 	GenePoolNibController *gpnc;
+	RectangleController *rc;
 	lua_State* interpreter;
 	
 }
@@ -41,6 +43,7 @@
 - (IBAction)saveAsFlam3:(id)sender;
 - (IBAction)showBreedingWindow:(id)sender;
 - (IBAction)showGenePoolWindow:(id)sender;
+- (IBAction)showRectangleWindow:(id)sender;
 - (IBAction)newFlame:(id)sender;
 - (IBAction)renderStill:(id)sender;
 - (IBAction)renderMovie:(id)sender;

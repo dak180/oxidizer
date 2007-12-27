@@ -157,4 +157,6 @@
 - (void)createGenomesFromLua:(NSArray *)genomeArray;
 - (BOOL)renderGenomeToPng:(NSString *)pngFileName;
 
++ (BOOL)useProgressBar;
+
 @end

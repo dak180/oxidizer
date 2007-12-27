@@ -242,8 +242,11 @@ NSString *variationName[1+flam3_nvariations] = {
 		[fetch setEntity:[NSEntityDescription entityForName:@"CMap" inManagedObjectContext:moc]];
 		[fetch setPredicate: predicate];
 		[fetch setSortDescriptors: sortDescriptors];
+
+		NSError*	err	= [[NSError alloc] init];
 		
-		cmaps = [moc executeFetchRequest:fetch error:nil];
+		
+		cmaps = [moc executeFetchRequest:fetch error:&err];
 		[sort release];
 		[fetch release];	
 		/* use the cmap */
@@ -280,7 +283,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	[fetch setPredicate: predicate];
 	[fetch setSortDescriptors: sortDescriptors];
 	
-	xforms = [moc executeFetchRequest:fetch error:nil];
+	NSError*	err	= [[NSError alloc] init];
+	
+	xforms = [moc executeFetchRequest:fetch error:&err];
 	[sort release];
 	[fetch release];
 	
@@ -372,7 +377,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	[fetch setPredicate: predicate];
 	[fetch setSortDescriptors: sortDescriptors];
 	
-	variations = [moc executeFetchRequest:fetch error:nil];
+	NSError*	err	= [[NSError alloc] init];
+	 
+	variations = [moc executeFetchRequest:fetch error:&err];
 	[sort release];
 	[fetch release];
 	
@@ -1603,8 +1610,10 @@ NSString *variationName[1+flam3_nvariations] = {
 		[fetch setEntity:[NSEntityDescription entityForName:@"CMap" inManagedObjectContext:moc]];
 		[fetch setPredicate: predicate];
 		[fetch setSortDescriptors: sortDescriptors];
+
+		NSError*	err	= [[NSError alloc] init];
 		
-		cmaps = [moc executeFetchRequest:fetch error:nil];
+		cmaps = [moc executeFetchRequest:fetch error:&err];
 		[sort release];
 		[fetch release];	
 	//	 use the cmap 
@@ -1641,8 +1650,10 @@ NSString *variationName[1+flam3_nvariations] = {
 	[fetch setEntity:[NSEntityDescription entityForName:@"XForm" inManagedObjectContext:moc]];
 	[fetch setPredicate: predicate];
 	[fetch setSortDescriptors: sortDescriptors];
-	
-	xforms = [moc executeFetchRequest:fetch error:nil];
+
+	NSError*	err	= [[NSError alloc] init];
+
+	xforms = [moc executeFetchRequest:fetch error:&err];
 	[sort release];
 	[fetch release];
 	
@@ -1743,8 +1754,10 @@ NSString *variationName[1+flam3_nvariations] = {
 	[fetch setEntity:[NSEntityDescription entityForName:@"Variations" inManagedObjectContext:moc]];
 	[fetch setPredicate: predicate];
 	[fetch setSortDescriptors: sortDescriptors];
+
+	NSError*	err	= [[NSError alloc] init];
 	
-	variations = [moc executeFetchRequest:fetch error:nil];
+	variations = [moc executeFetchRequest:fetch error:&err];
 	[sort release];
 	[fetch release];
 	
