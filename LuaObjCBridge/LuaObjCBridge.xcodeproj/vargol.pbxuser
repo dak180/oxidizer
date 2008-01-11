@@ -2,8 +2,9 @@
 {
 	4B1114C00828E15C007DD523 /* LuaObjCBridge.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1046, 34720}}";
-			sepNavSelRange = "{2968, 70}";
+			sepNavIntBoundsRect = "{{0, 0}, {1034, 34916}}";
+			sepNavSelRange = "{25462, 0}";
+			sepNavVisRange = "{25253, 298}";
 			sepNavVisRect = "{{0, 1247}, {582, 182}}";
 		};
 	};
@@ -14,10 +15,10 @@
 		);
 	};
 	4B4FE4BE0827873F007685F3 /* Project object */ = {
-		activeBuildConfigurationName = Debug;
+		activeArchitecture = i386;
+		activeBuildConfigurationName = Release;
 		activeExecutable = A4327A7E0C4E53C400B1D18D /* lua */;
 		activeTarget = 4B4FE50E08278784007685F3 /* LuaObjCBridge.framework */;
-		breakpointsGroup = A4327AA50C4E55A700B1D18D /* XCBreakpointsBucket */;
 		codeSenseManager = A4327A870C4E53ED00B1D18D /* Code sense */;
 		executables = (
 			A4327A7E0C4E53C400B1D18D /* lua */,
@@ -72,8 +73,8 @@
 					PBXFindDataSource_LocationID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 218910627;
-			PBXWorkspaceStateSaveDate = 218910627;
+			PBXPerProjectTemplateStateSaveDate = 221082260;
+			PBXWorkspaceStateSaveDate = 221082260;
 		};
 		sourceControlManager = A4327A860C4E53ED00B1D18D /* Source Control */;
 		userBuildSettings = {
@@ -107,12 +108,12 @@
 	};
 	A4327A7E0C4E53C400B1D18D /* lua */ = {
 		isa = PBXExecutable;
-		activeArgIndex = 2147483647;
 		activeArgIndices = (
 		);
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -130,12 +131,12 @@
 	};
 	A4327A7F0C4E53C400B1D18D /* Test */ = {
 		isa = PBXExecutable;
-		activeArgIndex = 2147483647;
 		activeArgIndices = (
 		);
 		argumentStrings = (
 		);
 		autoAttachOnCrash = 1;
+		breakpointsEnabled = 1;
 		configStateDict = {
 		};
 		customDataFormattersEnabled = 1;
@@ -162,11 +163,5 @@
 	A4327A870C4E53ED00B1D18D /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
-	};
-	A4327AA50C4E55A700B1D18D /* XCBreakpointsBucket */ = {
-		isa = XCBreakpointsBucket;
-		name = "Project Breakpoints";
-		objects = (
-		);
 	};
 }

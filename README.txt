@@ -14,7 +14,7 @@ cvs -d:pserver:anonymous@oxidizer.cvs.sourceforge.net:/cvsroot/oxidizer login
 
  
 You'll get a prompt for the CVS password, just press enter again. 
-Then enter the follwoing command 
+Then enter the following command 
 
 cvs -z3 -d:pserver:anonymous@oxidizer.cvs.sourceforge.net:/cvsroot/oxidizer co -P oxidizer
 

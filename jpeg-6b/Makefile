@@ -20,7 +20,7 @@ manext = 1
 mandir = $(prefix)/man/man$(manext)
 
 # The name of your C compiler:
-CC= gcc -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386
+CC= gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386
 
 # You may need to adjust these cc options:
 CFLAGS= -O3  -I$(srcdir)

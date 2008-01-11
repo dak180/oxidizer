@@ -940,7 +940,7 @@ id lua_objc_topropertylist(lua_State* state,int stack_index){
 							// If it *is* an array, however, we don't want to insert the Lua-internal "n" element into the ObjC array, since it just gives the array length
 							//
 						
-							key=nil;
+							key=0;
 							}
 						}
 					}

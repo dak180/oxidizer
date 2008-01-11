@@ -188,12 +188,14 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome addAttribute:[NSXMLNode attributeWithName:@"gamma" stringValue:[[genomeEntity valueForKey:@"gamma"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"gamma_threshold" stringValue:[[genomeEntity valueForKey:@"gamma_threshold"] stringValue]]];
 
-
-	[[genomeEntity valueForKey:@"background"] getRed:&red green:&green blue:&blue alpha:NULL];
+	NSColor *bc = [genomeEntity valueForKey:@"background"];
+	NSColor *sc = [bc colorUsingColorSpaceName:@"NSCalibratedRGBColorSpace"];
+	[sc getRed:&red green:&green blue:&blue alpha:NULL];		
 
 	[genome addAttribute:[NSXMLNode attributeWithName:@"background" 
-									stringValue:[NSString stringWithFormat:@"%d %d %d", (int)(red * 255.0), (int)(green * 255.0), (int)(blue * 255.0)]]];
-
+										  stringValue:[NSString stringWithFormat:@"%g %g %g", red , green, blue]]];
+	
+	
 	[genome addAttribute:[NSXMLNode attributeWithName:@"hue" stringValue:[[genomeEntity valueForKey:@"hue"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"vibrancy" stringValue:[[genomeEntity valueForKey:@"vibrancy"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"brightness" stringValue:[[genomeEntity valueForKey:@"brightness"] stringValue]]];
@@ -724,9 +726,9 @@ NSString *variationName[1+flam3_nvariations] = {
 		red =   [[split objectAtIndex:0] doubleValue];
 		green = [[split objectAtIndex:1] doubleValue];
 		blue =  [[split objectAtIndex:2] doubleValue];
-		red   /= 255;
-		green /= 255;
-		blue  /= 255;
+//		red   /= 255;
+//		green /= 255;
+//		blue  /= 255;
 
 		[newGenomeEntity setValue:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:1.0] forKey:@"background"];
 		
@@ -1562,7 +1564,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome setObject:[genomeEntity valueForKey:@"gamma_threshold"] forKey:@"gamma_threshold"];		
 
 	
-	[[genomeEntity valueForKey:@"background"] getRed:&red green:&green blue:&blue alpha:NULL];
+	NSColor *bc = [genomeEntity valueForKey:@"background"];
+	[[bc colorUsingColorSpaceName:@"NSDeviceRGBColorSpace"] getRed:&red green:&green blue:&blue alpha:NULL];		
 
 	NSMutableDictionary *background = [NSMutableDictionary dictionaryWithCapacity:3];
 	

@@ -151,7 +151,7 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-CFLAGS = -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include
+CFLAGS = -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include
 DIST_SOURCES = $(libflam3_a_SOURCES) $(flam3_animate_SOURCES) \
 	$(flam3_convert_SOURCES) $(flam3_genome_SOURCES) \
 	$(flam3_render_SOURCES)

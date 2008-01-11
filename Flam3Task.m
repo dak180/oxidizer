@@ -67,8 +67,7 @@
 
 
 + (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
-	
-	
+		
 	NSString *tempPath = [self createTemporaryPath];
 	NSString *stdoutFile = [tempPath  stringByAppendingPathComponent:@"stdoutFile"];
 	NSString *stderrFile = [tempPath  stringByAppendingPathComponent:@"stderrFile"];
@@ -159,6 +158,9 @@
 
 
 + (int)runFlam3RenderAsQuietTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
+
+	
+	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
 	
 	NSTask *task;
     task = [[NSTask alloc] init];
@@ -227,6 +229,10 @@
 
 + (int)runFlam3RenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
 									   usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator {
+	
+	NSLog(@"env: %@\n", environmentDictionary);
+
+	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
 	
 	NSTask *task;
     task = [[NSTask alloc] init];

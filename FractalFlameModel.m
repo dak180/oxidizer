@@ -140,13 +140,13 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[previewWindow center];
 	[taskProgressWindow center];
 	
-	if([FractalFlameModel useProgressBar]) {
-		[taskFrameIndicator setStyle:NSProgressIndicatorBarStyle];
-		[taskFrameIndicator setControlSize:NSRegularControlSize];
+//	if([FractalFlameModel useProgressBar]) {
+//		[taskFrameIndicator setStyle:NSProgressIndicatorBarStyle];
+///		[taskFrameIndicator setControlSize:NSRegularControlSize];
 		
-		[taskAllFramesIndicator setStyle:NSProgressIndicatorBarStyle];
-		[taskAllFramesIndicator setControlSize:NSRegularControlSize];
-	}
+//		[taskAllFramesIndicator setStyle:NSProgressIndicatorBarStyle];
+//		[taskAllFramesIndicator setControlSize:NSRegularControlSize];
+//	}
 	
 	
 	savePanel = [NSSavePanel savePanel];
@@ -587,10 +587,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		BOOL returnBool;
 		
-		if ([fileManager fileExistsAtPath:pngFileName]) {
-			returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
-			returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
-		}
+//		if ([fileManager fileExistsAtPath:pngFileName]) {
+//			returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
+//			returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
+//		}
 		
 	} else {
 		
@@ -1244,9 +1244,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskProgressWindow setTitle:@"Rendering Image"];
 	[taskProgressWindow makeKeyAndOrderFront:self];
 	
-	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
-	
-
 	int returnValue =  [Flam3Task runFlam3RenderAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator];
 	
 	[taskProgressWindow setIsVisible:NO];

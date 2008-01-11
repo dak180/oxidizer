@@ -44,7 +44,7 @@ available_tags=" CXX"
 
 # ### BEGIN LIBTOOL CONFIG
 
-# Libtool was configured on host imac.local:
+# Libtool was configured on host Macintosh.local:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -66,13 +66,13 @@ fast_install=needless
 
 # The host system.
 host_alias=
-host=i386-apple-darwin8.11.1
-host_os=darwin8.11.1
+host=i386-apple-darwin9.1.0
+host_os=darwin9.1.0
 
 # The build system.
 build_alias=
-build=i386-apple-darwin8.11.1
-build_os=darwin8.11.1
+build=i386-apple-darwin9.1.0
+build_os=darwin9.1.0
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -85,7 +85,7 @@ AR_FLAGS="cru"
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc"
+LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc"
 
 # A language-specific compiler.
 CC="gcc"
@@ -97,13 +97,13 @@ with_gcc=yes
 EGREP="/usr/bin/grep -E"
 
 # The linker used to build libraries.
-LD="/usr/bin/ld"
+LD="/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/usr/bin/nm -p"
+NM="/Developer/usr/bin/nm -p"
 
 # A symbol stripping program
 STRIP="strip"
@@ -322,7 +322,7 @@ variables_saved_for_relink="PATH DYLD_LIBRARY_PATH  GCC_EXEC_PREFIX COMPILER_PAT
 link_all_deplibs=yes
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../../i686-apple-darwin8/lib/i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../../i686-apple-darwin8/lib/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../ /lib/i686-apple-darwin8/4.0.1/ /lib/ /usr/lib/i686-apple-darwin8/4.0.1/ /usr/lib/  /lib /usr/lib /usr/local/lib"
+sys_lib_search_path_spec=" /lib/i686-apple-darwin9/4.0.1/ /lib/ /usr/lib/i686-apple-darwin9/4.0.1/ /usr/lib/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/i686-apple-darwin9/4.0.1/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../i686-apple-darwin9/4.0.1/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../  /lib /usr/lib /usr/local/lib"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/usr/local/lib /lib /usr/lib"
@@ -7321,7 +7321,7 @@ disable_libs=static
 # End:
 # ### BEGIN LIBTOOL TAG CONFIG: CXX
 
-# Libtool was configured on host imac.local:
+# Libtool was configured on host Macintosh.local:
 
 # Shell to use when invoking shell scripts.
 SHELL="/bin/sh"
@@ -7343,13 +7343,13 @@ fast_install=needless
 
 # The host system.
 host_alias=
-host=i386-apple-darwin8.11.1
-host_os=darwin8.11.1
+host=i386-apple-darwin9.1.0
+host_os=darwin9.1.0
 
 # The build system.
 build_alias=
-build=i386-apple-darwin8.11.1
-build_os=darwin8.11.1
+build=i386-apple-darwin9.1.0
+build_os=darwin9.1.0
 
 # An echo program that does not interpret backslashes.
 echo="echo"
@@ -7362,7 +7362,7 @@ AR_FLAGS="cru"
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.4u.sdk -arch i386 -arch ppc"
+LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc"
 
 # A language-specific compiler.
 CC="g++"
@@ -7374,13 +7374,13 @@ with_gcc=yes
 EGREP="/usr/bin/grep -E"
 
 # The linker used to build libraries.
-LD="/usr/bin/ld"
+LD="/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld"
 
 # Whether we need hard or soft links.
 LN_S="ln -s"
 
 # A BSD-compatible nm program.
-NM="/usr/bin/nm -p"
+NM="/Developer/usr/bin/nm -p"
 
 # A symbol stripping program
 STRIP="strip"
@@ -7599,7 +7599,7 @@ variables_saved_for_relink="PATH DYLD_LIBRARY_PATH  GCC_EXEC_PREFIX COMPILER_PAT
 link_all_deplibs=yes
 
 # Compile-time system search path for libraries
-sys_lib_search_path_spec=" /usr/lib/gcc/i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../../i686-apple-darwin8/lib/i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../../i686-apple-darwin8/lib/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../i686-apple-darwin8/4.0.1/ /usr/lib/gcc/i686-apple-darwin8/4.0.1/../../../ /lib/i686-apple-darwin8/4.0.1/ /lib/ /usr/lib/i686-apple-darwin8/4.0.1/ /usr/lib/  /lib /usr/lib /usr/local/lib"
+sys_lib_search_path_spec=" /lib/i686-apple-darwin9/4.0.1/ /lib/ /usr/lib/i686-apple-darwin9/4.0.1/ /usr/lib/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/i686-apple-darwin9/4.0.1/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../../i686-apple-darwin9/lib/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../i686-apple-darwin9/4.0.1/ /Developer/usr/bin/../lib/gcc/i686-apple-darwin9/4.0.1/../../../ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../i686-apple-darwin9/4.0.1/ /usr/lib/gcc/i686-apple-darwin9/4.0.1/../../../  /lib /usr/lib /usr/local/lib"
 
 # Run-time system search path for libraries
 sys_lib_dlsearch_path_spec="/usr/local/lib /lib /usr/lib"
