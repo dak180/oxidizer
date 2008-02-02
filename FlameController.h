@@ -34,7 +34,6 @@
 	IBOutlet PaletteController *paletteController;
     IBOutlet NSImageView *paletteWithHue;
     IBOutlet NSArrayController *genomeController;
-    IBOutlet NSArrayController *xformController;
     IBOutlet NSArrayController *cmapController;
     IBOutlet NSColorWell *colourWell;
     IBOutlet NSImageView *colourWithHue;
@@ -42,6 +41,9 @@
 	 NSBitmapImageRep *_paletteWithHueRep;
 	 NSBitmapImageRep *_colourWithHueRep;
 	 NSImage *colourImage;
+
+@public 
+    IBOutlet NSArrayController *xformController;
 
 }
 

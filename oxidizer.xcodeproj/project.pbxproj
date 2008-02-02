@@ -17,6 +17,7 @@
 		A404B37E0D143FF600FE81AC /* RectangleController.h in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = A404B37C0D143FF600FE81AC /* RectangleController.h */; };
 		A404B37F0D143FF600FE81AC /* RectangleController.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B37D0D143FF600FE81AC /* RectangleController.m */; };
 		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; settings = {COMPILER_FLAGS = "-fobjc-exceptions"; }; };
+		A40B00DB0D392E7A009F782F /* RectangleNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40B00DA0D392E7A009F782F /* RectangleNibController.m */; };
 		A40CA2690CF0B58D000C28FB /* flam3-render in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2D80C340AFE001582CC /* flam3-render */; };
 		A40CA26A0CF0B598000C28FB /* flam3-animate in Resources */ = {isa = PBXBuildFile; fileRef = A42608820C41109600DDB92E /* flam3-animate */; };
 		A40CA26B0CF0B59D000C28FB /* flam3-genome in Resources */ = {isa = PBXBuildFile; fileRef = A47ABF1D0C425EF9007F1047 /* flam3-genome */; };
@@ -94,6 +95,8 @@
 		A404B3310D14355600FE81AC /* RectangleView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = RectangleView.m; path = RectangleView/RectangleView.m; sourceTree = "<group>"; };
 		A404B37C0D143FF600FE81AC /* RectangleController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RectangleController.h; path = RectangleView/RectangleController.h; sourceTree = "<group>"; };
 		A404B37D0D143FF600FE81AC /* RectangleController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = RectangleController.m; path = RectangleView/RectangleController.m; sourceTree = "<group>"; };
+		A40B00D90D392E7A009F782F /* RectangleNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RectangleNibController.h; sourceTree = "<group>"; };
+		A40B00DA0D392E7A009F782F /* RectangleNibController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RectangleNibController.m; sourceTree = "<group>"; };
 		A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragDropAndSaveImageView.h; sourceTree = "<group>"; };
 		A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DragDropAndSaveImageView.m; sourceTree = "<group>"; };
 		A410568C0C5F760A0075334E /* stills.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stills.png; path = icons/Tango/stills.png; sourceTree = SOURCE_ROOT; };
@@ -314,6 +317,8 @@
 				A404B3310D14355600FE81AC /* RectangleView.m */,
 				A404B37C0D143FF600FE81AC /* RectangleController.h */,
 				A404B37D0D143FF600FE81AC /* RectangleController.m */,
+				A40B00D90D392E7A009F782F /* RectangleNibController.h */,
+				A40B00DA0D392E7A009F782F /* RectangleNibController.m */,
 			);
 			name = RectangleWindow;
 			sourceTree = "<group>";
@@ -464,6 +469,7 @@
 				A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */,
 				A404B3330D14355600FE81AC /* RectangleView.m in Sources */,
 				A404B37F0D143FF600FE81AC /* RectangleController.m in Sources */,
+				A40B00DB0D392E7A009F782F /* RectangleNibController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

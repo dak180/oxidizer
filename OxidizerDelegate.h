@@ -5,7 +5,7 @@
 #import "BreedingController.h"
 #import "GenePoolController.h"
 #import "GenePoolNibController.h"
-#import "RectangleController.h"
+#import "RectangleNibController.h"
 #include "LuaObjCBridge/LuaObjCBridge.h"
 
 @interface OxidizerDelegate : NSObject {
@@ -19,7 +19,7 @@
 	
 	GenePoolController *gpc;
 	GenePoolNibController *gpnc;
-	RectangleController *rc;
+	RectangleNibController *rnc;
 	lua_State* interpreter;
 	
 }

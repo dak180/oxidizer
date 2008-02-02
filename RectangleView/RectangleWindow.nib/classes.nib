@@ -13,22 +13,43 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>showRectangleWindow</key>
+				<string>id</string>
+			</dict>
 			<key>CLASS</key>
-			<string>RectangleView</string>
+			<string>RectangleNibController</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
-				<key>RectangleController</key>
-				<string>NSController</string>
+				<key>rectangleController</key>
+				<string>RectangleController</string>
+				<key>treeController</key>
+				<string>NSTreeController</string>
 			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>RectangleView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSView</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>coefficentChanged</key>
+				<string>id</string>
+				<key>modeChanged</key>
+				<string>id</string>
 				<key>showWindow</key>
+				<string>id</string>
+				<key>viewSizeChanged</key>
 				<string>id</string>
 			</dict>
 			<key>CLASS</key>
@@ -37,6 +58,20 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
+				<key>aTextField</key>
+				<string>NSTextField</string>
+				<key>bTextField</key>
+				<string>NSTextField</string>
+				<key>cTextField</key>
+				<string>NSTextField</string>
+				<key>dTextField</key>
+				<string>NSTextField</string>
+				<key>eTextField</key>
+				<string>NSTextField</string>
+				<key>fTextField</key>
+				<string>NSTextField</string>
+				<key>modeMatrix</key>
+				<string>NSMatrix</string>
 				<key>rectangleView</key>
 				<string>RectangleView</string>
 				<key>rectangleWindow</key>

@@ -135,6 +135,12 @@ void print_stack(lua_State* interpreter){
 	} else {
 		threads = @"1";
 	}  
+
+	
+	NSArray *paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
+	
+    NSString *applicationSupportFolder = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Oxidizer"];
+	[[NSFileManager defaultManager] createDirectoryAtPath:applicationSupportFolder attributes:nil];
 	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];		
 	
@@ -151,6 +157,7 @@ void print_stack(lua_State* interpreter){
 		@"Double", @"buffer_type",
 		[NSNumber numberWithBool:NO], @"use_alpha",
 		[NSNumber numberWithBool:YES], @"float_preview",
+		applicationSupportFolder, @"xml_folder",
 		nil]
 		];
 
@@ -264,6 +271,7 @@ void print_stack(lua_State* interpreter){
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
     [oxidizerWindow setToolbar:[toolbar autorelease]];
+	[oxidizerWindow center];
 }
 
 
@@ -349,12 +357,13 @@ void print_stack(lua_State* interpreter){
 
 - (IBAction)showRectangleWindow:(id)sender {
 	
-	if(rc == nil) {
-		rc = [[RectangleController alloc] init];
-		[NSBundle loadNibNamed:@"RectangleWindow" owner:rc];
+	if(rnc == nil) {
+		rnc = [[RectangleNibController alloc] init];
+		[NSBundle loadNibNamed:@"RectangleWindow" owner:rnc];
 	}
 	
-	[rc showWindow:sender]; 
+	[rnc setMOC:[ffm getNSManagedObjectContext]];
+	[rnc showRectangleWindow:sender]; 
 }
 
 - (IBAction)newFlame:(id)sender {

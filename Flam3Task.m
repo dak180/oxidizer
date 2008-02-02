@@ -160,7 +160,10 @@
 + (int)runFlam3RenderAsQuietTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
 
 	
-	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
+	[xml writeToFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"xml_folder"] stringByAppendingPathComponent:[[NSDate date] descriptionWithCalendarFormat:@"%Y%m%d%H%M%S%F.xml"
+																																							timeZone:nil
+																																							  locale:nil]]
+		  atomically:YES];
 	
 	NSTask *task;
     task = [[NSTask alloc] init];
@@ -234,7 +237,12 @@
 
 	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
 	
-	NSTask *task;
+	[xml writeToFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"xml_folder"] stringByAppendingPathComponent:[[NSDate date] descriptionWithCalendarFormat:@"%Y%m%d%H%M%S%F.xml"
+																																							timeZone:nil
+																																							  locale:nil]]
+	     atomically:YES];
+	
+	NSTask *task; 
     task = [[NSTask alloc] init];
 	
     [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render", [[ NSBundle mainBundle ] resourcePath ]]];

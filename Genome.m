@@ -320,11 +320,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	} else {
 
 		xform = [NSXMLElement elementWithName:@"xform"];
-
+	
 	}
 		
-	
 	[xform addAttribute:[NSXMLNode attributeWithName:@"weight" stringValue:[[xformEntity valueForKey:@"density"] stringValue]]];
+	
 
 	[xform addAttribute:[NSXMLNode attributeWithName:@"coefs" 
 										  stringValue:[NSString stringWithFormat:@"%0.7f %0.7f %0.7f %0.7f %0.7f %0.7f",

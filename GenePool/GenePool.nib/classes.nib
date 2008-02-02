@@ -1,62 +1,137 @@
-{
-    IBClasses = (
-        {
-            CLASS = DnDButton; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {genePoolController = GenePoolController; }; 
-            SUPERCLASS = NSButton; 
-        }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
-        {
-            ACTIONS = {
-                breedPool = id; 
-                fillPool = id; 
-                moveSelectedToEditor = id; 
-                showGenePoolWindow = id; 
-                toggleButtons = id; 
-                toggleGenome = id; 
-            }; 
-            CLASS = GenePoolController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                geneButton0 = NSButton; 
-                geneButton1 = NSButton; 
-                geneButton10 = NSButton; 
-                geneButton11 = NSButton; 
-                geneButton12 = NSButton; 
-                geneButton13 = NSButton; 
-                geneButton14 = NSButton; 
-                geneButton15 = NSButton; 
-                geneButton2 = NSButton; 
-                geneButton3 = NSButton; 
-                geneButton4 = NSButton; 
-                geneButton5 = NSButton; 
-                geneButton6 = NSButton; 
-                geneButton7 = NSButton; 
-                geneButton8 = NSButton; 
-                geneButton9 = NSButton; 
-                genePoolWindow = NSWindow; 
-                model = GenePoolModel; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            CLASS = GenePoolModel; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {
-                genePoolProgress = NSProgressIndicator; 
-                genePoolProgressText = NSTextField; 
-                genePoolProgressWindow = NSWindow; 
-            }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {
-            ACTIONS = {showGenePoolWindow = id; }; 
-            CLASS = GenePoolNibController; 
-            LANGUAGE = ObjC; 
-            OUTLETS = {genePoolController = GenePoolController; }; 
-            SUPERCLASS = NSObject; 
-        }
-    ); 
-    IBVersion = 1; 
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IBClasses</key>
+	<array>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>breedPool</key>
+				<string>id</string>
+				<key>fillPool</key>
+				<string>id</string>
+				<key>moveSelectedToEditor</key>
+				<string>id</string>
+				<key>showGenePoolWindow</key>
+				<string>id</string>
+				<key>toggleButtons</key>
+				<string>id</string>
+				<key>toggleGenome</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>GenePoolController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>geneButton0</key>
+				<string>NSButton</string>
+				<key>geneButton1</key>
+				<string>NSButton</string>
+				<key>geneButton10</key>
+				<string>NSButton</string>
+				<key>geneButton11</key>
+				<string>NSButton</string>
+				<key>geneButton12</key>
+				<string>NSButton</string>
+				<key>geneButton13</key>
+				<string>NSButton</string>
+				<key>geneButton14</key>
+				<string>NSButton</string>
+				<key>geneButton15</key>
+				<string>NSButton</string>
+				<key>geneButton2</key>
+				<string>NSButton</string>
+				<key>geneButton3</key>
+				<string>NSButton</string>
+				<key>geneButton4</key>
+				<string>NSButton</string>
+				<key>geneButton5</key>
+				<string>NSButton</string>
+				<key>geneButton6</key>
+				<string>NSButton</string>
+				<key>geneButton7</key>
+				<string>NSButton</string>
+				<key>geneButton8</key>
+				<string>NSButton</string>
+				<key>geneButton9</key>
+				<string>NSButton</string>
+				<key>genePoolWindow</key>
+				<string>NSWindow</string>
+				<key>model</key>
+				<string>GenePoolModel</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>GenePoolModel</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>genePoolProgress</key>
+				<string>NSProgressIndicator</string>
+				<key>genePoolProgressText</key>
+				<string>NSTextField</string>
+				<key>genePoolProgressWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>DnDButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>genePoolController</key>
+				<string>GenePoolController</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSButton</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>showGenePoolWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>GenePoolNibController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>genePoolController</key>
+				<string>GenePoolController</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>NSProgressIndicator</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSView</string>
+		</dict>
+	</array>
+	<key>IBVersion</key>
+	<string>1</string>
+</dict>
+</plist>

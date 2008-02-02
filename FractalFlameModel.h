@@ -40,7 +40,6 @@
     IBOutlet NSLevelIndicator *frameIndicator;
     IBOutlet QuickTimeController *qtController;
 	IBOutlet NSArrayController *progressController;
-	IBOutlet NSArrayController *flameController;
 	IBOutlet NSView *saveThumbnailsView;
     IBOutlet NSImageView *previewView;
 
@@ -95,6 +94,7 @@
 	int flameCount;
 	int flameProgress;
 	NSSavePanel *savePanel;
+	IBOutlet NSArrayController *flameController;
 	
 }
 
