@@ -157,7 +157,13 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (void)renderStill {
 
-	BOOL doRender = [qtController showQuickTimeFileImageDialogue];
+	BOOL doRender = [self okayToRender];
+
+	if(doRender == NO) {
+		return;
+	}
+	
+	doRender = [qtController showQuickTimeFileImageDialogue];
                   
 	if(doRender == NO) {
 		return;
@@ -169,6 +175,12 @@ int printProgress(void *nslPtr, double progress, int stage);
 }
 	
 - (void)renderStillToWindow {
+
+	BOOL doRender = [self okayToRender];
+	
+	if(doRender == NO) {
+		return;
+	}
 	
 	[NSThread detachNewThreadSelector:@selector(renderStillToWindowInNewThread) toTarget:self withObject:nil];
 	
@@ -1460,6 +1472,24 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 }
 
+
+- (BOOL )okayToRender {
+	
+	
+	if ([flames getSelectedGenome] == nil) {
+		
+		NSAlert *dohPanel = [NSAlert alertWithMessageText:@"You have not selected a Genome to Render!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:@"You need to select a Genome in the Genome Window.\nIf there are no Genomes there you can either...\n\nOpen a new one from a file.\nCreate a new by adding a random genome using the + button under the Genome list.\nBreed new ones in the Gene Pool or Breeder and copy them into the Editor using the Edit button."];
+		[dohPanel runModal];	
+		
+		return NO;
+	}
+	
+	return YES;
+} 
 @end
 
 

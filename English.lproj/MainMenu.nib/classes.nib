@@ -107,6 +107,52 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>customizeToolbar</key>
+				<string>id</string>
+				<key>newFlame</key>
+				<string>id</string>
+				<key>openFile</key>
+				<string>id</string>
+				<key>renderMovie</key>
+				<string>id</string>
+				<key>renderStill</key>
+				<string>id</string>
+				<key>renderStillToWindow</key>
+				<string>id</string>
+				<key>renderStills</key>
+				<string>id</string>
+				<key>runLuaScript</key>
+				<string>id</string>
+				<key>saveAsFlam3</key>
+				<string>id</string>
+				<key>saveFlam3</key>
+				<string>id</string>
+				<key>showBreedingWindow</key>
+				<string>id</string>
+				<key>showGenePoolWindow</key>
+				<string>id</string>
+				<key>showRectangleWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>OxidizerDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>bc</key>
+				<string>BreedingController</string>
+				<key>ffm</key>
+				<string>FractalFlameModel</string>
+				<key>oxidizerWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
 				<key>changeColourMap</key>
 				<string>id</string>
 				<key>changeColourMapAndHideWindow</key>
@@ -155,52 +201,6 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>customizeToolbar</key>
-				<string>id</string>
-				<key>newFlame</key>
-				<string>id</string>
-				<key>openFile</key>
-				<string>id</string>
-				<key>renderMovie</key>
-				<string>id</string>
-				<key>renderStill</key>
-				<string>id</string>
-				<key>renderStillToWindow</key>
-				<string>id</string>
-				<key>renderStills</key>
-				<string>id</string>
-				<key>runLuaScript</key>
-				<string>id</string>
-				<key>saveAsFlam3</key>
-				<string>id</string>
-				<key>saveFlam3</key>
-				<string>id</string>
-				<key>showBreedingWindow</key>
-				<string>id</string>
-				<key>showGenePoolWindow</key>
-				<string>id</string>
-				<key>showRectangleWindow</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>OxidizerDelegate</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>bc</key>
-				<string>BreedingController</string>
-				<key>ffm</key>
-				<string>FractalFlameModel</string>
-				<key>oxidizerWindow</key>
-				<string>NSWindow</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
 			<key>CLASS</key>
 			<string>DnDArrayController</string>
 			<key>LANGUAGE</key>
@@ -212,6 +212,19 @@
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSArrayController</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -228,19 +241,6 @@
 				<key>seedTextField</key>
 				<string>NSTextField</string>
 			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key></key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FirstResponder</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>

@@ -127,10 +127,12 @@
 
 - (void) newFlame;
 
-- (void)renderStill;
-- (void)renderAnimation;
-- (void)renderAnimationStills; 
-- (void)renderStillToWindow;
+- (void) renderStill;
+- (void) renderAnimation;
+- (void) renderAnimationStills; 
+- (void) renderStillToWindow;
+
+- (BOOL) okayToRender;
 
 /* NSTask based version */
 - (void)generateAllThumbnailsForGenomes:(NSArray *)genome;
