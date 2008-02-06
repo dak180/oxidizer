@@ -474,4 +474,18 @@
 	[self didChangeValueForKey: @"width"];
 	
 }	
+
+- (void)setTime:(int)newTime {
+
+	[self willChangeValueForKey: @"time"];
+	[self setPrimitiveValue:[NSNumber numberWithInt:newTime] forKey:@"time"] ;
+	[self didChangeValueForKey: @"time"];
+	
+	[self willChangeValueForKey: @"order"];
+	[self setPrimitiveValue:[NSNumber numberWithInt:newTime] forKey:@"order"] ;
+	[self didChangeValueForKey: @"order"];
+	
+}
+
+
 @end

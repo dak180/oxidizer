@@ -640,6 +640,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	tempAttribute = [genome attributeForName:@"time"];
 	if(tempAttribute != nil) {
 	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[tempAttribute stringValue] intValue]]  forKey:@"time"];
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[tempAttribute stringValue] intValue]]  forKey:@"order"];
 	}
 	
 	tempAttribute = [genome attributeForName:@"size"];

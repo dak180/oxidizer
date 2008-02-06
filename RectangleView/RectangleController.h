@@ -38,6 +38,7 @@
 	NSManagedObject *_currentTransform;
 	FractalFlameModel *_ffm;
 	BOOL _autoUpdatePreview;
+	NSArray *_sortDescriptors;
 
 	
 }

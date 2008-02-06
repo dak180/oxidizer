@@ -2,6 +2,25 @@
 
 @implementation RectangleController
 
+- init {
+
+	if (self = [super init]) {
+
+//		NSSortDescriptor *sortGenomes = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+		NSSortDescriptor *sortXForms = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+
+		_sortDescriptors = [NSArray arrayWithObject:sortXForms];
+
+		[sortXForms  release]; 
+//		[sortGenomes  release]; 
+
+	}
+	
+    return self;
+	
+	
+}
+
 -(void) awakeFromNib { 
 	
 	[rectangleView setDelegate:self]; 
