@@ -30,11 +30,10 @@
 
 }
 
-/*
-- (id)copyWithZone:(NSZone *)zone {
+- (void)setFFM:(FractalFlameModel *)ffm {
 	
-	return nil;
+	[rectangleController setFractalFlameModel:ffm];
+	
 }
-*/
 
 @end

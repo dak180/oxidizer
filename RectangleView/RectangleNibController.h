@@ -21,7 +21,6 @@
 
 - (IBAction)showRectangleWindow:(id)sender;
 - (void)setMOC:(NSManagedObjectContext *)moc;
+- (void)setFFM:(FractalFlameModel *)ffm;
 
-
-//- (id)copyWithZone:(NSZone *)zone;
 @end

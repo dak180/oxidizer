@@ -138,10 +138,8 @@
 - (void)generateAllThumbnailsForGenomes:(NSArray *)genome;
 - (void)generateAllThumbnailsForGenomesInThread:(NSArray *)genome;
 
-- (void)runFlam3RenderAsTask:(NSData *) xml;
-- (int)runFlam3StillRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary; 
+- (int)runFlam3StillRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary;
 - (int)runFlam3MovieFrameRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary; 
-- (void)renderStillUsingFlam3;
 
 - (void)createGenomesFromXMLFile:(NSString *)xmlFileName inContext:(NSManagedObjectContext *)thisMoc;
 - (void)appendGenomesFromXMLFile:(NSString *)xmlFileName fromTime:(int)time inContext:(NSManagedObjectContext *)thisMoc;

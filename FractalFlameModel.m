@@ -553,15 +553,19 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (IBAction)previewCurrentFlame:(id)sender {
 
-	[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread) toTarget:self withObject:nil]; 
+	NSArray *genomes = [NSArray arrayWithObject:[flames getSelectedGenome]];
+
+	[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread:) toTarget:self withObject:genomes]; 
 
 }
 
-- (IBAction)previewCurrentFlameInThread {
+- (void ) previewCurrentFlameInThread:(NSArray *)genomes  {
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
 	NSError *error;
+	
+	[genomes retain];
 	
 	BOOL worked = [moc save:&error];
 
@@ -587,9 +591,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[taskEnvironment retain];	
 	[taskEnvironment setObject:pngFileName forKey:@"out"];
 	
-	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
+//	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
 	
-	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
+	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
 	
 	if (returnCode == 0) {
 
@@ -610,7 +614,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 	}
 	
-		
+	[genomes release];
+	
 	[pool release];	
 
 }
@@ -1152,99 +1157,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 }
 
-- (void)renderStillUsingFlam3 {
-	
-	
-	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
-	
-	[NSThread detachNewThreadSelector:@selector(runFlam3RenderAsTask:) 
-						     toTarget:self 
-						   withObject:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:NO]];
 
-	
-}
-
-
-
-- (void)runFlam3RenderAsTask:(NSData *) xml{
-	
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
-	[xml retain];
-	
-	NSTask *task;
-    task = [[NSTask alloc] init];
-
-	NSString *prefix = [NSString pathWithComponents:[NSArray arrayWithObjects:
-		                                                     NSTemporaryDirectory(),
-															[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
-														    nil]];
-	NSLog(prefix);	
-	
-	[[NSFileManager defaultManager] createDirectoryAtPath:prefix attributes:nil];
-		
-	
-	NSDictionary *environmentDictionary = [NSDictionary dictionaryWithObjectsAndKeys:
-		                                       [NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]], @"flam3_palettes", 
-											   [NSString stringWithFormat:@"%@/", prefix], @"prefix",
-											   nil];
-
-    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render", [[ NSBundle mainBundle ] resourcePath ]]];
-	[task setEnvironment:environmentDictionary]; 
-	
-    NSPipe *stdErrPipe = [NSPipe pipe];
-    [task setStandardError:stdErrPipe];
-    NSFileHandle *flam3Output = [stdErrPipe fileHandleForReading];
-
-	
-    NSPipe *stdInPipe = [NSPipe pipe];
-    [task setStandardInput:stdInPipe];
-    NSFileHandle *flam3Input = [stdInPipe fileHandleForWriting];
-	
-	[task launch];
-	
-	[flam3Input writeData:xml];
-	[flam3Input closeFile];
-	
-	
-	[taskAllFramesIndicator setMaxValue:1.0];
-	[taskAllFramesIndicator setDoubleValue:1.0];
-	[taskFrameIndicator setMaxValue:100.0];
-	[taskFrameIndicator setDoubleValue:0.0];
-
-	[taskProgressWindow setTitle:@"Rendering Image"];
-	[taskProgressWindow makeKeyAndOrderFront:self];
-	
-	
-	NSData *data = [flam3Output availableData];
-	
-	double progressValue;	
-		
-	while([data length] > 0) {
-		NSString *string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
- //		NSLog (@"got:%@\n", string);
-		
-		if([string hasPrefix:@"\rchaos: "]) {
-			
-			progressValue = [[string substringFromIndex:7] floatValue];
-			[self performSelectorOnMainThread:@selector(setTaskFrameProgress:) withObject:[NSNumber numberWithDouble:progressValue] waitUntilDone:NO];
-			
-		}
-		
-		[string release];
-		data = [flam3Output availableData];
-	} 
-
-
-	[taskProgressWindow setIsVisible:NO];
-
-	[xml release];
-
-	[pool release];
-	
-	return;
-	
-}
 
 
 

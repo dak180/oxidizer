@@ -5,15 +5,14 @@
 -(void) awakeFromNib { 
 	
 	[rectangleView setDelegate:self]; 
+	_autoUpdatePreview = NO;
+
 	
 } 
 
 - (IBAction)showWindow:(id)sender
 {
 	[rectangleWindow makeKeyAndOrderFront:sender];
-//	[[NSNotificationCenter defaultCenter] addObserver:self
-//											 selector:@selector(controlTextDidChange:)
-//												 name:@"ConverterAdded" object:nil];
 
 	NSLog(@"%@", [fTextField delegate]);
 	
@@ -85,7 +84,7 @@
 
 	[self setCoeffsA:a b:b c:c d:d e:e f:f];
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
-
+	[self updatePreview:self];
 	
 }
 
@@ -117,6 +116,7 @@
 
 	[self setCoeffsA:a b:b c:c d:d e:e f:f];
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+	[self updatePreview:self];
 
 }
 
@@ -153,6 +153,7 @@
 	
 	[self setCoeffsA:a b:b c:c d:d e:e f:f];	
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+	[self updatePreview:self];
 	
 	
 }
@@ -200,12 +201,12 @@
 	e = eIn;
 	f = fIn;
 	
-	[currentTransform setValue:[NSNumber numberWithFloat:aIn] forKey:@"coeff_0_0"];
-	[currentTransform setValue:[NSNumber numberWithFloat:bIn] forKey:@"coeff_1_0"];
-	[currentTransform setValue:[NSNumber numberWithFloat:cIn] forKey:@"coeff_2_0"];
-	[currentTransform setValue:[NSNumber numberWithFloat:dIn] forKey:@"coeff_0_1"];
-	[currentTransform setValue:[NSNumber numberWithFloat:eIn] forKey:@"coeff_1_1"];
-	[currentTransform setValue:[NSNumber numberWithFloat:fIn] forKey:@"coeff_2_1"];
+	[_currentTransform setValue:[NSNumber numberWithFloat:aIn] forKey:@"coeff_0_0"];
+	[_currentTransform setValue:[NSNumber numberWithFloat:bIn] forKey:@"coeff_1_0"];
+	[_currentTransform setValue:[NSNumber numberWithFloat:cIn] forKey:@"coeff_2_0"];
+	[_currentTransform setValue:[NSNumber numberWithFloat:dIn] forKey:@"coeff_0_1"];
+	[_currentTransform setValue:[NSNumber numberWithFloat:eIn] forKey:@"coeff_1_1"];
+	[_currentTransform setValue:[NSNumber numberWithFloat:fIn] forKey:@"coeff_2_1"];
 		
 }
 
@@ -217,12 +218,34 @@
 		return NO;
 	}
 	
-	currentTransform = [item observedObject];
-	[rectangleView setTransformMode:MOVE_MODE];
+	_currentTransform = [item observedObject];
+//	[rectangleView setTransformMode:MOVE_MODE];
 	
 	return YES;
 }
 
+- (void)setFractalFlameModel:(FractalFlameModel *)ffm {
 
+	if(ffm != nil) {
+		[ffm retain];
+	}
+	[_ffm release];
+	
+	_ffm = ffm;
+	
+}
+
+- (IBAction)updatePreview:(id)sender {
+	
+	if(_autoUpdatePreview || [sender class] == [NSButton class]) {
+
+		NSManagedObject *genome = [_currentTransform valueForKey:@"parent_genome"];
+		[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread:) toTarget:_ffm withObject:[NSArray arrayWithObject:genome]]; 
+		
+	}
+
+
+	
+}
 
 @end

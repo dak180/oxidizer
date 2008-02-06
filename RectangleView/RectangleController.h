@@ -2,6 +2,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "RectangleView.h"
+#import "FractalFlameModel.h"
 
 @interface RectangleController : NSObject
 {
@@ -34,7 +35,10 @@
 	CGFloat c;
 	CGFloat f;	
 	
-	NSManagedObject *currentTransform;
+	NSManagedObject *_currentTransform;
+	FractalFlameModel *_ffm;
+	BOOL _autoUpdatePreview;
+
 	
 }
 - (IBAction)showWindow:(id)sender;
@@ -47,10 +51,15 @@
 - (IBAction)moveChanged:(id)sender;
 - (IBAction)scaleChanged:(id)sender;
 
+- (IBAction)updatePreview:(id)sender;
+
 /* delegete messages */
 
 - (void)controlTextDidChange:(NSNotification *)aNotification;
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification;
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item;
 - (void) setCoeffsA:(CGFloat )aIn b:(CGFloat )bIn c:(CGFloat )cIn d:(CGFloat )dIn e:(CGFloat )eIn f:(CGFloat )fIn;
+
+/* preview */
+- (void)setFractalFlameModel:(FractalFlameModel *)ffm;
 @end

@@ -271,6 +271,9 @@ void applyCoeffsToPoint(CGFloat x, CGFloat y, CGFloat *rx, CGFloat *ry );
 - (void)mouseUp:(NSEvent *)theEvent {
 
 	[self movePoint:theEvent];
+	if(_isDraggingPoint) {
+		[_delegate updatePreview:self];
+	}
 	_isDraggingPoint = NO;
 
 }
