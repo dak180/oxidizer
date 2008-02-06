@@ -6,6 +6,10 @@
 #define ROTATE_MODE 1 
 #define SCALE_MODE  2 
 
+#include <math.h>
+
+static inline double radians (double degrees) {return degrees * M_PI/180;}
+
 
 @interface RectangleView : NSView
 {

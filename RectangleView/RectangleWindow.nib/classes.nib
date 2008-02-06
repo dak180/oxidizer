@@ -47,6 +47,12 @@
 				<string>id</string>
 				<key>modeChanged</key>
 				<string>id</string>
+				<key>moveChanged</key>
+				<string>id</string>
+				<key>rotationChanged</key>
+				<string>id</string>
+				<key>scaleChanged</key>
+				<string>id</string>
 				<key>showWindow</key>
 				<string>id</string>
 				<key>viewSizeChanged</key>
@@ -72,10 +78,20 @@
 				<string>NSTextField</string>
 				<key>modeMatrix</key>
 				<string>NSMatrix</string>
+				<key>moveX</key>
+				<string>NSTextField</string>
+				<key>moveY</key>
+				<string>NSTextField</string>
 				<key>rectangleView</key>
 				<string>RectangleView</string>
 				<key>rectangleWindow</key>
 				<string>NSWindow</string>
+				<key>rotate</key>
+				<string>NSTextField</string>
+				<key>scaleP1</key>
+				<string>NSTextField</string>
+				<key>scaleP2</key>
+				<string>NSTextField</string>
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>

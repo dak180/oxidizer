@@ -1,8 +1,5 @@
 #import "RectangleView.h"
 
-#include <math.h>
-
-static inline double radians (double degrees) {return degrees * M_PI/180;}
 void applyCoeffsToPoint(CGFloat x, CGFloat y, CGFloat *rx, CGFloat *ry );
 
 @implementation RectangleView
@@ -248,7 +245,6 @@ void applyCoeffsToPoint(CGFloat x, CGFloat y, CGFloat *rx, CGFloat *ry );
 			if(abs(distanceFromPoint) < _circeRadiusSquared) {
 				_isDraggingPoint = YES;
 				_draggingPoint = 3;
-				
 			}
 			break;
 		case SCALE_MODE:
@@ -312,38 +308,33 @@ void applyCoeffsToPoint(CGFloat x, CGFloat y, CGFloat *rx, CGFloat *ry );
 					
 					float p0Length, p1Length, rotationLength, rotationX, rotationY, tmpX, tmpY;
 					
-					tmpX = mousePoint.x - ([self frame].size.width * 0.5) - c;
-					tmpY = mousePoint.y - ([self frame].size.width * 0.5) - f;
+					tmpX = mousePoint.x - ([self frame].size.width * 0.5) - (c * scale);
+					tmpY = mousePoint.y - ([self frame].size.width * 0.5) - (f * scale);
 					
 					/* normalise mouse point */
 					rotationLength = sqrt((tmpX * tmpX) + (tmpY * tmpY));
 					
-					rotationX = tmpX * ( _normalLength / rotationLength );
-					rotationY = tmpY * ( _normalLength / rotationLength );
+									
+					float rotation = -acos(((tmpX * _rotationStartX) + (tmpY * _rotationStartY)) / (rotationLength * _normalLength));
 					
-					float rotation = atan2( scale - rotationY, rotationX);
-//					float rotation = radians(60.0f);
+					float debug = rotation * 180.0 / M_PI;					
 					float cosRotation = cos(rotation);
 					float sinRotation = sin(rotation);
 					
-					a -= c;
-					b -= f;
-					d -= c;
-					e -= f;
+					CGFloat tmpA  = a;
 					
-					p0Length = sqrt((a * a) + (d * d));
-					p1Length = sqrt((b * b) + (e * e));
-										
-					a = p0Length * cosRotation;					
-					b = p1Length * sinRotation; 					
-					d = p0Length * -sinRotation; 					
-					e = p1Length * cosRotation; 					
-
-					a += c;
-					b += f;
-					d += c;
-					e += f;
+					a = (a * cosRotation) - (d * sinRotation);
+					d = (tmpA * sinRotation) + (d * cosRotation);
 					
+					CGFloat tmpB  = b;
+					
+					b = (b * cosRotation) - (e * sinRotation);
+					e = (tmpB * sinRotation) + (e * cosRotation);
+					
+					
+					rotationX = tmpX * ( _normalLength / rotationLength );
+					rotationY = tmpY * ( _normalLength / rotationLength );
+				
 					_rotationStartX = rotationX;
 					_rotationStartY = rotationY;
 					

@@ -14,6 +14,12 @@
     IBOutlet NSTextField *eTextField;
     IBOutlet NSTextField *fTextField;
 
+	IBOutlet NSTextField *moveX;
+	IBOutlet NSTextField *moveY;
+	IBOutlet NSTextField *rotate;
+	IBOutlet NSTextField *scaleP1;
+	IBOutlet NSTextField *scaleP2;
+
 	IBOutlet NSMatrix *modeMatrix;
 
 @private 
@@ -35,6 +41,11 @@
 - (IBAction)viewSizeChanged:(id)sender;
 - (IBAction)coefficentChanged:(id)sender;
 - (IBAction)modeChanged:(id)sender;
+
+
+- (IBAction)rotationChanged:(id)sender;
+- (IBAction)moveChanged:(id)sender;
+- (IBAction)scaleChanged:(id)sender;
 
 /* delegete messages */
 

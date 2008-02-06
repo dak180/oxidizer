@@ -61,10 +61,101 @@
 			[rectangleView setTransformMode:SCALE_MODE];
 			break;
 	}
+	
+}
+
+- (IBAction)rotationChanged:(id)sender {
+	
+	float rotation = radians(-[rotate floatValue]);
+
+	float cosRotation = cos(rotation);
+	float sinRotation = sin(rotation);
+	
+
+	
+	CGFloat tmpA  = a;
+	
+	a = (a * cosRotation) - (d * sinRotation);
+	d = (tmpA * sinRotation) + (d * cosRotation);
+
+	CGFloat tmpB  = b;
+
+	b = (b * cosRotation) - (e * sinRotation);
+	e = (tmpB * sinRotation) + (e * cosRotation);
+
+	[self setCoeffsA:a b:b c:c d:d e:e f:f];
+	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
 
 	
 }
 
+- (IBAction)moveChanged:(id)sender {
+	
+	NSSegmentedCell *cellButton = [sender selectedCell];
+	
+	if([sender tag] == 0) {
+		/* change x */
+		switch ([cellButton selectedSegment]) {
+			case 0:
+				c += [moveX floatValue];
+				break;
+			case 1:
+				c -= [moveX floatValue];
+				break;
+		}		
+	} else {
+		switch ([cellButton selectedSegment]) {
+			case 0:
+				f += [moveY floatValue];
+				break;
+			case 1:
+				f -= [moveY floatValue];
+				break;
+		}			
+		
+	}			
+
+	[self setCoeffsA:a b:b c:c d:d e:e f:f];
+	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+
+}
+
+
+- (IBAction)scaleChanged:(id)sender {
+
+	NSSegmentedCell *cellButton = [sender selectedCell];
+	
+	if([sender tag] == 0) {
+		/* change p1 */
+		switch ([cellButton selectedSegment]) {
+			case 0:
+				a *= [scaleP1 floatValue];
+				d *= [scaleP1 floatValue];
+				break;
+			case 1:
+				a /= [scaleP1 floatValue];
+				d /= [scaleP1 floatValue];
+				break;
+		}		
+	} else {
+		switch ([cellButton selectedSegment]) {
+			case 0:
+				b *= [scaleP2 floatValue];
+				e *= [scaleP2 floatValue];
+				break;
+			case 1:
+				b /= [scaleP2 floatValue];
+				e /= [scaleP2 floatValue];
+				break;
+		}			
+		
+	}			
+	
+	[self setCoeffsA:a b:b c:c d:d e:e f:f];	
+	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+	
+	
+}
 - (void)controlTextDidChange:(NSNotification *)aNotification {
 	
 	if ([aNotification object] == aTextField) {
@@ -117,6 +208,8 @@
 	[currentTransform setValue:[NSNumber numberWithFloat:fIn] forKey:@"coeff_2_1"];
 		
 }
+
+
 
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item {
 	
