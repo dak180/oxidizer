@@ -598,7 +598,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	if (returnCode == 0) {
 
 		
-		[flames performSelectorOnMainThread:@selector(setPreviewForCurrentFlameFromFile:) withObject:pngFileName waitUntilDone:YES];
+//		[flames performSelectorOnMainThread:@selector(setPreviewForCurrentFlameFromFile:) withObject:pngFileName waitUntilDone:YES];
+		[[genomes objectAtIndex:0] performSelectorOnMainThread:@selector(setImageFromFile:) withObject:pngFileName waitUntilDone:YES];
 		
 		
 		BOOL returnBool;

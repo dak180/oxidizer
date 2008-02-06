@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 69 tasks, 258 threads, 2 processors
-Load average: 1.55, Mach factor: 0.54
+Default processor set: 66 tasks, 250 threads, 2 processors
+Load average: 2.06, Mach factor: 0.28
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -131,7 +131,7 @@ configure:2465: result: none needed
 configure:2483: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
 conftest.c:2: error: syntax error before 'me'
 conftest.c:2: error: syntax error before 'me'
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccHZFqRo.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccBJTVsE.out
 configure:2489: $? = 1
 configure: failed program was:
 | #ifndef __cplusplus

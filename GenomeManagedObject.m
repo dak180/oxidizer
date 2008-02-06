@@ -487,5 +487,16 @@
 	
 }
 
+- (void) setImageFromFile:(NSString *)filePath {
+	
+	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:filePath]];
+
+	[self willChangeValueForKey:@"image"];
+	[self setValue:flameImage forKey:@"image"];
+	[self didChangeValueForKey:@"image"];
+
+	[flameImage release];	
+
+}
 
 @end
