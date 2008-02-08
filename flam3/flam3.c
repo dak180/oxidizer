@@ -18,13 +18,14 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.6 2007/12/09 16:31:48 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.7 2008/02/08 14:06:37 vargol Exp $";
 
 
 #include "private.h"
 #include "img.h"
 #include <limits.h>
 #include <math.h>
+#include <stdint.h>
 
 #ifdef HAVE_LIBPTHREAD
 #include <pthread.h>
@@ -145,11 +146,13 @@ static void disc2_precalc(flam3_xform *xf);
 static void supershape_precalc(flam3_xform *xf);
 
 static int id_matrix(double s[3][2]);
-
+static void copy_matrix(double to[3][2], double from[3][2]);
+static void convert_linear_to_polar(flam3_genome *cp, int ncps, int xfi, int cflag, double cxang[4][2], double cxmag[4][2], double cxtrn[4][2]);
+static void interp_and_convert_back(double *c, int ncps, double cxang[4][2], double cxmag[4][2], double cxtrn[4][2],double store_array[3][2]);
 void prepare_xform_fn_ptrs(flam3_genome *, randctx *);
 static void initialize_xforms(flam3_genome *thiscp, int start_here);
 static void parse_flame_element(xmlNode *);
-static void parse_image_element(xmlNode *);
+//static void parse_image_element(xmlNode *);
 static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, randctx *rc);
 
 
@@ -1373,180 +1376,170 @@ void prepare_xform_fn_ptrs(flam3_genome *cp, randctx *rc) {
 
             cp->xform[i].active_var_weights[totnum] = cp->xform[i].var[j];
 
-            if (j==0)
+            if (j==VAR_LINEAR)
                cp->xform[i].varFunc[totnum] = &var0_linear;
-            else if (j==1)
+            else if (j==VAR_SINUSOIDAL)
                cp->xform[i].varFunc[totnum] = &var1_sinusoidal;
-            else if (j==2)
+            else if (j==VAR_SPHERICAL)
                cp->xform[i].varFunc[totnum] = &var2_spherical;
-            else if (j==3)
+            else if (j==VAR_SWIRL)
                cp->xform[i].varFunc[totnum] = &var3_swirl;
-            else if (j==4) {
+            else if (j==VAR_HORSESHOE) {
                cp->xform[i].varFunc[totnum] = &var4_horseshoe;
-/*               cp->xform[i].precalc_angles_flag=1;*/
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==5) {
+            } else if (j==VAR_POLAR) {
                cp->xform[i].varFunc[totnum] = &var5_polar;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==6) {
+            } else if (j==VAR_HANDKERCHIEF) {
                cp->xform[i].varFunc[totnum] = &var6_handkerchief;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==7) {
+            } else if (j==VAR_HEART) {
                cp->xform[i].varFunc[totnum] = &var7_heart;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==8) {
+            } else if (j==VAR_DISC) {
                cp->xform[i].varFunc[totnum] = &var8_disc;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==9) {
+            } else if (j==VAR_SPIRAL) {
                cp->xform[i].varFunc[totnum] = &var9_spiral;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==10) {
+            } else if (j==VAR_HYPERBOLIC) {
                cp->xform[i].varFunc[totnum] = &var10_hyperbolic;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==11) {
+            } else if (j==VAR_DIAMOND) {
                cp->xform[i].varFunc[totnum] = &var11_diamond;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==12) {
+            } else if (j==VAR_EX) {
                cp->xform[i].varFunc[totnum] = &var12_ex;
                cp->xform[i].precalc_atan_xy_flag=1;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==13) {
+            } else if (j==VAR_JULIA) {
                cp->xform[i].varFunc[totnum] = &var13_julia;
                cp->xform[i].precalc_atan_xy_flag=1;
-//               cp->xform[i].precalc_angles_flag=1;
-            } else if (j==14)
+            } else if (j==VAR_BENT)
                cp->xform[i].varFunc[totnum] = &var14_bent;
-            else if (j==15)
+            else if (j==VAR_WAVES)
                cp->xform[i].varFunc[totnum] = &var15_waves;
-            else if (j==16) {
+            else if (j==VAR_FISHEYE) {
                cp->xform[i].varFunc[totnum] = &var16_fisheye;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==17)
+            } else if (j==VAR_POPCORN)
                cp->xform[i].varFunc[totnum] = &var17_popcorn;
-            else if (j==18)
+            else if (j==VAR_EXPONENTIAL)
                cp->xform[i].varFunc[totnum] = &var18_exponential;
-            else if (j==19) {
+            else if (j==VAR_POWER) {
                cp->xform[i].varFunc[totnum] = &var19_power;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==20)
+            } else if (j==VAR_COSINE)
                cp->xform[i].varFunc[totnum] = &var20_cosine;
-            else if (j==21) {
+            else if (j==VAR_RINGS) {
                cp->xform[i].varFunc[totnum] = &var21_rings;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==22) {
+            } else if (j==VAR_FAN) {
                cp->xform[i].varFunc[totnum] = &var22_fan;
                cp->xform[i].precalc_atan_xy_flag=1;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==23) {
+            } else if (j==VAR_BLOB) {
                cp->xform[i].varFunc[totnum] = &var23_blob;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==24)
+            } else if (j==VAR_PDJ)
                cp->xform[i].varFunc[totnum] = &var24_pdj;
-            else if (j==25) {
+            else if (j==VAR_FAN2) {
                cp->xform[i].varFunc[totnum] = &var25_fan2;
                cp->xform[i].precalc_atan_xy_flag=1;
-//               cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==26) {
+            } else if (j==VAR_RINGS2) {
                cp->xform[i].varFunc[totnum] = &var26_rings2;
                cp->xform[i].precalc_atan_xy_flag=1;
                cp->xform[i].precalc_angles_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==27) {
+            } else if (j==VAR_EYEFISH) {
                cp->xform[i].varFunc[totnum] = &var27_eyefish;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==28)
+            } else if (j==VAR_BUBBLE)
                cp->xform[i].varFunc[totnum] = &var28_bubble;
-            else if (j==29)
+            else if (j==VAR_CYLINDER)
                cp->xform[i].varFunc[totnum] = &var29_cylinder;
-            else if (j==30)
+            else if (j==VAR_PERSPECTIVE)
                cp->xform[i].varFunc[totnum] = &var30_perspective;
-            else if (j==31)
+            else if (j==VAR_NOISE)
                cp->xform[i].varFunc[totnum] = &var31_noise;
-            else if (j==32) {
+            else if (j==VAR_JULIAN) {
                cp->xform[i].varFunc[totnum] = &var32_juliaN_generic;
                cp->xform[i].precalc_atan_yx_flag=1;
-            } else if (j==33) {
+            } else if (j==VAR_JULIASCOPE) {
                cp->xform[i].varFunc[totnum] = &var33_juliaScope_generic;
                cp->xform[i].precalc_atan_yx_flag=1;
-            } else if (j==34)
+            } else if (j==VAR_BLUR)
                cp->xform[i].varFunc[totnum] = &var34_blur;
-            else if (j==35)
+            else if (j==VAR_GAUSSIAN_BLUR)
                cp->xform[i].varFunc[totnum] = &var35_gaussian;
-            else if (j==36) {
+            else if (j==VAR_RADIAL_BLUR) {
                cp->xform[i].varFunc[totnum] = &var36_radial_blur;
                cp->xform[i].precalc_atan_yx_flag=1;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==37)
+            } else if (j==VAR_PIE)
                cp->xform[i].varFunc[totnum] = &var37_pie;
-            else if (j==38) {
+            else if (j==VAR_NGON) {
                cp->xform[i].varFunc[totnum] = &var38_ngon;
                cp->xform[i].precalc_atan_yx_flag=1;
-            } else if (j==39)
+            } else if (j==VAR_CURL)
                cp->xform[i].varFunc[totnum] = &var39_curl;
-            else if (j==40)
+            else if (j==VAR_RECTANGLES)
                cp->xform[i].varFunc[totnum] = &var40_rectangles;
-            else if (j==41)
+            else if (j==VAR_ARCH)
                cp->xform[i].varFunc[totnum] = &var41_arch;
-            else if (j==42)
+            else if (j==VAR_TANGENT)
                cp->xform[i].varFunc[totnum] = &var42_tangent;
-            else if (j==43)
+            else if (j==VAR_SQUARE)
                cp->xform[i].varFunc[totnum] = &var43_square;
-            else if (j==44)
+            else if (j==VAR_RAYS)
                cp->xform[i].varFunc[totnum] = &var44_rays;
-            else if (j==45) {
+            else if (j==VAR_BLADE) {
                cp->xform[i].varFunc[totnum] = &var45_blade;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==46) {
+            } else if (j==VAR_SECANT) {
                cp->xform[i].varFunc[totnum] = &var46_secant;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==47) {
+            } else if (j==VAR_TWINTRIAN) {
                cp->xform[i].varFunc[totnum] = &var47_twintrian;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==48)
+            } else if (j==VAR_CROSS)
                cp->xform[i].varFunc[totnum] = &var48_cross;
-            else if (j==49) {
+            else if (j==VAR_DISC2) {
                cp->xform[i].varFunc[totnum] = &var49_disc2;
                cp->xform[i].precalc_atan_xy_flag=1;
-            } else if (j==50) {
+            } else if (j==VAR_SUPER_SHAPE) {
                cp->xform[i].precalc_sqrt_flag=1;
                cp->xform[i].precalc_atan_yx_flag=1;
                cp->xform[i].varFunc[totnum] = &var50_supershape;
-            } else if (j==51) {
+            } else if (j==VAR_FLOWER) {
                cp->xform[i].varFunc[totnum] = &var51_flower;
                cp->xform[i].precalc_atan_yx_flag=1;
-            } else if (j==52) {
+            } else if (j==VAR_CONIC) {
                cp->xform[i].varFunc[totnum] = &var52_conic;
                cp->xform[i].precalc_atan_yx_flag=1;
-            } else if (j==53) {
+            } else if (j==VAR_PARABOLA) {
                cp->xform[i].varFunc[totnum] = &var53_parabola;
                cp->xform[i].precalc_sqrt_flag=1;
-            } else if (j==54) {
+            } else if (j==VAR_SPLIT) {
                cp->xform[i].varFunc[totnum] = &var54_split;
-            } else if (j==55) {
+            } else if (j==VAR_MOVE) {
                cp->xform[i].varFunc[totnum] = &var55_move;
             }
             
@@ -1622,7 +1615,7 @@ int flam3_iterate(flam3_genome *cp, int n, int fuse,  double *samples, unsigned 
    p[3] = samples[3];
 
    for (i = -4*fuse; i < 4*n; i+=4) {
-      int fn = xform_distrib[((unsigned)irand(rc)) % CHOOSE_XFORM_GRAIN];
+       int fn = xform_distrib[((unsigned)irand(rc)) % CHOOSE_XFORM_GRAIN];
       
       if (1) {
          if (apply_xform(cp, fn, p, q, rc)>0) {
@@ -1706,7 +1699,7 @@ static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, randctx *
    f.p0 = 0.0;
    f.p1 = 0.0;
    f.xform = &(cp->xform[fn]);
- 
+
    for (var_n=0; var_n < cp->xform[fn].num_active_vars; var_n++) {
       (*cp->xform[fn].varFunc[var_n])(&f, cp->xform[fn].active_var_weights[var_n]);
    }
@@ -1939,9 +1932,17 @@ void flam3_rotate(flam3_genome *cp, double by) {
       double U[2][2];
       double dtheta = by * 2.0 * M_PI / 360.0;
 
-      /* hmm */
-      if (cp->xform[i].symmetry > 0.0) continue;
-      
+		/* Don't rotate symmetric xforms unless necessary */
+		/* 1 means that all rotating xform[i]'s have symmetry>0 */
+		/* or that it's OK to check */
+
+//      if (symm[i]==1) {
+//	      if (cp->xform[i].symmetry > 0.0) continue;
+//		}
+
+      if (cp->xform[i].symmetry > 0.0)
+      	continue;
+
       /* Do NOT rotate final xforms */
       if (cp->final_xform_enable==1 && cp->final_xform_index==i)
          continue;
@@ -1974,6 +1975,17 @@ static int id_matrix(double s[3][2]) {
     (s[2][0] == 0.0) &&
     (s[2][1] == 0.0);
 }
+
+static void copy_matrix(double to[3][2], double from[3][2]) {
+
+    to[0][0] = from[0][0];
+    to[0][1] = from[0][1];
+    to[1][0] = from[1][0];
+    to[1][1] = from[1][1];
+    to[2][0] = from[2][0];
+    to[2][1] = from[2][1];
+}
+
 
 static void clear_matrix(double m[3][2]) {
    m[0][0] = 0.0;
@@ -2195,21 +2207,70 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
       }
 #endif
 
-      /* Interpolate c matrix & post */
-      clear_matrix(result->xform[i].c);
-      clear_matrix(result->xform[i].post);
-      all_id = 1;
-      for (k = 0; k < ncp; k++) {
-         sum_matrix(c[k], cpi[k].xform[i].c, result->xform[i].c);
-         sum_matrix(c[k], cpi[k].xform[i].post, result->xform[i].post);
-         all_id &= id_matrix(cpi[k].xform[i].post);
-      }
-      if (all_id) {
-         clear_matrix(result->xform[i].post);
-         result->xform[i].post[0][0] = 1.0;
-         result->xform[i].post[1][1] = 1.0;
-      }
+      if (flam3_intspace_log == cpi[0].interpolation_space) {
+         int col;
+         double cxmag[4][2];  // XXX why only 4? should be ncp
+         double cxang[4][2];
+         double cxtrn[4][2];
 
+         /* affine part */
+         clear_matrix(result->xform[i].c);
+         convert_linear_to_polar(cpi,ncp,i,0,cxang,cxmag,cxtrn);
+         interp_and_convert_back(c, ncp, cxang, cxmag, cxtrn,result->xform[i].c);
+
+         /* post part */
+         all_id = 1;
+         for (k=0; k<ncp; k++)
+            all_id &= id_matrix(cpi[k].xform[i].post);
+         
+         clear_matrix(result->xform[i].post);
+         if (all_id) {
+            result->xform[i].post[0][0] = 1.0;
+            result->xform[i].post[1][1] = 1.0;
+         } else {
+            convert_linear_to_polar(cpi,ncp,i,1,cxang,cxmag,cxtrn);
+            interp_and_convert_back(c, ncp, cxang, cxmag, cxtrn,result->xform[i].post);
+         }
+         
+
+         if (0) {
+            fprintf(stderr,"original coefs\n");
+            for (k=0;k<3;k++) {
+               for (col=0;col<2;col++) {
+                  fprintf(stderr,"%f ",cpi[0].xform[i].c[k][col]);
+               }
+            }
+            fprintf(stderr,"\n");
+            
+            fprintf(stderr,"new coefs\n");
+            for (k=0;k<3;k++) {
+               for (col=0;col<2;col++) {
+                  fprintf(stderr,"%f ",result->xform[i].c[k][col]);
+               }
+            }
+            fprintf(stderr,"\n");
+
+         }
+         
+      } else {
+
+         /* Interpolate c matrix & post */
+         clear_matrix(result->xform[i].c);
+         clear_matrix(result->xform[i].post);
+         all_id = 1;
+         for (k = 0; k < ncp; k++) {
+            sum_matrix(c[k], cpi[k].xform[i].c, result->xform[i].c);
+            sum_matrix(c[k], cpi[k].xform[i].post, result->xform[i].post);
+
+            all_id &= id_matrix(cpi[k].xform[i].post);
+
+         }
+         if (all_id) {
+            clear_matrix(result->xform[i].post);
+            result->xform[i].post[0][0] = 1.0;
+            result->xform[i].post[1][1] = 1.0;
+         }
+      }
       /* Precalculate additional params for some variations */
       perspective_precalc(&(result->xform[i]));
       juliaN_precalc(&(result->xform[i]));
@@ -2222,8 +2283,161 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
    }
 }
 
-static void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc) {
+void establish_asymmetric_refangles(flam3_genome *cp, int ncps) {
+
+   int k, xfi, col;
+   
+   double cxang[4][2],d,c1[2];
+
+   for (xfi=0; xfi<cp[0].num_xforms; xfi++) {
+   
+     /* Final xforms don't rotate regardless of their symmetry */
+     if (cp[0].final_xform_enable==1 && xfi==cp[0].final_xform_index)
+        continue;
+
+     for (k=0; k<ncps;k++) {
+
+          /* Establish the angle for each component */
+          /* Should potentially functionalize */
+          for (col=0;col<2;col++) {
+          
+               c1[0] = cp[k].xform[xfi].c[col][0];
+               c1[1] = cp[k].xform[xfi].c[col][1];
+               
+               cxang[k][col] = atan2(c1[1],c1[0]);
+          }
+     }
+      
+     for (k=1; k<ncps; k++) {
+     
+          for (col=0;col<2;col++) {
+
+               d = cxang[k][col]-cxang[k-1][col];
+
+               /* Adjust to avoid the -pi/pi discontinuity */
+               if (d > M_PI+EPS)
+               cxang[k][col] -= 2*M_PI;
+               else if (d < -(M_PI-EPS) )
+               cxang[k][col] += 2*M_PI;
+
+               /* If this is an asymmetric case, store the NON-symmetric angle    */
+               /* Check them pairwise and store the reference angle in the second */
+               /* to avoid overwriting if asymmetric on both sides                */
+               if (cp[k].xform[xfi].symmetry>0 && cp[k-1].xform[xfi].symmetry<=0)
+                  cp[k].xform[xfi].wind[col] = cxang[k-1][col] + 2*M_PI;
+               else if (cp[k].xform[xfi].symmetry<=0 && cp[k-1].xform[xfi].symmetry>0)
+                  cp[k].xform[xfi].wind[col] = cxang[k][col] + 2*M_PI;
+          }
+     }
+   }
+}
+
+
+
+static void convert_linear_to_polar(flam3_genome *cp, int ncps, int xfi, int cflag, double cxang[4][2], double cxmag[4][2], double cxtrn[4][2]) {
+
+   double c1[2],d,t,refang;
+   int col,k;
+
+   for (k=0; k<ncps;k++) {
+
+      /* Establish the angles and magnitudes for each component */
+      /* Keep translation linear */
+      for (col=0;col<2;col++) {
+      
+         if (cflag==0) {
+            c1[0] = cp[k].xform[xfi].c[col][0];
+            c1[1] = cp[k].xform[xfi].c[col][1];
+            t = cp[k].xform[xfi].c[2][col];            
+         } else {
+            c1[0] = cp[k].xform[xfi].post[col][0];
+            c1[1] = cp[k].xform[xfi].post[col][1];
+            t = cp[k].xform[xfi].post[2][col];
+         }
+         
+         cxang[k][col] = atan2(c1[1],c1[0]);
+         cxmag[k][col] = 0.5 * log(c1[0]*c1[0] + c1[1]*c1[1]);
+         cxtrn[k][col] = t;
+      }
+   }
+   
+   /* Make sure the rotation is the shorter direction around the circle */
+   /* by adjusting each angle in succession, and rotate clockwise if 180 degrees */
+   {
+      for (col=0; col<2; col++) {
+         for (k=1;k<ncps;k++) {
+
+            d = cxang[k][col]-cxang[k-1][col];
+         
+            /* Adjust to avoid the -pi/pi discontinuity */
+            if (d > M_PI+EPS)
+               cxang[k][col] -= 2*M_PI;
+            else if (d < -(M_PI-EPS) )
+               cxang[k][col] += 2*M_PI;
+            
+            /* Do some fancy stuff if we're in linear mode */   
+            if (cp[k].xform[xfi].wind[col]>0 && cflag==0) {
+
+               /* If this is an asymmetric case, adjust the angles to make sure that it's */
+               /* within wind:wind+2pi */
+               refang = cp[k].xform[xfi].wind[col] - 2*M_PI;
+
+               /* Make sure both angles are within [refang refang+2*pi] */
+               while(cxang[k-1][col] < refang)
+                    cxang[k-1][col] += 2*M_PI;
+               
+               while(cxang[k-1][col] > refang + 2*M_PI)
+                    cxang[k-1][col] -= 2*M_PI;
+                    
+               while(cxang[k][col] < refang)
+                    cxang[k][col] += 2*M_PI;
+               
+               while(cxang[k][col] > refang + 2*M_PI)
+                    cxang[k][col] -= 2*M_PI;
+            }
+         }
+      }
+   }
+}
+
+static void interp_and_convert_back(double *c, int ncps, double cxang[4][2], double cxmag[4][2], double cxtrn[4][2],double store_array[3][2]) {
+
+   int i,col;
+   
+   double accang[2],accmag[2];
+   double expmag;
+   
+   accang[0] = 0.0;
+   accang[1] = 0.0;
+   accmag[0] = 0.0;
+   accmag[1] = 0.0;
+
+   
+   for (i=0; i<ncps; i++) {
+      for (col=0; col<2; col++) {
+      
+         accang[col] += c[i] * cxang[i][col];
+         accmag[col] += c[i] * cxmag[i][col];
+         /* translation is ready to go */
+         store_array[2][col] += c[i] * cxtrn[i][col];
+      }
+   }
+   
+   /* Convert the angle back to rectangular */
+   for (col=0;col<2;col++) {
+      expmag = exp(accmag[col]);
+      
+      store_array[col][0] = expmag * cos(accang[col]);
+      store_array[col][1] = expmag * sin(accang[col]);
+   }
+   
+}
+   
+void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc) {
    int i, tnx, max_nx = 0, max_fx = 0;
+   int xf,j;
+   int ii,fnd;
+   double normed;
    for (i = 0; i < nsrc; i++) {
       tnx = src[i].num_xforms - (src[i].final_xform_index >= 0);
       if (tnx > max_nx) max_nx = tnx;
@@ -2231,7 +2445,244 @@ static void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc) {
    }
    for (i = 0; i < nsrc; i++) {
       flam3_copyx(&dst[i], &src[i], max_nx, max_fx);
-   }  
+   }
+   
+//   if (src[1].time==160) {
+//      fprintf(stderr,"found 160\n");
+//      fprintf(stderr,"dst[0].ji = %d\n",dst[0].xform[3].just_initialized);
+//      fprintf(stderr,"dst[1].ji = %d\n",dst[1].xform[3].just_initialized);
+//     
+//   }
+   
+   /* Check to see if there's a parametric variation present in one xform   */
+   /* but not in an aligned xform.  If this is the case, use the parameters */
+   /* from the xform with the variation as the defaults for the blank one.  */
+   
+   /* All genomes will have the same number of xforms at this point */
+   /* num = max_nx + max_fx */
+   for (i = 0; i<nsrc; i++) {
+   	for (xf = 0; xf<max_nx+max_fx; xf++) {
+   	   	   	
+   		/* Loop over the variations to see which of them are set to 0 */
+   		/* Note that there are no parametric variations < 23 */
+   		for (j = 23; j < flam3_nvariations; j++) {
+   		
+   			if (dst[i].xform[xf].var[j]==0) {
+   			
+   				if (i>0) {
+   				   				
+	   				/* Check to see if the prior genome's xform is populated */
+	   				if (dst[i-1].xform[xf].var[j] != 0) {
+	   				
+	   					/* Copy the prior genome's parameters and continue */
+	   					flam3_copy_params(&(dst[i].xform[xf]), &(dst[i-1].xform[xf]), j);
+	   					continue;
+	   				}
+	   			} else if (i<nsrc-1) {
+
+	   				/* Check to see if the next genome's xform is populated */
+	   				if (dst[i+1].xform[xf].var[j] != 0) {
+	   				
+	   					/* Copy the next genome's parameters and continue */
+	   					flam3_copy_params(&(dst[i].xform[xf]), &(dst[i+1].xform[xf]), j);
+	   					continue;
+	   				}
+	   			}
+	   		}
+	   	} /* variations */
+
+			if (dst[i].xform[xf].just_initialized == 1) {
+			
+		   	/* This is a new xform.  Let's see if we can choose a better 'identity' xform. */
+		   	/* Check the neighbors to see if any of these variations are used: */
+		   	/* rings2, fan2, blob, perspective, julian, juliascope, ngon, curl, super_shape, split */
+		   	/* If so, we can use a better starting point for these */
+		   	
+		   	/* Remove linear from the list */
+		   	dst[i].xform[xf].var[0] = 0.0;
+		   	
+		   	/* Look through all of the 'companion' xforms to see if we get a match on any of these */
+		   	fnd=0;
+
+		   	for (ii=-1; ii<=1; ii+=2) {
+               if (i+ii<0 || i+ii>=nsrc)
+                  continue;
+                  
+               if (dst[i+ii].xform[xf].just_initialized==1)
+                  continue;
+
+               /* Spherical / Ngon (trumps all others due to holes) */
+               if (dst[i+ii].xform[xf].var[VAR_SPHERICAL]>0 ||
+                     dst[i+ii].xform[xf].var[VAR_NGON]>0) {
+                  dst[i].xform[xf].var[VAR_LINEAR] = -1.0;
+                  /* Set the coefs appropriately */
+                  dst[i].xform[xf].c[0][0] = -1.0;
+                  dst[i].xform[xf].c[0][1] = 0.0;
+                  dst[i].xform[xf].c[1][0] = 0.0;
+                  dst[i].xform[xf].c[1][1] = -1.0;
+                  dst[i].xform[xf].c[2][0] = 0.0;
+                  dst[i].xform[xf].c[2][1] = 0.0;               
+                  fnd=-1;
+               }
+            }
+
+            if (fnd==0) {
+
+			   	for (ii=-1; ii<=1; ii+=2) {
+	               if (i+ii<0 || i+ii>=nsrc)
+	                  continue;
+	                  
+	               if (dst[i+ii].xform[xf].just_initialized==1)
+	                  continue;
+
+	               /* Rectangles */
+	               if (dst[i+ii].xform[xf].var[VAR_RECTANGLES]>0) {
+			   	      dst[i].xform[xf].var[VAR_RECTANGLES] = 1.0;
+			   	      dst[i].xform[xf].rectangles_x = 0.0;
+			   	      dst[i].xform[xf].rectangles_y = 0.0;
+			   	      fnd++;
+			   	   }
+
+			   	   /* Rings 2 */
+			   	   if (dst[i+ii].xform[xf].var[VAR_RINGS2]>0) {
+			   	      dst[i].xform[xf].var[VAR_RINGS2] = 1.0;
+			   	      dst[i].xform[xf].rings2_val = 0.0;
+			   	      fnd++;
+			   	   }
+			   	   
+			   	   /* Fan 2 */
+			   	   if (dst[i+ii].xform[xf].var[VAR_FAN2]>0) {
+			   	      dst[i].xform[xf].var[VAR_FAN2] = 1.0;
+			   	      dst[i].xform[xf].fan2_x = 0.0;
+			   	      dst[i].xform[xf].fan2_y = 0.0;
+			   	      fnd++;
+			   	   }
+			   	
+			   	   /* Blob */
+			   	   if (dst[i+ii].xform[xf].var[VAR_BLOB]>0) {
+			   	      dst[i].xform[xf].var[VAR_BLOB] = 1.0;
+			   	      dst[i].xform[xf].blob_low = 1.0;
+			   	      dst[i].xform[xf].blob_high = 1.0;
+			   	      dst[i].xform[xf].blob_waves = 1.0;
+			   	      fnd++;
+			   	   }
+			   	
+			   	   /* Perspective */
+			   	   if (dst[i+ii].xform[xf].var[VAR_PERSPECTIVE]>0) {
+			   	      dst[i].xform[xf].var[VAR_PERSPECTIVE] = 1.0;
+			   	      dst[i].xform[xf].perspective_angle = 0.0;
+			   	      /* Keep the perspective distance as-is */
+			   	      fnd++;
+			   	   }
+			   	   
+			   	   /* JuliaN */
+			   	   if (dst[i+ii].xform[xf].var[VAR_JULIAN]>0) {
+			   	      dst[i].xform[xf].var[VAR_JULIAN] = 1.0;
+			   	      dst[i].xform[xf].juliaN_power = 1.0;
+			   	      dst[i].xform[xf].juliaN_dist = 1.0;		   	      
+			   	      fnd++;
+			   	   }
+			   	   
+			   	   /* JuliaScope */
+			   	   if (dst[i+ii].xform[xf].var[VAR_JULIASCOPE]>0) {
+			   	      dst[i].xform[xf].var[VAR_JULIASCOPE] = 1.0;
+			   	      dst[i].xform[xf].juliaScope_power = 1.0;
+			   	      dst[i].xform[xf].juliaScope_dist = 1.0;		   	      
+			   	      fnd++;
+			   	   }
+			   	
+			   	   /* Curl */
+			   	   if (dst[i+ii].xform[xf].var[VAR_CURL]>0) {
+			   	      dst[i].xform[xf].var[VAR_CURL] = 1.0;
+			   	      dst[i].xform[xf].curl_c1 = 0.0;
+			   	      dst[i].xform[xf].curl_c2 = 0.0;
+			   	      fnd++;
+			   	   }
+
+			   	   /* Super-Shape */
+			   	   if (dst[i+ii].xform[xf].var[VAR_SUPER_SHAPE]>0) {
+			   	      dst[i].xform[xf].var[VAR_SUPER_SHAPE] = 1.0;
+			   	      /* Keep supershape_m the same */
+			   	      dst[i].xform[xf].supershape_n1 = 2.0;
+			   	      dst[i].xform[xf].supershape_n2 = 2.0;
+			   	      dst[i].xform[xf].supershape_n3 = 2.0;
+			   	      dst[i].xform[xf].supershape_rnd = 0.0;
+			   	      dst[i].xform[xf].supershape_holes = 0.0;
+			   	      fnd++;
+			   	   }
+
+			   	   /* Split */
+			   	   if (dst[i+ii].xform[xf].var[VAR_SPLIT]>0) {
+			   	      dst[i].xform[xf].var[VAR_SPLIT] = 1.0;
+			   	      dst[i].xform[xf].split_xsize = 0.0;
+			   	      dst[i].xform[xf].split_ysize = 0.0;
+			   	      dst[i].xform[xf].split_shift = 0.0;
+			   	      fnd++;
+			   	   }
+			   	}
+		   	}
+		   	/* If we didn't have any matches with those, try the affine ones */
+		   	/* fan and rings */
+		   	if (fnd==0) {
+		   	
+   		   	for (ii=-1; ii<=1; ii+=2) {
+
+                  if (i+ii<0 || i+ii>=nsrc)
+                     continue;                  
+
+                  if (dst[i+ii].xform[xf].just_initialized==1)
+                     continue;
+                     
+      		   	   /* Fan */
+		   	      if (dst[i+ii].xform[xf].var[VAR_FAN]>0) {
+		   	         dst[i].xform[xf].var[VAR_FAN] = 1.0;
+		   	         fnd++;
+		   	      }
+
+      		   	   /* Rings */
+		   	      if (dst[i+ii].xform[xf].var[VAR_RINGS]>0) {
+		   	         dst[i].xform[xf].var[VAR_RINGS] = 1.0;
+		   	         fnd++;
+		   	      }
+
+               }
+               
+               if (fnd>0) {
+                  /* Set the coefs appropriately */
+                  dst[i].xform[xf].c[0][0] = 0.0;
+                  dst[i].xform[xf].c[0][1] = 1.0;
+                  dst[i].xform[xf].c[1][0] = 1.0;
+                  dst[i].xform[xf].c[1][1] = 0.0;
+                  dst[i].xform[xf].c[2][0] = 0.0;
+                  dst[i].xform[xf].c[2][1] = 0.0;               
+               }
+            }
+                                          
+		   	/* If we still have no matches, switch back to linear */
+		   	if (fnd==0)
+   		   	   dst[i].xform[xf].var[VAR_LINEAR] = 1.0;
+		   	else if (fnd>0) {
+
+		   	   /* Otherwise, go through and normalize the weights. */
+		   	   normed = 0.0;
+		   	   for (j = 0; j < flam3_nvariations; j++)
+		   	      normed += dst[i].xform[xf].var[j];
+		   	      
+		   	   for (j = 0; j < flam3_nvariations; j++)
+		   	      dst[i].xform[xf].var[j] /= normed;
+		   	}
+		   	
+         }
+	   } /* xforms */
+	} /* genomes */
+
+   /* Make sure that all xforms are no longer 'just initialized' */
+   for (i = 0; i<nsrc; i++) {
+   	for (xf = 0; xf<max_nx+max_fx; xf++) {
+   	   dst[i].xform[xf].just_initialized = 0;
+   	}
+   }
+   			   					
 }
 
 
@@ -2244,9 +2695,6 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
    int i1, i2;
    double c[2];
    flam3_genome cpi[4];
-//   int cpi1_std, cpi1_final;
-//   int cpi2_std, cpi2_final;
-//   int total_std, total_final;
 
    if (1 == ncps) {
       flam3_copy(result, &(cps[0]));
@@ -2281,6 +2729,7 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
    /* and ensure that they both have the same number before progressing */
    if (flam3_interpolation_linear == cps[i1].interpolation) {
        flam3_align(&cpi[0], &cps[i1], 2);
+     
    } else {
        if (0 == i1) {
       fprintf(stderr, "error: cannot use smooth interpolation on first segment.\n");
@@ -2292,6 +2741,7 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
        }
        flam3_align(&cpi[0], &cps[i1-1], 4);
    }
+   
    if (result->num_xforms > 0 && result->xform != NULL) {
        free(result->xform);
        result->num_xforms = 0;
@@ -2303,6 +2753,7 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
 
    result->time = time;
    result->interpolation = flam3_interpolation_linear;
+   result->interpolation_space = cpi[0].interpolation_space;
    result->palette_interpolation = flam3_palette_interpolation_hsv;
 
    if (flam3_interpolation_linear == cps[i1].interpolation) {
@@ -2312,8 +2763,10 @@ void flam3_interpolate(flam3_genome cps[], int ncps,
        free(cpi[2].xform);
        free(cpi[3].xform);
    }
+   
    free(cpi[0].xform);
    free(cpi[1].xform);
+
 #if 0
    flam3_print(stdout, result, NULL);
    for (i = 0; i < sizeof(result->xform[0].post); i++) {
@@ -2361,6 +2814,7 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
    int i,j;
 
    for (i = start_here ; i < thiscp->num_xforms ; i++) {
+       thiscp->xform[i].just_initialized = 1;
        thiscp->xform[i].density = 0.0;
        thiscp->xform[i].symmetry = 0;
        thiscp->xform[i].color[0] = i&1;
@@ -2380,6 +2834,8 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
        thiscp->xform[i].post[1][1] = 1.0;
        thiscp->xform[i].post[2][0] = 0.0;
        thiscp->xform[i].post[2][1] = 0.0;
+       thiscp->xform[i].wind[0] = 0.0;
+       thiscp->xform[i].wind[1] = 0.0;
        thiscp->xform[i].blob_low = 0.0;
        thiscp->xform[i].blob_high = 1.0;
        thiscp->xform[i].blob_waves = 1.0;
@@ -2451,69 +2907,69 @@ static void initialize_xforms(flam3_genome *thiscp, int start_here) {
 void flam3_copy_params(flam3_xform *dest, flam3_xform *src, int varn) {
 
    /* We only want to copy param var coefs for this one */
-   if (varn==23) {
+   if (varn==VAR_BLOB) {
       /* Blob */
       dest->blob_low = src->blob_low;
       dest->blob_high = src->blob_high;
       dest->blob_waves = src->blob_waves;
-   } else if (varn==24) {
+   } else if (varn==VAR_PDJ) {
       /* PDJ */
       dest->pdj_a = src->pdj_a;
       dest->pdj_b = src->pdj_b;
       dest->pdj_c = src->pdj_c;
       dest->pdj_d = src->pdj_d;
-   } else if (varn==25) {
+   } else if (varn==VAR_FAN2) {
       /* Fan2 */
       dest->fan2_x = src->fan2_x;
       dest->fan2_y = src->fan2_y;
-   } else if (varn==26) {
+   } else if (varn==VAR_RINGS2) {
       /* Rings2 */
       dest->rings2_val = src->rings2_val;
-   } else if (varn==30) {
+   } else if (varn==VAR_PERSPECTIVE) {
       /* Perspective */
       dest->perspective_angle = src->perspective_angle;
       dest->perspective_dist = src->perspective_dist;
       dest->persp_vsin = src->persp_vsin;
       dest->persp_vfcos = src->persp_vfcos;
-   } else if (varn==32) {
+   } else if (varn==VAR_JULIAN) {
       /* Julia_N */
       dest->juliaN_power = src->juliaN_power;
       dest->juliaN_dist = src->juliaN_dist;
       dest->juliaN_rN = src->juliaN_rN;
       dest->juliaN_cn = src->juliaN_cn;
-   } else if (varn==33) {
+   } else if (varn==VAR_JULIASCOPE) {
       /* Julia_Scope */
       dest->juliaScope_power = src->juliaScope_power;
       dest->juliaScope_dist = src->juliaScope_dist;
       dest->juliaScope_rN = src->juliaScope_rN;
       dest->juliaScope_cn = src->juliaScope_cn;
-   } else if (varn==36) {
+   } else if (varn==VAR_RADIAL_BLUR) {
       /* Radial Blur */
       dest->radialBlur_angle = src->radialBlur_angle;
-   } else if (varn==37) {
+   } else if (varn==VAR_PIE) {
       /* Pie */
       dest->pie_slices = src->pie_slices;
       dest->pie_rotation = src->pie_rotation;
       dest->pie_thickness = src->pie_thickness;
-   } else if (varn==38) {
+   } else if (varn==VAR_NGON) {
       /* Ngon */
       dest->ngon_sides = src->ngon_sides;
       dest->ngon_power = src->ngon_power;
       dest->ngon_corners = src->ngon_corners;
       dest->ngon_circle = src->ngon_circle;
-   } else if (varn==39) {
+   } else if (varn==VAR_CURL) {
       /* Curl */
       dest->curl_c1 = src->curl_c1;
       dest->curl_c2 = src->curl_c2;
-   } else if (varn==40) {
+   } else if (varn==VAR_RECTANGLES) {
       /* Rect */
       dest->rectangles_x = src->rectangles_x;
       dest->rectangles_y = src->rectangles_y;
-   } else if (varn==49) {
+   } else if (varn==VAR_DISC2) {
       /* Disc2 */
       dest->disc2_rot = src->disc2_rot;
       dest->disc2_twist = src->disc2_twist;
-   } else if (varn==50) {
+   } else if (varn==VAR_SUPER_SHAPE) {
       /* Supershape */
       dest->supershape_rnd = src->supershape_rnd;
       dest->supershape_m = src->supershape_m;
@@ -2521,24 +2977,24 @@ void flam3_copy_params(flam3_xform *dest, flam3_xform *src, int varn) {
       dest->supershape_n2 = src->supershape_n2;
       dest->supershape_n3 = src->supershape_n3;
       dest->supershape_holes = src->supershape_holes;
-   } else if (varn==51) {
+   } else if (varn==VAR_FLOWER) {
       /* Flower */
       dest->flower_petals = src->flower_petals;
       dest->flower_petals = src->flower_petals;
-   } else if (varn==52) {
+   } else if (varn==VAR_CONIC) {
       /* Conic */
       dest->conic_eccen = src->conic_eccen;
       dest->conic_holes = src->conic_holes;
-   } else if (varn==53) {
+   } else if (varn==VAR_PARABOLA) {
       /* Parabola */
       dest->parabola_height = src->parabola_height;
       dest->parabola_width = src->parabola_width;
-   } else if (varn==54) {
+   } else if (varn==VAR_SPLIT) {
       /* Split */
       dest->split_xsize = src->split_xsize;
       dest->split_ysize = src->split_ysize;
       dest->split_shift = src->split_shift;
-   } else if (varn==55) {
+   } else if (varn==VAR_MOVE) {
       /* Move */
       dest->move_x = src->move_x;
       dest->move_y = src->move_y;
@@ -2635,7 +3091,8 @@ void flam3_copyx(flam3_genome *dest, flam3_genome *src, int dest_std_xforms, int
       if (i==src->final_xform_index)
          continue;
 
-      dest->xform[j++] = src->xform[i];
+      dest->xform[j] = src->xform[i];
+      dest->xform[j++].just_initialized = 0; /* prolly not necessary */
    }
 
    /* Add the final xform if necessary */
@@ -2646,6 +3103,7 @@ void flam3_copyx(flam3_genome *dest, flam3_genome *src, int dest_std_xforms, int
 
       if (src->final_xform_enable > 0) {
          dest->xform[dest->num_xforms-1] = src->xform[src->final_xform_index];
+         dest->xform[dest->num_xforms-1].just_initialized = 0; /* prolly not necessary */
       } else {
          /* Interpolated-against final xforms need symmetry set */
          dest->xform[dest->num_xforms-1].symmetry=1.0;
@@ -2709,6 +3167,7 @@ static void clear_cp(flam3_genome *cp, int default_flag) {
        cp->ntemporal_samples = 60;
        cp->spatial_filter_func = gaussian_filter;
        cp->spatial_filter_support = gaussian_support;
+       cp->interpolation_space = flam3_intspace_linear;
 
     } else {
        /* Defaults are off, so set to UN-reasonable values. */
@@ -2732,6 +3191,7 @@ static void clear_cp(flam3_genome *cp, int default_flag) {
        cp->ntemporal_samples = 0;
        cp->spatial_filter_func = NULL;
        cp->spatial_filter_support = 0;
+       cp->interpolation_space = -1;
     }
 
     if (cp->xform != NULL && cp->num_xforms > 0) {
@@ -2974,6 +3434,15 @@ static void parse_flame_element(xmlNode *flame_node) {
      } else {
          fprintf(stderr, "warning: unrecognized palette interpolation type %s.\n", att_str);
      }
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"interpolation_space")) {
+      
+         if (!strcmp("linear", att_str))
+            cp->interpolation_space = flam3_intspace_linear;
+         else if (!strcmp("log", att_str))
+            cp->interpolation_space = flam3_intspace_log;
+         else
+            fprintf(stderr,"warning: unrecognized interpolation_space type %s.\n",att_str);
+     
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"name")) {
          strncpy(cp->flame_name, att_str, flam3_name_len);
          i = (int)strlen(cp->flame_name)-1;
@@ -3125,8 +3594,6 @@ static void parse_flame_element(xmlNode *flame_node) {
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"colors")) {
 
          int count;
-         int c_idx=0;
-         int col_count=0;
 
          /* Loop through the attributes of the colors element */
          att_ptr = chld_node->properties;
@@ -3289,6 +3756,10 @@ static void parse_flame_element(xmlNode *flame_node) {
             cp->final_xform_enable = 1;
          }
 
+         /* We're initializing the xform, so flip this flag */
+         cp->xform[xf].just_initialized = 0;
+
+         /* Even though most of these are already 0, set them all to be sure */
          for (j = 0; j < flam3_nvariations; j++) {
             cp->xform[xf].var[j] = 0.0;
          }
@@ -3929,6 +4400,8 @@ void flam3_apply_template(flam3_genome *cp, flam3_genome *templ) {
       cp->spatial_filter_func = templ->spatial_filter_func;
       cp->spatial_filter_support = templ->spatial_filter_support;
    }
+   if (templ->interpolation_space >= 0)
+      cp->interpolation_space = templ->interpolation_space;
 
 }
 
@@ -4014,6 +4487,9 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes, int print_ed
 
    if (flam3_interpolation_linear != cp->interpolation)
        fprintf(f, " interpolation=\"smooth\"");
+       
+   if (flam3_intspace_linear != cp->interpolation_space)
+       fprintf(f, " interpolation_space=\"log\"");
 
    if (flam3_palette_interpolation_hsv != cp->palette_interpolation)
        fprintf(f, " palette_interpolation=\"sweep\"");
@@ -4032,7 +4508,7 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes, int print_ed
    for (i = 0; i < cp->num_xforms; i++) {
       int blob_var=0,pdj_var=0,fan2_var=0,rings2_var=0,perspective_var=0;
       int juliaN_var=0,juliaScope_var=0,radialBlur_var=0,pie_var=0,disc2_var=0;
-      int ngon_var=0,curl_var=0,rectangles_var=0,amw_var=0,supershape_var=0;
+      int ngon_var=0,curl_var=0,rectangles_var=0,supershape_var=0;
       int flower_var=0,conic_var=0,parabola_var=0,split_var=0,move_var=0;
       if ( (cp->xform[i].density > 0.0 || i==cp->final_xform_index)
              && !(cp->symmetry &&  cp->xform[i].symmetry == 1.0)) {
@@ -4054,47 +4530,43 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes, int print_ed
             double v = cp->xform[i].var[j];
             if (0.0 != v) {
                fprintf(f, "%s=\"%g\" ", flam3_variation_names[j], v);
-               if (j==23)
+               if (j==VAR_BLOB)
                   blob_var=1;
-               else if (j==24)
+               else if (j==VAR_PDJ)
                   pdj_var=1;
-               else if (j==25)
+               else if (j==VAR_FAN2)
                   fan2_var=1;
-               else if (j==26)
+               else if (j==VAR_RINGS2)
                   rings2_var=1;
-               else if (j==30)
+               else if (j==VAR_PERSPECTIVE)
                   perspective_var=1;
-               else if (j==32)
+               else if (j==VAR_JULIAN)
                   juliaN_var=1;
-               else if (j==33)
+               else if (j==VAR_JULIASCOPE)
                   juliaScope_var=1;
-               else if (j==36)
+               else if (j==VAR_RADIAL_BLUR)
                   radialBlur_var=1;
-               else if (j==37)
+               else if (j==VAR_PIE)
                   pie_var=1;
-               else if (j==38)
+               else if (j==VAR_NGON)
                   ngon_var=1;
-               else if (j==39)
+               else if (j==VAR_CURL)
                   curl_var=1;
-               else if (j==40)
+               else if (j==VAR_RECTANGLES)
                   rectangles_var=1;
-#if 0
-               else if (j==49)
-                  amw_var=1;
-#endif
-               else if (j==49)
+               else if (j==VAR_DISC2)
                   disc2_var=1;
-               else if (j==50)
+               else if (j==VAR_SUPER_SHAPE)
                   supershape_var=1;
-               else if (j==51)
+               else if (j==VAR_FLOWER)
                   flower_var=1;
-               else if (j==52)
+               else if (j==VAR_CONIC)
                   conic_var=1;
-               else if (j==53)
+               else if (j==VAR_PARABOLA)
                   parabola_var=1;
-               else if (j==54)
+               else if (j==VAR_SPLIT)
                   split_var=1;
-               else if (j==55)
+               else if (j==VAR_MOVE)
                   move_var=1;
 
             }
@@ -4528,6 +5000,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
       cp->xform[i].color[0] = i&1;
       cp->xform[i].color[1] = (i&2)>>1;
       cp->xform[i].symmetry = 0.0;
+      cp->xform[i].just_initialized = 0;
       for (j = 0; j < 3; j++) {
          for (k = 0; k < 2; k++) {
             cp->xform[i].c[j][k] = flam3_random11();
@@ -4632,19 +5105,19 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
       }  
 
       
-      if (cp->xform[i].var[15] > 0) {
+      if (cp->xform[i].var[VAR_WAVES] > 0) {
          waves_precalc(&(cp->xform[i]));
       }
 
       /* Generate random params for parametric variations, if selected. */
-      if (cp->xform[i].var[23] > 0) {
+      if (cp->xform[i].var[VAR_BLOB] > 0) {
          /* Create random params for blob */
          cp->xform[i].blob_low = 0.2 + 0.5 * flam3_random01();
          cp->xform[i].blob_high = 0.8 + 0.4 * flam3_random01();
          cp->xform[i].blob_waves = (int)(2 + 5 * flam3_random01());
       }
 
-      if (cp->xform[i].var[24] > 0) {
+      if (cp->xform[i].var[VAR_PDJ] > 0) {
          /* Create random params for PDJ */
          cp->xform[i].pdj_a = 3.0 * flam3_random11();
          cp->xform[i].pdj_b = 3.0 * flam3_random11();
@@ -4652,18 +5125,18 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          cp->xform[i].pdj_d = 3.0 * flam3_random11();
       }
 
-      if (cp->xform[i].var[25] > 0) {
+      if (cp->xform[i].var[VAR_FAN2] > 0) {
          /* Create random params for fan2 */
          cp->xform[i].fan2_x = flam3_random11();
          cp->xform[i].fan2_y = flam3_random11();
       }
 
-      if (cp->xform[i].var[26] > 0) {
+      if (cp->xform[i].var[VAR_RINGS2] > 0) {
          /* Create random params for rings2 */
          cp->xform[i].rings2_val = 2*flam3_random01();
       }
 
-      if (cp->xform[i].var[30] > 0) {
+      if (cp->xform[i].var[VAR_PERSPECTIVE] > 0) {
 
          /* Create random params for perspective */
          cp->xform[i].perspective_angle = flam3_random01();
@@ -4673,7 +5146,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          perspective_precalc(&(cp->xform[i]));
       }
 
-      if (cp->xform[i].var[32] > 0) {
+      if (cp->xform[i].var[VAR_JULIAN] > 0) {
 
          /* Create random params for juliaN */
          cp->xform[i].juliaN_power = (int)(5*flam3_random01() + 2);
@@ -4683,7 +5156,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          juliaN_precalc(&(cp->xform[i]));
       }
 
-      if (cp->xform[i].var[33] > 0) {
+      if (cp->xform[i].var[VAR_JULIASCOPE] > 0) {
 
          /* Create random params for juliaScope */
          cp->xform[i].juliaScope_power = (int)(5*flam3_random01() + 2);
@@ -4693,7 +5166,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          juliaScope_precalc(&(cp->xform[i]));
       }
 
-      if (cp->xform[i].var[36] > 0) {
+      if (cp->xform[i].var[VAR_RADIAL_BLUR] > 0) {
 
          /* Create random params for radialBlur */
          cp->xform[i].radialBlur_angle = (2 * flam3_random01() - 1);
@@ -4702,14 +5175,14 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          radial_blur_precalc(&(cp->xform[i]));
       }
 
-      if (cp->xform[i].var[37] > 0) {
+      if (cp->xform[i].var[VAR_PIE] > 0) {
          /* Create random params for pie */
          cp->xform[i].pie_slices = (int) 10.0*flam3_random01();
          cp->xform[i].pie_thickness = flam3_random01();
          cp->xform[i].pie_rotation = 2.0 * M_PI * flam3_random11();
       }
 
-      if (cp->xform[i].var[38] > 0) {
+      if (cp->xform[i].var[VAR_NGON] > 0) {
          /* Create random params for ngon */
          cp->xform[i].ngon_sides = (int) flam3_random01()* 10 + 3;
          cp->xform[i].ngon_power = 3*flam3_random01() + 1;
@@ -4717,26 +5190,19 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          cp->xform[i].ngon_corners = 2*flam3_random01()*cp->xform[i].ngon_circle;
       }
 
-      if (cp->xform[i].var[39] > 0) {
+      if (cp->xform[i].var[VAR_CURL] > 0) {
          /* Create random params for curl */
          cp->xform[i].curl_c1 = flam3_random01();
          cp->xform[i].curl_c2 = flam3_random01();
       }
 
-      if (cp->xform[i].var[40] > 0) {
+      if (cp->xform[i].var[VAR_RECTANGLES] > 0) {
          /* Create random params for rectangles */
          cp->xform[i].rectangles_x = flam3_random01();
          cp->xform[i].rectangles_y = flam3_random01();
       }
 
-#if 0
-      if (cp->xform[i].var[49] > 0) {
-         /* Create random params for amw */
-         cp->xform[i].amw_amp = flam3_random01();
-      }
-#endif
-
-      if (cp->xform[i].var[49] > 0) {
+      if (cp->xform[i].var[VAR_DISC2] > 0) {
       /* Create random params for disc2 */
       cp->xform[i].disc2_rot = 0.5 * flam3_random01();
       cp->xform[i].disc2_twist = 0.5 * flam3_random01();
@@ -4745,7 +5211,7 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          disc2_precalc(&(cp->xform[i]));
       }
 
-      if (cp->xform[i].var[50] > 0) {
+      if (cp->xform[i].var[VAR_SUPER_SHAPE] > 0) {
          /* Create random params for supershape */
          cp->xform[i].supershape_rnd = flam3_random01();
          cp->xform[i].supershape_m = (int) flam3_random01()*6;
@@ -4755,32 +5221,32 @@ void flam3_random(flam3_genome *cp, int *ivars, int ivars_n, int sym, int spec_x
          cp->xform[i].supershape_holes = 0.0;
       }
 
-      if (cp->xform[i].var[51] > 0) {
+      if (cp->xform[i].var[VAR_FLOWER] > 0) {
          /* Create random params for flower */
          cp->xform[i].flower_petals = 4 * flam3_random01();
          cp->xform[i].flower_holes = flam3_random01();
       }
 
-      if (cp->xform[i].var[52] > 0) {
-         /* Create random params for flower */
+      if (cp->xform[i].var[VAR_CONIC] > 0) {
+         /* Create random params for conic */
          cp->xform[i].conic_eccen = flam3_random01();
          cp->xform[i].conic_holes = flam3_random01();
       }
 
-      if (cp->xform[i].var[53] > 0) {
+      if (cp->xform[i].var[VAR_PARABOLA] > 0) {
          /* Create random params for parabola */
          cp->xform[i].parabola_height = 0.5 + flam3_random01();
          cp->xform[i].parabola_width = 0.5 + flam3_random01();
       }
 
-      if (cp->xform[i].var[54] > 0) {
+      if (cp->xform[i].var[VAR_SPLIT] > 0) {
          /* Create random params for split */
          cp->xform[i].split_xsize = 2 * flam3_random11();
          cp->xform[i].split_ysize = 2 + flam3_random11();
          cp->xform[i].split_shift = flam3_random01();
       }
 
-      if (cp->xform[i].var[55] > 0) {
+      if (cp->xform[i].var[VAR_MOVE] > 0) {
          /* Create random params for move */
          cp->xform[i].move_x = flam3_random11();
          cp->xform[i].move_y = flam3_random11();
@@ -4816,6 +5282,23 @@ static int sort_by_y(const void *av, const void *bv) {
     return 0;
 }
 
+
+/* Memory helper functions because 
+
+    Python on Windows uses the MSVCR71.dll version of the C Runtime and 
+    mingw uses the MSVCRT.dll version. */
+
+void *flam3_malloc(size_t size) {
+
+   return (malloc(size));
+   
+}
+
+void flam3_free(void *ptr) {
+
+   free(ptr);
+   
+}
 
 /*
  * find a 2d bounding box that does not enclose eps of the fractal density
@@ -4886,15 +5369,87 @@ typedef unsigned short abucket_short[4];
 typedef float bucket_float[4];
 typedef float abucket_float[4];
 
+#ifdef HAVE_GCC_64BIT_ATOMIC_OPS
+inline void
+double_atomic_add(double *dest, double delta)
+{
+	uint64_t *int_ptr = (uint64_t *)dest;
+	union {
+		double dblval;
+		uint64_t intval;
+	} old_val, new_val;
+	int success;
+
+	do {
+		old_val.dblval = *dest;
+		new_val.dblval = old_val.dblval + delta;
+		success = __sync_bool_compare_and_swap(
+			int_ptr, old_val.intval, new_val.intval);
+	} while (!success);
+}
+#endif /* HAVE_GCC_64BIT_ATOMIC_OPS */
+
+#ifdef HAVE_GCC_ATOMIC_OPS
+inline void
+float_atomic_add(float *dest, float delta)
+{
+	uint32_t *int_ptr = (uint32_t *)dest;
+	union {
+		float fltval;
+		uint32_t intval;
+	} old_val, new_val;
+	int success;
+
+	do {
+		old_val.fltval = *dest;
+		new_val.fltval = old_val.fltval + delta;
+		success = __sync_bool_compare_and_swap(
+			int_ptr, old_val.intval, new_val.intval);
+	} while (!success);
+}
+
+inline void
+uint_atomic_add(unsigned int *dest, unsigned int delta)
+{
+	unsigned int old_val, new_val;
+	int success;
+
+	do {
+		old_val = *dest;
+		if (UINT_MAX - old_val > delta)
+			new_val = old_val + delta;
+		else
+			new_val = UINT_MAX;
+		success = __sync_bool_compare_and_swap(
+			dest, old_val, new_val);
+	} while (!success);
+}
+
+inline void
+ushort_atomic_add(unsigned short *dest, unsigned short delta)
+{
+	unsigned short old_val, new_val;
+	int success;
+
+	do {
+		old_val = *dest;
+		if (USHRT_MAX - old_val > delta)
+			new_val = old_val + delta;
+		else
+			new_val = USHRT_MAX;
+		success = __sync_bool_compare_and_swap(
+			dest, old_val, new_val);
+	} while (!success);
+}
+#endif /* HAVE_GCC_ATOMIC_OPS */
 
 /* 64-bit datatypes */
 #define B_ACCUM_T double
 #define A_ACCUM_T double
 #define bucket bucket_double
 #define abucket abucket_double
-#define bump_no_overflow(dest, delta) {dest += delta;}
-#define abump_no_overflow(dest, delta) {dest += delta;}
-#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) { \
+#define abump_no_overflow(dest, delta) do {dest += delta;} while (0)
+#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) do { \
    if ( (j) + (jj) >=0 && (j) + (jj) < (hgt) && (i) + (ii) >=0 && (i) + (ii) < (wid)) { \
    abucket *a = (acc) + ( (i) + (ii) ) + ( (j) + (jj) ) * (wid); \
    abump_no_overflow(a[0][0],(c)[0]); \
@@ -4902,12 +5457,28 @@ typedef float abucket_float[4];
    abump_no_overflow(a[0][2],(c)[2]); \
    abump_no_overflow(a[0][3],(c)[3]); \
    } \
-}
+} while (0)
+/* single-threaded */
+#define USE_LOCKS
+#define bump_no_overflow(dest, delta)  do {dest += delta;} while (0)
 #define render_rectangle render_rectangle_double
 #define iter_thread iter_thread_double
 #include "rect.c"
-#undef iter_thread
+#ifdef HAVE_GCC_64BIT_ATOMIC_OPS
+/* multi-threaded */
+#undef USE_LOCKS
+#undef bump_no_overflow
 #undef render_rectangle
+#undef iter_thread
+#define bump_no_overflow(dest, delta)  double_atomic_add(&dest, delta)
+#define render_rectangle render_rectangle_double_mt
+#define iter_thread iter_thread_double_mt
+#include "rect.c"
+#else /* !HAVE_GCC_64BIT_ATOMIC_OPS */
+#define render_rectangle_double_mt render_rectangle_double
+#endif /* HAVE_GCC_64BIT_ATOMIC_OPS */
+#undef render_rectangle
+#undef iter_thread
 #undef add_c_to_accum
 #undef A_ACCUM_T
 #undef B_ACCUM_T
@@ -4921,13 +5492,10 @@ typedef float abucket_float[4];
 #define A_ACCUM_T unsigned int
 #define bucket bucket_int
 #define abucket abucket_int
-#define bump_no_overflow(dest, delta) { \
-   if (UINT_MAX - dest > delta) dest += delta; \
-}
-#define abump_no_overflow(dest, delta) { \
-   if (UINT_MAX - dest > delta) dest += delta; \
-}
-#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) { \
+#define abump_no_overflow(dest, delta) do { \
+   if (UINT_MAX - dest > delta) dest += delta; else dest = UINT_MAX; \
+} while (0)
+#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) do { \
    if ( (j) + (jj) >=0 && (j) + (jj) < (hgt) && (i) + (ii) >=0 && (i) + (ii) < (wid)) { \
    abucket *a = (acc) + ( (i) + (ii) ) + ( (j) + (jj) ) * (wid); \
    abump_no_overflow(a[0][0],(c)[0]); \
@@ -4935,10 +5503,28 @@ typedef float abucket_float[4];
    abump_no_overflow(a[0][2],(c)[2]); \
    abump_no_overflow(a[0][3],(c)[3]); \
    } \
-}
+} while (0)
+/* single-threaded */
+#define USE_LOCKS
+#define bump_no_overflow(dest, delta) do { \
+   if (UINT_MAX - dest > delta) dest += delta; else dest = UINT_MAX; \
+} while (0)
 #define render_rectangle render_rectangle_int
 #define iter_thread iter_thread_int
 #include "rect.c"
+#ifdef HAVE_GCC_ATOMIC_OPS
+/* multi-threaded */
+#undef USE_LOCKS
+#undef bump_no_overflow
+#undef render_rectangle
+#undef iter_thread
+#define bump_no_overflow(dest, delta)  uint_atomic_add(&dest, delta)
+#define render_rectangle render_rectangle_int_mt
+#define iter_thread iter_thread_int_mt
+#include "rect.c"
+#else /* !HAVE_GCC_ATOMIC_OPS */
+#define render_rectangle_int_mt render_rectangle_int
+#endif /* HAVE_GCC_ATOMIC_OPS */
 #undef iter_thread
 #undef render_rectangle
 #undef add_c_to_accum
@@ -4954,11 +5540,8 @@ typedef float abucket_float[4];
 #define A_ACCUM_T float
 #define bucket bucket_int
 #define abucket abucket_float
-#define bump_no_overflow(dest, delta) { \
-   if (UINT_MAX - dest > delta) dest += delta; \
-}
-#define abump_no_overflow(dest, delta) {dest += delta;}
-#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) { \
+#define abump_no_overflow(dest, delta) do {dest += delta;} while (0)
+#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) do { \
    if ( (j) + (jj) >=0 && (j) + (jj) < (hgt) && (i) + (ii) >=0 && (i) + (ii) < (wid)) { \
    abucket *a = (acc) + ( (i) + (ii) ) + ( (j) + (jj) ) * (wid); \
    abump_no_overflow(a[0][0],(c)[0]); \
@@ -4966,10 +5549,28 @@ typedef float abucket_float[4];
    abump_no_overflow(a[0][2],(c)[2]); \
    abump_no_overflow(a[0][3],(c)[3]); \
    } \
-}
+} while (0)
+/* single-threaded */
+#define USE_LOCKS
+#define bump_no_overflow(dest, delta) do { \
+   if (UINT_MAX - dest > delta) dest += delta; else dest = UINT_MAX; \
+} while (0)
 #define render_rectangle render_rectangle_float
 #define iter_thread iter_thread_float
 #include "rect.c"
+#ifdef HAVE_GCC_ATOMIC_OPS
+/* multi-threaded */
+#undef USE_LOCKS
+#undef bump_no_overflow
+#undef render_rectangle
+#undef iter_thread
+#define bump_no_overflow(dest, delta)  uint_atomic_add(&dest, delta)
+#define render_rectangle render_rectangle_float_mt
+#define iter_thread iter_thread_float_mt
+#include "rect.c"
+#else /* !HAVE_GCC_ATOMIC_OPS */
+#define render_rectangle_float_mt render_rectangle_float
+#endif /* HAVE_GCC_ATOMIC_OPS */
 #undef iter_thread
 #undef render_rectangle
 #undef add_c_to_accum
@@ -4987,13 +5588,10 @@ typedef float abucket_float[4];
 #define bucket bucket_short
 #define abucket abucket_short
 #define MAXBUCKET (1<<14)
-#define bump_no_overflow(dest, delta) { \
-   if (USHRT_MAX - dest > delta) dest += delta; \
-}
-#define abump_no_overflow(dest, delta) { \
-   if (USHRT_MAX - dest > delta) dest += delta; \
-}
-#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) { \
+#define abump_no_overflow(dest, delta) do { \
+   if (USHRT_MAX - dest > delta) dest += delta; else dest = USHRT_MAX; \
+} while (0)
+#define add_c_to_accum(acc,i,ii,j,jj,wid,hgt,c) do { \
    if ( (j) + (jj) >=0 && (j) + (jj) < (hgt) && (i) + (ii) >=0 && (i) + (ii) < (wid)) { \
    abucket *a = (acc) + ( (i) + (ii) ) + ( (j) + (jj) ) * (wid); \
    abump_no_overflow(a[0][0],(c)[0]); \
@@ -5001,10 +5599,28 @@ typedef float abucket_float[4];
    abump_no_overflow(a[0][2],(c)[2]); \
    abump_no_overflow(a[0][3],(c)[3]); \
    } \
-}
+} while (0)
+/* single-threaded */
+#define USE_LOCKS
+#define bump_no_overflow(dest, delta) do { \
+   if (USHRT_MAX - dest > delta) dest += delta; else dest = USHRT_MAX; \
+} while (0)
 #define render_rectangle render_rectangle_short
 #define iter_thread iter_thread_short
 #include "rect.c"
+#ifdef HAVE_GCC_ATOMIC_OPS
+/* multi-threaded */
+#undef USE_LOCKS
+#undef bump_no_overflow
+#undef render_rectangle
+#undef iter_thread
+#define bump_no_overflow(dest, delta)  ushort_atomic_add(&dest, delta)
+#define render_rectangle render_rectangle_short_mt
+#define iter_thread iter_thread_short_mt
+#include "rect.c"
+#else /* !HAVE_GCC_ATOMIC_OPS */
+#define render_rectangle_short_mt render_rectangle_short
+#endif /* HAVE_GCC_ATOMIC_OPS */
 #undef iter_thread
 #undef render_rectangle
 #undef add_c_to_accum
@@ -5030,27 +5646,53 @@ double flam3_render_memory_required(flam3_frame *spec)
     (double) cps[0].width * cps[0].height * real_bits;
 }
 
+void bits_error(flam3_frame *spec) {
+      fprintf(stderr, "flam3: bits must be 16, 32, 33, or 64 not %d.\n",
+         spec->bits);
+      exit(1);
+}
+
 void flam3_render(flam3_frame *spec, unsigned char *out,
 		  int out_width, int field, int nchan, int trans,
 		  stat_struct *stats) {
-  switch (spec->bits) {
-  case 16:
-    render_rectangle_short(spec, out, out_width, field, nchan, trans, stats);
-    break;
-  case 32:
-    render_rectangle_int(spec, out, out_width, field, nchan, trans, stats);
-    break;
-  case 33:
-    render_rectangle_float(spec, out, out_width, field, nchan, trans, stats);
-    break;
-  case 64:
-    render_rectangle_double(spec, out, out_width, field, nchan, trans, stats);
-    break;
-  default:
-    fprintf(stderr, "flam3: bits must be 16, 32, 33, or 64 not %d.\n",
-       spec->bits);
-    exit(1);
-    break;
+  if (spec->nthreads == 1) {
+    /* single-threaded */
+    switch (spec->bits) {
+    case 16:
+      render_rectangle_short(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    case 32:
+      render_rectangle_int(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    case 33:
+      render_rectangle_float(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    case 64:
+      render_rectangle_double(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    default:
+      bits_error(spec);
+      break;
+    }
+  } else {
+    /* multi-threaded */
+    switch (spec->bits) {
+    case 16:
+      render_rectangle_short_mt(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    case 32:
+      render_rectangle_int_mt(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    case 33:
+      render_rectangle_float_mt(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    case 64:
+      render_rectangle_double_mt(spec, out, out_width, field, nchan, trans, stats);
+      break;
+    default:
+      bits_error(spec);
+      break;
+    }
   }
 }
 
@@ -5294,4 +5936,16 @@ void flam3_unflatten_genome(void *buf, flam3_genome *cp) {
       memcpy(bufoff, (const void *)(&cp->xform[i]), sizeof(flam3_xform));
       bufoff += sizeof(flam3_xform);
    }
+}
+
+void flam3_srandom() {
+    unsigned int seed;
+    char *s = getenv("seed");
+
+    if (s)
+	seed = atoi(s);
+    else
+	seed = time(0) + getpid();
+
+    srandom(seed);
 }

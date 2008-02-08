@@ -18,7 +18,7 @@
 */
 
 static char *docstring_c_id =
-"@(#) $Id: docstring.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: docstring.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 #include "config.h"
 #include "flam3.h"
@@ -86,6 +86,7 @@ static char *the_docstring =
 "name_enable   0      use 'name' attr in <flame> to name image output if present (render only)\n"
 "nick      \"\"      nickname to use in <edit> tags / img comments\n"
 "url      \"\"      url to use in <edit> tags / img comments\n"
+"id       \"\"      ID to use in <edit> tags\n"
 "comment      \"\"      comment string for <edit> tags (genome only)\n"
 "use_mem      auto      floating point number of bytes of memory to use (render only)\n"
 "write_genome   0      write out genome associated with center of motion blur window (animate only)\n"

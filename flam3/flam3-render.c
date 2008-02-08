@@ -18,7 +18,7 @@
 */
 
 static char *flam3_render_c_id =
-"@(#) $Id: flam3-render.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: flam3-render.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 #ifdef WIN32
 #define WINVER 0x0500
@@ -90,14 +90,14 @@ int main(int argc, char **argv) {
    flam3_genome *cps;
    int ncps;
    int i;
-   unsigned char *image;
+   unsigned char *image=NULL;
    FILE *fp;
    char fname[256];
    size_t this_size, last_size = -1;
    double imgmem;
-   int strip;
+   unsigned int strip;
    double center_y, center_base;
-   int nstrips;
+   unsigned int nstrips;
    char *prefix = args("prefix", "");
    char *out = args("out", NULL);
    char *format = getenv("format");
@@ -113,19 +113,20 @@ int main(int argc, char **argv) {
    int num_threads = argi("nthreads",0);
    FILE *in;
    double zoom_scale;
-   int channels;
+   unsigned int channels;
    long start_time = (long)time(0);
    flam3_img_comments fpc;
    stat_struct stats;
    char numiter_string[64];
    char badval_string[64];
    char rtime_string[64];
+
+#ifdef WIN32
+   
    char *slashloc;
    char exepath[256];
    char palpath[256];   
 
-#ifdef WIN32
-   
     slashloc = strrchr(argv[0],'\\');
 	if (NULL==slashloc) {
 	   sprintf(palpath,"flam3_palettes=flam3-palettes.xml");
@@ -144,9 +145,8 @@ int main(int argc, char **argv) {
    }
 
    /* Init random number generators */
-   /* MANDATORY! */
    flam3_init_frame(&f);
-   srandom(seed ? seed : ((unsigned int)time(0) + getpid()));
+   flam3_srandom();
 
    /* Set the number of threads */
    if (num_threads==0) {

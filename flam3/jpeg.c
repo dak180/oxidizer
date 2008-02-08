@@ -19,7 +19,7 @@
 
 
 static char *jpeg_c_id =
-"@(#) $Id: jpeg.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: jpeg.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +35,7 @@ void
 write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc) {
    struct jpeg_compress_struct info;
    struct jpeg_error_mgr jerr;
-   int i;
+   unsigned int i;
    char *nick = getenv("nick");
    char *url = getenv("url");
    char *ai; /* For argi */
@@ -69,22 +69,22 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
     
    /* Write comments to jpeg */
    if (jpegcom_enable==1) {
-        jpeg_write_marker(&info, JPEG_COM, ver_string, (int)strlen(ver_string));
+        jpeg_write_marker(&info, JPEG_COM, (unsigned char *)ver_string, (int)strlen(ver_string));
 
         if (0 != nick) {
             snprintf(nick_string,64,"flam3_nickname: %s",nick);
-            jpeg_write_marker(&info, JPEG_COM, nick_string, (int)strlen(nick_string));
+            jpeg_write_marker(&info, JPEG_COM, (unsigned char *)nick_string, (int)strlen(nick_string));
         }
 
         if (0 != url) {
             snprintf(url_string,128,"flam3_url: %s",url);
-            jpeg_write_marker(&info, JPEG_COM, url_string, (int)strlen(url_string));
+            jpeg_write_marker(&info, JPEG_COM, (unsigned char *)url_string, (int)strlen(url_string));
         }
 
-        jpeg_write_marker(&info, JPEG_COM, bv_string, (int)strlen(bv_string));
-        jpeg_write_marker(&info, JPEG_COM, ni_string, (int)strlen(ni_string));
-        jpeg_write_marker(&info, JPEG_COM, rt_string, (int)strlen(rt_string));
-        jpeg_write_marker(&info, JPEG_COM, genome_string, (int)strlen(genome_string));
+        jpeg_write_marker(&info, JPEG_COM, (unsigned char *)bv_string, (int)strlen(bv_string));
+        jpeg_write_marker(&info, JPEG_COM, (unsigned char *)ni_string, (int)strlen(ni_string));
+        jpeg_write_marker(&info, JPEG_COM, (unsigned char *)rt_string, (int)strlen(rt_string));
+        jpeg_write_marker(&info, JPEG_COM, (unsigned char *)genome_string, (int)strlen(genome_string));
     }
 
     for (i = 0; i < height; i++) {

@@ -1,4 +1,4 @@
-flam3 - cosmic recursive fractal flames
+FLAM3 - cosmic recursive fractal flames
 see the file COPYING for the license covering this software.
 
 This is free software to render fractal flames as described on
@@ -77,7 +77,8 @@ strip           NA              strip input, frame and nframes control which one
 transparency    0               make bknd transparent, if format supports it
 name_enable     0               use 'name' attr in <flame> to name image output if present (render only)
 nick            ""              nickname to use in <edit> tags / img comments
-url             ""              url to use in <edit> tags /img comments
+url             ""              url to use in <edit> tags / img comments
+id		""		ID  to use in <edit> tags / img comments
 comment         ""              comment string for <edit> tags (genome only)
 use_mem         auto            floating point number of bytes of memory to use (render only)
 nthreads        auto            number of threads to use (render and animate)
@@ -249,6 +250,23 @@ todo:  eliminate all static storage.
 ======================================
 
 changelog:
+
+1/26/08 better scalability across multiple CPUs by using compare and
+    swap (from Tim Hockin).  fix bug in large images (>2GB).  add
+    flam3_srandom and flam3_malloc/free to better support wrapping
+    with python on windows, which links with a different C
+    runtime. add --enable-shared option to configure script (from
+    Bobby R Ward). release as 2.7.8.
+
+12/16/07 fixed bug (rare random crash) identified by david burnett.
+    initialize new xforms with better defaults for parametric
+    variations (based on interpolated-against xforms).  add id envar,
+    like nick/url.  add clone_action envar.  return to xform
+    interpolation based on complex logs, but make consistent decisions
+    about counter/clockwise rotation across the sheep edges.
+    interpolation_space attribute to flame element can be set to
+    "linear" to go back to the simpler method, or "log" to use this
+    new (default) method. release as 2.7.7
 
 10/20/07 fixed action string overflow when many xforms are present.
     added 'print_edit_depth' env var to control how many levels of

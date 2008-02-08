@@ -18,7 +18,7 @@
 */
 
 static char *flam3_genome_c_id =
-"@(#) $Id: flam3-genome.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: flam3-genome.c,v 1.5 2008/02/08 14:06:37 vargol Exp $";
 
 #include "private.h"
 #include "isaacs.h"
@@ -116,6 +116,7 @@ xmlDocPtr create_new_editdoc(char *action, flam3_genome *parent0, flam3_genome *
    char timestring[100];
    char *nick = getenv("nick");
    char *url = getenv("url");
+   char *id = getenv("id");
    char *comment = getenv("comment");
    int sheep_gen = argi("sheep_gen",-1);
    int sheep_id = argi("sheep_id",-1);
@@ -144,6 +145,10 @@ xmlDocPtr create_new_editdoc(char *action, flam3_genome *parent0, flam3_genome *
    /* url */
    if (url) {
       xmlNewProp(root_node, (const xmlChar *)"url", (const xmlChar *)url);
+   }
+
+   if (id) {
+      xmlNewProp(root_node, (const xmlChar *)"id", (const xmlChar *)id);
    }
 
    /* action */
@@ -258,8 +263,15 @@ spin(int frame, double blend, flam3_genome *parent, flam3_genome *templ)
 
   memset(&result, 0, sizeof(flam3_genome));
   flam3_copy(&result,parent);
+  
+  //  symm = (int *)calloc(result.num_xforms,sizeof(int));
+  //  for (si=0;si<result.num_xforms;si++)
+  //      symm[si] = 0.0;
 
   flam3_rotate(&result, blend*360.0);
+  
+  // free(symm);
+  
   if (templ)
      flam3_apply_template(&result, templ);
 
@@ -284,29 +296,39 @@ spin(int frame, double blend, flam3_genome *parent, flam3_genome *templ)
   free(result.xform);
 }
 
-void
-spin_inter(int frame, double blend, flam3_genome *parents, flam3_genome *templ)
-{
+void spin_inter(int frame, double blend, flam3_genome *parents, flam3_genome *templ) {
   flam3_genome spun[2];
+  flam3_genome spun_prealign[2];
   flam3_genome result;
   char action[50];
   xmlDocPtr doc;
 
   memset(spun, 0, 2*sizeof(flam3_genome));
+  memset(spun_prealign, 0, 2*sizeof(flam3_genome));
   memset(&result, 0, sizeof(flam3_genome));
 
+  flam3_copy(&(spun_prealign[0]), &(parents[0]));
+  flam3_copy(&(spun_prealign[1]), &(parents[1]));
 
-  flam3_copy(&(spun[0]), &(parents[0]));
-  flam3_copy(&(spun[1]), &(parents[1]));
+  flam3_align(spun, spun_prealign, 2);
 
-  flam3_rotate(&spun[0], blend*360.0);
-  flam3_rotate(&spun[1], blend*360.0);
+  if (0.0 == blend)
+     /* Make sure we use the un-padded original for blend=0 */
+     flam3_copy(&result, &(spun_prealign[0]) );
+  else {
+     spun[0].time = 0.0;
+     spun[1].time = 1.0;
 
-  spun[0].time = 0.0;
-  spun[1].time = 1.0;
+     /* Call this first to establish the asymmetric reference angles */
+     establish_asymmetric_refangles(spun,2);  
 
-  flam3_interpolate(spun, 2, smoother(blend), &result);
+     flam3_rotate(&spun[0], blend*360.0);
+     flam3_rotate(&spun[1], blend*360.0);
 
+     /* Now call the interpolation */
+     flam3_interpolate(spun, 2, smoother(blend), &result);
+  }
+  
   if ((parents[0].palette_index != flam3_palette_random) &&
       (parents[1].palette_index != flam3_palette_random)) {
     result.palette_index = flam3_palette_interpolated;
@@ -339,6 +361,8 @@ spin_inter(int frame, double blend, flam3_genome *parents, flam3_genome *templ)
   /* Free xform storage */
   free(spun[0].xform);
   free(spun[1].xform);
+  free(spun_prealign[0].xform);
+  free(spun_prealign[1].xform);
   free(result.xform);
 }
 
@@ -355,7 +379,7 @@ void add_to_action(char *action, char *addtoaction) {
 
 void truncate_variations(flam3_genome *g, int max_vars, char *action) {
    int i, j, nvars, smallest;
-   double sv;
+   double sv=0;
    char trunc_note[30];
 
    for (i = 0; i < g->num_xforms; i++) {
@@ -575,13 +599,13 @@ main(argc, argv)
    int seed = argi("seed", 0);
    char *use_vars = getenv("use_vars");
    char *dont_use_vars = getenv("dont_use_vars");
-   flam3_genome *parent0, *parent1;
+   flam3_genome *parent0=NULL, *parent1=NULL;
    flam3_genome selp0, selp1;
    flam3_genome *aselp0, *aselp1;
    int parent0_n, parent1_n;
    int num_threads = 1;
    int ncp;
-   char default_duv[30]="31,34,35,36,38,43,44,48";
+   char default_duv[30]="31,34,35,36,38,43,44,46,48";
 
    int ivars[max_specified_vars];
    int novars[max_specified_vars];
@@ -594,14 +618,14 @@ main(argc, argv)
    
    stat_struct stats;
 
-   char *slashloc;
-   char exepath[256];
-   char palpath[256];
 
 
 #ifdef WIN32
    
-    slashloc = strrchr(argv[0],'\\');
+   char *slashloc;
+   char exepath[256];
+   char palpath[256];
+   slashloc = strrchr(argv[0],'\\');
 	if (NULL==slashloc) {
 	   sprintf(palpath,"flam3_palettes=flam3-palettes.xml");
 	} else {
@@ -627,7 +651,7 @@ main(argc, argv)
 
    /* Init random number generators */
    flam3_init_frame(&f);
-   srandom(seed ? seed : (time(0) + getpid()));
+   flam3_srandom();
 
    f.temporal_filter_radius = 0.0;
    f.bits = bits;
@@ -912,6 +936,8 @@ main(argc, argv)
 
          /* Action is 'clone' with trunc_vars concat */
          sprintf(action,"clone");
+	 if (getenv("clone_action"))
+	   sprintf(action,"clone %s", getenv("clone_action"));
 
          flam3_copy(&selp0, &(parent0[random()%parent0_n]));
          flam3_copy(&cp_save, &selp0);
@@ -1094,7 +1120,6 @@ main(argc, argv)
                   }
                } else if (r < 0.8) {
                   int nx = 0;
-                  int ny = 0;
                   if (debug) fprintf(stderr, "deleting an xform\n");
                   sprintf(action,"mutate delete");
 /*                  for (i = 0; i < cp_orig.num_xforms; i++) {
@@ -1156,7 +1181,6 @@ main(argc, argv)
                }
 
             } else if (cross0) {
-               int nxf;
                int i0, i1, rb, used_parent;
                char ministr[10];
 

@@ -43,7 +43,7 @@
 #define WHITE_LEVEL 255
 #define SUB_BATCH_SIZE 10000
 
-#ifdef HAVE_LIBPTHREAD
+#if defined(HAVE_LIBPTHREAD) && defined(USE_LOCKS)
   /* mutex for bucket accumulator */
   pthread_mutex_t bucket_mutex;
 #endif
@@ -137,7 +137,7 @@ static void iter_thread(void *fth) {
       /* Execute iterations */
       badcount = flam3_iterate(&(fthp->cp), sub_batch_size, FUSE, fthp->iter_storage, ficp->xform_distrib, &(fthp->rc));
 
-      #ifdef HAVE_LIBPTHREAD
+      #if defined(HAVE_LIBPTHREAD) && defined(USE_LOCKS)
         /* Lock mutex for access to accumulator */
         pthread_mutex_lock(&bucket_mutex);
       #endif
@@ -221,7 +221,7 @@ static void iter_thread(void *fth) {
          }
       }
       
-      #ifdef HAVE_LIBPTHREAD
+      #if defined(HAVE_LIBPTHREAD) && defined(USE_LOCKS)
         /* Release mutex */
         pthread_mutex_unlock(&bucket_mutex);
       #endif
@@ -242,7 +242,7 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    abucket *accumulate;
    double *points;
    double *filter, *temporal_filter, *temporal_deltas, *motion_filter;
-   double ppux, ppuy;
+   double ppux=0, ppuy=0;
    int image_width, image_height;    /* size of the image to produce */
    int filter_width;
    int oversample = spec->genomes[0].spatial_oversample;
@@ -252,17 +252,14 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
       depends on times.  fix by making all batches happen at the same time */
    int ntemporal_samples = spec->genomes[0].ntemporal_samples;
    bucket cmap[CMAP_SIZE];
-   unsigned char *cmap2;
+   unsigned char *cmap2=NULL;
    int gutter_width;
    double vibrancy = 0.0;
    double gamma = 0.0;
    double background[3];
    int vib_gam_n = 0;
    double keep_thresh=100.0;
-   time_t progress_timer = 0, progress_began,
-     progress_timer_history[64] = {0};
-   double progress_history[64] = {0};
-   int progress_history_mark = 0;
+   time_t progress_timer = 0, progress_began=0;
    int verbose = spec->verbose;
    char *fname = getenv("image");
    int gnm_idx,max_gnm_de_fw,de_offset;
@@ -273,7 +270,7 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    flam3_thread_helper *fth;
 #ifdef HAVE_LIBPTHREAD
    pthread_attr_t pt_attr;
-   pthread_t *myThreads;
+   pthread_t *myThreads=NULL;
 #endif
    int thread_status;
    int thi;
@@ -458,28 +455,22 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
 
    nbuckets = (long)fic.width * (long)fic.height;
    if (1) {
-     
-     /* Allocate buckets */
-     buckets = (bucket *)malloc(sizeof(bucket) * nbuckets);
-     if (NULL == buckets) {
-       fprintf(stderr,"render_rectangle (bucket): cannot malloc %ld bytes\n",sizeof(bucket)*nbuckets);
-       exit(1);
-     }
-            
-     /* Allocate accumulator */
-     accumulate = (abucket *)malloc(sizeof(abucket) * nbuckets);
-     if (NULL == accumulate) {
-       fprintf(stderr,"render_rectangle (abucket): cannot malloc %ld bytes\n",sizeof(abucket)*nbuckets);
-       exit(1);
-     }
-     
-     /* Allocate iteration storage */
-     points = (double *)malloc(4 * sizeof(double) * SUB_BATCH_SIZE * spec->nthreads);
-     if (NULL == points) {
-       fprintf(stderr,"render_rectangle (points): cannot malloc %ld bytes\n",4*sizeof(double)*SUB_BATCH_SIZE*spec->nthreads);
-       exit(1);
-     }
 
+     char *last_block = NULL;
+     size_t memory_rqd = (sizeof(bucket) * nbuckets +
+             sizeof(abucket) * nbuckets +
+             4 * sizeof(double) * (size_t)SUB_BATCH_SIZE * spec->nthreads);
+     last_block = (char *) malloc(memory_rqd);
+     if (NULL == last_block) {
+       fprintf(stderr, "render_rectangle: cannot malloc %ld bytes.\n", memory_rqd);
+       fprintf(stderr, "render_rectangle: h=%d w=%d nb=%ld.\n", fic.width, fic.height, nbuckets);
+       exit(1);
+     }
+     /* else fprintf(stderr, "render_rectangle: mallocked %dMb.\n", Mb); */
+
+     buckets = (bucket *) last_block;
+     accumulate = (abucket *) (last_block + sizeof(bucket) * nbuckets);
+     points = (double *)  (last_block + (sizeof(bucket) + sizeof(abucket)) * nbuckets);
    }
 
    if (verbose) {
@@ -491,7 +482,6 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
       int len = (int)strlen(fname);
       FILE *fin = fopen(fname, "rb");
       int w, h;
-      cmap2 = NULL;
       if (len > 4) {
          char *ending = fname + len - 4;
          if (!strcmp(ending, ".png")) {
@@ -515,10 +505,10 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
 
    for (batch_num = 0; batch_num < nbatches; batch_num++) {
       double de_time;
-      double sample_density;
-      int de_row_size, de_kernel_index, de_half_size;
-      int de_cutoff_val;
-      double *de_filter_coefs,*de_filter_widths;
+      double sample_density=0.0;
+      int de_row_size, de_kernel_index=0, de_half_size;
+      int de_cutoff_val=0;
+      double *de_filter_coefs=NULL,*de_filter_widths=NULL;
       double num_de_filters_d;
       int num_de_filters=0,filtloop,de_max_ind;
       double comp_max_radius,comp_min_radius;
@@ -707,7 +697,7 @@ if (1) {
 
          /* compute camera */
          if (1) {
-            double t0, t1, shift, corner0, corner1;
+            double t0, t1, shift=0.0, corner0, corner1;
             double scale;
 
             if (cp.sample_density <= 0.0) {
@@ -816,7 +806,9 @@ if (1) {
          /* Let's make some threads */
          myThreads = (pthread_t *)malloc(spec->nthreads * sizeof(pthread_t));
 
+         #if defined(USE_LOCKS)
          pthread_mutex_init(&bucket_mutex, NULL);
+         #endif
 
          pthread_attr_init(&pt_attr);
          pthread_attr_setdetachstate(&pt_attr,PTHREAD_CREATE_JOINABLE);
@@ -830,11 +822,20 @@ if (1) {
          for (thi=0; thi < spec->nthreads; thi++)
             pthread_join(myThreads[thi], (void **)&thread_status);
 
+         #if defined(USE_LOCKS)
          pthread_mutex_destroy(&bucket_mutex);
+         #endif
 #else
          for (thi=0; thi < spec->nthreads; thi++)
             iter_thread( (void *)(&(fth[thi])) );
-#endif         
+#endif
+
+    /* We have to free the xform data allocated in the flam3_copy call above */
+         for (thi=0; thi < spec->nthreads; thi++) {
+            free(fth[thi].cp.xform);
+            fth[thi].cp.num_xforms=0;
+         }
+             
 	 if (fic.aborted) {
 	   if (verbose) fprintf(stderr, "\naborted!\n");
 	   goto done;
@@ -1183,8 +1184,9 @@ if (1) {
 #endif
    free(filter);
    free(buckets);
-   free(accumulate);
-   free(points);
+//   free(accumulate);
+//   free(points);
+   free(fth);
    /* Free the xform in cp */
    free(cp.xform);
    cp.num_xforms=0;

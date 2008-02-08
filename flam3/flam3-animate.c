@@ -19,14 +19,14 @@
 
 
 static char *flam3_animate_c_id =
-"@(#) $Id: flam3-animate.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: flam3-animate.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 #include "private.h"
 #include "img.h"
 #include "isaacs.h"
 
 int main(int argc, char **argv) {
-  char *ai, *fname, *flamename;
+  char *ai, *fname, *flamename=NULL;
   char *prefix = args("prefix", "");
   int first_frame = argi("begin", 0);
   int last_frame = argi("end", 0);
@@ -56,13 +56,13 @@ int main(int argc, char **argv) {
   char badval_string[64];
   char numiter_string[64];
   char rtime_string[64];
-  char *slashloc;
-  char exepath[256];
-  char palpath[256];  
 
 #ifdef WIN32
    
-    slashloc = strrchr(argv[0],'\\');
+  char *slashloc;
+  char exepath[256];
+  char palpath[256];  
+   slashloc = strrchr(argv[0],'\\');
 	if (NULL==slashloc) {
 	   sprintf(palpath,"flam3_palettes=flam3-palettes.xml");
 	} else {
@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
 
    /* Init random number generators */
    flam3_init_frame(&f);
-   srandom(seed ? seed : (time(0) + getpid()));
+   flam3_srandom();
 
    /* Set the number of threads */
    if (num_threads==0) {
@@ -188,7 +188,9 @@ int main(int argc, char **argv) {
   f.progress = 0;
   f.nthreads = num_threads;
 
-  image = (unsigned char *) malloc(channels * cps[0].width * cps[0].height);
+  image = (unsigned char *) malloc((size_t)channels *
+				   (size_t)cps[0].width *
+				   (size_t)cps[0].height);
 
   if (dtime < 1) {
     fprintf(stderr, "dtime must be positive, not %d.\n", dtime);

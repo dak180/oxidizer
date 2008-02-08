@@ -19,7 +19,7 @@
 
 
 static char *jpeg_c_id =
-"@(#) $Id: png.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: png.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +35,7 @@ void write_png(FILE *file, unsigned char *image, int width, int height, flam3_im
   png_structp  png_ptr;
   png_infop    info_ptr;
   png_text     text[FLAM3_PNG_COM];
-  int          i;
+  unsigned int i;
   unsigned char **rows = malloc(sizeof(unsigned char *) * height);
   char *nick = getenv("nick");
   char *url = getenv("url");

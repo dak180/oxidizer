@@ -18,7 +18,7 @@
 */
 
 static char *libifs_c_id =
-"@(#) $Id: flam3-convert.c,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: flam3-convert.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include "private.h"
 
@@ -191,11 +191,12 @@ int
 main(int argc, char **argv)
 {
   char *s, *ss;
-  char *slashloc;
-  char palpath[256],exepath[256];
 
 #ifdef WIN32
    
+  char *slashloc;
+  char palpath[256],exepath[256];
+
     slashloc = strrchr(argv[0],'\\');
 	if (NULL==slashloc) {
 	   sprintf(palpath,"flam3_palettes=flam3-palettes.xml");

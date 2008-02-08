@@ -27,7 +27,7 @@
 
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.4 2007/10/27 15:39:27 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 char *flam3_version();
 
@@ -60,10 +60,70 @@ extern char *flam3_variation_names[];
 #define flam3_interpolation_linear 0
 #define flam3_interpolation_smooth 1
 
+#define flam3_intspace_linear 0
+#define flam3_intspace_log    1
+
 #define flam3_palette_interpolation_hsv   0
 #define flam3_palette_interpolation_sweep 1
 
 #define flam3_max_action_length 10000
+
+#define VAR_LINEAR   0
+#define VAR_SINUSOIDAL  1
+#define VAR_SPHERICAL  2
+#define VAR_SWIRL 3
+#define VAR_HORSESHOE  4
+#define VAR_POLAR 5
+#define VAR_HANDKERCHIEF 6
+#define VAR_HEART 7
+#define VAR_DISC 8
+#define VAR_SPIRAL 9
+#define VAR_HYPERBOLIC 10
+#define VAR_DIAMOND 11
+#define VAR_EX 12
+#define VAR_JULIA 13
+#define VAR_BENT 14
+#define VAR_WAVES 15
+#define VAR_FISHEYE 16
+#define VAR_POPCORN 17
+#define VAR_EXPONENTIAL 18
+#define VAR_POWER 19
+#define VAR_COSINE 20
+#define VAR_RINGS 21
+#define VAR_FAN 22
+#define VAR_BLOB 23
+#define VAR_PDJ 24
+#define VAR_FAN2 25
+#define VAR_RINGS2 26
+#define VAR_EYEFISH 27
+#define VAR_BUBBLE 28
+#define VAR_CYLINDER 29
+#define VAR_PERSPECTIVE 30
+#define VAR_NOISE 31
+#define VAR_JULIAN 32
+#define VAR_JULIASCOPE 33
+#define VAR_BLUR 34
+#define VAR_GAUSSIAN_BLUR 35
+#define VAR_RADIAL_BLUR 36
+#define VAR_PIE 37
+#define VAR_NGON 38
+#define VAR_CURL 39
+#define VAR_RECTANGLES 40
+#define VAR_ARCH 41
+#define VAR_TANGENT 42
+#define VAR_SQUARE 43
+#define VAR_RAYS 44
+#define VAR_BLADE 45
+#define VAR_SECANT 46
+#define VAR_TWINTRIAN 47
+#define VAR_CROSS 48
+#define VAR_DISC2 49
+#define VAR_SUPER_SHAPE 50
+#define VAR_FLOWER 51
+#define VAR_CONIC 52
+#define VAR_PARABOLA 53
+#define VAR_SPLIT 54
+#define VAR_MOVE 55
 
 typedef void (*flam3_iterator)(void *, double);
 
@@ -87,7 +147,7 @@ typedef struct {
 
 typedef struct {
 
-   int width, height;
+   unsigned int width, height;
    int version;
    int id;
 
@@ -112,6 +172,9 @@ typedef struct {
    double density;      /* probability that this function is chosen. 0 - 1 */
    double color[2];     /* color coords for this function. 0 - 1 */
    double symmetry;     /* 1=this is a symmetry xform, 0=not */
+   
+   int just_initialized;/* Set to 1 during initialization, 0 otherwise */
+   double wind[2]; /* winding numbers */
 
    int precalc_sqrt_flag;
    int precalc_angles_flag;
@@ -254,6 +317,7 @@ typedef struct {
    char flame_name[flam3_name_len+1]; /* 64 chars plus a null */
    double time;
    int interpolation;
+   int interpolation_space;
    int palette_interpolation;
    int num_xforms;
    int final_xform_index;
@@ -361,6 +425,8 @@ void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors,
 void flam3_estimate_bounding_box(flam3_genome *g, double eps, int nsamples,
              double *bmin, double *bmax, randctx *rc);
 void flam3_rotate(flam3_genome *g, double angle); /* angle in degrees */
+void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc);
+void establish_asymmetric_refangles(flam3_genome *cp, int ncps);
 
 double flam3_dimension(flam3_genome *g, int ntries, int clip_to_camera);
 double flam3_lyapunov(flam3_genome *g, int ntries);
@@ -406,9 +472,15 @@ int flam3_random_isaac_bit(randctx *);
 
 void flam3_init_frame(flam3_frame *f);
 
+/* External memory helpers */
+void *flam3_malloc(size_t size);
+void flam3_free(void *ptr);
+
 /* AE Plugin helper functions */
 size_t flam3_size_flattened_genome(flam3_genome *cp);
 void flam3_flatten_genome(flam3_genome *cp, void *buf);
 void flam3_unflatten_genome(void *buf, flam3_genome *cp);
+
+void flam3_srandom();
 
 #endif
