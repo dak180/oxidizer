@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 65 tasks, 241 threads, 2 processors
-Load average: 2.23, Mach factor: 0.66
+Default processor set: 62 tasks, 229 threads, 2 processors
+Load average: 2.38, Mach factor: 0.57
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -47,110 +47,110 @@ PATH: /sbin
 ## Core tests. ##
 ## ----------- ##
 
-configure:1975: checking for a BSD-compatible install
-configure:2031: result: /usr/bin/install -c
-configure:2042: checking whether build environment is sane
-configure:2085: result: yes
-configure:2113: checking for a thread-safe mkdir -p
-configure:2152: result: ./install-sh -c -d
-configure:2165: checking for gawk
-configure:2195: result: no
-configure:2165: checking for mawk
-configure:2195: result: no
-configure:2165: checking for nawk
-configure:2195: result: no
-configure:2165: checking for awk
-configure:2181: found /usr/bin/awk
-configure:2192: result: awk
-configure:2203: checking whether make sets $(MAKE)
-configure:2224: result: yes
-configure:2460: checking for gcc
-configure:2476: found /Developer/usr/bin/gcc
-configure:2487: result: gcc
-configure:2725: checking for C compiler version
-configure:2732: gcc --version >&5
+configure:1974: checking for a BSD-compatible install
+configure:2030: result: /usr/bin/install -c
+configure:2041: checking whether build environment is sane
+configure:2084: result: yes
+configure:2112: checking for a thread-safe mkdir -p
+configure:2151: result: ./install-sh -c -d
+configure:2164: checking for gawk
+configure:2194: result: no
+configure:2164: checking for mawk
+configure:2194: result: no
+configure:2164: checking for nawk
+configure:2194: result: no
+configure:2164: checking for awk
+configure:2180: found /usr/bin/awk
+configure:2191: result: awk
+configure:2202: checking whether make sets $(MAKE)
+configure:2223: result: yes
+configure:2459: checking for gcc
+configure:2475: found /Developer/usr/bin/gcc
+configure:2486: result: gcc
+configure:2724: checking for C compiler version
+configure:2731: gcc --version >&5
 i686-apple-darwin9-gcc-4.0.1 (GCC) 4.0.1 (Apple Inc. build 5465)
 Copyright (C) 2005 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-configure:2735: $? = 0
-configure:2742: gcc -v >&5
+configure:2734: $? = 0
+configure:2741: gcc -v >&5
 Using built-in specs.
 Target: i686-apple-darwin9
 Configured with: /var/tmp/gcc/gcc-5465~16/src/configure --disable-checking -enable-werror --prefix=/usr --mandir=/share/man --enable-languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/$/-4.0/ --with-gxx-include-dir=/include/c++/4.0.0 --with-slibdir=/usr/lib --build=i686-apple-darwin9 --with-arch=apple --with-tune=generic --host=i686-apple-darwin9 --target=i686-apple-darwin9
 Thread model: posix
 gcc version 4.0.1 (Apple Inc. build 5465)
-configure:2745: $? = 0
-configure:2752: gcc -V >&5
+configure:2744: $? = 0
+configure:2751: gcc -V >&5
 gcc-4.0: argument to `-V' is missing
-configure:2755: $? = 1
-configure:2778: checking for C compiler default output file name
-configure:2805: gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c  >&5
-configure:2808: $? = 0
-configure:2846: result: a.out
-configure:2863: checking whether the C compiler works
-configure:2873: ./a.out
-configure:2876: $? = 0
-configure:2893: result: yes
-configure:2900: checking whether we are cross compiling
-configure:2902: result: no
-configure:2905: checking for suffix of executables
-configure:2912: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c  >&5
-configure:2915: $? = 0
-configure:2939: result: 
-configure:2945: checking for suffix of object files
-configure:2971: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:2974: $? = 0
-configure:2997: result: o
-configure:3001: checking whether we are using the GNU C compiler
-configure:3030: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:3036: $? = 0
-configure:3053: result: yes
-configure:3058: checking whether gcc accepts -g
-configure:3088: gcc -c -g  conftest.c >&5
-configure:3094: $? = 0
-configure:3193: result: yes
-configure:3210: checking for gcc option to accept ISO C89
-configure:3284: gcc  -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:3290: $? = 0
-configure:3313: result: none needed
-configure:3342: checking for style of include used by make
-configure:3370: result: GNU
-configure:3395: checking dependency style of gcc
-configure:3486: result: none
-configure:3514: checking for a BSD-compatible install
-configure:3570: result: /usr/bin/install -c
-configure:3581: checking whether make sets $(MAKE)
-configure:3602: result: yes
-configure:3690: checking build system type
-configure:3708: result: i386-apple-darwin9.1.0
-configure:3730: checking host system type
-configure:3745: result: i386-apple-darwin9.1.0
-configure:3767: checking for a sed that does not truncate output
-configure:3823: result: /usr/bin/sed
-configure:3826: checking for grep that handles long lines and -e
-configure:3900: result: /usr/bin/grep
-configure:3905: checking for egrep
-configure:3983: result: /usr/bin/grep -E
-configure:3999: checking for ld used by gcc
-configure:4066: result: /Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld
-configure:4075: checking if the linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) is GNU ld
-configure:4090: result: no
-configure:4095: checking for /Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld option to reload object files
-configure:4102: result: -r
-configure:4120: checking for BSD-compatible nm
-configure:4169: result: /Developer/usr/bin/nm -p
-configure:4173: checking whether ln -s works
-configure:4177: result: yes
-configure:4184: checking how to recognize dependent libraries
-configure:4370: result: pass_all
-configure:4611: checking how to run the C preprocessor
-configure:4651: gcc -E  conftest.c
-configure:4657: $? = 0
-configure:4688: gcc -E  conftest.c
+configure:2754: $? = 1
+configure:2777: checking for C compiler default output file name
+configure:2804: gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c  >&5
+configure:2807: $? = 0
+configure:2845: result: a.out
+configure:2862: checking whether the C compiler works
+configure:2872: ./a.out
+configure:2875: $? = 0
+configure:2892: result: yes
+configure:2899: checking whether we are cross compiling
+configure:2901: result: no
+configure:2904: checking for suffix of executables
+configure:2911: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c  >&5
+configure:2914: $? = 0
+configure:2938: result: 
+configure:2944: checking for suffix of object files
+configure:2970: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:2973: $? = 0
+configure:2996: result: o
+configure:3000: checking whether we are using the GNU C compiler
+configure:3029: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:3035: $? = 0
+configure:3052: result: yes
+configure:3057: checking whether gcc accepts -g
+configure:3087: gcc -c -g  conftest.c >&5
+configure:3093: $? = 0
+configure:3192: result: yes
+configure:3209: checking for gcc option to accept ISO C89
+configure:3283: gcc  -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:3289: $? = 0
+configure:3312: result: none needed
+configure:3341: checking for style of include used by make
+configure:3369: result: GNU
+configure:3394: checking dependency style of gcc
+configure:3485: result: none
+configure:3513: checking for a BSD-compatible install
+configure:3569: result: /usr/bin/install -c
+configure:3580: checking whether make sets $(MAKE)
+configure:3601: result: yes
+configure:3689: checking build system type
+configure:3707: result: i386-apple-darwin9.1.0
+configure:3729: checking host system type
+configure:3744: result: i386-apple-darwin9.1.0
+configure:3766: checking for a sed that does not truncate output
+configure:3820: result: /usr/bin/sed
+configure:3823: checking for grep that handles long lines and -e
+configure:3897: result: /usr/bin/grep
+configure:3902: checking for egrep
+configure:3980: result: /usr/bin/grep -E
+configure:3996: checking for ld used by gcc
+configure:4063: result: /Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld
+configure:4072: checking if the linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) is GNU ld
+configure:4087: result: no
+configure:4092: checking for /Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld option to reload object files
+configure:4099: result: -r
+configure:4117: checking for BSD-compatible nm
+configure:4166: result: /Developer/usr/bin/nm -p
+configure:4170: checking whether ln -s works
+configure:4174: result: yes
+configure:4181: checking how to recognise dependent libraries
+configure:4357: result: pass_all
+configure:4591: checking how to run the C preprocessor
+configure:4631: gcc -E  conftest.c
+configure:4637: $? = 0
+configure:4668: gcc -E  conftest.c
 conftest.c:10:28: error: ac_nonexistent.h: No such file or directory
-configure:4694: $? = 1
+configure:4674: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
 | #define PACKAGE_NAME ""
@@ -162,12 +162,12 @@ configure: failed program was:
 | #define VERSION "2.7.9"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:4727: result: gcc -E
-configure:4756: gcc -E  conftest.c
-configure:4762: $? = 0
-configure:4793: gcc -E  conftest.c
+configure:4707: result: gcc -E
+configure:4736: gcc -E  conftest.c
+configure:4742: $? = 0
+configure:4773: gcc -E  conftest.c
 conftest.c:10:28: error: ac_nonexistent.h: No such file or directory
-configure:4799: $? = 1
+configure:4779: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
 | #define PACKAGE_NAME ""
@@ -179,97 +179,97 @@ configure: failed program was:
 | #define VERSION "2.7.9"
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:4837: checking for ANSI C header files
-configure:4867: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:4873: $? = 0
-configure:4972: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c  >&5
-configure:4975: $? = 0
-configure:4981: ./conftest
-configure:4984: $? = 0
-configure:5001: result: yes
-configure:5025: checking for sys/types.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for sys/stat.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for stdlib.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for string.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for memory.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for strings.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for inttypes.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for stdint.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5025: checking for unistd.h
-configure:5046: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5052: $? = 0
-configure:5068: result: yes
-configure:5095: checking dlfcn.h usability
-configure:5112: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:5118: $? = 0
-configure:5132: result: yes
-configure:5136: checking dlfcn.h presence
-configure:5151: gcc -E  conftest.c
-configure:5157: $? = 0
-configure:5171: result: yes
-configure:5199: checking for dlfcn.h
-configure:5207: result: yes
-configure:5278: checking for g++
-configure:5294: found /Developer/usr/bin/g++
-configure:5305: result: g++
-configure:5336: checking for C++ compiler version
-configure:5343: g++ --version >&5
+configure:4817: checking for ANSI C header files
+configure:4847: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:4853: $? = 0
+configure:4952: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c  >&5
+configure:4955: $? = 0
+configure:4961: ./conftest
+configure:4964: $? = 0
+configure:4981: result: yes
+configure:5005: checking for sys/types.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for sys/stat.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for stdlib.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for string.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for memory.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for strings.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for inttypes.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for stdint.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5005: checking for unistd.h
+configure:5026: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5032: $? = 0
+configure:5048: result: yes
+configure:5075: checking dlfcn.h usability
+configure:5092: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:5098: $? = 0
+configure:5112: result: yes
+configure:5116: checking dlfcn.h presence
+configure:5131: gcc -E  conftest.c
+configure:5137: $? = 0
+configure:5151: result: yes
+configure:5179: checking for dlfcn.h
+configure:5187: result: yes
+configure:5258: checking for g++
+configure:5274: found /Developer/usr/bin/g++
+configure:5285: result: g++
+configure:5316: checking for C++ compiler version
+configure:5323: g++ --version >&5
 i686-apple-darwin9-g++-4.0.1 (GCC) 4.0.1 (Apple Inc. build 5465)
 Copyright (C) 2005 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-configure:5346: $? = 0
-configure:5353: g++ -v >&5
+configure:5326: $? = 0
+configure:5333: g++ -v >&5
 Using built-in specs.
 Target: i686-apple-darwin9
 Configured with: /var/tmp/gcc/gcc-5465~16/src/configure --disable-checking -enable-werror --prefix=/usr --mandir=/share/man --enable-languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/$/-4.0/ --with-gxx-include-dir=/include/c++/4.0.0 --with-slibdir=/usr/lib --build=i686-apple-darwin9 --with-arch=apple --with-tune=generic --host=i686-apple-darwin9 --target=i686-apple-darwin9
 Thread model: posix
 gcc version 4.0.1 (Apple Inc. build 5465)
-configure:5356: $? = 0
-configure:5363: g++ -V >&5
+configure:5336: $? = 0
+configure:5343: g++ -V >&5
 g++-4.0: argument to `-V' is missing
-configure:5366: $? = 1
-configure:5369: checking whether we are using the GNU C++ compiler
-configure:5398: g++ -c   conftest.cpp >&5
-configure:5404: $? = 0
-configure:5421: result: yes
-configure:5426: checking whether g++ accepts -g
-configure:5456: g++ -c -g  conftest.cpp >&5
-configure:5462: $? = 0
-configure:5561: result: yes
-configure:5586: checking dependency style of g++
-configure:5677: result: none
-configure:5702: checking how to run the C++ preprocessor
-configure:5738: g++ -E  conftest.cpp
-configure:5744: $? = 0
-configure:5775: g++ -E  conftest.cpp
+configure:5346: $? = 1
+configure:5349: checking whether we are using the GNU C++ compiler
+configure:5378: g++ -c   conftest.cpp >&5
+configure:5384: $? = 0
+configure:5401: result: yes
+configure:5406: checking whether g++ accepts -g
+configure:5436: g++ -c -g  conftest.cpp >&5
+configure:5442: $? = 0
+configure:5541: result: yes
+configure:5566: checking dependency style of g++
+configure:5657: result: none
+configure:5682: checking how to run the C++ preprocessor
+configure:5718: g++ -E  conftest.cpp
+configure:5724: $? = 0
+configure:5755: g++ -E  conftest.cpp
 conftest.cpp:21:28: error: ac_nonexistent.h: No such file or directory
-configure:5781: $? = 1
+configure:5761: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
 | #define PACKAGE_NAME ""
@@ -292,12 +292,12 @@ configure: failed program was:
 | #define HAVE_DLFCN_H 1
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:5814: result: g++ -E
-configure:5843: g++ -E  conftest.cpp
-configure:5849: $? = 0
-configure:5880: g++ -E  conftest.cpp
+configure:5794: result: g++ -E
+configure:5823: g++ -E  conftest.cpp
+configure:5829: $? = 0
+configure:5860: g++ -E  conftest.cpp
 conftest.cpp:21:28: error: ac_nonexistent.h: No such file or directory
-configure:5886: $? = 1
+configure:5866: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
 | #define PACKAGE_NAME ""
@@ -320,70 +320,70 @@ configure: failed program was:
 | #define HAVE_DLFCN_H 1
 | /* end confdefs.h.  */
 | #include <ac_nonexistent.h>
-configure:5979: checking for g77
-configure:6009: result: no
-configure:5979: checking for xlf
-configure:6009: result: no
-configure:5979: checking for f77
-configure:6009: result: no
-configure:5979: checking for frt
-configure:6009: result: no
-configure:5979: checking for pgf77
-configure:6009: result: no
-configure:5979: checking for cf77
-configure:6009: result: no
-configure:5979: checking for fort77
-configure:6009: result: no
-configure:5979: checking for fl32
-configure:6009: result: no
-configure:5979: checking for af77
-configure:6009: result: no
-configure:5979: checking for xlf90
-configure:6009: result: no
-configure:5979: checking for f90
-configure:6009: result: no
-configure:5979: checking for pgf90
-configure:6009: result: no
-configure:5979: checking for pghpf
-configure:6009: result: no
-configure:5979: checking for epcf90
-configure:6009: result: no
-configure:5979: checking for gfortran
-configure:6009: result: no
-configure:5979: checking for g95
-configure:6009: result: no
-configure:5979: checking for xlf95
-configure:6009: result: no
-configure:5979: checking for f95
-configure:6009: result: no
-configure:5979: checking for fort
-configure:6009: result: no
-configure:5979: checking for ifort
-configure:6009: result: no
-configure:5979: checking for ifc
-configure:6009: result: no
-configure:5979: checking for efc
-configure:6009: result: no
-configure:5979: checking for pgf95
-configure:6009: result: no
-configure:5979: checking for lf95
-configure:6009: result: no
-configure:5979: checking for ftn
-configure:6009: result: no
-configure:6036: checking for Fortran 77 compiler version
-configure:6043:  --version >&5
-./configure: line 6044: --version: command not found
+configure:5959: checking for g77
+configure:5989: result: no
+configure:5959: checking for xlf
+configure:5989: result: no
+configure:5959: checking for f77
+configure:5989: result: no
+configure:5959: checking for frt
+configure:5989: result: no
+configure:5959: checking for pgf77
+configure:5989: result: no
+configure:5959: checking for cf77
+configure:5989: result: no
+configure:5959: checking for fort77
+configure:5989: result: no
+configure:5959: checking for fl32
+configure:5989: result: no
+configure:5959: checking for af77
+configure:5989: result: no
+configure:5959: checking for xlf90
+configure:5989: result: no
+configure:5959: checking for f90
+configure:5989: result: no
+configure:5959: checking for pgf90
+configure:5989: result: no
+configure:5959: checking for pghpf
+configure:5989: result: no
+configure:5959: checking for epcf90
+configure:5989: result: no
+configure:5959: checking for gfortran
+configure:5989: result: no
+configure:5959: checking for g95
+configure:5989: result: no
+configure:5959: checking for xlf95
+configure:5989: result: no
+configure:5959: checking for f95
+configure:5989: result: no
+configure:5959: checking for fort
+configure:5989: result: no
+configure:5959: checking for ifort
+configure:5989: result: no
+configure:5959: checking for ifc
+configure:5989: result: no
+configure:5959: checking for efc
+configure:5989: result: no
+configure:5959: checking for pgf95
+configure:5989: result: no
+configure:5959: checking for lf95
+configure:5989: result: no
+configure:5959: checking for ftn
+configure:5989: result: no
+configure:6016: checking for Fortran 77 compiler version
+configure:6023:  --version >&5
+./configure: line 6024: --version: command not found
+configure:6026: $? = 127
+configure:6033:  -v >&5
+./configure: line 6034: -v: command not found
+configure:6036: $? = 127
+configure:6043:  -V >&5
+./configure: line 6044: -V: command not found
 configure:6046: $? = 127
-configure:6053:  -v >&5
-./configure: line 6054: -v: command not found
-configure:6056: $? = 127
-configure:6063:  -V >&5
-./configure: line 6064: -V: command not found
-configure:6066: $? = 127
-configure:6074: checking whether we are using the GNU Fortran 77 compiler
-configure:6093:  -c  conftest.F >&5
-./configure: line 6094: -c: command not found
-configure:6099: $? = 127
+configure:6054: checking whether we are using the GNU Fortran 77 compiler
+configure:6073:  -c  conftest.F >&5
+./configure: line 6074: -c: command not found
+configure:6079: $? = 127
 configure: failed program was:
 |       program main
 | #ifndef __GNUC__
@@ -391,143 +391,143 @@ configure: failed program was:
 | #endif
 | 
 |       end
-configure:6116: result: no
-configure:6122: checking whether  accepts -g
-configure:6139:  -c -g conftest.f >&5
-./configure: line 6140: -c: command not found
-configure:6145: $? = 127
+configure:6096: result: no
+configure:6102: checking whether  accepts -g
+configure:6119:  -c -g conftest.f >&5
+./configure: line 6120: -c: command not found
+configure:6125: $? = 127
 configure: failed program was:
 |       program main
 | 
 |       end
-configure:6161: result: no
-configure:6191: checking the maximum length of command line arguments
-configure:6303: result: 196608
-configure:6315: checking command to parse /Developer/usr/bin/nm -p output from gcc object
-configure:6420: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:6423: $? = 0
-configure:6427: /Developer/usr/bin/nm -p conftest.o \| sed -n -e 's/^.*[ 	]\([BCDEGRST][BCDEGRST]*\)[ 	][ 	]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' \> conftest.nm
-configure:6430: $? = 0
+configure:6141: result: no
+configure:6171: checking the maximum length of command line arguments
+configure:6280: result: 196608
+configure:6291: checking command to parse /Developer/usr/bin/nm -p output from gcc object
+configure:6396: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:6399: $? = 0
+configure:6403: /Developer/usr/bin/nm -p conftest.o \| sed -n -e 's/^.*[ 	]\([BCDEGRST][BCDEGRST]*\)[ 	][ 	]*\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2 \2/p' \> conftest.nm
+configure:6406: $? = 0
 cannot find nm_test_var in conftest.nm
-configure:6420: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:6423: $? = 0
-configure:6427: /Developer/usr/bin/nm -p conftest.o \| sed -n -e 's/^.*[ 	]\([BCDEGRST][BCDEGRST]*\)[ 	][ 	]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p' \> conftest.nm
-configure:6430: $? = 0
-configure:6482: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c conftstm.o >&5
-configure:6485: $? = 0
-configure:6523: result: ok
-configure:6527: checking for objdir
-configure:6542: result: .libs
-configure:6634: checking for ar
-configure:6650: found /Developer/usr/bin/ar
-configure:6661: result: ar
-configure:6730: checking for ranlib
-configure:6746: found /Developer/usr/bin/ranlib
-configure:6757: result: ranlib
-configure:6826: checking for strip
-configure:6842: found /Developer/usr/bin/strip
-configure:6853: result: strip
-configure:7139: checking if gcc supports -fno-rtti -fno-exceptions
-configure:7157: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -fno-rtti -fno-exceptions conftest.c >&5
+configure:6396: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:6399: $? = 0
+configure:6403: /Developer/usr/bin/nm -p conftest.o \| sed -n -e 's/^.*[ 	]\([BCDEGRST][BCDEGRST]*\)[ 	][ 	]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p' \> conftest.nm
+configure:6406: $? = 0
+configure:6458: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c conftstm.o >&5
+configure:6461: $? = 0
+configure:6499: result: ok
+configure:6503: checking for objdir
+configure:6518: result: .libs
+configure:6610: checking for ar
+configure:6626: found /Developer/usr/bin/ar
+configure:6637: result: ar
+configure:6706: checking for ranlib
+configure:6722: found /Developer/usr/bin/ranlib
+configure:6733: result: ranlib
+configure:6802: checking for strip
+configure:6818: found /Developer/usr/bin/strip
+configure:6829: result: strip
+configure:7115: checking if gcc supports -fno-rtti -fno-exceptions
+configure:7133: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
 cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
-configure:7161: $? = 0
-configure:7174: result: no
-configure:7189: checking for gcc option to produce PIC
-configure:7421: result: -fno-common
-configure:7429: checking if gcc PIC flag -fno-common works
-configure:7447: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -fno-common -DPIC conftest.c >&5
-configure:7451: $? = 0
-configure:7464: result: yes
-configure:7492: checking if gcc static flag -static works
-configure:7520: result: no
-configure:7530: checking if gcc supports -c -o file.o
-configure:7551: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -o out/conftest2.o conftest.c >&5
-configure:7555: $? = 0
-configure:7577: result: yes
-configure:7603: checking whether the gcc linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
-configure:8584: result: yes
-configure:8651: checking dynamic linker characteristics
-configure:9265: result: darwin9.1.0 dyld
-configure:9274: checking how to hardcode library paths into programs
-configure:9299: result: immediate
-configure:9313: checking whether stripping libraries is possible
-configure:9327: result: yes
-configure:10120: checking if libtool supports shared libraries
-configure:10122: result: yes
-configure:10125: checking whether to build shared libraries
-configure:10146: result: no
-configure:10149: checking whether to build static libraries
-configure:10153: result: yes
-configure:10246: creating libtool
-configure:10834: checking for ld used by g++
-configure:10901: result: /Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld
-configure:10910: checking if the linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) is GNU ld
-configure:10925: result: no
-configure:10976: checking whether the g++ linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
-configure:11950: result: yes
-configure:11968: g++ -c -g -O2  conftest.cpp >&5
-configure:11971: $? = 0
-configure:12123: checking for g++ option to produce PIC
-configure:12407: result: -fno-common
-configure:12415: checking if g++ PIC flag -fno-common works
-configure:12433: g++ -c -g -O2  -fno-common -DPIC conftest.cpp >&5
-configure:12437: $? = 0
-configure:12450: result: yes
-configure:12478: checking if g++ static flag -static works
-configure:12506: result: no
-configure:12516: checking if g++ supports -c -o file.o
-configure:12537: g++ -c -g -O2  -o out/conftest2.o conftest.cpp >&5
-configure:12541: $? = 0
-configure:12563: result: yes
-configure:12589: checking whether the g++ linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
-configure:12617: result: yes
-configure:12684: checking dynamic linker characteristics
-configure:13246: result: darwin9.1.0 dyld
-configure:13255: checking how to hardcode library paths into programs
-configure:13280: result: immediate
-configure:19477: checking for ANSI C header files
-configure:19641: result: yes
-configure:19651: checking for an ANSI C-conforming const
-configure:19726: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:19732: $? = 0
-configure:19747: result: yes
-configure:19757: checking for size_t
-configure:19787: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:19793: $? = 0
-configure:19808: result: yes
-configure:19820: checking whether time.h and sys/time.h may both be included
-configure:19850: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
-configure:19856: $? = 0
-configure:19871: result: yes
-configure:19882: checking for deflateInit_ in -lz
-configure:19917: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lz   >&5
-configure:19923: $? = 0
-configure:19941: result: yes
-configure:19957: checking for png_write_image in -lpng
-configure:19992: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lpng  -lz  >&5
-configure:19998: $? = 0
-configure:20016: result: yes
-configure:20032: checking for xmlParseFile in -lxml2
-configure:20067: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lxml2  -lpng -lz  >&5
-configure:20073: $? = 0
-configure:20091: result: yes
-configure:20107: checking whether gcc knows 32-bit __sync_bool_compare_and_swap()
-configure:20126: result: no - try specifying CFLAGS=-march={your_arch}
-configure:20130: checking whether gcc knows 64-bit __sync_bool_compare_and_swap()
-configure:20148: result: no - try specifying CFLAGS=-march={your_arch}
-configure:20158: checking for pthread_create in -lpthread
-configure:20193: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lpthread  -lxml2 -lpng -lz  >&5
-configure:20199: $? = 0
-configure:20217: result: yes
-configure:20233: checking for jpeg_start_compress in -ljpeg
-configure:20268: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -ljpeg  -lpthread -lxml2 -lpng -lz  >&5
-configure:20274: $? = 0
-configure:20292: result: yes
-configure:20309: checking for xml2-config
-configure:20328: found /usr/bin/xml2-config
-configure:20341: result: /usr/bin/xml2-config
-configure:20478: creating ./config.status
+configure:7137: $? = 0
+configure:7150: result: no
+configure:7165: checking for gcc option to produce PIC
+configure:7375: result: -fno-common
+configure:7383: checking if gcc PIC flag -fno-common works
+configure:7401: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -fno-common -DPIC conftest.c >&5
+configure:7405: $? = 0
+configure:7418: result: yes
+configure:7446: checking if gcc static flag -static works
+configure:7474: result: no
+configure:7484: checking if gcc supports -c -o file.o
+configure:7505: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -o out/conftest2.o conftest.c >&5
+configure:7509: $? = 0
+configure:7531: result: yes
+configure:7557: checking whether the gcc linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
+configure:8511: result: yes
+configure:8578: checking dynamic linker characteristics
+configure:9166: result: darwin9.1.0 dyld
+configure:9175: checking how to hardcode library paths into programs
+configure:9200: result: immediate
+configure:9214: checking whether stripping libraries is possible
+configure:9227: result: yes
+configure:10020: checking if libtool supports shared libraries
+configure:10022: result: yes
+configure:10025: checking whether to build shared libraries
+configure:10046: result: no
+configure:10049: checking whether to build static libraries
+configure:10053: result: yes
+configure:10145: creating libtool
+configure:10733: checking for ld used by g++
+configure:10800: result: /Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld
+configure:10809: checking if the linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) is GNU ld
+configure:10824: result: no
+configure:10875: checking whether the g++ linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
+configure:11809: result: yes
+configure:11827: g++ -c -g -O2  conftest.cpp >&5
+configure:11830: $? = 0
+configure:11949: checking for g++ option to produce PIC
+configure:12223: result: -fno-common
+configure:12231: checking if g++ PIC flag -fno-common works
+configure:12249: g++ -c -g -O2  -fno-common -DPIC conftest.cpp >&5
+configure:12253: $? = 0
+configure:12266: result: yes
+configure:12294: checking if g++ static flag -static works
+configure:12322: result: no
+configure:12332: checking if g++ supports -c -o file.o
+configure:12353: g++ -c -g -O2  -o out/conftest2.o conftest.cpp >&5
+configure:12357: $? = 0
+configure:12379: result: yes
+configure:12405: checking whether the g++ linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
+configure:12430: result: yes
+configure:12497: checking dynamic linker characteristics
+configure:13085: result: darwin9.1.0 dyld
+configure:13094: checking how to hardcode library paths into programs
+configure:13119: result: immediate
+configure:19259: checking for ANSI C header files
+configure:19423: result: yes
+configure:19433: checking for an ANSI C-conforming const
+configure:19508: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:19514: $? = 0
+configure:19529: result: yes
+configure:19539: checking for size_t
+configure:19569: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:19575: $? = 0
+configure:19590: result: yes
+configure:19602: checking whether time.h and sys/time.h may both be included
+configure:19632: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  conftest.c >&5
+configure:19638: $? = 0
+configure:19653: result: yes
+configure:19664: checking for deflateInit_ in -lz
+configure:19699: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lz   >&5
+configure:19705: $? = 0
+configure:19723: result: yes
+configure:19739: checking for png_write_image in -lpng
+configure:19774: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lpng  -lz  >&5
+configure:19780: $? = 0
+configure:19798: result: yes
+configure:19814: checking for xmlParseFile in -lxml2
+configure:19849: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lxml2  -lpng -lz  >&5
+configure:19855: $? = 0
+configure:19873: result: yes
+configure:19889: checking whether gcc knows 32-bit __sync_bool_compare_and_swap()
+configure:19908: result: no - try specifying CFLAGS=-march={your_arch}
+configure:19912: checking whether gcc knows 64-bit __sync_bool_compare_and_swap()
+configure:19930: result: no - try specifying CFLAGS=-march={your_arch}
+configure:19940: checking for pthread_create in -lpthread
+configure:19975: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -lpthread  -lxml2 -lpng -lz  >&5
+configure:19981: $? = 0
+configure:19999: result: yes
+configure:20015: checking for jpeg_start_compress in -ljpeg
+configure:20050: gcc -o conftest -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -arch i386 -arch ppc -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib conftest.c -ljpeg  -lpthread -lxml2 -lpng -lz  >&5
+configure:20056: $? = 0
+configure:20074: result: yes
+configure:20091: checking for xml2-config
+configure:20110: found /usr/bin/xml2-config
+configure:20123: result: /usr/bin/xml2-config
+configure:20260: creating ./config.status
 
 ## ---------------------- ##
 ## Running config.status. ##
@@ -544,10 +544,11 @@ generated by GNU Autoconf 2.61.  Invocation command line was
 
 on Macintosh.local
 
-config.status:664: creating Makefile
-config.status:664: creating flam3.pc
-config.status:664: creating config.h
-config.status:944: executing depfiles commands
+config.status:663: creating Makefile
+config.status:663: creating flam3.pc
+config.status:663: creating config.h
+config.status:897: config.h is unchanged
+config.status:943: executing depfiles commands
 
 ## ---------------- ##
 ## Cache variables. ##
@@ -706,7 +707,6 @@ PACKAGE_TARNAME=''
 PACKAGE_VERSION=''
 PATH_SEPARATOR=':'
 RANLIB='ranlib'
-SED='/usr/bin/sed'
 SET_MAKE=''
 SHELL='/bin/sh'
 STRIP='strip'

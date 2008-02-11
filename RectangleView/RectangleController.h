@@ -27,6 +27,7 @@
 
 	IBOutlet NSButton *undoButton;
 	IBOutlet NSButton *redoButton;
+	IBOutlet NSButton *editPostCheckbox;
 
 @private 
 	

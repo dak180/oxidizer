@@ -252,7 +252,6 @@
 	
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
 	[self resetUndoStack];
-	[self addUndoEntry];
 	
 }
 
@@ -438,6 +437,8 @@
 	
 	[_undoStack removeAllObjects];
 	_undoStackPointer = -1;
+	[self addUndoEntry];
+	
 	[undoButton setEnabled:NO];
 	[redoButton setEnabled:NO];
 	
