@@ -18,10 +18,11 @@
 */
 
 static char *flam3_genome_c_id =
-"@(#) $Id: flam3-genome.c,v 1.5 2008/02/08 14:06:37 vargol Exp $";
+"@(#) $Id: flam3-genome.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
 
 #include "private.h"
 #include "isaacs.h"
+#include "config.h"
 
 int verbose;
 

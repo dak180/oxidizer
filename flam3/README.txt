@@ -251,7 +251,14 @@ todo:  eliminate all static storage.
 
 changelog:
 
-1/26/08 better scalability across multiple CPUs by using compare and
+02/08/08 non-zero weights for final xforms no longer allowed, and now 
+    have no effect.  recompiled windows exes with mingw gcc 4.1 to 
+    take advantage of scalability improvements in flam3 2.7.8 (was 
+    compiling with mingw gcc 3.4 until now). for fedora package 
+    compliance, flam3.pc.in patched by ian weller and moved use of 
+    config.h to c files only. release as 2.7.9.
+
+01/26/08 better scalability across multiple CPUs by using compare and
     swap (from Tim Hockin).  fix bug in large images (>2GB).  add
     flam3_srandom and flam3_malloc/free to better support wrapping
     with python on windows, which links with a different C

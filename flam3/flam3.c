@@ -18,11 +18,12 @@
 */
 
 static char *flam3_c_id =
-"@(#) $Id: flam3.c,v 1.7 2008/02/08 14:06:37 vargol Exp $";
+"@(#) $Id: flam3.c,v 1.8 2008/02/11 18:08:37 vargol Exp $";
 
 
 #include "private.h"
 #include "img.h"
+#include "config.h"
 #include <limits.h>
 #include <math.h>
 #include <stdint.h>
@@ -1571,10 +1572,15 @@ void flam3_create_xform_distrib(flam3_genome *cp, unsigned short *xform_distrib)
      dr = 0.0;
       for (i = 0; i < cp->num_xforms; i++) {
          double d = cp->xform[i].density;
+         
+         /* Ignore final xform density */
+         if (i == cp->final_xform_index)
+            continue;
+            
          if (d < 0.0) {
             fprintf(stderr, "xform weight must be non-negative, not %g.\n", d);
             exit(1);
-         }
+         }         
          dr += d;
       }
       if (dr == 0.0) {
@@ -3780,6 +3786,10 @@ static void parse_flame_element(xmlNode *flame_node) {
             cpy = att_str;
 
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"weight")) {
+               if (cp->final_xform_index==xf) {
+                  fprintf(stderr,"Error: Final xforms should not have weight specified.\n");
+               	exit(1);
+               }
                cp->xform[xf].density = atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"enabled")) {
                cp->final_xform_enable = atoi(att_str);
