@@ -1,6 +1,7 @@
 #import "RectangleView.h"
 
 void applyCoeffsToPoint(CGFloat x, CGFloat y, CGFloat *rx, CGFloat *ry );
+unsigned int _fp_nan = 0x400000;
 
 @implementation RectangleView
 
@@ -314,13 +315,11 @@ void applyCoeffsToPoint(CGFloat x, CGFloat y, CGFloat *rx, CGFloat *ry );
 					
 					tmpX = mousePoint.x - ([self frame].size.width * 0.5) - (c * scale);
 					tmpY = mousePoint.y - ([self frame].size.width * 0.5) - (f * scale);
-					
-					/* normalise mouse point */
+
 					rotationLength = sqrt((tmpX * tmpX) + (tmpY * tmpY));
-					
-									
-					float rotation = -acos(((tmpX * _rotationStartX) + (tmpY * _rotationStartY)) / (rotationLength * _normalLength));
-					
+								
+					float rotation = -(atan2(_rotationStartY, _rotationStartX) - atan2(tmpY, tmpX)) ;
+					 
 					float debug = rotation * 180.0 / M_PI;					
 					float cosRotation = cos(rotation);
 					float sinRotation = sin(rotation);
@@ -341,7 +340,7 @@ void applyCoeffsToPoint(CGFloat x, CGFloat y, CGFloat *rx, CGFloat *ry );
 				
 					_rotationStartX = rotationX;
 					_rotationStartY = rotationY;
-					
+
 				}
 				break;
 			case SCALE_MODE:
