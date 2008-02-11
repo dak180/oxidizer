@@ -49,11 +49,17 @@
 				<string>id</string>
 				<key>moveChanged</key>
 				<string>id</string>
+				<key>redoEntry</key>
+				<string>id</string>
 				<key>rotationChanged</key>
 				<string>id</string>
 				<key>scaleChanged</key>
 				<string>id</string>
 				<key>showWindow</key>
+				<string>id</string>
+				<key>toggleTransformationType</key>
+				<string>id</string>
+				<key>undoEntry</key>
 				<string>id</string>
 				<key>updatePreview</key>
 				<string>id</string>
@@ -88,12 +94,18 @@
 				<string>RectangleView</string>
 				<key>rectangleWindow</key>
 				<string>NSWindow</string>
+				<key>redoButton</key>
+				<string>NSButton</string>
 				<key>rotate</key>
 				<string>NSTextField</string>
 				<key>scaleP1</key>
 				<string>NSTextField</string>
 				<key>scaleP2</key>
 				<string>NSTextField</string>
+				<key>treeController</key>
+				<string>NSTreeController</string>
+				<key>undoButton</key>
+				<string>NSButton</string>
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>

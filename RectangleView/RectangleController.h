@@ -23,6 +23,11 @@
 
 	IBOutlet NSMatrix *modeMatrix;
 
+	IBOutlet NSTreeController *treeController;
+
+	IBOutlet NSButton *undoButton;
+	IBOutlet NSButton *redoButton;
+
 @private 
 	
 	
@@ -39,7 +44,10 @@
 	FractalFlameModel *_ffm;
 	BOOL _autoUpdatePreview;
 	NSArray *_sortDescriptors;
-
+	BOOL _editPostTransformations;
+	
+	NSMutableArray *_undoStack;
+	int _undoStackPointer;
 	
 }
 - (IBAction)showWindow:(id)sender;
@@ -53,14 +61,23 @@
 - (IBAction)scaleChanged:(id)sender;
 
 - (IBAction)updatePreview:(id)sender;
+- (IBAction)toggleTransformationType:(id)sender;
+
+- (IBAction) undoEntry:(id)sender;
+- (IBAction) redoEntry:(id)sender;
 
 /* delegete messages */
 
 - (void)controlTextDidChange:(NSNotification *)aNotification;
 - (void)outlineViewSelectionDidChange:(NSNotification *)notification;
 - (BOOL)outlineView:(NSOutlineView *)outlineView shouldSelectItem:(id)item;
-- (void) setCoeffsA:(CGFloat )aIn b:(CGFloat )bIn c:(CGFloat )cIn d:(CGFloat )dIn e:(CGFloat )eIn f:(CGFloat )fIn;
+- (void)setCoeffsA:(CGFloat )aIn b:(CGFloat )bIn c:(CGFloat )cIn d:(CGFloat )dIn e:(CGFloat )eIn f:(CGFloat )fIn;
 
 /* preview */
 - (void)setFractalFlameModel:(FractalFlameModel *)ffm;
+
+/* undo stack */
+- (void) resetUndoStack;
+- (void) addUndoEntry;
+
 @end

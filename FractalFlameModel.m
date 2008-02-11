@@ -591,23 +591,21 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[taskEnvironment retain];	
 	[taskEnvironment setObject:pngFileName forKey:@"out"];
 	
-//	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
-	
+
 	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
 	
 	if (returnCode == 0) {
 
 		
-//		[flames performSelectorOnMainThread:@selector(setPreviewForCurrentFlameFromFile:) withObject:pngFileName waitUntilDone:YES];
 		[[genomes objectAtIndex:0] performSelectorOnMainThread:@selector(setImageFromFile:) withObject:pngFileName waitUntilDone:YES];
 		
 		
 		BOOL returnBool;
 		
-//		if ([fileManager fileExistsAtPath:pngFileName]) {
-//			returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
-//			returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
-//		}
+		if ([fileManager fileExistsAtPath:pngFileName]) {
+			returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
+			returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
+		}
 		
 	} else {
 		
@@ -860,11 +858,12 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 		if(runResult == NSOKButton && [savePanel filename] != nil) {
 			filename = [savePanel filename];
+			[filename retain];
 		} else {
 			return;
 		}
 		
-		[self setCurrentFilename:[savePanel filename]];
+		[self setCurrentFilename:filename];
 	}
 
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
@@ -877,7 +876,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	genomes = [moc executeFetchRequest:fetch error:nil];
 	[fetch release];	  
 	
-	[[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO] writeToFile:[savePanel filename] atomically:YES];
+	[[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO] writeToFile:filename atomically:YES];
 		
 	
 	if(_saveThumbnail) {
@@ -896,6 +895,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		
 	}
 
+	[filename release];
 	return;
 }
 
