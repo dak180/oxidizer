@@ -47,6 +47,8 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 
 - (void) setCoordinates;
 - (void) drawTrianglesToContext:(CGContextRef)context;
+- (void) drawAxisToContext:(CGContextRef )context;
+
 - (void) applyCoeffsToPointX:(CGFloat)xIn y:(CGFloat)yIn returnX:(CGFloat *)rx y:(CGFloat *)ry;
 - (void) setCoeffsA:(CGFloat )aIn b:(CGFloat )bIn c:(CGFloat )cIn d:(CGFloat )dIn e:(CGFloat )eIn f:(CGFloat )fIn;
 - (void) setDelegate:(id) newDelegate;

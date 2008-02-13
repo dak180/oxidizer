@@ -32,6 +32,7 @@ unsigned int _fp_nan = 0x400000;
 	CGContextTranslateCTM (myContext, [self frame].size.width * 0.5, [self frame].size.height * 0.5);
 	CGContextScaleCTM(myContext, 1.0, -1.0);  // flip context so 0,0 s top left
 	 
+	[self drawAxisToContext:myContext];
     [self drawTrianglesToContext:myContext];
 
     CGContextRestoreGState (myContext);
@@ -56,6 +57,18 @@ unsigned int _fp_nan = 0x400000;
 	CGContextAddLineToPoint(context, transformedTriangle[2][0] , transformedTriangle[2][1]);
 	CGContextClosePath(context);
 	CGContextStrokePath(context);
+	
+    CGContextSelectFont (context, // 3
+						 "Times-Bold",
+						 1,
+						 kCGEncodingMacRoman);
+//    CGContextSetCharacterSpacing (context, 1); // 4
+    CGContextSetTextDrawingMode (context, kCGTextFill); // 5
+	
+    CGContextShowTextAtPoint (context, transformedTriangle[1][0] - (_circeRadius * 4), transformedTriangle[1][1] + (_circeRadius * 4), "O", 1); // 10
+    CGContextShowTextAtPoint (context, transformedTriangle[0][0] + (_circeRadius * 2), transformedTriangle[0][1] + _circeRadius, "P1", 2); // 10
+    CGContextShowTextAtPoint (context, transformedTriangle[2][0] - _circeRadius, transformedTriangle[2][1]  - (_circeRadius * 2), "P2", 2); // 10
+	
 	
 	/* draw the controller circles */
 	
@@ -137,6 +150,64 @@ unsigned int _fp_nan = 0x400000;
 	
 	
 }
+
+- (void) drawAxisToContext:(CGContextRef )context {
+	
+	CGContextSaveGState (context);
+	
+	
+	CGFloat xPoint = [self frame].size.width * 0.5;
+	CGFloat yPoint = [self frame].size.height * 0.5;
+	
+	CGContextSetRGBStrokeColor (context, 0.6, 0.6, 0.6, 1); 
+	
+	
+	CGContextMoveToPoint(context, -xPoint, 0.0);
+	CGContextAddLineToPoint(context, xPoint , 0.0);
+	CGContextClosePath(context);
+	CGContextStrokePath(context);
+	
+	CGContextMoveToPoint(context, 0.0, -yPoint);
+	CGContextAddLineToPoint(context, 0.0, yPoint);
+	CGContextClosePath(context);
+	CGContextStrokePath(context);
+	
+	CGContextSetRGBStrokeColor (context, 0.8, 0.8, 0.8, 1); 
+
+	CGFloat point;
+	
+	for(point = scale; point < xPoint; point += scale) {
+
+		CGContextMoveToPoint(context, point, -yPoint);
+		CGContextAddLineToPoint(context, point, yPoint);
+		CGContextClosePath(context);
+		CGContextStrokePath(context);
+
+		CGContextMoveToPoint(context, -point, -yPoint);
+		CGContextAddLineToPoint(context, -point, yPoint);
+		CGContextClosePath(context);
+		CGContextStrokePath(context);		
+	}
+	
+	for(point = scale; point < yPoint; point += scale) {
+
+		CGContextMoveToPoint(context, -xPoint, point);
+		CGContextAddLineToPoint(context, xPoint , point);
+		CGContextClosePath(context);
+		CGContextStrokePath(context);
+		
+		CGContextMoveToPoint(context, -xPoint, -point);
+		CGContextAddLineToPoint(context, xPoint , -point);
+		CGContextClosePath(context);
+		CGContextStrokePath(context);
+	}
+	
+	
+	CGContextRestoreGState (context);
+	
+	
+}
+
 
 - (void)setCoordinates {
 	
@@ -269,6 +340,7 @@ unsigned int _fp_nan = 0x400000;
 	
 
 }
+
 - (void)mouseUp:(NSEvent *)theEvent {
 
 	if(_isDraggingPoint) {
@@ -302,8 +374,8 @@ unsigned int _fp_nan = 0x400000;
 					c /= scale;
 					f /= scale;
 					
-					[self setCoordinates];
-					[self display];
+//					[self setCoordinates];
+//					[self display];
 				}
 				break;
 			case ROTATE_MODE:
@@ -311,16 +383,16 @@ unsigned int _fp_nan = 0x400000;
 					
 					NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 					
-					float p0Length, p1Length, rotationLength, rotationX, rotationY, tmpX, tmpY;
+					float rotationLength, rotationX, rotationY, tmpX, tmpY;
 					
 					tmpX = mousePoint.x - ([self frame].size.width * 0.5) - (c * scale);
-					tmpY = mousePoint.y - ([self frame].size.width * 0.5) - (f * scale);
+					tmpY = mousePoint.y - ([self frame].size.height * 0.5) - (f * scale);
 
 					rotationLength = sqrt((tmpX * tmpX) + (tmpY * tmpY));
 								
 					float rotation = -(atan2(_rotationStartY, _rotationStartX) - atan2(tmpY, tmpX)) ;
 					 
-					float debug = rotation * 180.0 / M_PI;					
+//					float debug = rotation * 180.0 / M_PI;					
 					float cosRotation = cos(rotation);
 					float sinRotation = sin(rotation);
 					
