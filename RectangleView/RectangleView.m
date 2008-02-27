@@ -28,7 +28,7 @@ unsigned int _fp_nan = 0x400000;
     CGContextRef myContext = [[NSGraphicsContext currentContext]graphicsPort];		
 	
 	CGContextSaveGState (myContext);
-	
+		
 	CGContextTranslateCTM (myContext, [self frame].size.width * 0.5, [self frame].size.height * 0.5);
 	CGContextScaleCTM(myContext, 1.0, -1.0);  // flip context so 0,0 s top left
 	 
@@ -49,7 +49,6 @@ unsigned int _fp_nan = 0x400000;
 
 - (void) drawTrianglesToContext:(CGContextRef)context {
 	
-	int i = 0;	
 
 	/* draw transformed triangle */
 	CGContextMoveToPoint(context, transformedTriangle[0][0], transformedTriangle[0][1]);
@@ -119,13 +118,14 @@ unsigned int _fp_nan = 0x400000;
 	
 	
 	
-	
+	int i = 0;
 	
 	/* draw the squares */
 	
 	CGContextSetLineDash (context, 0.0, squarelineDash , 2);
+		
 	
-	
+/*	
 	CGContextMoveToPoint(context, x[0][i], y[0][i]);
 	CGContextAddLineToPoint(context, x[1][i], y[1][i]);
 	CGContextAddLineToPoint(context, x[2][i], y[2][i]);
@@ -147,9 +147,193 @@ unsigned int _fp_nan = 0x400000;
 		CGContextStrokePath(context);
 		
 	}
+*/
+	for (i=0; i<5; i++) {
+		
+		CGContextAddArc (context, x[4][i], y[4][i], _circeRadius, 0.0, 2.0 * M_PI, 0);		
+		CGContextClosePath(context);
+		CGContextStrokePath(context);
+		
+		[self safeDrawTrapezoid:i ToContext:context];	
+		
+	}
+	
+	
 	
 	
 }
+
+
+
+- (void) safeDrawTrapezoid:(int)poly ToContext:(CGContextRef )context {
+
+	CGFloat maxX = [self frame].size.width * 0.51;  /* slightly bigger to hide outside edges */
+	CGFloat maxY = [self frame].size.height * 0.51;
+	
+	CGFloat minX = -maxX;
+	CGFloat minY = -maxY;
+
+	Vertex clipEdge[2];
+	Vertex inputVertices[15];
+	Vertex outputVertices[15];
+	
+	int numberOfPoints = 4;
+	
+	clipEdge[0].x = minX; 
+	clipEdge[0].y = maxY; 
+
+	clipEdge[1].x = minX; 
+	clipEdge[1].y = minY; 
+	
+	
+	
+	int i;
+	for(i=0; i<4; i++) {
+		inputVertices[i].x = x[i][poly]; 
+		inputVertices[i].y = y[i][poly]; 
+	}
+
+	numberOfPoints = [self sutherlandHodgmanClipVertices:inputVertices 
+										  NumberOfPoints:numberOfPoints 
+										  OutputVertices:outputVertices 
+											WithClipEdge:clipEdge];
+	
+	[self copyVertices:outputVertices To:inputVertices Length:numberOfPoints];
+
+	clipEdge[0].x = minX; 
+	clipEdge[0].y = minY; 
+	
+	clipEdge[1].x = maxX; 
+	clipEdge[1].y = minY; 
+	
+	numberOfPoints = [self sutherlandHodgmanClipVertices:inputVertices NumberOfPoints:numberOfPoints OutputVertices:outputVertices WithClipEdge:clipEdge];
+	[self copyVertices:outputVertices To:inputVertices Length:numberOfPoints];
+	
+	
+	clipEdge[0].x = maxX; 
+	clipEdge[0].y = minY; 
+	clipEdge[1].x = maxX; 
+	clipEdge[1].y = maxY; 
+	
+	numberOfPoints = [self sutherlandHodgmanClipVertices:inputVertices NumberOfPoints:numberOfPoints OutputVertices:outputVertices WithClipEdge:clipEdge];
+	 [self copyVertices:outputVertices To:inputVertices Length:numberOfPoints];
+
+	clipEdge[0].x = maxX; 
+	clipEdge[0].y = maxY; 
+	clipEdge[1].x = minX; 
+	clipEdge[1].y = maxY; 
+
+	numberOfPoints = [self sutherlandHodgmanClipVertices:inputVertices NumberOfPoints:numberOfPoints OutputVertices:outputVertices WithClipEdge:clipEdge];
+
+	
+	CGContextMoveToPoint(context, outputVertices[0].x, outputVertices[0].y);
+	
+	for(i=1; i<numberOfPoints; i++) {
+		CGContextAddLineToPoint(context, outputVertices[i].x, outputVertices[i].y);		
+	}
+	
+	CGContextClosePath(context);
+	CGContextStrokePath(context);
+	
+	return;
+}
+
+
+- (int) sutherlandHodgmanClipVertices:(Vertex *)inputVertices NumberOfPoints:(int)numberOfPoints  OutputVertices:(Vertex *)outputVertices WithClipEdge:(Vertex *)clipBoundary {
+	
+	Vertex start, end;                     /*Start, end point of current polygon edge*/ 
+    Vertex intersect;                    /*Intersection point with a clip boundary*/
+	
+	int outputCount = 0;
+	int i;
+	
+	start = inputVertices[numberOfPoints-1]; /*Start with the last vertex */
+	
+	for (i=0; i < numberOfPoints; i++) {
+		
+		end = inputVertices[i]; /*Now s and p correspond to the vertices*/
+        
+		if ([self isPoint:&end Inside:clipBoundary])  {
+			/*Cases 1 and 4*/
+			if ([self isPoint:&start Inside:clipBoundary])  {
+				/*Case 1*/
+				outputVertices[outputCount] = end;
+				outputCount++;
+            } else  {
+				/*Case 4*/
+				[self intersectStart:&start End:&end ClipEdge:clipBoundary Intersect:&intersect];
+				outputVertices[outputCount] = intersect;
+				outputCount++;
+				outputVertices[outputCount] = end;
+				outputCount++;
+            }
+		} else {
+		    /*Cases 2 and 3*/
+			if ([self isPoint:&start Inside:clipBoundary])  {
+				/*Case 2*/
+				[self intersectStart:&start End:&end ClipEdge:clipBoundary Intersect:&intersect];
+				outputVertices[outputCount] = intersect;
+				outputCount++;
+			} 
+		}
+		start = end;     /*Advance to next pair of vertices*/
+	}
+	
+	return outputCount; 
+}
+
+- (void) intersectStart:(Vertex *)start End:(Vertex *)end ClipEdge:(Vertex *)clipBoundary Intersect:(Vertex *)intersect {
+	
+	if (clipBoundary[0].y==clipBoundary[1].y)  {   /*horizontal*/ 
+		intersect->y=clipBoundary[0].y;
+		intersect->x=start->x +(clipBoundary[0].y-start->y) * (end->x-start->x)/(end->y-start->y);   /*Vertical*/
+	} else {
+		intersect->x=clipBoundary[0].x;
+		intersect->y=start->y +(clipBoundary[0].x-start->x) * (end->y-start->y)/(end->x-start->x);
+	}
+	
+}
+
+- (bool) isPoint:(Vertex *)point Inside:(Vertex *)clipBoundary {
+
+	if (clipBoundary[1].x > clipBoundary[0].x) {
+		if (point->y >= clipBoundary[0].y) {
+			return TRUE;	
+		} 		
+	}     
+	
+	if (clipBoundary[1].x < clipBoundary[0].x) {   
+		/*top edge*/
+		if (point->y <= clipBoundary[0].y)  {
+			return TRUE;	
+		}		
+	}
+	
+	if (clipBoundary[1].y > clipBoundary[0].y) {
+		if (point->x <= clipBoundary[1].x) {
+			return TRUE;	
+		}		
+	}             /*right edge*/
+	
+	if (clipBoundary[1].y < clipBoundary[0].y)  {  
+		/*left edge*/
+		if (point->x >= clipBoundary[1].x)  {
+			return TRUE;	
+		}
+	}            
+	
+	return FALSE;
+	
+}
+
+- (void) copyVertices:(Vertex *)outputVertices To:(Vertex *)inputVertices Length:(int)numberOfPoints {
+	int i;
+	
+	for(i = 0; i < numberOfPoints; i++) {
+		inputVertices[i] = outputVertices[i];
+	}
+}
+
 
 - (void) drawAxisToContext:(CGContextRef )context {
 	
@@ -211,7 +395,6 @@ unsigned int _fp_nan = 0x400000;
 
 - (void)setCoordinates {
 	
-	
 	triangle [0][0] = 0.0;
 	triangle [0][1] = -scale * 0.5;
 	triangle [1][0] = 0.0;
@@ -262,17 +445,22 @@ unsigned int _fp_nan = 0x400000;
 		
 		x[1][i] *= scale;
 		y[1][i] *= scale;
-		
+
 		x[2][i] *= scale;
 		y[2][i] *= scale;
-		
+
 		x[3][i] *= scale;
 		y[3][i] *= scale;
-		
+
+		/* centre point */
 		x[4][i] *= scale;
 		y[4][i] *= scale;
+
 		
 	}
+	
+	
+	
 	
 	
 	
@@ -373,9 +561,6 @@ unsigned int _fp_nan = 0x400000;
 					
 					c /= scale;
 					f /= scale;
-					
-//					[self setCoordinates];
-//					[self display];
 				}
 				break;
 			case ROTATE_MODE:
@@ -485,6 +670,7 @@ unsigned int _fp_nan = 0x400000;
 	[self display];
 	
 }
+
 
 
 - (id) delegate {

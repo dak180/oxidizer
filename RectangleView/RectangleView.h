@@ -10,6 +10,10 @@
 
 static inline double radians (double degrees) {return degrees * M_PI/180;}
 
+typedef struct Vertex {
+	CGFloat x;
+	CGFloat y;
+} Vertex;
 
 @interface RectangleView : NSView
 {
@@ -48,6 +52,13 @@ static inline double radians (double degrees) {return degrees * M_PI/180;}
 - (void) setCoordinates;
 - (void) drawTrianglesToContext:(CGContextRef)context;
 - (void) drawAxisToContext:(CGContextRef )context;
+- (void) safeDrawTrapezoid:(int)poly ToContext:(CGContextRef )context;
+
+- (void) copyVertices:(Vertex *)outputVertices To:(Vertex *)inputVertices Length:(int)numberOfPoints;
+- (int)  sutherlandHodgmanClipVertices:(Vertex *)inputVertices NumberOfPoints:(int)numberOfPoints  OutputVertices:(Vertex *)outputVertices WithClipEdge:(Vertex *)clipBoundary;
+- (bool) isPoint:(Vertex *)point Inside:(Vertex *)clipBoundary;
+- (void) intersectStart:(Vertex *)start End:(Vertex *)end ClipEdge:(Vertex *)clipBoundary Intersect:(Vertex *)intersect;
+
 
 - (void) applyCoeffsToPointX:(CGFloat)xIn y:(CGFloat)yIn returnX:(CGFloat *)rx y:(CGFloat *)ry;
 - (void) setCoeffsA:(CGFloat )aIn b:(CGFloat )bIn c:(CGFloat )cIn d:(CGFloat )dIn e:(CGFloat )eIn f:(CGFloat )fIn;
