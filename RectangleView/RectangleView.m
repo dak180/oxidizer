@@ -76,11 +76,22 @@ unsigned int _fp_nan = 0x400000;
 			CGContextAddArc (context, transformedTriangle[1][0] , transformedTriangle[1][1], _circeRadius, 0.0, 2.0 * M_PI, 0);		
 			CGContextClosePath(context);
 			CGContextFillPath(context);
+
+			CGContextAddArc (context, transformedTriangle[1][0] , transformedTriangle[1][1], _circeRadius + 2, 0.0, 2.0 * M_PI, 0);		
+			CGContextClosePath(context);
+			CGContextStrokePath(context);
+			
 			break;
 		case ROTATE_MODE:
 			CGContextAddArc (context, transformedTriangle[1][0] , transformedTriangle[1][1], _circeRadius, 0.0, 2.0 * M_PI, 0);		
 			CGContextClosePath(context);
 			CGContextStrokePath(context);
+
+			CGContextAddArc (context, transformedTriangle[1][0] , transformedTriangle[1][1], _circeRadius + 2.0, 0.0, 2.0 * M_PI, 0);		
+			CGContextClosePath(context);
+			CGContextStrokePath(context);
+			
+			
 			CGContextMoveToPoint(context, transformedTriangle[1][0], transformedTriangle[1][1]);
 			CGContextAddLineToPoint(context, transformedTriangle[1][0] + _rotationStartX , transformedTriangle[1][1] - _rotationStartY);
 			CGContextClosePath(context);
@@ -88,14 +99,26 @@ unsigned int _fp_nan = 0x400000;
 			CGContextAddArc (context, transformedTriangle[1][0] + _rotationStartX , transformedTriangle[1][1] - _rotationStartY, _circeRadius, 0.0, 2.0 * M_PI, 0);		
 			CGContextClosePath(context);
 			CGContextFillPath(context);
+
+			CGContextAddArc (context, transformedTriangle[1][0] + _rotationStartX , transformedTriangle[1][1] - _rotationStartY, _circeRadius + 2.0, 0.0, 2.0 * M_PI, 0);		
+			CGContextClosePath(context);
+			CGContextStrokePath(context);
+			
 			break;
 		case SCALE_MODE:
 			CGContextAddArc (context, transformedTriangle[0][0] , transformedTriangle[0][1], _circeRadius, 0.0, 2.0 * M_PI, 0);		
 			CGContextClosePath(context);
 			CGContextFillPath(context);
+			CGContextAddArc (context, transformedTriangle[0][0] , transformedTriangle[0][1], _circeRadius + 2.0, 0.0, 2.0 * M_PI, 0);		
+			CGContextClosePath(context);
+			CGContextStrokePath(context);
+
 			CGContextAddArc (context, transformedTriangle[2][0] , transformedTriangle[2][1], _circeRadius, 0.0, 2.0 * M_PI, 0);		
 			CGContextClosePath(context);
 			CGContextFillPath(context);
+			CGContextAddArc (context, transformedTriangle[2][0] , transformedTriangle[2][1], _circeRadius + 2.0, 0.0, 2.0 * M_PI, 0);		
+			CGContextClosePath(context);
+			CGContextStrokePath(context);
 			break;
 	}	
 	
@@ -125,34 +148,7 @@ unsigned int _fp_nan = 0x400000;
 	CGContextSetLineDash (context, 0.0, squarelineDash , 2);
 		
 	
-/*	
-	CGContextMoveToPoint(context, x[0][i], y[0][i]);
-	CGContextAddLineToPoint(context, x[1][i], y[1][i]);
-	CGContextAddLineToPoint(context, x[2][i], y[2][i]);
-	CGContextAddLineToPoint(context, x[3][i], y[3][i]);
-	CGContextClosePath(context);
-	CGContextStrokePath(context);
-	
-	
-	for (i=1; i<5; i++) {
-		
-		CGContextAddArc (context, x[4][i], y[4][i], _circeRadius, 0.0, 2.0 * M_PI, 0);		
-		CGContextClosePath(context);
-		CGContextStrokePath(context);
-		CGContextMoveToPoint(context, x[0][i], y[0][i]);
-		CGContextAddLineToPoint(context, x[1][i], y[1][i]);
-		CGContextAddLineToPoint(context, x[2][i], y[2][i]);
-		CGContextAddLineToPoint(context, x[3][i], y[3][i]);
-		CGContextClosePath(context);
-		CGContextStrokePath(context);
-		
-	}
-*/
 	for (i=0; i<5; i++) {
-		
-		CGContextAddArc (context, x[4][i], y[4][i], _circeRadius, 0.0, 2.0 * M_PI, 0);		
-		CGContextClosePath(context);
-		CGContextStrokePath(context);
 		
 		[self safeDrawTrapezoid:i ToContext:context];	
 		
@@ -234,6 +230,14 @@ unsigned int _fp_nan = 0x400000;
 	
 	CGContextClosePath(context);
 	CGContextStrokePath(context);
+
+	/* see if it's safe to draw the transformed centre circle */
+	if ( x[4][i] > minX && x[4][i] < maxX && y[4][i] > minY && y[4][i] < maxY) {		
+		CGContextAddArc (context, x[4][i], y[4][i], _circeRadius, 0.0, 2.0 * M_PI, 0);		
+		CGContextClosePath(context);
+		CGContextStrokePath(context);
+	}
+	
 	
 	return;
 }
