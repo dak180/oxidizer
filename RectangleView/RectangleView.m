@@ -232,8 +232,8 @@ unsigned int _fp_nan = 0x400000;
 	CGContextStrokePath(context);
 
 	/* see if it's safe to draw the transformed centre circle */
-	if ( x[4][i] > minX && x[4][i] < maxX && y[4][i] > minY && y[4][i] < maxY) {		
-		CGContextAddArc (context, x[4][i], y[4][i], _circeRadius, 0.0, 2.0 * M_PI, 0);		
+	if ( x[4][poly] > minX && x[4][poly] < maxX && y[4][poly] > minY && y[4][poly] < maxY) {		
+		CGContextAddArc (context, x[4][poly], y[4][poly], _circeRadius, 0.0, 2.0 * M_PI, 0);		
 		CGContextClosePath(context);
 		CGContextStrokePath(context);
 	}
