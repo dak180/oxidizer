@@ -18,8 +18,10 @@
 + (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary;
 + (int)runFlam3RenderAsQuietTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary;
 + (int)runFlam3RenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
-								  usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator;
+								  usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator
+											usingETALabel:(NSTextField *)etaLabel;
 + (int)runFlamAnimateAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
-	usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator;
+								  usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator
+											usingETALabel:(NSTextField *)etaTextField;
 
 @end

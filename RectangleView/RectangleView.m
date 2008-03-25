@@ -11,7 +11,7 @@ unsigned int _fp_nan = 0x400000;
 		scale =  80.0;
 		_normalLength = sqrt(scale * scale * 2.0);
 		_circeRadius = 0.05 * scale;
-		_circeRadiusSquared = _circeRadius * _circeRadius;
+		_hitRadiusSquared = _circeRadius * _circeRadius + 2.0;
 		_transformMode = MOVE_MODE;
 	}
 	return self;
@@ -498,7 +498,7 @@ unsigned int _fp_nan = 0x400000;
 		case MOVE_MODE:
 			distanceFromPoint = ((mousePoint.x - transformedTriangle[1][0]) * (mousePoint.x - transformedTriangle[1][0])) +  
 			                    ((mousePoint.y - transformedTriangle[1][1]) * (mousePoint.y - transformedTriangle[1][1]));
-			if(abs(distanceFromPoint) < _circeRadiusSquared) {
+			if(abs(distanceFromPoint) < _hitRadiusSquared) {
 				_isDraggingPoint = YES;
 				_draggingPoint = 1;
 			}
@@ -506,7 +506,7 @@ unsigned int _fp_nan = 0x400000;
 		case ROTATE_MODE:
 			distanceFromPoint = ((mousePoint.x - (transformedTriangle[1][0] + _rotationStartX)) * (mousePoint.x - (transformedTriangle[1][0] + _rotationStartX))) +  
 								((mousePoint.y - (transformedTriangle[1][1] - _rotationStartY)) * (mousePoint.y - (transformedTriangle[1][1] - _rotationStartY)));
-			if(abs(distanceFromPoint) < _circeRadiusSquared) {
+			if(abs(distanceFromPoint) < _hitRadiusSquared) {
 				_isDraggingPoint = YES;
 				_draggingPoint = 3;
 			}
@@ -514,7 +514,7 @@ unsigned int _fp_nan = 0x400000;
 		case SCALE_MODE:
 			distanceFromPoint = ((mousePoint.x - transformedTriangle[0][0]) * (mousePoint.x - transformedTriangle[0][0])) +  
 								((mousePoint.y - transformedTriangle[0][1]) * (mousePoint.y - transformedTriangle[0][1]));
-			if(abs(distanceFromPoint) < _circeRadiusSquared) {
+			if(abs(distanceFromPoint) < _hitRadiusSquared) {
 				_isDraggingPoint = YES;
 				_draggingPoint = 0;
 			} else {
@@ -522,7 +522,7 @@ unsigned int _fp_nan = 0x400000;
 				distanceFromPoint = ((mousePoint.x - transformedTriangle[2][0]) * (mousePoint.x - transformedTriangle[2][0])) +  
 									((mousePoint.y - transformedTriangle[2][1]) * (mousePoint.y - transformedTriangle[2][1]));
 				
-				if(abs(distanceFromPoint) < _circeRadiusSquared) {
+				if(abs(distanceFromPoint) < _hitRadiusSquared) {
 					_isDraggingPoint = YES;
 					_draggingPoint = 2;
 				}

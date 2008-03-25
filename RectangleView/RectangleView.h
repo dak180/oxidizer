@@ -36,7 +36,7 @@ typedef struct Vertex {
 	CGFloat scale;
 
 	CGFloat _circeRadius;
-	CGFloat _circeRadiusSquared;
+	CGFloat _hitRadiusSquared;
 	
 	CGFloat _rotationStartX;
 	CGFloat _rotationStartY;

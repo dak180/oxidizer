@@ -231,12 +231,12 @@
 
 
 + (int)runFlam3RenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
-									   usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator {
+									   usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator 
+									   usingETALabel:(NSTextField *)etaLabel {
+	
 	
 	NSLog(@"env: %@\n", environmentDictionary);
 
-	NSLog(@"%@", [[NSString alloc] initWithData:xml  encoding:NSUTF8StringEncoding]);
-	
 	[xml writeToFile:[[[NSUserDefaults standardUserDefaults] stringForKey:@"xml_folder"] stringByAppendingPathComponent:[[NSDate date] descriptionWithCalendarFormat:@"%Y%m%d%H%M%S%F.xml"
 																																							timeZone:nil
 																																							  locale:nil]]
@@ -279,12 +279,19 @@
 	while([data length] > 0) {
 		NSString *string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
 		
+//		NSLog(@"%@", string);
+		
 		if([string hasPrefix:@"\rchaos: "]) {
 			
 			progressValue = [[string substringFromIndex:7] floatValue];
 
 			[taskFrameIndicator setDoubleValueInMainThread:[NSNumber numberWithDouble:progressValue]];
+		} else if([string hasPrefix:@"  ETA: "]) {
+			
+			[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[string substringFromIndex:6] waitUntilDone:NO];
+
 		}
+													
 		
 		if([errorMessage length] > 256) {
 			[errorMessage setString:string];
@@ -330,7 +337,8 @@
 
 
 + (int)runFlamAnimateAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
-	usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator {
+	                                      usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator
+			                              usingETALabel:(NSTextField *)etaLabel {
 	
 	NSTask *task;
     task = [[NSTask alloc] init];
@@ -374,6 +382,11 @@
 			progressValue = [[string substringFromIndex:7] floatValue];
 			
 			[taskFrameIndicator setDoubleValueInMainThread:[NSNumber numberWithDouble:progressValue]];
+			
+		} else if([string hasPrefix:@"  ETA: "]) {
+			
+			[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[string substringFromIndex:6] waitUntilDone:NO];
+			
 		}
 		
 		[errorMessage appendString:string];

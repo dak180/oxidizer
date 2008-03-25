@@ -427,6 +427,10 @@ static double *_paletteData = NULL;
 		green = [[colour valueForKey:@"green"] doubleValue];
 		blue  = [[colour valueForKey:@"blue"] doubleValue];
 
+		lastRed = red;
+		lastGreen = green;
+		lastBlue = blue;
+		
 		newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
 
 		[newColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];

@@ -1171,7 +1171,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskProgressWindow setTitle:@"Rendering Image"];
 	[taskProgressWindow makeKeyAndOrderFront:self];
 	
-	int returnValue =  [Flam3Task runFlam3RenderAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator];
+	int returnValue =  [Flam3Task runFlam3RenderAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator usingETALabel:etaTextField];
 	
 	[taskProgressWindow setIsVisible:NO];
 
@@ -1182,7 +1182,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 - (int)runFlam3MovieFrameRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
 
-	return [Flam3Task runFlamAnimateAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator];
+	return [Flam3Task runFlamAnimateAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator usingETALabel:etaTextField];
 
 }
 

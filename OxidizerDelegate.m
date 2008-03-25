@@ -367,6 +367,18 @@ void print_stack(lua_State* interpreter){
 	[rnc showRectangleWindow:sender]; 
 }
 
+
+- (IBAction)showGradientWindow:(id)sender {
+	
+	if(gnc == nil) {
+		gnc = [[GradientNibController alloc] init];
+		[NSBundle loadNibNamed:@"GradientWindow" owner:gnc];
+	}
+	
+	[gnc showGradientWindow:sender]; 
+}
+
+
 - (IBAction)newFlame:(id)sender {
 	[ffm newFlame];
 }	

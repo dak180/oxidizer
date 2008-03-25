@@ -16,12 +16,15 @@
 
 }
 
+
+
 - (void)__setDoubleValueInMainThread:(NSNumber *)value {
 
 	[self setDoubleValue:[value doubleValue]];
 	[self displayIfNeeded];
 	
 }
+
 
 @end
 

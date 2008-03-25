@@ -46,6 +46,7 @@
     IBOutlet NSWindow *taskProgressWindow;
     IBOutlet NSProgressIndicator *taskAllFramesIndicator;
     IBOutlet NSProgressIndicator *taskFrameIndicator;
+    IBOutlet NSTextField *etaTextField;
 	
 	
 	BOOL _saveThumbnail;
@@ -115,7 +116,7 @@
 - (void) renderStillInNewThread:(QuickTimeController *)qt;
 - (void )renderStillToWindowInNewThread;
 //- (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
-- (void) previewCurrentFlameInThread;
+- (void) previewCurrentFlameInThread:(NSArray *)genomes;
 - (void) AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
 - (void) hideProgressWindow;
 - (void) initProgressController:(NSNumber *)threadsCount;
