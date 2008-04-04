@@ -140,14 +140,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[previewWindow center];
 	[taskProgressWindow center];
 	
-//	if([FractalFlameModel useProgressBar]) {
-//		[taskFrameIndicator setStyle:NSProgressIndicatorBarStyle];
-///		[taskFrameIndicator setControlSize:NSRegularControlSize];
-		
-//		[taskAllFramesIndicator setStyle:NSProgressIndicatorBarStyle];
-//		[taskAllFramesIndicator setControlSize:NSRegularControlSize];
-//	}
-	
+
 	
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];

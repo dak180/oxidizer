@@ -161,7 +161,12 @@
 	colourImage = [[NSImage alloc] init];
 	[colourImage addRepresentation:_colourWithHueRep];
 	[colourWithHue setImage:colourImage];
-    
+	
+	if(gnc == nil) {
+		gnc = [[GradientNibController alloc] init];
+		[NSBundle loadNibNamed:@"GradientWindow" owner:gnc];
+	}
+		    
 }
 
 - (void)addNewFlame:(NSManagedObject *)genomeEntity {
@@ -302,7 +307,11 @@
 	
 		[paletteWindow setIsVisible:TRUE]; 
 	} else {
-		[cmapWindow setIsVisible:TRUE]; 
+		[gnc setCMapController:cmapController];
+		[gnc setFlameController:self];
+		[gnc showGradientWindow:self]; 
+
+//		[cmapWindow setIsVisible:TRUE]; 
 		
 	}
 }
@@ -367,7 +376,8 @@
 				} 		
 			} 
 			colour = [colourWell color];
-			[colour getRed:&red green:&green blue:&blue alpha:NULL];
+			[[colour colorUsingColorSpaceName:@"NSDeviceRGBColorSpace"] getRed:&red green:&green blue:&blue alpha:NULL];		
+//			[colour getRed:&red green:&green blue:&blue alpha:NULL];
 			[cmapEntity setValue:[NSNumber numberWithDouble:red] forKey:@"red"];
 			[cmapEntity setValue:[NSNumber numberWithDouble:green] forKey:@"green"];
 			[cmapEntity setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
@@ -377,7 +387,8 @@
 			index = [cmapController selectionIndex];
 			cmapEntity = [arrangedObjects objectAtIndex:index];
 			colour = [colourWell color];
-			[colour getRed:&red green:&green blue:&blue alpha:NULL];
+			[[colour colorUsingColorSpaceName:@"NSDeviceRGBColorSpace"] getRed:&red green:&green blue:&blue alpha:NULL];		
+//			[colour getRed:&red green:&green blue:&blue alpha:NULL];
 			[cmapEntity setValue:[NSNumber numberWithDouble:red] forKey:@"red"];
 			[cmapEntity setValue:[NSNumber numberWithDouble:green] forKey:@"green"];
 			[cmapEntity setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
@@ -403,7 +414,15 @@
 
 - (IBAction)changeColourMapAndHideWindow:(id)sender {
 
-	[cmapWindow  setIsVisible:FALSE];
+	[cmapController rearrangeObjects];
+	
+	[PaletteController fillBitmapRep:_colourWithHueRep withColours:[cmapController arrangedObjects] forHeight:15];
+	NSManagedObject *genome = [self getSelectedGenome];
+	[genome willChangeValueForKey:@"colour_map_image"];
+	[genome setValue:colourImage forKey:@"colour_map_image"]; 	 
+	[genome didChangeValueForKey:@"colour_map_image"];
+	[colourWithHue setNeedsDisplay:YES];	
+//	[cmapWindow  setIsVisible:FALSE];
 
 }
 

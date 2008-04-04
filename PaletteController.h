@@ -46,6 +46,7 @@ double *initialisePalettes(void);
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue;
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSArray *)colours  forHeight:(int)height;
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(double *)palette forHeight:(int)height;
++ (void) fillColour:(NSDictionary *)colour forWidth:(int)width andHeight:(int)height;
 + (NSMutableArray *) extrapolateArray:(NSArray *)colours;
 
 - (void) setPalette:(unsigned int )palette colourArray:(NSArray *)colours  usePalette:(BOOL)useThePaletteNumber;

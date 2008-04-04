@@ -25,7 +25,6 @@
 #import "QTKit/QTKit.h"
 #import "QuickTimeController.h"
 
-
 @interface FractalFlameModel : NSObjectController
 {
     IBOutlet EnvironmentController *environment;
@@ -96,6 +95,7 @@
 	int flameProgress;
 	NSSavePanel *savePanel;
 	IBOutlet NSArrayController *flameController;
+	
 	
 }
 

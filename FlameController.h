@@ -21,7 +21,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PaletteController.h"
-
+#import "GradientNibController.h"
 
 @interface FlameController : NSObject 
 {
@@ -44,6 +44,9 @@
 
 @public 
     IBOutlet NSArrayController *xformController;
+
+@private
+	GradientNibController *gnc;
 
 }
 

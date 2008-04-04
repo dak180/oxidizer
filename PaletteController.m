@@ -313,6 +313,37 @@ static double *_paletteData = NULL;
 
 }
 
++(void) fillColour:(NSDictionary *)colour forWidth:(int)width andHeight:(int)height {
+	
+	unsigned char *paletteData;	
+	int j;
+	
+	unsigned char red, green, blue;
+	
+	paletteData = [[colour objectForKey:@"bitmapRep"] bitmapData];
+	
+	red = (unsigned char)([[colour objectForKey:@"red"] doubleValue] * 255.0);
+	green = (unsigned char)([[colour objectForKey:@"green"] doubleValue] * 255.0);
+	blue = (unsigned char)([[colour objectForKey:@"blue"] doubleValue] * 255.0);
+	
+	for(j=0; j<width; j++) {
+		
+		*paletteData = red;
+		paletteData++;
+		*paletteData = green;
+		paletteData++;
+		*paletteData = blue;
+		paletteData++;
+		
+	}																								
+	
+	paletteData = [[colour objectForKey:@"bitmapRep"] bitmapData];
+	
+	for(j=1; j<height; j++) {
+		memcpy(paletteData+(256*j*3), paletteData, 256*3);
+	}
+	
+}
 
 +(NSMutableArray *) extrapolateArray:(NSArray *)colours {
 
