@@ -485,13 +485,13 @@ static double *_paletteData = NULL;
 		greenDelta = green / (double)(255 - index);  	
 		blueDelta = blue / (double)(255 - index);  	
 
-		for(i=0; i<index; i++) {
+		for(i=index+1; i<256; i++) {
 			
 			newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
 
 			red -=redDelta;
-			green -= redDelta;
-			blue -= redDelta;
+			green -= greenDelta;
+			blue -= blueDelta;
 	
 			
 			[newColour setObject:[NSNumber numberWithInt:i] forKey:@"index"];

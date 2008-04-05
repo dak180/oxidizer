@@ -183,6 +183,12 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	NSDictionary *selectedColour = [[arrayController selectedObjects] objectAtIndex:0];
 	int arrayIndexForSelected = [colours indexOfObject:selectedColour];
+	
+	if( arrayIndexForSelected + 1 >= [colours count] ) {
+		NSBeep();
+		return;
+	}
+
 	int colourIndex = [[selectedColour objectForKey:@"index"] intValue];
 	
 	NSDictionary *nextColour = [colours objectAtIndex:arrayIndexForSelected+1];
@@ -195,6 +201,28 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		[colour setObject:[NSNumber numberWithDouble:[[selectedColour objectForKey:@"green"] doubleValue]] forKey:@"green"];
 		[colour setObject:[NSNumber numberWithDouble:[[selectedColour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
 		[colour setObject:[NSNumber numberWithInt:(int)(colourIndex + ((nextIndex - colourIndex) / 2.0)) ] forKey:@"index"];
+
+		NSBitmapImageRep *paletteRep;
+		NSImage *paletteImage;
+
+		paletteRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+															pixelsWide:COLOUR_SQUARE_SIDE
+															pixelsHigh:COLOUR_SQUARE_SIDE
+														 bitsPerSample:8
+													   samplesPerPixel:3
+															  hasAlpha:NO 
+															  isPlanar:NO
+														colorSpaceName:NSDeviceRGBColorSpace
+														  bitmapFormat:0
+														   bytesPerRow:3*256
+														  bitsPerPixel:24]; 
+		
+		paletteImage = [[NSImage alloc] init];
+		[paletteImage addRepresentation:paletteRep];
+		
+		[colour setObject:paletteRep forKey:@"bitmapRep"];
+		[colour setObject:paletteImage forKey:@"image"];
+		
 		[PaletteController fillColour:colour forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 
 		[colours addObject:colour];
