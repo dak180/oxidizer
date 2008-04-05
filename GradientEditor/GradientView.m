@@ -7,6 +7,7 @@
 //
 
 #import "GradientView.h"
+#import "GradientController.h"
 
 #define NOT_SELECTED_GREY 0.5
 
@@ -28,11 +29,8 @@
 																					bitmapFormat:0
 																					 bytesPerRow:3*GRADIENT_IMAGE_WIDTH
 																					bitsPerPixel:24]; 
-//		[PaletteController fillBitmapRep:gradientWithHueRep withPalette:0 usingHue:hue];
 		memset([gradientRep bitmapData], 255, GRADIENT_IMAGE_WIDTH * GRADIENT_IMAGE_HEIGHT * 3);
 		[gradientImage addRepresentation:gradientRep];
-//		[gradientWithHueRep release];
-		
   		
     }
     return self;
@@ -218,7 +216,7 @@
 	
 	if(oldSelectedSwatch != selectedSwatch) {
 
-		[delegate setSelectedColour:selectedSwatch];
+		[(GradientController *)delegate setSelectedColour:selectedSwatch];
 		[self display];
 	}
 	
@@ -242,7 +240,7 @@
 
 	[selectedSwatch setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
 		
-	[delegate fillGradientImageRep];
+	[(GradientController *)delegate fillGradientImageRep];
 	[self display];
 } 
 
