@@ -47,6 +47,8 @@
 		A4BE79470DA6DD3700160702 /* GradientController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79440DA6DD3700160702 /* GradientController.m */; };
 		A4BE79480DA6DD3700160702 /* GradientNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79460DA6DD3700160702 /* GradientNibController.m */; };
 		A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */; };
+		A4C5BDC70DA91D46002BE1C2 /* libflam3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */; };
+		A4C5BDCB0DA91D6D002BE1C2 /* libflam3.0.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
 		A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
 		A4D6FA2D09B1E25200096036 /* GenomeManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D6FA2C09B1E25200096036 /* GenomeManagedObject.m */; };
@@ -146,6 +148,7 @@
 		A4BE79450DA6DD3700160702 /* GradientNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientNibController.h; path = GradientEditor/GradientNibController.h; sourceTree = "<group>"; };
 		A4BE79460DA6DD3700160702 /* GradientNibController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientNibController.m; path = GradientEditor/GradientNibController.m; sourceTree = "<group>"; };
 		A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
+		A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libflam3.0.dylib; path = build_folder_for_flam3/lib/libflam3.0.dylib; sourceTree = "<group>"; };
 		A4D3633D09AB9CE20078025F /* genome.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = genome.xcdatamodel; sourceTree = "<group>"; };
 		A4D604A909658A6C0001CD1D /* PaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PaletteController.h; sourceTree = "<group>"; };
 		A4D604AA09658A6C0001CD1D /* PaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PaletteController.m; sourceTree = "<group>"; };
@@ -183,6 +186,7 @@
 				A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */,
 				A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */,
 				A4327AB20C4E58B600B1D18D /* LuaObjCBridge.framework in Frameworks */,
+				A4C5BDC70DA91D46002BE1C2 /* libflam3.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +268,6 @@
 		29B97314FDCFA39411CA2CEA /* oxidizer */ = {
 			isa = PBXGroup;
 			children = (
-				A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */,
 				A4E641F5096DA554002DE446 /* Models */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -294,8 +297,10 @@
 				A47ABF1D0C425EF9007F1047 /* flam3-genome */,
 				A42608820C41109600DDB92E /* flam3-animate */,
 				A41CF2D80C340AFE001582CC /* flam3-render */,
+				A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */,
 				A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */,
 				A41CF2DB0C340B44001582CC /* libpng.dylib */,
+				A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */,
 				A4E52D560A0141A400382558 /* flam3-palettes.xml */,
 				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -424,6 +429,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4C5BDCB0DA91D6D002BE1C2 /* libflam3.0.dylib in Resources */,
 				A4F21B460CEA112400F0195A /* libpng.dylib in Resources */,
 				A4F21B470CEA112C00F0195A /* libjpeg.62.dylib in Resources */,
 				A40CA26A0CF0B598000C28FB /* flam3-animate in Resources */,
@@ -463,7 +469,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir `pwd`/build_folder_for_flam3\n\nexport FLAM3_BUILD_PATH=`pwd`/build_folder_for_flam3 \n\necho $FLAM3_BUILD_PATH\n\ncd LuaObjCBridge\n\nxcodebuild -configuration Release\n\n\ncd ../libpng\necho \"Building libpng\"\nexport CFLAGS=\"-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc\" \nexport LDFLAGS=\"-arch i386 -arch ppc\"  \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir `pwd`/../build_folder_for_flam3/lib\nmkdir `pwd`/../build_folder_for_flam3/bin\nmkdir `pwd`/../build_folder_for_flam3/include\nmkdir `pwd`/../build_folder_for_flam3/man\nmkdir `pwd`/../build_folder_for_flam3/man/man1\n\nenv CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386\" CFLAGS=\"-O3\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nln -s /usr/bin/glibtool ./libtool\nmake install\n\necho \"Building flam3\"\ncd ../flam3\nln -s /usr/bin/glibtool ./libtool\nexport CFLAGS=\"-isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I$FLAM3_BUILD_PATH/include\" \nexport LDFLAGS=\"-arch i386 -arch ppc -L${FLAM3_BUILD_PATH}/lib\" \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH\nmake install\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\n";
+			shellScript = "mkdir `pwd`/build_folder_for_flam3\n\nexport FLAM3_BUILD_PATH=`pwd`/build_folder_for_flam3 \n\necho $FLAM3_BUILD_PATH\n\ncd LuaObjCBridge\n\nxcodebuild -configuration Release\n\n\ncd ../libpng\necho \"Building libpng\"\nexport CFLAGS=\"-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc\" \nexport LDFLAGS=\"-arch i386 -arch ppc\"  \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir `pwd`/../build_folder_for_flam3/lib\nmkdir `pwd`/../build_folder_for_flam3/bin\nmkdir `pwd`/../build_folder_for_flam3/include\nmkdir `pwd`/../build_folder_for_flam3/man\nmkdir `pwd`/../build_folder_for_flam3/man/man1\n\nenv CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386\" CFLAGS=\"-O3\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nln -s /usr/bin/glibtool ./libtool\nmake install\n\necho \"Building flam3\"\ncd ../flam3\nln -s /usr/bin/glibtool ./libtool\nexport CFLAGS=\"-isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I$FLAM3_BUILD_PATH/include\" \nexport LDFLAGS=\"-arch i386 -arch ppc -L${FLAM3_BUILD_PATH}/lib\" \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nmake install\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -542,7 +548,13 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(LIBRARY_SEARCH_PATHS)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../Releases/oxidizer/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
 				PRODUCT_NAME = Oxidizer;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
@@ -563,7 +575,13 @@
 				HEADER_SEARCH_PATHS = /usr/include/libxml2;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "$(LIBRARY_SEARCH_PATHS)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+				);
+				LIBRARY_SEARCH_PATHS_QUOTED_1 = "\"$(SRCROOT)/../Releases/oxidizer/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_2 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
 				PRODUCT_NAME = Oxidizer;
 				WRAPPER_EXTENSION = app;
 			};

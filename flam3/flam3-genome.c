@@ -18,7 +18,7 @@
 */
 
 static char *flam3_genome_c_id =
-"@(#) $Id: flam3-genome.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
+"@(#) $Id: flam3-genome.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include "private.h"
 #include "isaacs.h"
@@ -74,8 +74,7 @@ void test_cp(flam3_genome *cp) {
    cp->height = 128;
    cp->spatial_oversample = 1;
    cp->spatial_filter_radius = 0.5;
-   cp->spatial_filter_func = gaussian_filter;
-   cp->spatial_filter_support = gaussian_support;
+   cp->spatial_filter_select = 0;
    cp->zoom = 0.0;
    cp->sample_density = 1;
    cp->nbatches = 1;
@@ -446,6 +445,7 @@ double try_colors(flam3_genome *g, int color_resolution) {
 
     f.temporal_filter_radius = 0.0;
     f.bits = 32;
+    f.bytes_per_channel=1;
     f.verbose = 0;
     f.genomes = g;
     f.ngenomes = 1;
@@ -606,7 +606,6 @@ main(argc, argv)
    int parent0_n, parent1_n;
    int num_threads = 1;
    int ncp;
-   char default_duv[30]="31,34,35,36,38,43,44,46,48";
 
    int ivars[max_specified_vars];
    int novars[max_specified_vars];
@@ -656,6 +655,7 @@ main(argc, argv)
 
    f.temporal_filter_radius = 0.0;
    f.bits = bits;
+   f.bytes_per_channel = 1;
    f.verbose = 0;
    f.genomes = &cp_orig;
    f.ngenomes = 1;
@@ -673,52 +673,15 @@ main(argc, argv)
    
    /* Specify reasonable defaults if nothing is specified */
    if (!use_vars && !dont_use_vars) {
-      dont_use_vars = default_duv;
-   }
-   
-   if (use_vars) {
-      /* Parse comma-separated list of variations to use */
-      var_tok = strtok(use_vars,",");
-      ivars[num_ivars++] = atoi(var_tok);
-      while(1) {
-         var_tok = strtok(NULL,",");
+      novars[num_novars++] = VAR_NOISE;
+      novars[num_novars++] = VAR_BLUR;
+      novars[num_novars++] = VAR_GAUSSIAN_BLUR;
+      novars[num_novars++] = VAR_RADIAL_BLUR;
+      novars[num_novars++] = VAR_NGON;
+      novars[num_novars++] = VAR_SQUARE;
+      novars[num_novars++] = VAR_RAYS;
+      novars[num_novars++] = VAR_CROSS;
 
-         if (var_tok==NULL)
-            break;
-
-         ivars[num_ivars++] = atoi(var_tok);
-
-         if (num_ivars==max_specified_vars) {
-            fprintf(stderr,"Maximum number of user-specified variations exceeded.  Truncating.\n");
-            break;
-         }
-      }
-
-      /* Error checking */
-      for (i=0;i<num_ivars;i++) {
-         if (ivars[i]<0 || ivars[i]>=flam3_nvariations) {
-            fprintf(stderr,"specified variation list includes bad value. (%d)\n",ivars[i]);
-            exit(1);
-         }
-      }
-   } else if (dont_use_vars) {
-      /* Parse comma-separated list of variations NOT to use */
-      var_tok = strtok(dont_use_vars,",");
-      novars[num_novars++] = atoi(var_tok);
-      while(1) {
-         var_tok = strtok(NULL,",");
-
-         if (var_tok==NULL)
-            break;
-
-         novars[num_novars++] = atoi(var_tok);
-
-         if (num_novars==max_specified_vars) {
-            fprintf(stderr,"Maximum number of user-specified variations exceeded.  Truncating.\n");
-            break;
-         }
-      }
-      
       /* Loop over the novars and set ivars to the complement */
       for (i=0;i<flam3_nvariations;i++) {
          for (j=0;j<num_novars;j++) {
@@ -728,14 +691,64 @@ main(argc, argv)
          if (j==num_novars)
             ivars[num_ivars++] = i;
       }
-         
-      
-   } else {
-      /* Set first var to -1 for totally random */
-      ivars[0] = -1;
-      num_ivars = 1;
-   }
 
+   } else {
+   
+        if (use_vars) {
+           /* Parse comma-separated list of variations to use */
+           var_tok = strtok(use_vars,",");
+           ivars[num_ivars++] = atoi(var_tok);
+           while(1) {
+              var_tok = strtok(NULL,",");
+
+              if (var_tok==NULL)
+                 break;
+
+              ivars[num_ivars++] = atoi(var_tok);
+
+              if (num_ivars==max_specified_vars) {
+                 fprintf(stderr,"Maximum number of user-specified variations exceeded.  Truncating.\n");
+                 break;
+              }
+           }
+
+           /* Error checking */
+           for (i=0;i<num_ivars;i++) {
+              if (ivars[i]<0 || ivars[i]>=flam3_nvariations) {
+                 fprintf(stderr,"specified variation list includes bad value. (%d)\n",ivars[i]);
+                 exit(1);
+              }
+           }
+        } else if (dont_use_vars) {
+           /* Parse comma-separated list of variations NOT to use */
+           var_tok = strtok(dont_use_vars,",");
+           novars[num_novars++] = atoi(var_tok);
+           while(1) {
+              var_tok = strtok(NULL,",");
+
+              if (var_tok==NULL)
+                 break;
+
+              novars[num_novars++] = atoi(var_tok);
+
+              if (num_novars==max_specified_vars) {
+                 fprintf(stderr,"Maximum number of user-specified variations exceeded.  Truncating.\n");
+                 break;
+              }
+           }
+           
+           /* Loop over the novars and set ivars to the complement */
+           for (i=0;i<flam3_nvariations;i++) {
+              for (j=0;j<num_novars;j++) {
+                 if (novars[j] == i)
+                    break;
+              }
+              if (j==num_novars)
+                 ivars[num_ivars++] = i;
+           }
+        }
+   }
+   
    if (1 < (!!mutate + !!(cross0 || cross1) +
        !!inter + !!rotate + !!clone + !!strip)) {
       fprintf(stderr,

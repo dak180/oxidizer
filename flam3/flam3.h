@@ -27,7 +27,7 @@
 
 
 static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.6 2008/02/11 18:08:37 vargol Exp $";
+"@(#) $Id: flam3.h,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 char *flam3_version();
 
@@ -114,7 +114,7 @@ extern char *flam3_variation_names[];
 #define VAR_SQUARE 43
 #define VAR_RAYS 44
 #define VAR_BLADE 45
-#define VAR_SECANT 46
+#define VAR_SECANT2 46
 #define VAR_TWINTRIAN 47
 #define VAR_CROSS 48
 #define VAR_DISC2 49
@@ -343,8 +343,9 @@ typedef struct {
    double zoom;                  /* effects ppu, sample density, scale */
    double pixels_per_unit;       /* vertically */
    double spatial_filter_radius; /* radius of spatial filter */
-   double (*spatial_filter_func)(double); /* spatial filter kernel function */
-   double spatial_filter_support; /* size of standard kernel for specific function */
+   int spatial_filter_select; /* selected spatial filter */
+//   double (*spatial_filter_func)(double); /* spatial filter kernel function */
+//   double spatial_filter_support; /* size of standard kernel for specific function */
    double sample_density;        /* samples per pixel (not bucket) */
    /* in order to motion blur more accurately we compute the logs of the
    sample density many times and average the results. */
@@ -442,8 +443,9 @@ typedef struct {
    int            ngenomes;
    int            verbose;
    int            bits;
+   int            bytes_per_channel;
    double         time;
-   int            (*progress)(void *, double, int);
+   int            (*progress)(void *, double, int, double);
    void          *progress_parameter;
    randctx       rc;
    int           nthreads;
@@ -456,7 +458,7 @@ typedef struct {
 
 /* out is pixel array with stride of out_width.
    pixels are rgb or rgba if nchan is 3 or 4. */
-void flam3_render(flam3_frame *f, unsigned char *out, int out_width, int field, int nchan, int transp, stat_struct *stats);
+void flam3_render(flam3_frame *f, void *out, int out_width, int field, int nchan, int transp, stat_struct *stats);
 
 double flam3_render_memory_required(flam3_frame *f);
 
@@ -482,5 +484,22 @@ void flam3_flatten_genome(flam3_genome *cp, void *buf);
 void flam3_unflatten_genome(void *buf, flam3_genome *cp);
 
 void flam3_srandom();
+
+/* Spatial filter kernels */
+#define flam3_gaussian_kernel 0
+#define flam3_hermite_kernel 1
+#define flam3_box_kernel 2
+#define flam3_triangle_kernel 3
+#define flam3_bell_kernel 4
+#define flam3_b_spline_kernel 5
+#define flam3_lanczos3_kernel 6
+#define flam3_lanczos2_kernel 7
+#define flam3_mitchell_kernel 8
+#define flam3_blackman_kernel 9
+#define flam3_catrom_kernel 10
+#define flam3_hamming_kernel 11
+#define flam3_hanning_kernel 12
+#define flam3_quadratic_kernel 13
+
 
 #endif

@@ -4,7 +4,7 @@ AM_CFLAGS = -g -O3 -ffast-math -DPACKAGE_DATA_DIR=\"$(pkgdatadir)\"
 
 bin_PROGRAMS = flam3-animate flam3-genome flam3-render flam3-convert
 lib_LTLIBRARIES = libflam3.la
-include_HEADERS = flam3.h
+include_HEADERS = flam3.h isaac.h isaacs.h
 
 libflam3_la_SOURCES = flam3.c flam3-palettes.c jpeg.c png.c isaac.c
 libflam3_la_LDFLAGS = -no-undefined -ljpeg -lpng -lz -lpthread

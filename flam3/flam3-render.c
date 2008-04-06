@@ -18,7 +18,7 @@
 */
 
 static char *flam3_render_c_id =
-"@(#) $Id: flam3-render.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
+"@(#) $Id: flam3-render.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #ifdef WIN32
 #define WINVER 0x0500
@@ -40,7 +40,8 @@ static char *flam3_render_c_id =
 int calc_nstrips(flam3_frame *spec) {
   double mem_required;
   double mem_available;
-  int nstrips;
+  int nstrips,ninc;
+  char *testmalloc;
 #ifdef WIN32
   MEMORYSTATUS stat;
   stat.dwLength = sizeof(stat);
@@ -76,11 +77,29 @@ int calc_nstrips(flam3_frame *spec) {
   mem_required = flam3_render_memory_required(spec);
   if (mem_available >= mem_required) return 1;
   nstrips = (int) ceil(mem_required / mem_available);
+
+if (0) {
+  /* Attempt to malloc a strip, and if it fails, try adding additional strips */
+  ninc=-1;
+  testmalloc = NULL;
+  while(NULL==testmalloc && ninc<3) {
+     ninc++;
+	  testmalloc = (char *)malloc((int)ceil(mem_required / (nstrips+ninc)));
+  }
+  if (NULL==testmalloc) {
+     fprintf(stderr,"Unable to allocate memory for render.  Please close some running programs and try to render again.\n");
+     exit(1);
+  } else {
+     free(testmalloc);
+     nstrips = nstrips + ninc;
+  }
+}
+  
   return nstrips;
 }
 
-int print_progress(void *foo, double fraction, int stage) {
-  fprintf(stderr, "stage=%s progress=%g\n", stage?"filtering":"chaos", fraction);
+int print_progress(void *foo, double fraction, int stage, double eta) {
+    fprintf(stderr, "stage=%s progress=%g eta=%g\n", stage?"filtering":"chaos", fraction, eta);
   return 0;
 }
 
@@ -90,7 +109,7 @@ int main(int argc, char **argv) {
    flam3_genome *cps;
    int ncps;
    int i;
-   unsigned char *image=NULL;
+   void *image=NULL;
    FILE *fp;
    char fname[256];
    size_t this_size, last_size = -1;
@@ -103,6 +122,7 @@ int main(int argc, char **argv) {
    char *format = getenv("format");
    int verbose = argi("verbose", 1);
    int bits = argi("bits", 33);
+   int bpc = argi("bpc",8);
    int seed = argi("seed", 0);
    int transparency = argi("transparency", 0);
    char *inf = getenv("in");
@@ -171,6 +191,15 @@ int main(int argc, char **argv) {
 
    channels = strcmp(format, "png") ? 3 : 4;
 
+   /* Check for 16-bit-per-channel processing */
+   if ( (16 == bpc) && (strcmp(format,"png") != 0)) {
+	fprintf(stderr,"Support for 16 bpc images is only present for the png format.\n");
+	exit(1);
+   } else if (bpc != 8 && bpc != 16) {
+	fprintf(stderr,"Unexpected bpc specified (%d)\n",bpc);
+	exit(1);
+   }
+   
    if (pixel_aspect <= 0.0) {
      fprintf(stderr, "pixel aspect ratio must be positive, not %g.\n",
         pixel_aspect);
@@ -220,6 +249,12 @@ int main(int argc, char **argv) {
       f.pixel_aspect_ratio = pixel_aspect;
       f.progress = 0;
       f.nthreads = num_threads;
+      
+      if (16==bpc)
+         f.bytes_per_channel = 2;
+      else
+         f.bytes_per_channel = 1;
+         
 
       if (getenv("nstrips")) {
          nstrips = atoi(getenv("nstrips"));
@@ -233,19 +268,21 @@ int main(int argc, char **argv) {
          exit(1);
       }
       
-      imgmem = (double)channels * (double)cps[i].width * (double)cps[i].height;
+      imgmem = (double)channels * (double)cps[i].width 
+               * (double)cps[i].height * f.bytes_per_channel;
       
       if (imgmem > ULONG_MAX) {
          fprintf(stderr,"Image size > ULONG_MAX.  Aborting.\n");
          exit(1);
       }
 
-      this_size = (size_t)channels * (size_t)cps[i].width * (size_t)cps[i].height;
+      this_size = (size_t)channels * (size_t)cps[i].width 
+                  * (size_t)cps[i].height * f.bytes_per_channel;
       if (this_size != last_size) {
          if (last_size != -1)
             free(image);
          last_size = this_size;
-         image = (unsigned char *) malloc(this_size);
+         image = (void *) malloc(this_size);
          if (NULL==image) {
             fprintf(stderr,"Error allocating memory for image.  Aborting\n");
             exit(1);
@@ -263,9 +300,10 @@ int main(int argc, char **argv) {
       (2 * cps[i].pixels_per_unit * zoom_scale);
 
       for (strip = 0; strip < nstrips; strip++) {
-         unsigned char *strip_start = image + cps[i].height * strip * cps[i].width * channels;
+         size_t ssoff = (size_t)cps[i].height * strip * cps[i].width * channels * f.bytes_per_channel;
+         void *strip_start = image + ssoff;
          cps[i].center[1] = center_base + cps[i].height * (double) strip / (cps[i].pixels_per_unit * zoom_scale);
-
+         
          if ((cps[i].height * (strip + 1)) > real_height) {
             int oh = cps[i].height;
             cps[i].height = real_height - oh * strip;
@@ -311,16 +349,16 @@ int main(int argc, char **argv) {
 
          if (!strcmp(format, "png")) {
 
-             write_png(fp, image, cps[i].width, real_height, &fpc);            
+             write_png(fp, image, cps[i].width, real_height, &fpc, f.bytes_per_channel);            
             
          } else if (!strcmp(format, "jpg")) {
                                       
-             write_jpeg(fp, image, cps[i].width, real_height, &fpc);
+             write_jpeg(fp, (unsigned char *)image, cps[i].width, real_height, &fpc);
             
          } else {
             fprintf(fp, "P6\n");
             fprintf(fp, "%d %d\n255\n", cps[i].width, real_height);
-            fwrite(image, 1, this_size, fp);
+            fwrite((unsigned char *)image, 1, this_size, fp);
          }
          /* Free string */
          free(fpc.genome);

@@ -170,6 +170,7 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 RANLIB = @RANLIB@
+SED = @SED@
 SET_MAKE = @SET_MAKE@
 SHELL = @SHELL@
 STRIP = @STRIP@
@@ -229,7 +230,7 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = foreign no-dependencies
 AM_CFLAGS = -g -O3 -ffast-math -DPACKAGE_DATA_DIR=\"$(pkgdatadir)\"
 lib_LTLIBRARIES = libflam3.la
-include_HEADERS = flam3.h
+include_HEADERS = flam3.h isaac.h isaacs.h
 libflam3_la_SOURCES = flam3.c flam3-palettes.c jpeg.c png.c isaac.c
 libflam3_la_LDFLAGS = -no-undefined -ljpeg -lpng -lz -lpthread
 flam3_genome_SOURCES = flam3-genome.c docstring.c

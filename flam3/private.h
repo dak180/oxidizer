@@ -61,40 +61,6 @@ extern int getpid();
 #define argf(s,d)   ((ai = getenv(s)) ? atof(ai) : (d))
 #define args(s,d)   ((ai = getenv(s)) ? ai : (d))
 
-/* Spatial Filter Kernels */
-#define  hermite_support      (1.0)
-#define  box_support      (0.5)
-#define  triangle_support   (1.0)
-#define  bell_support      (1.5)
-#define  b_spline_support   (2.0)
-#define  mitchell_support   (2.0)
-#define  mitchell_b   (1.0 / 3.0)
-#define  mitchell_c   (1.0 / 3.0)
-#define  blackman_support  (1.0)
-#define  catrom_support    (2.0)
-#define  hanning_support   (1.0)
-#define  hamming_support   (1.0)
-#define  lanczos3_support  (3.0)
-#define  lanczos2_support  (2.0)
-#define  gaussian_support  (1.8)
-#define  quadratic_support (1.5)
-
-double hermite_filter(double t);
-double box_filter(double t);
-double triangle_filter(double t);
-double bell_filter(double t);
-double b_spline_filter(double t);
-double sinc(double x);
-double lanczos3_filter(double t);
-double lanczos2_filter(double t);
-double mitchell_filter(double t);
-double blackman_filter(double x);
-double catrom_filter(double x);
-double hamming_filter(double x);
-double hanning_filter(double x);
-double gaussian_filter(double x);
-double quadratic_filter(double x);
-
 void docstring();
 
 /* Structures for passing parameters to iteration threads */
@@ -120,7 +86,32 @@ typedef struct {
    double *iter_storage; /* Storage for iteration coordinates */
    randctx rc; /* Thread-unique ISAAC seed */
    flam3_genome cp; /* Full copy of genome for use by the thread */
-   int thread_verbose;
+   int first_thread;
    int timer_initialize;
    flam3_iter_constants *fic; /* Constants for render */
 } flam3_thread_helper;
+
+double flam3_sinc(double x);
+
+#define flam3_num_spatialfilters 14
+double flam3_gaussian_filter(double x);
+double flam3_hermite_filter(double t);
+double flam3_box_filter(double t);
+double flam3_triangle_filter(double t);
+double flam3_bell_filter(double t);
+double flam3_b_spline_filter(double t);
+double flam3_lanczos3_filter(double t);
+double flam3_lanczos2_filter(double t);
+double flam3_mitchell_filter(double t);
+double flam3_blackman_filter(double x);
+double flam3_catrom_filter(double x);
+double flam3_hamming_filter(double x);
+double flam3_hanning_filter(double x);
+double flam3_quadratic_filter(double x);
+
+double flam3_spatial_filter(int knum, double x);
+
+#define  flam3_mitchell_b   (1.0 / 3.0)
+#define  flam3_mitchell_c   (1.0 / 3.0)
+
+

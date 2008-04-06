@@ -58,6 +58,7 @@ static void iter_thread(void *fth) {
    static time_t progress_timer_history[64];
    static double progress_history[64];
    static int progress_history_mark = 0;
+   double eta = 0.0;
    
    if (fthp->timer_initialize) {
    	progress_timer = 0;
@@ -68,20 +69,21 @@ static void iter_thread(void *fth) {
    
    for (sub_batch = 0; sub_batch < ficp->batch_size; sub_batch+=SUB_BATCH_SIZE) {
       int sub_batch_size, badcount;
+      time_t newt = time(NULL);
       /* sub_batch is double so this is sketchy */
       sub_batch_size = (sub_batch + SUB_BATCH_SIZE > ficp->batch_size) ?
 	(ficp->batch_size - sub_batch) : SUB_BATCH_SIZE;
 
-      if (fthp->thread_verbose && time(NULL) != progress_timer) {
+      if (fthp->first_thread && newt != progress_timer) {
          double percent = 100.0 *
              ((((sub_batch / (double) ficp->batch_size) + ficp->temporal_sample_num)
              / ficp->ntemporal_samples) + ficp->batch_num)/ficp->nbatches;
-         double eta;
          int old_mark = 0;
-         int ticker = (progress_timer&1)?':':'.';
+         int ticker;
 
-         fprintf(stderr, "\rchaos: %5.1f%%", percent);
-         progress_timer = time(NULL);
+	 if (ficp->spec->verbose)
+	     fprintf(stderr, "\rchaos: %5.1f%%", percent);
+         progress_timer = newt;
          if (progress_timer_history[progress_history_mark] &&
                 progress_history[progress_history_mark] < percent)
             old_mark = progress_history_mark;
@@ -90,17 +92,17 @@ static void iter_thread(void *fth) {
             eta = (100 - percent) * (progress_timer - progress_timer_history[old_mark])
                   / (percent - progress_history[old_mark]);
 
-            if (eta < 1000)
-               ticker = ':';
-
-            if (eta > 100)
-               fprintf(stderr, "  ETA%c %.1f minutes", ticker, eta / 60);
-            else
-               fprintf(stderr, "  ETA%c %ld seconds ", ticker, (long) ceil(eta));
-
-            fprintf(stderr, "              \r");
-
-            fflush(stderr);
+	    if (ficp->spec->verbose) {
+		ticker = (progress_timer&1)?':':'.';
+		if (eta < 1000)
+		    ticker = ':';
+		if (eta > 100)
+		    fprintf(stderr, "  ETA%c %.1f minutes", ticker, eta / 60);
+		else
+		    fprintf(stderr, "  ETA%c %ld seconds ", ticker, (long) ceil(eta));
+		fprintf(stderr, "              \r");
+		fflush(stderr);
+	    }
          }
 
          progress_timer_history[progress_history_mark] = progress_timer;
@@ -109,9 +111,9 @@ static void iter_thread(void *fth) {
       }
 
       if (ficp->spec->progress) {
-	if (fthp->thread_verbose) {
+	if (fthp->first_thread) {
 	  if ((*ficp->spec->progress)(ficp->spec->progress_parameter,
-				      sub_batch/(double)ficp->batch_size, 0)) {
+				      sub_batch/(double)ficp->batch_size, 0, eta)) {
 	    ficp->aborted = 1;
             #ifdef HAVE_LIBPTHREAD
 	      pthread_exit((void *)0);
@@ -232,7 +234,7 @@ static void iter_thread(void *fth) {
    #endif
 }
 
-static void render_rectangle(flam3_frame *spec, unsigned char *out,
+static void render_rectangle(flam3_frame *spec, void *out,
 			     int out_width, int field, int nchan,
 			     int transp, stat_struct *stats) {
    long nbuckets;
@@ -245,6 +247,7 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    double ppux=0, ppuy=0;
    int image_width, image_height;    /* size of the image to produce */
    int filter_width;
+   int bytes_per_channel = spec->bytes_per_channel;
    int oversample = spec->genomes[0].spatial_oversample;
    int nbatches = spec->genomes[0].nbatches;
    /* ntemporal_samples ( & nbatches?) should be computed inside the batch
@@ -305,7 +308,7 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
    if (field) {
       image_height = spec->genomes[0].height / 2;
       if (field == flam3_field_odd)
-    out += nchan * out_width;
+    out += nchan * bytes_per_channel * out_width;
       out_width *= 2;
    } else
       image_height = spec->genomes[0].height;
@@ -315,8 +318,8 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
 
 
    if (1) {
-   double (*sf_func)() = spec->genomes[0].spatial_filter_func;
-   double sf_supp = spec->genomes[0].spatial_filter_support;
+   int sf_sel = spec->genomes[0].spatial_filter_select;
+   double sf_supp = flam3_spatial_support[sf_sel];
    double fw =  (2.0 * sf_supp * oversample *
          spec->genomes[0].spatial_filter_radius /
          spec->pixel_aspect_ratio);
@@ -348,7 +351,8 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
 
          jj /= spec->pixel_aspect_ratio;
 
-         filter[i + j * filter_width] = (*sf_func)(ii) * (*sf_func)(jj);
+         filter[i + j * filter_width] = 
+            flam3_spatial_filter(sf_sel,ii) * flam3_spatial_filter(sf_sel,jj);
       }
 
 
@@ -609,7 +613,9 @@ static void render_rectangle(flam3_frame *spec, unsigned char *out,
                   if (de_filt_d <= 1.0) {
 if (1) {
                      /* Gaussian */
-                     de_filt_sum += gaussian_filter(gaussian_support*de_filt_d);
+                     de_filt_sum += flam3_spatial_filter(flam3_gaussian_kernel,
+                        flam3_spatial_support[flam3_gaussian_kernel]*de_filt_d);
+                     //de_filt_sum += flam3_gaussian_filter(flam3_gaussian_support*de_filt_d);
 } else {
                      /* Epanichnikov */
                      de_filt_sum += (1.0 - (de_filt_d * de_filt_d));
@@ -630,7 +636,10 @@ if (1) {
                   else {
 if (1) {
                      /* Gaussian */
-                     de_filter_coefs[filter_coef_idx] = gaussian_filter(gaussian_support*de_filt_d)/de_filt_sum;
+                     de_filter_coefs[filter_coef_idx] =
+                         flam3_spatial_filter(flam3_gaussian_kernel,
+                            flam3_spatial_support[flam3_gaussian_kernel]*de_filt_d)/de_filt_sum; 
+                         //flam3_gaussian_filter(flam3_gaussian_support*de_filt_d)/de_filt_sum;
 } else {
                      /* Epanichnikov */
                      de_filter_coefs[filter_coef_idx] = (1.0 - (de_filt_d * de_filt_d))/de_filt_sum;
@@ -785,14 +794,14 @@ if (1) {
 
             if (0==thi) {
 
-               fth[thi].thread_verbose=verbose;
+               fth[thi].first_thread=1;
                if (0==batch_num && 0==temporal_sample_num)
                	fth[thi].timer_initialize = 1;
                else
                	fth[thi].timer_initialize = 0;
                	
             } else {
-               fth[thi].thread_verbose=0;
+               fth[thi].first_thread=0;
 	         	fth[thi].timer_initialize = 0;
             }
 
@@ -1010,7 +1019,7 @@ if (1) {
 
       if (fic.spec->progress) {
 	if ((*fic.spec->progress)(fic.spec->progress_parameter,
-				      j/(double)fic.height, 1)) {
+				  j/(double)fic.height, 1, 0.0)) {
 	   if (verbose) fprintf(stderr, "\naborted!\n");
 	  goto done;
 	  }
@@ -1056,7 +1065,9 @@ if (1) {
          x = de_offset;
          for (i = 0; i < image_width; i++) {
             int ii, jj;
-            unsigned char *p;
+            void *p;
+            unsigned short *p16;
+            unsigned char *p8;
             double ls, a;
             double alpha;
             t[0] = t[1] = t[2] = t[3] = 0.0;
@@ -1073,7 +1084,9 @@ if (1) {
                }
             }
 
-            p = out + nchan * (i + j * out_width);
+            p = out + nchan * bytes_per_channel * (i + j * out_width);
+            p8 = (unsigned char *)p;
+            p16 = (unsigned short *)p;
 
             if (t[3] > 0.0) {
 
@@ -1125,8 +1138,15 @@ if (1) {
                a = 255;
             if (a < 0)
                a = 0;
+               
+            if (2==bytes_per_channel) {
+               a *= 256.0; /* Scales to [0-65280] */
+               p16[0] = (unsigned short) a;
+            } else {
+               p8[0] = (unsigned char) a;
+            }
 
-            p[0] = (unsigned char) a;
+            //p[0] = (unsigned char) a;
 
             /* green */
             a = ls * ((double) t[1] / PREFILTER_WHITE);
@@ -1141,7 +1161,14 @@ if (1) {
             if (a < 0)
                a = 0;
 
-            p[1] = (unsigned char) a;
+            if (2==bytes_per_channel) {
+               a *= 256.0; /* Scales to [0-65280] */
+               p16[1] = (unsigned short) a;
+            } else {
+               p8[1] = (unsigned char) a;
+            }
+
+//            p[1] = (unsigned char) a;
 
             /* blue */
             a = ls * ((double) t[2] / PREFILTER_WHITE);
@@ -1156,15 +1183,29 @@ if (1) {
             if (a < 0)
                a = 0;
 
-            p[2] = (unsigned char) a;
+            if (2==bytes_per_channel) {
+               a *= 256.0; /* Scales to [0-65280] */
+               p16[2] = (unsigned short) a;
+            } else {
+               p8[2] = (unsigned char) a;
+            }
+
+//            p[2] = (unsigned char) a;
 
             /* alpha */
             if (nchan>3) {
-         if (transp==1)
-      p[3] = (unsigned char) (alpha * 255.999);
-         else
-      p[3] = 255;
-       }
+               if (transp==1) {
+                  if (2==bytes_per_channel)
+                     p16[3] = (unsigned short) (alpha * 65535.999);
+                  else
+                     p8[3] = (unsigned char) (alpha * 255.999);
+               } else {
+                  if (2==bytes_per_channel)
+                     p16[3] = 65535;
+                  else
+                     p8[3] = 255;
+               }
+            }
 
             x += oversample;
          }

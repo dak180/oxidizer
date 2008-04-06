@@ -19,7 +19,7 @@
 
 
 static char *jpeg_h_id =
-"@(#) $Id: img.h,v 1.6 2008/02/11 18:08:37 vargol Exp $";
+"@(#) $Id: img.h,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include <stdio.h>
 #include "flam3.h"
@@ -31,7 +31,7 @@ static char *jpeg_h_id =
 #endif
 
 void write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc);
-void write_png(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc);
+void write_png(FILE *file, void *image, int width, int height, flam3_img_comments *fpc, int bpc);
 
 /* returns RGBA pixel array or NULL on failure */
 unsigned char *read_png(FILE *file, int *width, int *height);

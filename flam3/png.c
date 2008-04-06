@@ -19,7 +19,7 @@
 
 
 static char *jpeg_c_id =
-"@(#) $Id: png.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
+"@(#) $Id: png.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,12 +31,17 @@ static char *jpeg_c_id =
 #include "flam3.h"
 #include "private.h"
 
-void write_png(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc) {
+#ifdef WIN32
+#include <winsock.h> /* for htons */
+#endif
+
+void write_png(FILE *file, void *image, int width, int height, flam3_img_comments *fpc, int bpc) {
   png_structp  png_ptr;
   png_infop    info_ptr;
   png_text     text[FLAM3_PNG_COM];
-  unsigned int i;
-  unsigned char **rows = malloc(sizeof(unsigned char *) * height);
+  size_t i;
+  unsigned short testbe = 1;
+  void **rows = malloc(sizeof(void *) * height);
   char *nick = getenv("nick");
   char *url = getenv("url");
   char *ai; /* For argi */
@@ -71,8 +76,8 @@ void write_png(FILE *file, unsigned char *image, int width, int height, flam3_im
   text[6].text = fpc->genome;
 
   for (i = 0; i < height; i++)
-    rows[i] = image + i * width * 4;
-  
+    rows[i] = image + i * width * 4 * bpc;
+      
   png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
 				    NULL, NULL, NULL);
   info_ptr = png_create_info_struct(png_ptr);
@@ -85,11 +90,21 @@ void write_png(FILE *file, unsigned char *image, int width, int height, flam3_im
   }
   png_init_io(png_ptr, file);
 
-  png_set_IHDR(png_ptr, info_ptr, width, height, 8,
+  png_set_IHDR(png_ptr, info_ptr, width, height, 8*bpc,
 	       PNG_COLOR_TYPE_RGBA,
 	       PNG_INTERLACE_NONE,
 	       PNG_COMPRESSION_TYPE_BASE,
 	       PNG_FILTER_TYPE_BASE);
+	       
+  /* Swap the bytes if we're doing 16bpc and on little-endian platform */       
+  if (2==bpc && testbe != htons(testbe)) {
+    unsigned short *im = (unsigned short *)image;
+    for (i=0; i<height*width*4; i++) {
+       im[i] = htons(im[i]);
+    }
+  }
+      
+  
 
   if (pngcom_enable==1)
 	  png_set_text(png_ptr, info_ptr, text, FLAM3_PNG_COM);

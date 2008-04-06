@@ -42,9 +42,6 @@ and it should produce 00000.jpg and 00001.jpg, one image for each
 and it should produce 100 files named 00000.jpg through 00099.jpg that
 interpolate between the two <flame> elements.
 
-Both programs get their options through environment variables.  An
-easy way to set them is to invoke the program via the env command,
-which allows you to give name=value pairs.
 
 envar           default         meaning
 =====           =======         =======
@@ -66,7 +63,8 @@ format          png             "jpg" or "ppm" or "png"
 pixel_aspect    1.0             aspect ratio of pixels (width over height), eg 0.90909 for NTSC
 seed            random          integer seed for random numbers, defaults to time+pid
 verbose         0               if non-zero then print progress meter on stderr
-bits            33              also 16, 32, or 64: sets bit-width of internal buffers
+bits            33              also 16, 32, or 64: sets bit-width of internal buffers (33 means 32-bit floating-point)
+bpc             8               bits per channel of color: only png supports 16 (render/animate)
 image           filename        replace palette with png, jpg, or ppm image
 use_vars        -1              comma separated list of variation #'s to use when generating a random flame (genome only)
 tries           50              number of tries to make to find a good genome.
@@ -229,7 +227,7 @@ The complete list of variations:
   43. square
   44. rays
   45. blade
-  46. secant
+  46. secant2
   47. twintrian
   48. cross
   49. disc2
@@ -250,6 +248,23 @@ todo:  eliminate all static storage.
 ======================================
 
 changelog:
+
+04/05/08 Added 16 bit per channel support to PNG via bpc envar.
+    isaac.h is now installed with the flam3 headers.  Strip indexing
+    now done with size_t's to fix bug in large images (thanks Paul).
+    Progress callback now returns ETA, and per-thread verbose flag
+    functionality fixed.  Enumerated spatial filter types now used in
+    flam3.h, taking the place of function pointers (simplifies the
+    API).  Fix bug by moving precalculation of variation variables to
+    flam3_iterate (thanks david).  Release as 2.7.11.
+
+03/15/08 fixed interpolation bug when magnitude of rotation/scaling
+    component of affine transform is 0.  replaced secant variation
+    with more flame-friendly secant2 (eliminates gap in y direction,
+    scales y-coordinate by weight).  warning message now printed when 
+    unrecognized variation is present in an xform.  fixed bad 
+    inequality when checking for -pi/pi discontinuity during complex 
+    interpolation.  release as 2.7.10.
 
 02/08/08 non-zero weights for final xforms no longer allowed, and now 
     have no effect.  recompiled windows exes with mingw gcc 4.1 to 

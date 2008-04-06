@@ -19,7 +19,7 @@
 
 
 static char *flam3_animate_c_id =
-"@(#) $Id: flam3-animate.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
+"@(#) $Id: flam3-animate.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include "private.h"
 #include "img.h"
@@ -40,6 +40,7 @@ int main(int argc, char **argv) {
   int verbose = argi("verbose", 1);
   int transparency = argi("transparency", 0);
   int bits = argi("bits", 33);
+  int bpc = argi("bpc",8);
   int seed = argi("seed", 0);
   int ftime, channels;
   unsigned char *image;
@@ -179,6 +180,16 @@ int main(int argc, char **argv) {
     }
   }
   channels = strcmp(format, "png") ? 3 : 4;
+
+   /* Check for 16-bit-per-channel processing */
+   if ( (16 == bpc) && (strcmp(format,"png") != 0)) {
+	fprintf(stderr,"Support for 16 bpc images is only present for the png format.\n");
+	exit(1);
+   } else if (bpc != 8 && bpc != 16) {
+	fprintf(stderr,"Unexpected bpc specified (%d)\n",bpc);
+	exit(1);
+   }
+   
   f.temporal_filter_radius = argf("blur", 0.5);
   f.pixel_aspect_ratio = pixel_aspect;
   f.genomes = cps;
@@ -188,9 +199,15 @@ int main(int argc, char **argv) {
   f.progress = 0;
   f.nthreads = num_threads;
 
-  image = (unsigned char *) malloc((size_t)channels *
+  if (16==bpc)
+     f.bytes_per_channel = 2;
+  else
+     f.bytes_per_channel = 1;
+         
+
+  image = (void *) malloc((size_t)channels *
 				   (size_t)cps[0].width *
-				   (size_t)cps[0].height);
+				   (size_t)cps[0].height * f.bytes_per_channel);
 
   if (dtime < 1) {
     fprintf(stderr, "dtime must be positive, not %d.\n", dtime);
@@ -262,7 +279,7 @@ int main(int argc, char **argv) {
    
     if (!strcmp(format, "png")) {
     
-       write_png(fp, image, cps[0].width, cps[0].height, &fpc);       
+       write_png(fp, image, cps[0].width, cps[0].height, &fpc, 1);       
        
     } else if (!strcmp(format, "jpg")) {
     

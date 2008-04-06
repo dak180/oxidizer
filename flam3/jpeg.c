@@ -19,7 +19,7 @@
 
 
 static char *jpeg_c_id =
-"@(#) $Id: jpeg.c,v 1.6 2008/02/11 18:08:37 vargol Exp $";
+"@(#) $Id: jpeg.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,7 +35,7 @@ void
 write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc) {
    struct jpeg_compress_struct info;
    struct jpeg_error_mgr jerr;
-   unsigned int i;
+   size_t i;
    char *nick = getenv("nick");
    char *url = getenv("url");
    char *ai; /* For argi */
