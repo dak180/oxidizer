@@ -29,8 +29,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 - (void)awakeFromNib {
     // register for drag and drop
     [gradientTableView registerForDraggedTypes:[NSArray arrayWithObject:NSColorPboardType]];
-    [gradientView registerForDraggedTypes:[NSArray arrayWithObject:NSColorPboardType]];
-	
+ 	
 }
 
 
@@ -97,7 +96,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 		NSBitmapImageRep *paletteRep;
 		NSImage *paletteImage;
 		
-		NSMutableDictionary *colour = [NSMutableDictionary dictionaryWithCapacity:4];
+		NSMutableDictionary *colour = [NSMutableDictionary dictionaryWithCapacity:6];
 		NSManagedObject *gradientColour = [newArray objectAtIndex:i];
 		[colour setObject:[NSNumber numberWithDouble:[[gradientColour valueForKey:@"red"] doubleValue]] forKey:@"red"];
 		[colour setObject:[NSNumber numberWithDouble:[[gradientColour valueForKey:@"green"] doubleValue]] forKey:@"green"];
@@ -262,6 +261,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 }
 
+
 - (NSDragOperation)tableView:(NSTableView*)aTableView
 				validateDrop:(id <NSDraggingInfo>)info
 				 proposedRow:(int)row
@@ -269,27 +269,74 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
     
     NSDragOperation dragOp = NSDragOperationCopy;
     
-	if(row == -1) {
-		row = 0;
-	}
-//    [aTableView setDropRow:row dropOperation:NSTableViewDropAbove];
 	
     return dragOp;
 }
+
 
 - (BOOL)tableView:(NSTableView*)aTableView
 	   acceptDrop:(id <NSDraggingInfo>)info
 			  row:(int)row
 	dropOperation:(NSTableViewDropOperation)op {
 	
+	
+	
+	if(row == 0 && op == NSTableViewDropAbove) {
+		return FALSE;
+	}
+	
 	NSPasteboard *pasteBoard = [info draggingPasteboard];
 
-	NSMutableDictionary *colourDictionary = [colours objectAtIndex:row];
-	
 	NSColor *colorWellColour = [[NSColor colorFromPasteboard:pasteBoard] colorUsingColorSpaceName:@"NSDeviceRGBColorSpace"];
 
 	float red, green, blue;
 
+	NSMutableDictionary *colourDictionary;
+	
+	if (op == NSTableViewDropOn) {
+		colourDictionary = [colours objectAtIndex:row];
+	} else {
+		
+		NSBitmapImageRep *paletteRep;
+		NSImage *paletteImage;		
+		
+		NSMutableDictionary *colourDictionary1 = [colours objectAtIndex:row-1];
+		NSMutableDictionary *colourDictionary2 = [colours objectAtIndex:row];
+		
+		int index1 = [[colourDictionary1 objectForKey:@"index"] intValue];
+		int index2 = [[colourDictionary2 objectForKey:@"index"] intValue];
+		
+		if( index1 == index2 - 1) {
+			return FALSE;
+		}
+		
+		colourDictionary = [[NSMutableDictionary alloc] initWithCapacity:6];
+		
+		[colourDictionary setObject:[NSNumber numberWithInt:(index1 + ((index2 - index1) / 2))] forKey:@"index"];
+		
+		paletteRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+															pixelsWide:COLOUR_SQUARE_SIDE
+															pixelsHigh:COLOUR_SQUARE_SIDE
+														 bitsPerSample:8
+													   samplesPerPixel:3
+															  hasAlpha:NO 
+															  isPlanar:NO
+														colorSpaceName:NSDeviceRGBColorSpace
+														  bitmapFormat:0
+														   bytesPerRow:3*256
+														  bitsPerPixel:24]; 
+		
+		paletteImage = [[NSImage alloc] init];
+		[paletteImage addRepresentation:paletteRep];
+		
+		[colourDictionary setObject:paletteRep forKey:@"bitmapRep"];
+		[colourDictionary setObject:paletteImage forKey:@"image"];
+		
+		[colours addObject:colourDictionary];
+		
+	}
+
+	
 	[colorWellColour getRed:&red green:&green blue:&blue alpha:NULL];
 
 	[colourDictionary setObject:[NSNumber numberWithFloat:red] forKey:@"red"];
