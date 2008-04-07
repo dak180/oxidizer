@@ -169,6 +169,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification {
 	
+	[PaletteController fillColour:[[arrayController selectedObjects] objectAtIndex:0] forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 	[self fillGradientImageRep];
 	[gradientView display];
 }
