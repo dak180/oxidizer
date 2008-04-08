@@ -39,6 +39,8 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	[gradientView setDelegate:self];
 	[self fillGradientImageRep]; 
     [gradientView display];
+	[gradientView setGradientArrayController:arrayController]; 
+
 	[gradientWindow makeKeyAndOrderFront:self];
 
 }
@@ -54,10 +56,11 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			break;
 		case 1:	
 			[arrayController removeObjects:[arrayController selectedObjects]];
-			[gradientView setSelectedSwatch:nil];
 			break;
 	}
 	
+	[arrayController rearrangeObjects];
+	[gradientView setSelectedSwatch:nil];
 	[self fillGradientImageRep];
 	[gradientView display];
 
@@ -145,8 +148,6 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	
 	[PaletteController fillBitmapRep:imageRep withColours:colours forHeight:GRADIENT_IMAGE_HEIGHT];
 	
-	[gradientView setGradientArray:colours]; 
-
 }
 
 int sortUsingIndex(id colour1, id colour2, void *context) {

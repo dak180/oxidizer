@@ -44,6 +44,9 @@
 
 - (void)drawRect:(NSRect)rect {
     // Drawing code here.
+	
+	NSArray *gradientArray = [gradientArrayController arrangedObjects];
+
 	CGContextRef context = [[NSGraphicsContext currentContext]graphicsPort];
 	CGContextSaveGState(context);
 	
@@ -159,6 +162,7 @@
 	
 }
 
+/*
 -(void) setGradientArray:(NSArray *)array {
 	
 	if(array != nil) {
@@ -169,6 +173,20 @@
 	gradientArray = array;
 
 }
+*/
+
+
+-(void) setGradientArrayController:(NSArrayController *)controller {
+	
+	if(controller != nil) {
+		[controller retain];
+	}
+	
+	[gradientArrayController release];
+	gradientArrayController = controller;
+	
+}
+
 
 -(void) setSelectedSwatch:(NSMutableDictionary *)swatch {
 
@@ -185,6 +203,7 @@
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	
+	NSArray *gradientArray = [gradientArrayController arrangedObjects];
 
 	int i;
 	
@@ -246,6 +265,9 @@
 
 - (void)mouseUp:(NSEvent *)theEvent { 
 
+
+	NSArray *gradientArray = [gradientArrayController arrangedObjects];
+	
 	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	NSRect frame = [self frame];
 	

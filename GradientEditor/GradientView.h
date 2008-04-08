@@ -19,7 +19,8 @@
 	
 @private
 	
-	NSArray *gradientArray;
+//	NSArray *gradientArray;
+	NSArrayController *gradientArrayController;
 	NSBitmapImageRep *gradientRep;
 	NSImage *gradientImage;
 	NSMutableDictionary *selectedSwatch;
@@ -31,7 +32,8 @@
 }
 
 -(NSBitmapImageRep *) getGradientRep;
--(void) setGradientArray:(NSArray *)array;
+//-(void) setGradientArray:(NSArray *)array;
+-(void) setGradientArrayController:(NSArrayController *)controller;
 -(void) setSelectedSwatch:(NSMutableDictionary *)swatch;
 
 - (void) mouseDown:(NSEvent *)theEvent;
