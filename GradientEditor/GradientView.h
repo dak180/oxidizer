@@ -19,15 +19,14 @@
 	
 @private
 	
-//	NSArray *gradientArray;
 	NSArrayController *gradientArrayController;
 	NSBitmapImageRep *gradientRep;
 	NSImage *gradientImage;
-	NSMutableDictionary *selectedSwatch;
+//	NSMutableDictionary *selectedSwatch;
 	
 	id delegate;
 	
-	int selectedIndex;
+//	int selectedIndex;
 	
 }
 

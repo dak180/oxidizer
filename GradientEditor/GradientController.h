@@ -19,6 +19,7 @@
 
 @private 
 	
+	NSMutableArray *cmapSortDescriptors;
 	NSMutableArray *colours;
 	NSArrayController *cmap;
 	id flameController;

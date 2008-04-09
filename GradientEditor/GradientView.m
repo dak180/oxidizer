@@ -45,6 +45,7 @@
 - (void)drawRect:(NSRect)rect {
     // Drawing code here.
 	
+	NSDictionary *selectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0];
 	NSArray *gradientArray = [gradientArrayController arrangedObjects];
 
 	CGContextRef context = [[NSGraphicsContext currentContext]graphicsPort];
@@ -162,19 +163,6 @@
 	
 }
 
-/*
--(void) setGradientArray:(NSArray *)array {
-	
-	if(array != nil) {
-		[array retain];
-	}
-	
-	[gradientArray release];
-	gradientArray = array;
-
-}
-*/
-
 
 -(void) setGradientArrayController:(NSArrayController *)controller {
 	
@@ -190,13 +178,17 @@
 
 -(void) setSelectedSwatch:(NSMutableDictionary *)swatch {
 
+	/*
 	if(swatch != nil) {
 		[swatch retain];
 	}
 	
 	[selectedSwatch release];
 	selectedSwatch = swatch;
+	 
+	 
 	selectedIndex = [[selectedSwatch  objectForKey:@"index"] intValue];
+	*/ 
 	[self display];
 
 }
@@ -206,8 +198,8 @@
 	NSArray *gradientArray = [gradientArrayController arrangedObjects];
 
 	int i;
-	
-	NSDictionary *oldSelectedSwatch = selectedSwatch;
+	NSDictionary *selectedSwatch;
+	NSDictionary *oldSelectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0];
 	CGFloat swatchOffsetX, swatchOffsetY;
 
 	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -224,10 +216,7 @@
 		
 		if((swatchOffsetX * swatchOffsetX) + (swatchOffsetY * swatchOffsetY) < (SWATCH_RADIUS * SWATCH_RADIUS)) {
 			selectedSwatch = [gradientArray objectAtIndex:i];
-			[selectedSwatch setObject:[NSNumber numberWithBool:YES] forKey:@"selected"];
 			break;
-		} else {
-			[[gradientArray objectAtIndex:i] setObject:[NSNumber numberWithBool:NO] forKey:@"selected"];			
 		}
 		
 	}
@@ -257,7 +246,10 @@
 		colourIndex = 255;
 	}
 
+	NSDictionary *selectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0]; 
+	[selectedSwatch willChangeValueForKey:@"index"];
 	[selectedSwatch setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
+	[selectedSwatch didChangeValueForKey:@"index"];
 		
 	[(GradientController *)delegate fillGradientImageRep];
 	[self display];
@@ -265,7 +257,8 @@
 
 - (void)mouseUp:(NSEvent *)theEvent { 
 
-
+	NSDictionary *selectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0]; 
+	int selectedIndex = [gradientArrayController selectionIndex]; 
 	NSArray *gradientArray = [gradientArrayController arrangedObjects];
 	
 	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -299,7 +292,9 @@
 		colourIndex = selectedIndex;
 	}
 	
+	[selectedSwatch willChangeValueForKey:@"index"];
 	[selectedSwatch setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
+	[selectedSwatch didChangeValueForKey:@"index"];
 	
 	[self display];
 }

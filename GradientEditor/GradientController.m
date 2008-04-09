@@ -22,9 +22,15 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	if (self = [super init]) {
 			colours = [NSMutableArray arrayWithCapacity:2];		
 			[colours retain];
+		
+		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+		cmapSortDescriptors = [NSArray arrayWithObject: sort];
+		[sort  release]; 
+		
 	}     
 	return self;
 }
+
 
 - (void)awakeFromNib {
     // register for drag and drop
@@ -49,17 +55,20 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 - (IBAction)editPalette:(id)sender {
 	
 	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
+	NSArray *selected;
 	
 	switch([segments selectedSegment]) {
 		case 0: 
 			[self addColour];
 			break;
 		case 1:	
-			[arrayController removeObjects:[arrayController selectedObjects]];
+			selected = [arrayController selectedObjects];
+			if([selected count] < [[arrayController arrangedObjects] count]) {
+				[arrayController removeObjects:selected];
+			}
 			break;
 	}
 	
-	[arrayController rearrangeObjects];
 	[gradientView setSelectedSwatch:nil];
 	[self fillGradientImageRep];
 	[gradientView display];
@@ -73,13 +82,16 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	[cmap removeObjects:[cmap arrangedObjects]];
 	int i;
 	
-	for(i=0; i<[colours count]; i++) {
+	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+		
+		NSDictionary *colour = [[arrayController arrangedObjects] objectAtIndex:i];
+		
 		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
 		
-		[cmapEntity setValue:[NSNumber numberWithDouble:[[[colours objectAtIndex:i] objectForKey:@"red"] doubleValue]] forKey:@"red"];
-		[cmapEntity setValue:[NSNumber numberWithDouble:[[[colours objectAtIndex:i] objectForKey:@"green"] doubleValue]] forKey:@"green"];
-		[cmapEntity setValue:[NSNumber numberWithDouble:[[[colours objectAtIndex:i] objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
-		[cmapEntity setValue:[NSNumber numberWithInt:[[[colours objectAtIndex:i] objectForKey:@"index"] intValue]] forKey:@"index"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[cmapEntity setValue:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
 		[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
 	}
 
@@ -90,7 +102,9 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 - (void) setColourArray:(NSArray *)newArray {
 
-	[colours removeAllObjects];
+	[arrayController removeObjects:[arrayController arrangedObjects]];
+	
+	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:255];
 	
 	int i;
 	
@@ -126,15 +140,16 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 		
 		[PaletteController fillColour:colour forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 		
-		
-		[colours addObject:colour];
+		[tempArray addObject:colour];
 		
 		[paletteImage release];
 		[paletteRep release];
 
 	}
 	
+	[arrayController addObjects:tempArray];
 	[self fillGradientImageRep];
+	[tempArray release];
 	
 }
 
@@ -142,11 +157,9 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 	NSBitmapImageRep *imageRep = [gradientView getGradientRep];
 	
-	[colours sortUsingFunction:sortUsingIndex context:nil];
-	
 	[arrayController rearrangeObjects];
 	
-	[PaletteController fillBitmapRep:imageRep withColours:colours forHeight:GRADIENT_IMAGE_HEIGHT];
+	[PaletteController fillBitmapRep:imageRep withColours:[arrayController arrangedObjects] forHeight:GRADIENT_IMAGE_HEIGHT];
 	
 }
 
@@ -182,18 +195,33 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 - (void) addColour {
 	
+	NSArray *colourArray = [arrayController arrangedObjects];
+	
 	NSDictionary *selectedColour = [[arrayController selectedObjects] objectAtIndex:0];
-	int arrayIndexForSelected = [colours indexOfObject:selectedColour];
+	int arrayIndexForSelected = [colourArray indexOfObject:selectedColour];
 	
-	if( arrayIndexForSelected + 1 >= [colours count] ) {
-		NSBeep();
-		return;
-	}
-
 	int colourIndex = [[selectedColour objectForKey:@"index"] intValue];
+
+	NSDictionary *nextColour;
+	int nextIndex, newIndex;
+
+	if( arrayIndexForSelected + 1 == [colourArray count]) {
+		if (colourIndex == 255) {
+			NSBeep();
+			return;
+		} else {
+			nextColour = selectedColour;
+			nextIndex = 256;
+			newIndex = 255;
+		}
+	} else {
+		nextColour = [colourArray objectAtIndex:arrayIndexForSelected+1];
+		nextIndex = [[nextColour objectForKey:@"index"] intValue];	
+		newIndex = (int)(colourIndex + ((nextIndex - colourIndex) / 2.0));
+	}
 	
-	NSDictionary *nextColour = [colours objectAtIndex:arrayIndexForSelected+1];
-	int nextIndex = [[nextColour objectForKey:@"index"] intValue];
+
+	
 	
 	if(colourIndex + 1 != nextIndex) {
 		
@@ -201,7 +229,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		[colour setObject:[NSNumber numberWithDouble:[[selectedColour objectForKey:@"red"] doubleValue]] forKey:@"red"];
 		[colour setObject:[NSNumber numberWithDouble:[[selectedColour objectForKey:@"green"] doubleValue]] forKey:@"green"];
 		[colour setObject:[NSNumber numberWithDouble:[[selectedColour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
-		[colour setObject:[NSNumber numberWithInt:(int)(colourIndex + ((nextIndex - colourIndex) / 2.0)) ] forKey:@"index"];
+		[colour setObject:[NSNumber numberWithInt:newIndex] forKey:@"index"];
 
 		NSBitmapImageRep *paletteRep;
 		NSImage *paletteImage;
@@ -226,7 +254,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 		[PaletteController fillColour:colour forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 
-		[colours addObject:colour];
+		[arrayController addObject:colour];
+		[arrayController rearrangeObjects];
 	} else {
 		NSBeep();
 	}
@@ -234,7 +263,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 - (NSArray *) getColourArray {
 	
-	return colours;
+	return [arrayController arrangedObjects];
 }
 
 - (void) setCMapController:(NSArrayController *)newCmap {
@@ -295,14 +324,14 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	NSMutableDictionary *colourDictionary;
 	
 	if (op == NSTableViewDropOn) {
-		colourDictionary = [colours objectAtIndex:row];
+		colourDictionary = [[arrayController arrangedObjects] objectAtIndex:row];
 	} else {
 		
 		NSBitmapImageRep *paletteRep;
 		NSImage *paletteImage;		
 		
-		NSMutableDictionary *colourDictionary1 = [colours objectAtIndex:row-1];
-		NSMutableDictionary *colourDictionary2 = [colours objectAtIndex:row];
+		NSMutableDictionary *colourDictionary1 = [[arrayController arrangedObjects] objectAtIndex:row-1];
+		NSMutableDictionary *colourDictionary2 = [[arrayController arrangedObjects] objectAtIndex:row];
 		
 		int index1 = [[colourDictionary1 objectForKey:@"index"] intValue];
 		int index2 = [[colourDictionary2 objectForKey:@"index"] intValue];
@@ -333,7 +362,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		[colourDictionary setObject:paletteRep forKey:@"bitmapRep"];
 		[colourDictionary setObject:paletteImage forKey:@"image"];
 		
-		[colours addObject:colourDictionary];
+		[arrayController addObject:colourDictionary];
 		
 	}
 
