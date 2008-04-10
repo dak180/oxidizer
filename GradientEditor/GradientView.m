@@ -198,8 +198,17 @@
 	NSArray *gradientArray = [gradientArrayController arrangedObjects];
 
 	int i;
-	NSDictionary *selectedSwatch;
-	NSDictionary *oldSelectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0];
+	NSDictionary *selectedSwatch = nil;
+	NSDictionary *oldSelectedSwatch;
+	
+	NSArray *selectedObjects = [gradientArrayController selectedObjects];
+	
+	if(selectedObjects == nil || [selectedObjects count] == 0) {
+		oldSelectedSwatch = nil;		
+	} else {
+		oldSelectedSwatch = [selectedObjects objectAtIndex:0];
+	}	
+
 	CGFloat swatchOffsetX, swatchOffsetY;
 
 	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
@@ -209,6 +218,7 @@
 
 	swatchOffsetY = SWATCH_OFFSET  - mousePoint.y;
 
+	draggingSwatch = NO;
 
 	for(i = 0; i<[gradientArray count]; i++) {
 		
@@ -216,23 +226,28 @@
 		
 		if((swatchOffsetX * swatchOffsetX) + (swatchOffsetY * swatchOffsetY) < (SWATCH_RADIUS * SWATCH_RADIUS)) {
 			selectedSwatch = [gradientArray objectAtIndex:i];
+			draggingSwatch = YES;
 			break;
 		}
 		
 	}
 	
 	
-	if(oldSelectedSwatch != selectedSwatch) {
+	if(oldSelectedSwatch != selectedSwatch && selectedSwatch != nil) {
 
 		[(GradientController *)delegate setSelectedColour:selectedSwatch];
 		[self display];
-	}
+	} 
 	
 	
 }
 
 - (void)mouseDragged:(NSEvent *)theEvent { 
 
+	if(draggingSwatch == NO) {
+		return;
+	}
+	
 	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	NSRect frame = [self frame];
 
@@ -246,7 +261,16 @@
 		colourIndex = 255;
 	}
 
-	NSDictionary *selectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0]; 
+	NSMutableDictionary *selectedSwatch;
+	
+	NSArray *selectedObjects = [gradientArrayController selectedObjects];  
+	
+	if(selectedObjects == nil || [selectedObjects count] == 0) {
+		return;		
+	} else {
+		selectedSwatch = [selectedObjects objectAtIndex:0];
+	}	
+	
 	[selectedSwatch willChangeValueForKey:@"index"];
 	[selectedSwatch setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
 	[selectedSwatch didChangeValueForKey:@"index"];
@@ -256,8 +280,20 @@
 } 
 
 - (void)mouseUp:(NSEvent *)theEvent { 
+	
+	if(draggingSwatch == NO) {
+		return;
+	}
 
-	NSDictionary *selectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0]; 
+	NSMutableDictionary *selectedSwatch;
+
+	NSArray *selectedObjects = [gradientArrayController selectedObjects];
+	
+	if(selectedObjects == nil || [selectedObjects count] == 0) {
+		return;		
+	} else {
+		selectedSwatch = [selectedObjects objectAtIndex:0];
+	}	
 	int selectedIndex = [gradientArrayController selectionIndex]; 
 	NSArray *gradientArray = [gradientArrayController arrangedObjects];
 	

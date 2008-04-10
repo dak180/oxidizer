@@ -26,7 +26,7 @@
 	
 	id delegate;
 	
-//	int selectedIndex;
+	BOOL draggingSwatch;
 	
 }
 

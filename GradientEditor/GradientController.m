@@ -149,6 +149,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	
 	[arrayController addObjects:tempArray];
 	[self fillGradientImageRep];
+	[arrayController setSelectionIndex:0];
 	[tempArray release];
 	
 }
@@ -330,13 +331,23 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		NSBitmapImageRep *paletteRep;
 		NSImage *paletteImage;		
 		
-		NSMutableDictionary *colourDictionary1 = [[arrayController arrangedObjects] objectAtIndex:row-1];
-		NSMutableDictionary *colourDictionary2 = [[arrayController arrangedObjects] objectAtIndex:row];
-		
+		NSArray *colourArray = [arrayController arrangedObjects];
+
+		NSMutableDictionary *colourDictionary1 = [colourArray objectAtIndex:row-1];
 		int index1 = [[colourDictionary1 objectForKey:@"index"] intValue];
-		int index2 = [[colourDictionary2 objectForKey:@"index"] intValue];
+
+		NSMutableDictionary *colourDictionary2;   
+		int index2;
 		
-		if( index1 == index2 - 1) {
+		if(row < [colourArray count]) {			
+			colourDictionary2 = [[arrayController arrangedObjects] objectAtIndex:row];
+			index2 = [[colourDictionary2 objectForKey:@"index"] intValue];
+		} else {
+			index2 = index1 + ((255 - index1) * 2);
+		}
+		
+		
+		if( index1 == 255 || index1 == index2 - 1) {
 			return FALSE;
 		}
 		
