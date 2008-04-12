@@ -52,5 +52,6 @@ double *initialisePalettes(void);
 - (void) setPalette:(unsigned int )palette colourArray:(NSArray *)colours  usePalette:(BOOL)useThePaletteNumber;
 - (int)changePaletteAndHidePaletteWindow;
 
++ (void )createXMLForGradient:(NSArray *)cmaps forElement:(NSXMLElement *)gradient;
 
 @end

@@ -79,7 +79,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 - (IBAction)applyNewPalette:(id)sender {
 	NSManagedObject *cmapEntity;
 	
-	[cmap removeObjects:[cmap arrangedObjects]];
+	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
 	int i;
 	
 	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
@@ -102,7 +102,17 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 - (void) setColourArray:(NSArray *)newArray {
 
-	[arrayController removeObjects:[arrayController arrangedObjects]];
+	/*
+	while([[arrayController arrangedObjects] count] > 0) {
+		[arrayController removeObjectAtArrangedObjectIndex:0];
+		
+		NSLog (@"%d", [[arrayController arrangedObjects] count]); 
+		if([[arrayController arrangedObjects] count] == 1) {
+			NSLog (@"%@", [arrayController arrangedObjects]); 			
+		}
+	} */
+	
+	[[arrayController content] removeAllObjects];
 	
 	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:255];
 	
@@ -390,6 +400,20 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	[gradientView display];
 
 	return YES;
+}
+
+- (void) saveGradient {
+	
+	
+	NSXMLElement *root;
+		
+	root = (NSXMLElement *)[NSXMLNode elementWithName:@"gradient"];
+	[root addAttribute:[NSXMLNode attributeWithName:@"version" stringValue:@"1"]];	
+	[PaletteController createXMLForGradient:[arrayController arrangedObjects] forElement:root];
+
+	return;
+	
+	
 }
 
 @end

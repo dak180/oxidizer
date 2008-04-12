@@ -511,6 +511,29 @@ static double *_paletteData = NULL;
 }
 
 
++ (void )createXMLForGradient:(NSArray *)cmaps forElement:(NSXMLElement *)gradient {
+	
+	NSDictionary *colour;
+	NSXMLElement *colourElement;
+	
+    NSEnumerator *enumerator = [cmaps objectEnumerator];
+	
+
+	while((colour = [enumerator nextObject])) {
+		colourElement = (NSXMLElement *)[NSXMLNode elementWithName:@"color"];
+		
+		[colourElement addAttribute:[NSXMLNode attributeWithName:@"index" stringValue:[[colour  objectForKey:@"index"] stringValue]]];	
+		[colourElement addAttribute:[NSXMLNode attributeWithName:@"red" stringValue:[[colour  objectForKey:@"red"] stringValue]]];	
+		[colourElement addAttribute:[NSXMLNode attributeWithName:@"green" stringValue:[[colour  objectForKey:@"green"] stringValue]]];	
+		[colourElement addAttribute:[NSXMLNode attributeWithName:@"blue" stringValue:[[colour  objectForKey:@"blue"] stringValue]]];	
+		
+		[gradient addChild:colourElement];
+		
+	}
+	
+}
+
+
 @end
 
 double *initialisePalettes(void) {
