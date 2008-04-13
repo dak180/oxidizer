@@ -100,18 +100,62 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 }
 
+- (IBAction)newGradient:(id)sender {
+	
+	[[arrayController content] removeAllObjects];
+
+	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:255];
+
+	int i;
+	
+ 	for(i=0; i<2; i++) {
+		
+		NSBitmapImageRep *paletteRep;
+		NSImage *paletteImage;
+		
+		NSMutableDictionary *colour = [NSMutableDictionary dictionaryWithCapacity:6];
+		[colour setObject:[NSNumber numberWithDouble:i] forKey:@"red"];
+		[colour setObject:[NSNumber numberWithDouble:i] forKey:@"green"];
+		[colour setObject:[NSNumber numberWithDouble:i] forKey:@"blue"];
+		[colour setObject:[NSNumber numberWithInt:i*255] forKey:@"index"];
+		
+		paletteRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+															pixelsWide:COLOUR_SQUARE_SIDE
+															pixelsHigh:COLOUR_SQUARE_SIDE
+														 bitsPerSample:8
+													   samplesPerPixel:3
+															  hasAlpha:NO 
+															  isPlanar:NO
+														colorSpaceName:NSDeviceRGBColorSpace
+														  bitmapFormat:0
+														   bytesPerRow:3*256
+														  bitsPerPixel:24]; 
+		
+		paletteImage = [[NSImage alloc] init];
+		[paletteImage addRepresentation:paletteRep];
+		
+		[colour setObject:paletteRep forKey:@"bitmapRep"];
+		[colour setObject:paletteImage forKey:@"image"];
+		
+		[PaletteController fillColour:colour forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
+		
+		[tempArray addObject:colour];
+		
+		[paletteImage release];
+		[paletteRep release];
+		
+	}   	
+	
+	[arrayController addObjects:tempArray];
+	[self fillGradientImageRep];
+	[arrayController setSelectionIndex:0];
+	[tempArray release];
+	
+}
+
 - (void) setColourArray:(NSArray *)newArray {
 
-	/*
-	while([[arrayController arrangedObjects] count] > 0) {
-		[arrayController removeObjectAtArrangedObjectIndex:0];
-		
-		NSLog (@"%d", [[arrayController arrangedObjects] count]); 
-		if([[arrayController arrangedObjects] count] == 1) {
-			NSLog (@"%@", [arrayController arrangedObjects]); 			
-		}
-	} */
-	
+	/* this appears to be a safe way yo remove everything */
 	[[arrayController content] removeAllObjects];
 	
 	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:255];

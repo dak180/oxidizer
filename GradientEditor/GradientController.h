@@ -32,6 +32,8 @@
 - (IBAction)showWindow:(id)sender;
 - (IBAction)editPalette:(id)sender;
 - (IBAction)applyNewPalette:(id)sender;
+- (IBAction)newGradient:(id)sender;
+
 
 - (void) fillGradientImageRep; 
 
