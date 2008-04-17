@@ -258,16 +258,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		[Genome createXMLForCMap:newCmaps forElement:genome];
 		[newCmaps release];
 		
-/*		
-		if([cmaps count] < 256) {
-			NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
-			[newCmaps retain];
-			[Genome createXMLForCMap:newCmaps forElement:genome];
-			[newCmaps release];
-		} else {
-			[Genome createXMLForCMap:cmaps forElement:genome];
-		}
-*/		
+	
 	} else {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"palette" stringValue:[[genomeEntity valueForKey:@"palette"] stringValue]]];
 	}

@@ -84,10 +84,17 @@
 
 - (IBAction)rotationChanged:(id)sender {
 	
+	float rotation;
 	
-	float rotation = radians(-[rotate floatValue]);
-
-	float cosRotation = cos(rotation);
+	NSSegmentedCell *cellButton = [sender selectedCell];
+	
+	if([cellButton selectedSegment] == 0) {
+		rotation = radians(-[rotate floatValue]);
+	} else {
+		rotation = radians([rotate floatValue]);		
+	}
+		
+    float cosRotation = cos(rotation);
 	float sinRotation = sin(rotation);
 	
 	CGFloat tmpA  = a;
