@@ -851,12 +851,10 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 		if(runResult == NSOKButton && [savePanel filename] != nil) {
 			filename = [savePanel filename];
-			[filename retain];
+			[self setCurrentFilename:[savePanel filename]];
 		} else {
 			return;
 		}
-		
-		[self setCurrentFilename:filename];
 	}
 
 	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
@@ -888,7 +886,6 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		
 	}
 
-	[filename release];
 	return;
 }
 
@@ -1062,10 +1059,11 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 - (void) setCurrentFilename:(NSString *)filename {
 	
-	[filename retain];
+	if(filename != nil) {
+		[filename retain];		
+	}
 	
 	if(_currentFilename != nil) {
-		
 		[_currentFilename release];
 	}
 	
