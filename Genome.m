@@ -287,10 +287,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	for(i=0; i < old_num_xforms; i++) {
 		
 		[genome addChild:[Genome createXMLForXFormFromEntity:[xforms objectAtIndex:i] fromContext:moc]];
-		if([[[xforms objectAtIndex:i] valueForKey:@"final_xform"] boolValue] == YES) {
-//			newGenome->final_xform_index = i+newGenome->num_xforms;
-		}
-		
+	
 	}
 	
 	
@@ -311,10 +308,10 @@ NSString *variationName[1+flam3_nvariations] = {
 	} else {
 
 		xform = [NSXMLElement elementWithName:@"xform"];
+		[xform addAttribute:[NSXMLNode attributeWithName:@"weight" stringValue:[[xformEntity valueForKey:@"density"] stringValue]]];
 	
 	}
 		
-	[xform addAttribute:[NSXMLNode attributeWithName:@"weight" stringValue:[[xformEntity valueForKey:@"density"] stringValue]]];
 	
 
 	[xform addAttribute:[NSXMLNode attributeWithName:@"coefs" 
