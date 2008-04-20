@@ -273,8 +273,19 @@
 	NSData *data = [flam3Error availableData];
 	NSMutableString *errorMessage = [NSMutableString stringWithCapacity:1000];
 	
+	double progressFactor = 1.0;
+	double etaFactor = 1.0;
 	
-	double progressValue;	
+	double progressValue = 0.0;	
+
+	[taskFrameIndicator setDoubleValueInMainThread:[NSNumber numberWithDouble:progressValue]];
+	[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:@"" waitUntilDone:NO];
+	
+	double currentStrip = 1.0;
+	double stripCount = 1.0;
+	
+    double stripProgress = 0.0;
+    double totalPercent = 0.0;
 	
 	while([data length] > 0) {
 		NSString *string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
@@ -283,14 +294,50 @@
 		
 		if([string hasPrefix:@"\rchaos: "]) {
 			
-			progressValue = [[string substringFromIndex:7] floatValue];
-
+			stripProgress = [[string substringFromIndex:7] floatValue];
+			progressValue = (stripProgress + totalPercent) * progressFactor;
+									
 			[taskFrameIndicator setDoubleValueInMainThread:[NSNumber numberWithDouble:progressValue]];
+			
 		} else if([string hasPrefix:@"  ETA: "]) {
 			
-			[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[string substringFromIndex:6] waitUntilDone:NO];
+			progressValue = [[string substringFromIndex:7] floatValue];
 
-		}
+			if([string hasSuffix:@"minutes"]) {
+				progressValue *= 60.0;
+			}
+
+			/* if its the ETA for the last / only stip leave it alone */
+			if(stripCount - currentStrip > 1) {
+				
+				double percentPerSecond = (100 - stripProgress) / progressValue;
+				double remainingProgress = (stripCount * 100) - (totalPercent + stripProgress);
+				progressValue = remainingProgress / percentPerSecond;
+
+			}
+
+			
+			if(progressValue > 60) {
+				[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithFormat:@"%.1f minutes", progressValue/60.0] waitUntilDone:NO];
+			} else {
+				[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithFormat:@"%.0f seconds", progressValue] waitUntilDone:NO];				
+			}
+			
+
+		} else if([string hasPrefix:@"strip = "]) {
+
+			NSArray *stripDetails = [[string substringFromIndex:8] componentsSeparatedByString:@"/"];	
+
+			currentStrip = [[stripDetails objectAtIndex:0] doubleValue];
+			stripCount = [[stripDetails objectAtIndex:1] doubleValue];
+			progressFactor = 1.0 / stripCount;
+			etaFactor = stripCount / currentStrip;
+			
+			totalPercent = (currentStrip - 1) * 100.0;
+			
+		} else if([string hasPrefix:@"\rdensity"]){
+			[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[string substringFromIndex:1] waitUntilDone:NO];				
+		}	
 													
 		
 		if([errorMessage length] > 256) {

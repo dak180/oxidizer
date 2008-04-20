@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 63 tasks, 227 threads, 2 processors
-Load average: 1.68, Mach factor: 0.78
+Default processor set: 66 tasks, 261 threads, 2 processors
+Load average: 1.58, Mach factor: 0.82
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -459,33 +459,6 @@ configure:10025: checking whether to build shared libraries
 configure:10046: result: yes
 configure:10049: checking whether to build static libraries
 configure:10053: result: yes
-configure:10145: creating libtool
-configure:10733: checking for ld used by g++
-configure:10800: result: /Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld
-configure:10809: checking if the linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) is GNU ld
-configure:10824: result: no
-configure:10875: checking whether the g++ linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
-configure:11809: result: yes
-configure:11827: g++ -c -g -O2  conftest.cpp >&5
-configure:11830: $? = 0
-configure:11949: checking for g++ option to produce PIC
-configure:12223: result: -fno-common
-configure:12231: checking if g++ PIC flag -fno-common works
-configure:12249: g++ -c -g -O2  -fno-common -DPIC conftest.cpp >&5
-configure:12253: $? = 0
-configure:12266: result: yes
-configure:12294: checking if g++ static flag -static works
-configure:12322: result: no
-configure:12332: checking if g++ supports -c -o file.o
-configure:12353: g++ -c -g -O2  -o out/conftest2.o conftest.cpp >&5
-configure:12357: $? = 0
-configure:12379: result: yes
-configure:12405: checking whether the g++ linker (/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld) supports shared libraries
-configure:12430: result: yes
-configure:12497: checking dynamic linker characteristics
-configure:13085: result: darwin9.2.2 dyld
-configure:13094: checking how to hardcode library paths into programs
-configure:13119: result: immediate
 configure:19259: checking for ANSI C header files
 configure:19423: result: yes
 configure:19433: checking for an ANSI C-conforming const
@@ -634,23 +607,15 @@ lt_cv_file_magic_test_file=
 lt_cv_ld_reload_flag=-r
 lt_cv_objdir=.libs
 lt_cv_path_LD=/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld
-lt_cv_path_LDCXX=/Developer/usr/libexec/gcc/i686-apple-darwin9/4.0.1/ld
 lt_cv_path_NM='/Developer/usr/bin/nm -p'
 lt_cv_path_SED=/usr/bin/sed
 lt_cv_prog_compiler_c_o=yes
-lt_cv_prog_compiler_c_o_CXX=yes
 lt_cv_prog_compiler_rtti_exceptions=no
 lt_cv_prog_gnu_ld=no
-lt_cv_prog_gnu_ldcxx=no
 lt_cv_sys_global_symbol_pipe='sed -n -e '\''s/^.*[ 	]\([BCDEGRST][BCDEGRST]*\)[ 	][ 	]*_\([_A-Za-z][_A-Za-z0-9]*\)$/\1 _\2 \2/p'\'''
 lt_cv_sys_global_symbol_to_c_name_address='sed -n -e '\''s/^: \([^ ]*\) $/  {\"\1\", (lt_ptr) 0},/p'\'' -e '\''s/^[BCDEGRST] \([^ ]*\) \([^ ]*\)$/  {"\2", (lt_ptr) \&\2},/p'\'''
 lt_cv_sys_global_symbol_to_cdecl='sed -n -e '\''s/^. .* \(.*\)$/extern int \1;/p'\'''
 lt_cv_sys_max_cmd_len=196608
-lt_lt_cv_prog_compiler_c_o='"yes"'
-lt_lt_cv_prog_compiler_c_o_CXX='"yes"'
-lt_lt_cv_sys_global_symbol_pipe='"sed -n -e '\''s/^.*[ 	]\\([BCDEGRST][BCDEGRST]*\\)[ 	][ 	]*_\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 _\\2 \\2/p'\''"'
-lt_lt_cv_sys_global_symbol_to_c_name_address='"sed -n -e '\''s/^: \\([^ ]*\\) \$/  {\\\"\\1\\\", (lt_ptr) 0},/p'\'' -e '\''s/^[BCDEGRST] \\([^ ]*\\) \\([^ ]*\\)\$/  {\"\\2\", (lt_ptr) \\&\\2},/p'\''"'
-lt_lt_cv_sys_global_symbol_to_cdecl='"sed -n -e '\''s/^. .* \\(.*\\)\$/extern int \\1;/p'\''"'
 
 ## ----------------- ##
 ## Output variables. ##
