@@ -21,7 +21,7 @@
 	GenePoolController *gpc;
 	GenePoolNibController *gpnc;
 	RectangleNibController *rnc;
-	GradientNibController *gnc;
+//	GradientNibController *gnc;
 	lua_State* interpreter;
 	
 }
@@ -46,7 +46,7 @@
 - (IBAction)showBreedingWindow:(id)sender;
 - (IBAction)showGenePoolWindow:(id)sender;
 - (IBAction)showRectangleWindow:(id)sender;
-- (IBAction)showGradientWindow:(id)sender;
+//- (IBAction)showGradientWindow:(id)sender;
 - (IBAction)newFlame:(id)sender;
 - (IBAction)renderStill:(id)sender;
 - (IBAction)renderMovie:(id)sender;

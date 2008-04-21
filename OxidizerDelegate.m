@@ -323,9 +323,6 @@ void print_stack(lua_State* interpreter){
 	
 	[ffm openFile:sender]; 
 	
-	
-	
-	
 }
 
 - (IBAction)saveFlam3:(id)sender {
@@ -367,7 +364,7 @@ void print_stack(lua_State* interpreter){
 	[rnc showRectangleWindow:sender]; 
 }
 
-
+/*
 - (IBAction)showGradientWindow:(id)sender {
 	
 	if(gnc == nil) {
@@ -377,7 +374,7 @@ void print_stack(lua_State* interpreter){
 	
 	[gnc showGradientWindow:sender]; 
 }
-
+*/
 
 - (IBAction)newFlame:(id)sender {
 	[ffm newFlame];
