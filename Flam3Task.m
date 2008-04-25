@@ -287,6 +287,9 @@
     double stripProgress = 0.0;
     double totalPercent = 0.0;
 	
+	time_t start = time(NULL);
+	time_t now;
+	
 	while([data length] > 0) {
 		NSString *string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
 		
@@ -296,32 +299,19 @@
 			
 			stripProgress = [[string substringFromIndex:7] floatValue];
 			progressValue = (stripProgress + totalPercent) * progressFactor;
+			
+			now = time(NULL);
+			
+			double eta = (now - start)  / progressValue;
+			eta *= (100.0 - progressValue);
+			
+			if(eta > 60 && progressValue > 0.0 ) {
+				[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithFormat:@"%.1f minutes", eta/60.0] waitUntilDone:NO];
+			} else if(progressValue > 0) {
+				[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithFormat:@"%.0f seconds", eta] waitUntilDone:NO];				
+			}
 									
 			[taskFrameIndicator setDoubleValueInMainThread:[NSNumber numberWithDouble:progressValue]];
-			
-		} else if([string hasPrefix:@"  ETA: "]) {
-			
-			progressValue = [[string substringFromIndex:7] floatValue];
-
-			if([string hasSuffix:@"minutes"]) {
-				progressValue *= 60.0;
-			}
-
-			/* if its the ETA for the last / only stip leave it alone */
-			if(stripCount - currentStrip > 1) {
-				
-				double percentPerSecond = (100 - stripProgress) / progressValue;
-				double remainingProgress = (stripCount * 100) - (totalPercent + stripProgress);
-				progressValue = remainingProgress / percentPerSecond;
-
-			}
-
-			
-			if(progressValue > 60) {
-				[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithFormat:@"%.1f minutes", progressValue/60.0] waitUntilDone:NO];
-			} else {
-				[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[NSString stringWithFormat:@"%.0f seconds", progressValue] waitUntilDone:NO];				
-			}
 			
 
 		} else if([string hasPrefix:@"strip = "]) {
