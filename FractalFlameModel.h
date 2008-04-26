@@ -24,6 +24,7 @@
 #import "PaletteController.h"
 #import "QTKit/QTKit.h"
 #import "QuickTimeController.h"
+#import "ProgressIndicatorWithCancel.h"
 
 @interface FractalFlameModel : NSObjectController
 {
@@ -32,7 +33,6 @@
     IBOutlet PaletteController *palette;
     IBOutlet NSTableView *progessTable;
     IBOutlet NSTableView *flameTable;
-    IBOutlet NSWindow *progressWindow;
     IBOutlet NSWindow *preferencesWindow;
     IBOutlet NSWindow *oxidizerWindow;
     IBOutlet NSWindow *previewWindow;
@@ -43,8 +43,8 @@
     IBOutlet NSImageView *previewView;
 
     IBOutlet NSWindow *taskProgressWindow;
-    IBOutlet NSProgressIndicator *taskAllFramesIndicator;
-    IBOutlet NSProgressIndicator *taskFrameIndicator;
+    IBOutlet ProgressIndicatorWithCancel *taskAllFramesIndicator;
+    IBOutlet ProgressIndicatorWithCancel *taskFrameIndicator;
     IBOutlet NSTextField *etaTextField;
 	
 	
@@ -118,8 +118,6 @@
 //- (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) previewCurrentFlameInThread:(NSArray *)genomes;
 - (void) AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
-- (void) hideProgressWindow;
-- (void) initProgressController:(NSNumber *)threadsCount;
 - (void) saveFlam3WithThumbnail;
 - (void) saveAsFlam3WithThumbnail;
 
@@ -141,6 +139,7 @@
 
 - (int)runFlam3StillRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary;
 - (int)runFlam3MovieFrameRenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary; 
+- (IBAction)cancelTask:(id)sender; 
 
 - (void)createGenomesFromXMLFile:(NSString *)xmlFileName inContext:(NSManagedObjectContext *)thisMoc;
 - (void)appendGenomesFromXMLFile:(NSString *)xmlFileName fromTime:(int)time inContext:(NSManagedObjectContext *)thisMoc;

@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 58 tasks, 214 threads, 2 processors
-Load average: 0.84, Mach factor: 1.19
+Default processor set: 62 tasks, 322 threads, 2 processors
+Load average: 1.66, Mach factor: 0.67
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -494,7 +494,7 @@ configure:19601: checking malloc.h usability
 configure:19618: gcc -c -O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc  conftest.c >&5
 conftest.c:55:20: error: malloc.h: No such file or directory
 conftest.c:55:20: error: malloc.h: No such file or directory
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//cc9hTiSa.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccDACjLq.out
 configure:19624: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -609,7 +609,8 @@ configure:20028: $? = 0
 configure:20044: result: yes
 configure:20212: checking for memset
 configure:20268: gcc -o conftest -O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc  -arch i386 -arch ppc conftest.c  >&5
-Binary file conftest.er1 matches
+conftest.c:48: warning: conflicting types for built-in function 'memset'
+conftest.c:48: warning: conflicting types for built-in function 'memset'
 configure:20274: $? = 0
 configure:20292: result: yes
 configure:20310: checking for pow
@@ -644,7 +645,7 @@ pnggccrd.c:376: error: assignment of read-only variable '_mask48_3'
 pnggccrd.c:377: error: assignment of read-only variable '_mask48_2'
 pnggccrd.c:378: error: assignment of read-only variable '_mask48_1'
 pnggccrd.c:379: error: assignment of read-only variable '_mask48_0'
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccGIqJa0.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccBDuxLw.out
 configure:20582: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */

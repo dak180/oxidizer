@@ -7,7 +7,6 @@
 //
 
 #import "Flam3Task.h"
-#import "NSProgressIndicatorUpdateOnMainThread.h"
 
 @implementation Flam3Task
 
@@ -231,7 +230,7 @@
 
 
 + (int)runFlam3RenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
-									   usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator 
+									   usingTaskFrameIndicator:(ProgressIndicatorWithCancel *)taskFrameIndicator 
 									   usingETALabel:(NSTextField *)etaLabel {
 	
 	
@@ -329,6 +328,12 @@
 			[etaLabel performSelectorOnMainThread:@selector(setStringValue:) withObject:[string substringFromIndex:1] waitUntilDone:NO];				
 		}	
 													
+		if([taskFrameIndicator shouldCancel]) {
+			
+			[task terminate];
+			break;
+			
+		}
 		
 		if([errorMessage length] > 256) {
 			[errorMessage setString:string];
@@ -345,7 +350,7 @@
 		
 	int taskStatus = [task terminationStatus];
 	
-	if(taskStatus != 0) {
+	if(taskStatus != 0 && [taskFrameIndicator shouldCancel] == NO) {
 		
 		NSLog(@"flam3 Error message: %@", errorMessage);		
 
@@ -357,8 +362,11 @@
 									 informativeTextWithFormat:errorMessage];
 		[finishedPanel runModal];	
 				
-	}
+	} 
 	
+	[taskFrameIndicator setCancel:NO];
+
+		
 	[flam3Output closeFile];	
 	[flam3Error closeFile];	
 		
@@ -374,7 +382,7 @@
 
 
 + (int)runFlamAnimateAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
-	                                      usingTaskFrameIndicator:(NSProgressIndicator *)taskFrameIndicator
+	                                      usingTaskFrameIndicator:(ProgressIndicatorWithCancel *)taskFrameIndicator
 			                              usingETALabel:(NSTextField *)etaLabel {
 	
 	NSTask *task;
@@ -426,6 +434,13 @@
 			
 		}
 		
+		if([taskFrameIndicator shouldCancel]) {
+			
+			[task terminate];
+			break;
+			
+		}
+		
 		[errorMessage appendString:string];
 		[string release];
 		data = [flam3Error availableData];
@@ -435,7 +450,7 @@
 	
 	int taskStatus = [task terminationStatus];
 	
-	if(taskStatus != 0) {
+	if(taskStatus != 0 && [taskFrameIndicator shouldCancel] == NO) {
 		
 		
 		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render failed!" 
@@ -446,6 +461,8 @@
 		[finishedPanel runModal];	
 		
 	}
+	
+	[taskFrameIndicator setCancel:NO];
 	
 	[flam3Output closeFile];	
 	[flam3Error closeFile];	

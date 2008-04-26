@@ -22,7 +22,6 @@
 #import "Flam3Task.h"
 #import "Genome.h"
 #import "GreaterThanThreeTransformer.h"
-#import "ProgressDetails.h"
 #import "QuickTime/QuickTime.h"
 
 #include <sys/types.h>
@@ -56,6 +55,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		_currentFilename = nil;
 		
 		[NSBundle loadNibNamed:@"FileViews" owner:self];
+		[NSBundle loadNibNamed:@"TaskProgress" owner:self];
 
 		
 		GreaterThanThreeTransformer *gttt;
@@ -908,40 +908,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	return;
 }
 
-//-(void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep {
 
-//	[qtController saveNSBitmapImageRep:rep]; 
-//}
-
-
-
-
-
-- (void)hideProgressWindow {
-	
-	[progressWindow setIsVisible:NO];
-	
-}
-
-
-- (void)initProgressController:(NSNumber *)threadsCount {
-	
-	int i, threads;
-	
-	threads = [threadsCount intValue];
-	
-	[progressController removeObjects:[progressController arrangedObjects]];
-	
-	
-	for(i=0; i<threads; i++) {
-		ProgressDetails *progressDict = [[ProgressDetails alloc] init];
-		
-		[progressDict setThread:[NSNumber numberWithInt:i]]; 
-		[progressDict setProgress:[NSNumber numberWithDouble:0.0]]; 
-		
-		[progressController insertObject:progressDict atArrangedObjectIndex:i];
-	}	
-}
 
 - (void) newFlame {
 	
@@ -1359,6 +1326,11 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 }
 
+- (IBAction)cancelTask:(id)sender {
+	
+	[taskFrameIndicator setCancel:TRUE];
+	
+}
 
 + (BOOL)useProgressBar
 {
