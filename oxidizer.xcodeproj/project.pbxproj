@@ -48,7 +48,6 @@
 		A4C5BDCB0DA91D6D002BE1C2 /* libflam3.0.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */; };
 		A4C6CDE60DC3708600E2EEFB /* ProgressIndicatorWithCancel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */; };
 		A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */; };
-		A4C6CE2F0DC3735400E2EEFB /* TaskProgressNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C6CE2E0DC3735400E2EEFB /* TaskProgressNibController.m */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
 		A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
 		A4D6FA2D09B1E25200096036 /* GenomeManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D6FA2C09B1E25200096036 /* GenomeManagedObject.m */; };
@@ -148,8 +147,6 @@
 		A4C6CDE40DC3708600E2EEFB /* ProgressIndicatorWithCancel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgressIndicatorWithCancel.h; path = ProgressWindow/ProgressIndicatorWithCancel.h; sourceTree = "<group>"; };
 		A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProgressIndicatorWithCancel.m; path = ProgressWindow/ProgressIndicatorWithCancel.m; sourceTree = "<group>"; };
 		A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = TaskProgress.nib; path = ProgressWindow/TaskProgress.nib; sourceTree = "<group>"; };
-		A4C6CE2D0DC3735400E2EEFB /* TaskProgressNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskProgressNibController.h; sourceTree = "<group>"; };
-		A4C6CE2E0DC3735400E2EEFB /* TaskProgressNibController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TaskProgressNibController.m; sourceTree = "<group>"; };
 		A4D3633D09AB9CE20078025F /* genome.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = genome.xcdatamodel; sourceTree = "<group>"; };
 		A4D604A909658A6C0001CD1D /* PaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PaletteController.h; sourceTree = "<group>"; };
 		A4D604AA09658A6C0001CD1D /* PaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PaletteController.m; sourceTree = "<group>"; };
@@ -379,8 +376,6 @@
 			children = (
 				A4C6CDE40DC3708600E2EEFB /* ProgressIndicatorWithCancel.h */,
 				A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */,
-				A4C6CE2D0DC3735400E2EEFB /* TaskProgressNibController.h */,
-				A4C6CE2E0DC3735400E2EEFB /* TaskProgressNibController.m */,
 			);
 			name = ProgressWindow;
 			sourceTree = "<group>";
@@ -515,7 +510,6 @@
 				A4BE79470DA6DD3700160702 /* GradientController.m in Sources */,
 				A4BE79480DA6DD3700160702 /* GradientNibController.m in Sources */,
 				A4C6CDE60DC3708600E2EEFB /* ProgressIndicatorWithCancel.m in Sources */,
-				A4C6CE2F0DC3735400E2EEFB /* TaskProgressNibController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
