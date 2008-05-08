@@ -27,7 +27,6 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
-
 int printProgress(void *nslPtr, double progress, int stage);
 
 
@@ -45,8 +44,41 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"last_frame"];
 
 
-		defaults = [NSUserDefaults standardUserDefaults];
+		unsigned int cpuCount ;
+		size_t len = sizeof(cpuCount);
+		static int mib[2] = { CTL_HW, HW_NCPU };
 		
+		NSString *threads;
+		
+		if(sysctl(mib, 2,  &cpuCount, &len, NULL, 0) == 0 && len ==  sizeof(cpuCount)) {
+			threads = [NSString stringWithFormat:@"%ld", cpuCount];
+		} else {
+			threads = @"1";
+		}  
+		
+		defaults = [NSUserDefaults standardUserDefaults];
+
+		NSArray *paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
+		
+		NSString *applicationSupportFolder = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Oxidizer"];
+		[[NSFileManager defaultManager] createDirectoryAtPath:applicationSupportFolder attributes:nil];
+		
+		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+									NSUserName(),  @"nick",
+									@"http://oxidizer.sf.net", @"url",
+									@"Made by Oxidizer", @"comment",
+									threads, @"threads",
+									[NSNumber numberWithBool:NO], @"save_thumbnails",
+									[NSNumber numberWithBool:NO], @"show_render",
+									@"1", @"qs",
+									@"1", @"ss",
+									@"PAL 4:3", @"aspect",
+									@"Double", @"buffer_type",
+									[NSNumber numberWithBool:NO], @"use_alpha",
+									[NSNumber numberWithBool:YES], @"float_preview",
+									applicationSupportFolder, @"xml_folder",
+									nil]
+		 ];
 	
 		_saveThumbnail = [defaults boolForKey:@"save_thumbnails"];
 		
@@ -78,7 +110,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		coordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[NSManagedObjectModel mergedModelFromBundles:nil]]; 
 		
 		[moc setPersistentStoreCoordinator: coordinator];
-		
+
+	/*	
 		NSString *STORE_TYPE = NSInMemoryStoreType;
 		//    NSString *STORE_FILENAME = @"flam3.genome";
 		
@@ -91,6 +124,21 @@ int printProgress(void *nslPtr, double progress, int stage);
 														  URL:nil
 													  options:nil
 														error:&error];
+*/
+
+		NSError *error;
+		
+		NSString *appFolder = [defaults stringForKey:@"xml_folder"];
+		
+				
+		NSLog(@"appFolder %@", [defaults dictionaryRepresentation]);
+		NSURL *url = [NSURL fileURLWithPath: [appFolder stringByAppendingPathComponent: @"Oxidizer.sqliteO2"]];
+		
+		id newStore = [coordinator addPersistentStoreWithType: NSSQLiteStoreType
+												configuration: nil
+														  URL: url
+													  options: nil	
+														error: &error];        		
 		
 		if (newStore == nil) {
 			NSLog(@"Store Configuration Failure\n%@",

@@ -373,7 +373,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	[sort release];
 	[fetch release];
 	
-	
+	[err release];
 	
 	unsigned int i;
 	
@@ -564,10 +564,12 @@ NSString *variationName[1+flam3_nvariations] = {
 		oldRootElement = [oldDoc rootElement];
 		[oldRootElement detach];
 		[newEditElement addChild:oldRootElement];
+		[oldDoc release];
+
 	}
 
 	[genomeElement addChild:newEditElement];
-	
+	[newEditElement release];
 	return;
 }
 
@@ -579,8 +581,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	NSError *error;
 	
-	NSLog(@"%@", @"called createGenomeEntitiesFromXML");
-	NSLog(@"%@", [[NSString alloc] initWithData:xml encoding:NSUTF8StringEncoding]);
+//	NSLog(@"%@", @"called createGenomeEntitiesFromXML");
+//	NSLog(@"%@", [[NSString alloc] initWithData:xml encoding:NSUTF8StringEncoding]);
 	
 	
 	NSXMLDocument *doc = [[NSXMLDocument alloc] initWithData:xml options:0 error:&error];
@@ -603,6 +605,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	while ((flameElement = [flameEnumerator nextObject])) {
 		[genomes addObject:[Genome createGenomeEntitiesFromElement:flameElement inContext:moc]]; 
 	}
+	
+	[doc release];
 		
 	[genomes autorelease];
 	return genomes;
@@ -1057,7 +1061,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		
 	}
 
-	
+	[variationSet autorelease];
 	return variationSet;
 	
 }
