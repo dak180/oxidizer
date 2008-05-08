@@ -251,6 +251,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		cmaps = [moc executeFetchRequest:fetch error:&err];
 		[sort release];
 		[fetch release];	
+		[err release];
 		/* use the cmap */
 
 		NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
@@ -281,6 +282,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	xforms = [moc executeFetchRequest:fetch error:&err];
 	[sort release];
 	[fetch release];
+	[err release];
 	
 	int old_num_xforms = [xforms count];
 	
@@ -887,7 +889,12 @@ NSString *variationName[1+flam3_nvariations] = {
 	[newGenomeEntity setValue:newColours forKey:@"cmap"];
 	[newGenomeEntity setValue:newTransforms forKey:@"xforms"];
 	
-	[newGenomeEntity autorelease];
+	if(newColours != nil) {
+		[newColours release];
+	}
+	
+	[newTransforms release];
+	[newGenomeEntity release];
 	
 	return newGenomeEntity;
 	
@@ -1612,6 +1619,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		cmaps = [moc executeFetchRequest:fetch error:&err];
 		[sort release];
 		[fetch release];	
+		[err release];
 	//	 use the cmap 
 		
 		NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
@@ -1652,6 +1660,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	xforms = [moc executeFetchRequest:fetch error:&err];
 	[sort release];
 	[fetch release];
+	[err release];
 	
 	int old_num_xforms = [xforms count];
 	
@@ -1755,9 +1764,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	variations = [moc executeFetchRequest:fetch error:&err];
 	[sort release];
-	[fetch release];
-	
-	
+	[fetch release];	
+	[err release];
+
 	
 	unsigned int i;
 	
@@ -2157,6 +2166,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	[newGenomeEntity setValue:[edits objectForKey:@"nick"] forKey:@"nick"];
 	[newGenomeEntity setValue:[edits objectForKey:@"url"] forKey:@"url"];
 	[newGenomeEntity setValue:[edits objectForKey:@"comm"] forKey:@"comment"];
+	
 	[previousEdits release];
 	
 	
@@ -2308,7 +2318,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	}
 	
 	
-	return variationSet;
+	return [variationSet autorelease];
 	
 }
 
