@@ -20,9 +20,10 @@
 #import "FractalFlameModel.h"
 #import "BreedingController.h"
 #import "Flam3Task.h"
-#import "Genome.h"
 #import "GreaterThanThreeTransformer.h"
 #import "QuickTime/QuickTime.h"
+#import "Genome/Genome.h"
+#import "Genome/GenomeXMLParser.h"
 
 #include <sys/types.h>
 #include <sys/sysctl.h>
@@ -111,6 +112,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		[moc setPersistentStoreCoordinator: coordinator];
 
+		
 	/*	
 		NSString *STORE_TYPE = NSInMemoryStoreType;
 		//    NSString *STORE_FILENAME = @"flam3.genome";
@@ -1206,7 +1208,21 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 - (void) createGenomesFromXMLFile:(NSString *)xmlFileName inContext:(NSManagedObjectContext *)thisMoc {
 	
 
-	NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:xmlFileName] inContext:thisMoc]; 
+//	NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:xmlFileName] inContext:thisMoc]; 
+
+    NSURL *xmlURL = [NSURL fileURLWithPath:xmlFileName];
+    NSXMLParser *newParser = [[NSXMLParser alloc] initWithContentsOfURL:xmlURL];
+	GenomeXMLParser *gxp = [[GenomeXMLParser alloc] init];
+							  
+	[newParser setDelegate:gxp];
+	[gxp setManangedObjectContext:thisMoc];
+	[newParser parse]; // return value not used
+	
+	NSArray *newGenomes = [gxp getGenomes];
+	[newGenomes retain];
+	
+	[gxp release];
+	[newParser release];
 	
 	if ([newGenomes count] == 0) {
 
@@ -1226,6 +1242,8 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[moc performSelectorOnMainThread:@selector(save:) withObject:nil waitUntilDone:YES];
 	
 	[self generateAllThumbnailsForGenomes:newGenomes];
+	
+	[newGenomes release];
 	
 	
 }

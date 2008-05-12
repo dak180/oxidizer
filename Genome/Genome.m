@@ -605,7 +605,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	
 	while ((flameElement = [flameEnumerator nextObject])) {
-		[genomes addObject:[Genome createGenomeEntitiesFromElement:flameElement inContext:moc]]; 
+//		[genomes addObject:[Genome createGenomeEntitiesFromElement:flameElement inContext:moc]]; 
 	}
 	
 	[doc release];
@@ -2639,6 +2639,645 @@ NSString *variationName[1+flam3_nvariations] = {
 	return;
 	
 }
+
+
++ (NSManagedObject *)createGenomeEntityFromAttributeDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc {
+	
+	NSManagedObject *newGenomeEntity = [Genome createDefaultGenomeEntityInContext:moc];
+	NSString *tempAttribute;
+	
+	
+	tempAttribute = [genome objectForKey:@"name"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:tempAttribute forKey:@"name"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"parent"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:tempAttribute forKey:@"parent"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"time"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"time"];
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"order"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"size"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO] forKey:@"aspect_lock"];
+		NSArray *split = [tempAttribute componentsSeparatedByString:@" "];
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[split objectAtIndex:0] intValue]] forKey:@"width"];
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[split objectAtIndex:1] intValue]] forKey:@"height"];
+	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES] forKey:@"aspect_lock"];
+	}		
+	
+	tempAttribute = [genome objectForKey:@"scale"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"scale"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"center"];
+	if(tempAttribute != nil) {
+		NSArray *split = [tempAttribute componentsSeparatedByString:@" "];
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:0] doubleValue]] forKey:@"centre_x"];
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:1] doubleValue]] forKey:@"centre_y"];
+	}		
+	
+	
+	tempAttribute = [genome objectForKey:@"scale"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"scale"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"zoom"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"zoom"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"oversample"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"oversample"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"quality"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"quality"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"passes"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"batches"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"temporal_samples"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"jitter"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"estimator_radius"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"de_max_filter"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"estimator_minimum"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"de_min_filter"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"estimator_curve"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"de_alpha"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"gamma"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"gamma"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"gamma_threshold"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"gamma_threshold"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"background"];
+	if(tempAttribute != nil) {
+		NSArray *split = [tempAttribute componentsSeparatedByString:@" "];
+		double red, green, blue;
+		red =   [[split objectAtIndex:0] doubleValue];
+		green = [[split objectAtIndex:1] doubleValue];
+		blue =  [[split objectAtIndex:2] doubleValue];
+		//		red   /= 255;
+		//		green /= 255;
+		//		blue  /= 255;
+		
+		[newGenomeEntity setValue:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:1.0] forKey:@"background"];
+		
+	}
+	
+	tempAttribute = [genome objectForKey:@"hue"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"hue"];
+	}
+	tempAttribute = [genome objectForKey:@"vibrancy"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"vibrancy"];
+	}
+	tempAttribute = [genome objectForKey:@"brightness"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"brightness"];
+	}	
+	
+	tempAttribute = [genome objectForKey:@"rotate"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"rotate"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"contrast"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"contrast"];
+	}
+	
+	
+	tempAttribute = [genome objectForKey:@"interpolation"];
+	if([tempAttribute isEqualToString:@"smooth"]) {
+		[newGenomeEntity setValue:[NSNumber numberWithInt:1]  forKey:@"interpolation"];
+	} else {
+		[newGenomeEntity setValue:[NSNumber numberWithInt:0]  forKey:@"interpolation"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"motion_exponent"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"motion_exp"];
+	}
+	
+	
+	tempAttribute = [genome objectForKey:@"filter"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]]  forKey:@"spatial_filter_radius"];
+	}
+	
+	tempAttribute = [genome objectForKey:@"filter_shape"];
+	if(tempAttribute != nil) {
+		
+		NSString *spatial_filter_func = tempAttribute;
+		
+		if ([spatial_filter_func isEqualToString:@"bspline"]) {
+			[newGenomeEntity setValue:@"B-Spline"  forKey:@"spatial_filter_func"];
+		} else {
+			[newGenomeEntity setValue:[spatial_filter_func capitalizedString]  forKey:@"spatial_filter_func"];		
+		}
+		
+	}
+	
+	tempAttribute = [genome objectForKey:@"palette"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"palette"];
+	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"use_palette"];
+	} else {
+	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"use_palette"];		
+	}
+	
+	[newGenomeEntity autorelease];
+	
+	return newGenomeEntity;
+	
+	
+}
+
++ (NSManagedObject *)createTransformEntity:(NSString *)name fromAttributeDictionary:(NSDictionary *)xform atPosition:(int)position inContext:(NSManagedObjectContext *)moc {
+	
+		
+	NSManagedObject *xFormEntity;		
+	NSString *tempObject;
+
+	
+	xFormEntity = [NSEntityDescription insertNewObjectForEntityForName:@"XForm" inManagedObjectContext:moc];
+	
+	[xFormEntity setValue:[NSNumber numberWithInt:position] forKey:@"order"];
+	
+	
+	if([name isEqualToString:@"finalxform"]) {
+		[xFormEntity setValue:[NSNumber numberWithBool:YES] forKey:@"final_xform"];
+	} else {
+		[xFormEntity setValue:[NSNumber numberWithBool:NO] forKey:@"final_xform"];
+		tempObject = [xform objectForKey:@"weight"];
+		if (tempObject != nil) {
+			[xFormEntity setValue:[NSNumber numberWithDouble:[tempObject doubleValue]] forKey:@"density"];
+		}
+	}
+	
+
+
+	NSString *attribute = [xform objectForKey:@"coefs"];
+	if (attribute != nil) {
+
+		NSArray *split = [attribute componentsSeparatedByString:@" "];
+		
+		[xFormEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:0] doubleValue]] forKey:@"coeff_0_0"];
+		[xFormEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:1] doubleValue]] forKey:@"coeff_0_1"];
+		[xFormEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:2] doubleValue]] forKey:@"coeff_1_0"];
+		[xFormEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:3] doubleValue]] forKey:@"coeff_1_1"];
+		[xFormEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:4] doubleValue]] forKey:@"coeff_2_0"];
+		[xFormEntity setValue:[NSNumber numberWithDouble:[[split objectAtIndex:5] doubleValue]] forKey:@"coeff_2_1"];
+		
+	}	
+	
+	
+	double post[3][2] = {1.0, 0.0, 0.0, 1.0, 0.0, 0.0};
+	
+	[xFormEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"post_flag"];
+	
+	attribute = [xform objectForKey:@"post"];
+	if (attribute != nil) {
+
+		NSArray *split = [attribute componentsSeparatedByString:@" "];
+		
+		post[0][0] = [[split objectAtIndex:0] doubleValue]; 
+		post[0][1] = [[split objectAtIndex:1] doubleValue];
+		post[1][0] = [[split objectAtIndex:2] doubleValue];
+		post[1][1] = [[split objectAtIndex:3] doubleValue];
+		post[2][0] = [[split objectAtIndex:4] doubleValue];
+		post[2][1] = [[split objectAtIndex:5] doubleValue];
+		
+	}			
+	
+	if ((post[0][0] == 1.0) &&
+		(post[0][1] == 0.0) &&
+		(post[1][0] == 0.0) &&
+		(post[1][1] == 1.0) &&
+		(post[2][0] == 0.0) &&
+		(post[2][1] == 0.0)) {
+		[xFormEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"post_flag"];
+	} else {
+		[xFormEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"post_flag"];
+		
+	}
+	
+	[xFormEntity setValue:[NSNumber numberWithDouble:post[0][0]] forKey:@"post_0_0"];
+	[xFormEntity setValue:[NSNumber numberWithDouble:post[0][1]] forKey:@"post_0_1"];
+	[xFormEntity setValue:[NSNumber numberWithDouble:post[1][0]] forKey:@"post_1_0"];
+	[xFormEntity setValue:[NSNumber numberWithDouble:post[1][1]] forKey:@"post_1_1"];
+	[xFormEntity setValue:[NSNumber numberWithDouble:post[2][0]] forKey:@"post_2_0"];
+	[xFormEntity setValue:[NSNumber numberWithDouble:post[2][1]] forKey:@"post_2_1"];
+	
+	tempObject = [xform objectForKey:@"color"];
+	if (tempObject != nil) {
+		[xFormEntity setValue:[NSNumber numberWithDouble:[tempObject doubleValue]] forKey:@"colour_0"];			
+	}	
+	
+	
+	tempObject = [xform objectForKey:@"symmetry"];
+	if (tempObject != nil) {
+		[xFormEntity setValue:[NSNumber numberWithInt:[tempObject intValue]] forKey:@"symmetry"];			
+	}
+	
+	[xFormEntity setValue:[Genome createVariationEntitiesFromAttributes:xform inContext:moc] forKey:@"variations"];
+
+	return [xFormEntity autorelease];
+	
+}
+
++ (NSMutableSet *)createVariationEntitiesFromAttributes:(NSDictionary *)xform inContext:(NSManagedObjectContext *)moc {
+	
+	/* deal with the far to many ways that variations are defined */
+	
+	double weight;
+	
+	NSString *attribute;
+	NSString *variationWeight;
+	
+	NSMutableSet *variationSet = [[NSMutableSet alloc] initWithCapacity:flam3_nvariations];
+	
+	attribute = [xform objectForKey:@"var"];
+	if (attribute != nil) {
+		NSArray *split = [attribute componentsSeparatedByString:@" "];
+		int kind = 0;
+		NSEnumerator *variations = [split objectEnumerator];
+		while ((variationWeight = [variations nextObject]) && kind < flam3_nvariations) {
+			weight = [variationWeight doubleValue];
+			NSManagedObject *newVariation = [Genome createVariationEntityFromAttributeDictionary:xform ofVariationType:kind andWeight:weight inContext:moc];
+			[variationSet addObject:newVariation];
+			kind++;
+		}
+	} else if ((attribute = [xform objectForKey:@"var1"])) {
+		
+		int kind = [attribute  intValue];
+		int i;
+		NSManagedObject *newVariation;
+		
+		for (i = 0; i < flam3_nvariations; i++) {
+			if (kind == i) {
+				newVariation = [Genome createVariationEntityFromAttributeDictionary:xform
+														   ofVariationType:i 
+																 andWeight:1.0 
+																 inContext:moc];
+			} else {
+				newVariation = [Genome createVariationEntityFromAttributeDictionary:xform
+														   ofVariationType:i 
+																 andWeight:0.0 
+																 inContext:moc];
+			}
+			[variationSet addObject:newVariation];
+		}
+		
+	} else {
+		
+		int i;
+		NSManagedObject *newVariation;
+		for (i = 0; i < flam3_nvariations; i++) {
+			
+			if ((attribute = [xform objectForKey:variationName[i]])) {
+				newVariation = [Genome  createVariationEntityFromAttributeDictionary:xform
+														   ofVariationType:i
+																 andWeight:[attribute doubleValue]  
+																 inContext:moc];
+			} else {
+				newVariation = [Genome createVariationEntityFromAttributeDictionary:xform
+														   ofVariationType:i 
+																 andWeight:0.0 
+																 inContext:moc];
+			}
+			[variationSet addObject:newVariation];
+		}
+		
+		
+	}
+	
+	[variationSet autorelease];
+	return variationSet;
+	
+}
+
+
++ (NSManagedObject *)createVariationEntityFromAttributeDictionary:(NSDictionary *)variationDictionary ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc {
+	
+	NSManagedObject *variation = [NSEntityDescription insertNewObjectForEntityForName:@"Variations" inManagedObjectContext:moc];
+	
+	[variation setValue:variationName[kind] forKey:@"name"]; 
+	[variation setValue:[NSNumber numberWithInt:kind] forKey:@"variation_index"];
+	
+	if(weight != 0.0) {
+		[variation setValue:[NSNumber numberWithBool:YES] forKey:@"in_use"];
+	} else {
+		[variation setValue:[NSNumber numberWithBool:NO] forKey:@"in_use"];
+	}
+	[variation setValue:[NSNumber numberWithDouble:weight] forKey:@"weight"];					
+	
+	switch(kind) {
+		case 23:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"blob_high"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"blob_low"] doubleValue]] forKey:@"parameter_2"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"blob_waves"] doubleValue]] forKey:@"parameter_3"];		
+			
+			[variation setValue:@"Blob High:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Blob Low:" forKey:@"parameter_2_name"];
+			[variation setValue:@"Blob Wave:" forKey:@"parameter_3_name"];
+			break;
+		case 24:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_4"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"pdj_a"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"pdj_b"] doubleValue]] forKey:@"parameter_2"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"pdj_c"] doubleValue]] forKey:@"parameter_3"];		
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"pdj_d"] doubleValue]] forKey:@"parameter_4"];		
+			
+			[variation setValue:@"PDJ A:" forKey:@"parameter_1_name"];
+			[variation setValue:@"PDJ B:" forKey:@"parameter_2_name"];
+			[variation setValue:@"PDJ C:" forKey:@"parameter_3_name"];
+			[variation setValue:@"PDJ D:" forKey:@"parameter_4_name"];
+			
+			break;
+		case 25:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"fan2_x"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"fan2_y"] doubleValue]] forKey:@"parameter_2"];
+			
+			[variation setValue:@"Fan2 x:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Fan2 y:" forKey:@"parameter_2_name"];
+			
+			break;				
+		case 26:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"rings2_val"] doubleValue]] forKey:@"parameter_1"];
+			
+			[variation setValue:@"Rings2:" forKey:@"parameter_1_name"];
+			
+			break;
+		case 30:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"perspective_angle"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"perspective_dist"] doubleValue]] forKey:@"parameter_2"];
+			
+			[variation setValue:@"Angle:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Distance:" forKey:@"parameter_2_name"];
+			
+			break;
+		case 32:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"julian_dist"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"julian_power"] doubleValue]] forKey:@"parameter_2"];
+			
+			[variation setValue:@"Distance:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+			
+			break;
+		case 33:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"juliascope_dist"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"juliascope_power"] doubleValue]] forKey:@"parameter_2"];			
+			
+			[variation setValue:@"JS Distance:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+			
+			break;
+		case 36:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			
+			[variation setValue:@"Angle:" forKey:@"parameter_1_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"radial_blur_angle"] doubleValue]] forKey:@"parameter_1"];
+			
+			break;	
+		case 37:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+			
+			[variation setValue:@"Slices:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Rotation:" forKey:@"parameter_2_name"];
+			[variation setValue:@"Thickness:" forKey:@"parameter_3_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"pie_slices"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"pie_rotation"] doubleValue]] forKey:@"parameter_2"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"pie_thickness"] doubleValue]] forKey:@"parameter_3"];
+			break;	
+			
+		case 38:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_4"];
+			
+			[variation setValue:@"Sides:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Power:" forKey:@"parameter_2_name"];
+			[variation setValue:@"Circle:" forKey:@"parameter_3_name"];
+			[variation setValue:@"Corners:" forKey:@"parameter_4_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"ngon_sides"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"ngon_power"] doubleValue]] forKey:@"parameter_2"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"ngon_circle"] doubleValue]] forKey:@"parameter_3"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"ngon_corners"] doubleValue]] forKey:@"parameter_4"];		
+			break;	
+			
+		case 39:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"c1:" forKey:@"parameter_1_name"];
+			[variation setValue:@"c2:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"curl_c1"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"curl_c2"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		case 40:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"x:" forKey:@"parameter_1_name"];
+			[variation setValue:@"y:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"rectangles_x"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"rectangles_y"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		case 49:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"Rotation:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Twist:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"disc2_rot"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"disc2_twist"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		case 50:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_3"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_4"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_5"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_6"];
+			
+			[variation setValue:@"Random:" forKey:@"parameter_1_name"];
+			[variation setValue:@"M:" forKey:@"parameter_2_name"];
+			[variation setValue:@"N1:" forKey:@"parameter_3_name"];
+			[variation setValue:@"N2:" forKey:@"parameter_4_name"];
+			[variation setValue:@"N3:" forKey:@"parameter_5_name"];
+			[variation setValue:@"Holes:" forKey:@"parameter_6_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"super_shape_rnd"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"super_shape_m"] doubleValue]] forKey:@"parameter_2"];			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"super_shape_n1"] doubleValue]] forKey:@"parameter_3"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"super_shape_n2"] doubleValue]] forKey:@"parameter_4"];			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"super_shape_n3"] doubleValue]] forKey:@"parameter_5"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"super_shape_holes"] doubleValue]] forKey:@"parameter_6"];	
+			break;	
+			
+		case 51:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"Petals:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Holes:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"flower_petals"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"flower_holes"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		case 52:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"Eccentricity:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Holes:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"conic_eccentricity"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"conic_holes"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		case 53:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"Height:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Width:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"parabola_height"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"parabola_width"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		case 54:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"X Size:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Y Size:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"split_xsize"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"split_ysize"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		case 55:
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
+			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
+			
+			[variation setValue:@"Move X:" forKey:@"parameter_1_name"];
+			[variation setValue:@"Move Y:" forKey:@"parameter_2_name"];
+			
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"move_x"] doubleValue]] forKey:@"parameter_1"];
+			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"move_y"] doubleValue]] forKey:@"parameter_2"];			
+			break;	
+			
+		default:
+			break;
+	}
+	
+	[variation autorelease];
+	
+	return variation;
+}
+
+
++ (NSManagedObject *) createColourMapFromAttributeDictionary:(NSDictionary *)colour inContext:(NSManagedObjectContext *)moc {
+	
+	int index;
+	double red, green, blue;
+	
+	
+	NSManagedObject *newColour = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:moc];
+	
+	index  = [[colour objectForKey:@"index"] intValue];
+
+	NSString *tempString = [colour objectForKey:@"rgb"];
+	NSArray *split = [tempString componentsSeparatedByString:@" "];
+	
+	red =   [[split objectAtIndex:0] doubleValue];
+	green = [[split objectAtIndex:1] doubleValue];
+	blue =  [[split objectAtIndex:2] doubleValue];
+		
+	red /= 255.0;
+	green /= 255.0;
+	blue /= 255.0;
+		
+	[newColour setValue:[NSNumber numberWithInt:index] forKey:@"index"];
+	[newColour setValue:[NSNumber numberWithDouble:red] forKey:@"red"];
+	[newColour setValue:[NSNumber numberWithDouble:green] forKey:@"green"];
+	[newColour setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
+		
+	return [newColour autorelease];  
+			
+}
+
+
 
 @end
 

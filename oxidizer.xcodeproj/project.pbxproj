@@ -22,6 +22,9 @@
 		A40CA26A0CF0B598000C28FB /* flam3-animate in Resources */ = {isa = PBXBuildFile; fileRef = A42608820C41109600DDB92E /* flam3-animate */; };
 		A40CA26B0CF0B59D000C28FB /* flam3-genome in Resources */ = {isa = PBXBuildFile; fileRef = A47ABF1D0C425EF9007F1047 /* flam3-genome */; };
 		A40CB5210AB8864300613AD6 /* DragDropAndSaveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */; };
+		A40EF52B0DD71DEA003329A6 /* Genome.m in Sources */ = {isa = PBXBuildFile; fileRef = A40EF5280DD71DEA003329A6 /* Genome.m */; };
+		A40EF52C0DD71DEA003329A6 /* GenomeManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A40EF52A0DD71DEA003329A6 /* GenomeManagedObject.m */; };
+		A40EF52F0DD71E0A003329A6 /* GenomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A40EF52E0DD71E0A003329A6 /* GenomeXMLParser.m */; };
 		A410568E0C5F760A0075334E /* stills.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568C0C5F760A0075334E /* stills.png */; };
 		A410568F0C5F760A0075334E /* text-x-script.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568D0C5F760A0075334E /* text-x-script.png */; };
 		A41963670C5E484B002EDD7B /* FileViews.nib in Resources */ = {isa = PBXBuildFile; fileRef = A41963660C5E484B002EDD7B /* FileViews.nib */; };
@@ -50,14 +53,12 @@
 		A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
 		A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
-		A4D6FA2D09B1E25200096036 /* GenomeManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D6FA2C09B1E25200096036 /* GenomeManagedObject.m */; };
 		A4DA85880966DB7D00FFCF4D /* FractalFlameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */; };
 		A4DA858E0966DD2A00FFCF4D /* EnvironmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */; };
 		A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
 		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
 		A4F21B460CEA112400F0195A /* libpng.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2DB0C340B44001582CC /* libpng.dylib */; };
 		A4F21B470CEA112C00F0195A /* libjpeg.62.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */; };
-		A4F333A2096C813B00230854 /* Genome.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F333A1096C813B00230854 /* Genome.m */; };
 		A4F3EF1E0AB5DE3100A282F2 /* image-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */; };
 		A4F3EF200AB5DE3B00A282F2 /* video-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */; };
 		A4F49C1B0AAB05C800FA4BE8 /* OxidizerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */; };
@@ -104,6 +105,12 @@
 		A40B00DA0D392E7A009F782F /* RectangleNibController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RectangleNibController.m; path = RectangleView/RectangleNibController.m; sourceTree = "<group>"; };
 		A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragDropAndSaveImageView.h; sourceTree = "<group>"; };
 		A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DragDropAndSaveImageView.m; sourceTree = "<group>"; };
+		A40EF5270DD71DEA003329A6 /* Genome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Genome.h; sourceTree = "<group>"; };
+		A40EF5280DD71DEA003329A6 /* Genome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Genome.m; sourceTree = "<group>"; };
+		A40EF5290DD71DEA003329A6 /* GenomeManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenomeManagedObject.h; sourceTree = "<group>"; };
+		A40EF52A0DD71DEA003329A6 /* GenomeManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenomeManagedObject.m; sourceTree = "<group>"; };
+		A40EF52D0DD71E0A003329A6 /* GenomeXMLParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenomeXMLParser.h; sourceTree = "<group>"; };
+		A40EF52E0DD71E0A003329A6 /* GenomeXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenomeXMLParser.m; sourceTree = "<group>"; };
 		A410568C0C5F760A0075334E /* stills.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stills.png; path = icons/Tango/stills.png; sourceTree = SOURCE_ROOT; };
 		A410568D0C5F760A0075334E /* text-x-script.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "text-x-script.png"; path = "icons/Tango/text-x-script.png"; sourceTree = SOURCE_ROOT; };
 		A41963660C5E484B002EDD7B /* FileViews.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = FileViews.nib; path = FileViews/FileViews.nib; sourceTree = "<group>"; };
@@ -150,8 +157,6 @@
 		A4D3633D09AB9CE20078025F /* genome.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = genome.xcdatamodel; sourceTree = "<group>"; };
 		A4D604A909658A6C0001CD1D /* PaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PaletteController.h; sourceTree = "<group>"; };
 		A4D604AA09658A6C0001CD1D /* PaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PaletteController.m; sourceTree = "<group>"; };
-		A4D6FA2B09B1E25200096036 /* GenomeManagedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenomeManagedObject.h; sourceTree = "<group>"; };
-		A4D6FA2C09B1E25200096036 /* GenomeManagedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenomeManagedObject.m; sourceTree = "<group>"; };
 		A4DA85860966DB7D00FFCF4D /* FractalFlameModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FractalFlameModel.h; sourceTree = "<group>"; };
 		A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FractalFlameModel.m; sourceTree = "<group>"; };
 		A4DA858C0966DD2A00FFCF4D /* EnvironmentController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EnvironmentController.h; sourceTree = "<group>"; };
@@ -159,8 +164,6 @@
 		A4DA871B096712CA00FFCF4D /* FlameController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FlameController.h; sourceTree = "<group>"; };
 		A4DA871C096712CA00FFCF4D /* FlameController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FlameController.m; sourceTree = "<group>"; };
 		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "flam3/flam3-palettes.xml"; sourceTree = SOURCE_ROOT; };
-		A4F333A0096C813B00230854 /* Genome.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = Genome.h; sourceTree = "<group>"; };
-		A4F333A1096C813B00230854 /* Genome.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = Genome.m; sourceTree = "<group>"; };
 		A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "image-x-generic.png"; path = "icons/Tango/image-x-generic.png"; sourceTree = "<group>"; };
 		A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "video-x-generic.png"; path = "icons/Tango/video-x-generic.png"; sourceTree = "<group>"; };
 		A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OxidizerDelegate.m; sourceTree = "<group>"; };
@@ -210,10 +213,6 @@
 				A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */,
 				A4DA871B096712CA00FFCF4D /* FlameController.h */,
 				A4DA871C096712CA00FFCF4D /* FlameController.m */,
-				A4F333A0096C813B00230854 /* Genome.h */,
-				A4F333A1096C813B00230854 /* Genome.m */,
-				A4D6FA2B09B1E25200096036 /* GenomeManagedObject.h */,
-				A4D6FA2C09B1E25200096036 /* GenomeManagedObject.m */,
 				A4233E9209EFF3000047DC34 /* QuickTimeController.h */,
 				A4233E9309EFF3010047DC34 /* QuickTimeController.m */,
 				A4A3027B0A28995D002828D9 /* BreedingController.h */,
@@ -264,6 +263,7 @@
 		29B97314FDCFA39411CA2CEA /* oxidizer */ = {
 			isa = PBXGroup;
 			children = (
+				A40EF5260DD71DEA003329A6 /* Genome */,
 				A4E641F5096DA554002DE446 /* Models */,
 				080E96DDFE201D6D7F000001 /* Classes */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
@@ -336,6 +336,19 @@
 				A40B00DA0D392E7A009F782F /* RectangleNibController.m */,
 			);
 			name = RectangleWindow;
+			sourceTree = "<group>";
+		};
+		A40EF5260DD71DEA003329A6 /* Genome */ = {
+			isa = PBXGroup;
+			children = (
+				A40EF5270DD71DEA003329A6 /* Genome.h */,
+				A40EF5280DD71DEA003329A6 /* Genome.m */,
+				A40EF5290DD71DEA003329A6 /* GenomeManagedObject.h */,
+				A40EF52A0DD71DEA003329A6 /* GenomeManagedObject.m */,
+				A40EF52D0DD71E0A003329A6 /* GenomeXMLParser.h */,
+				A40EF52E0DD71E0A003329A6 /* GenomeXMLParser.m */,
+			);
+			path = Genome;
 			sourceTree = "<group>";
 		};
 		A41B41A40C43AD99000130DE /* Categories */ = {
@@ -474,7 +487,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir `pwd`/build_folder_for_flam3\n\nexport FLAM3_BUILD_PATH=`pwd`/build_folder_for_flam3 \n\necho $FLAM3_BUILD_PATH\n\ncd LuaObjCBridge\n\nxcodebuild -configuration Release\n\n\ncd ../libpng\necho \"Building libpng\"\nexport CFLAGS=\"-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc\" \nexport LDFLAGS=\"-arch i386 -arch ppc\"  \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir `pwd`/../build_folder_for_flam3/lib\nmkdir `pwd`/../build_folder_for_flam3/bin\nmkdir `pwd`/../build_folder_for_flam3/include\nmkdir `pwd`/../build_folder_for_flam3/man\nmkdir `pwd`/../build_folder_for_flam3/man/man1\n\nenv CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386\" CFLAGS=\"-O3\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nln -s /usr/bin/glibtool ./libtool\nmake install\n\necho \"Building flam3\"\ncd ../flam3\nln -s /usr/bin/glibtool ./libtool\nexport CFLAGS=\"-isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I$FLAM3_BUILD_PATH/include\" \nexport LDFLAGS=\"-arch i386 -arch ppc -L${FLAM3_BUILD_PATH}/lib\" \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nmake install\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-animate\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-genome\n";
+			shellScript = "mkdir `pwd`/build_folder_for_flam3\n\nexport FLAM3_BUILD_PATH=`pwd`/build_folder_for_flam3 \n\necho $FLAM3_BUILD_PATH\n\ncd LuaObjCBridge\n\n#xcodebuild -configuration Release\n\n\ncd ../libpng\necho \"Building libpng\"\nexport CFLAGS=\"-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc\" \nexport LDFLAGS=\"-arch i386 -arch ppc\"  \n#./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH\n#make install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir `pwd`/../build_folder_for_flam3/lib\nmkdir `pwd`/../build_folder_for_flam3/bin\nmkdir `pwd`/../build_folder_for_flam3/include\nmkdir `pwd`/../build_folder_for_flam3/man\nmkdir `pwd`/../build_folder_for_flam3/man/man1\n\n#env CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386\" CFLAGS=\"-O3\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\n#ln -s /usr/bin/glibtool ./libtool\n#make install\n\necho \"Building flam3\"\ncd ../flam3\n#ln -s /usr/bin/glibtool ./libtool\n#export CFLAGS=\"-isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I$FLAM3_BUILD_PATH/include\" \n#export LDFLAGS=\"-arch i386 -arch ppc -L${FLAM3_BUILD_PATH}/lib\" \n#./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\n#make install\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-animate\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-genome\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -488,9 +501,7 @@
 				A4DA85880966DB7D00FFCF4D /* FractalFlameModel.m in Sources */,
 				A4DA858E0966DD2A00FFCF4D /* EnvironmentController.m in Sources */,
 				A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */,
-				A4F333A2096C813B00230854 /* Genome.m in Sources */,
 				A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */,
-				A4D6FA2D09B1E25200096036 /* GenomeManagedObject.m in Sources */,
 				A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */,
 				A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */,
 				A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */,
@@ -510,6 +521,9 @@
 				A4BE79470DA6DD3700160702 /* GradientController.m in Sources */,
 				A4BE79480DA6DD3700160702 /* GradientNibController.m in Sources */,
 				A4C6CDE60DC3708600E2EEFB /* ProgressIndicatorWithCancel.m in Sources */,
+				A40EF52B0DD71DEA003329A6 /* Genome.m in Sources */,
+				A40EF52C0DD71DEA003329A6 /* GenomeManagedObject.m in Sources */,
+				A40EF52F0DD71E0A003329A6 /* GenomeXMLParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
