@@ -84,6 +84,7 @@
 	if(runResult == NSOKButton && [op filename] != nil) {
 		[self deleteOldGenomesInContext:moc];
 		[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
+//		NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:[op filename]] inContext:moc]; 
 		NSArray *newGenomes = [Genome createGenomeEntitiesFromXML:[NSData dataWithContentsOfFile:[op filename]] inContext:moc]; 
 		[moc processPendingChanges];			
 		[BreedingController makeImageForGenomes:newGenomes];

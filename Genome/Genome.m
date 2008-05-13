@@ -20,6 +20,7 @@
 #import "Genome.h"
 #import "GenomeManagedObject.h"
 #import "PaletteController.h"
+#import "GenomeXMLParser.h"
 
 #define flam3_nvariations 56
 
@@ -576,6 +577,25 @@ NSString *variationName[1+flam3_nvariations] = {
 }
 
 
++ (NSArray *)createGenomeEntitiesFromFile:(NSString *)xmlFileName inContext:(NSManagedObjectContext *)moc {
+
+    NSURL *xmlURL = [NSURL fileURLWithPath:xmlFileName];
+    NSXMLParser *newParser = [[NSXMLParser alloc] initWithContentsOfURL:xmlURL];
+	GenomeXMLParser *gxp = [[GenomeXMLParser alloc] init];
+	
+	[newParser setDelegate:gxp];
+	[gxp setManangedObjectContext:moc];
+	[newParser parse]; // return value not used
+	
+	NSArray *newGenomes = [gxp getGenomes];
+	[newGenomes retain];
+	
+	[gxp release];
+	[newParser release];	
+	
+	return [newGenomes autorelease];
+}	
+
 + (NSArray *)createGenomeEntitiesFromXML:(NSData *)xml inContext:(NSManagedObjectContext *)moc {
 	
 	NSArray *flameElements;
@@ -605,7 +625,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	
 	while ((flameElement = [flameEnumerator nextObject])) {
-//		[genomes addObject:[Genome createGenomeEntitiesFromElement:flameElement inContext:moc]]; 
+		[genomes addObject:[Genome createGenomeEntitiesFromElement:flameElement inContext:moc]]; 
 	}
 	
 	[doc release];
@@ -613,6 +633,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genomes autorelease];
 	return genomes;
 }
+ 
 
 + (NSManagedObject *)createGenomeEntitiesFromElement:(NSXMLElement *)genome inContext:(NSManagedObjectContext *)moc {
 	
