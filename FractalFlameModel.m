@@ -132,7 +132,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		NSString *appFolder = [defaults stringForKey:@"xml_folder"];
 		
 				
-		NSLog(@"appFolder %@", [defaults dictionaryRepresentation]);
+//		NSLog(@"appFolder %@", [defaults dictionaryRepresentation]);
 		NSURL *url = [NSURL fileURLWithPath: [appFolder stringByAppendingPathComponent: @"Oxidizer.sqliteO2"]];
 		
 		id newStore = [coordinator addPersistentStoreWithType: NSSQLiteStoreType
@@ -1136,7 +1136,15 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		
 		NSArray *genome = [NSArray arrayWithObject:[genomes objectAtIndex:i]];
 		
-		int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:thisMoc forThumbnail:YES] withEnvironment:taskEnvironment];
+		
+		NSDate *reftime = [NSDate date];
+		NSData *genomeXML = [Genome createXMLFromEntities:genome fromContext:thisMoc forThumbnail:YES];
+		NSLog(@"time to create XML: %f", [[NSDate date] timeIntervalSinceDate:reftime]);
+		[genomeXML retain];
+		NSDate *reftime2 = [NSDate date];
+		int returnCode = [self runFlam3StillRenderAsTask:genomeXML withEnvironment:taskEnvironment];
+		NSLog(@"time to create thumbnail: %f", [[NSDate date] timeIntervalSinceDate:reftime2]);
+		[genomeXML release];
 		
 		if (returnCode == 0) {
 			

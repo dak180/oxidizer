@@ -49,7 +49,7 @@
 		
 		_paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 															pixelsWide:256
-															pixelsHigh:10
+															pixelsHigh:1
 														 bitsPerSample:8
 													   samplesPerPixel:3
 															  hasAlpha:NO 
@@ -61,7 +61,7 @@
 
 		_colourWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 															pixelsWide:256
-															pixelsHigh:15
+															pixelsHigh:1
 														 bitsPerSample:8
 													   samplesPerPixel:3
 															  hasAlpha:NO 

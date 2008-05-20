@@ -54,7 +54,7 @@ static double *_paletteData = NULL;
 		
 		paletteRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 															pixelsWide:256
-															pixelsHigh:10
+															pixelsHigh:1
 														 bitsPerSample:8
 													   samplesPerPixel:3
 															  hasAlpha:NO 
@@ -240,7 +240,7 @@ static double *_paletteData = NULL;
 		paletteData = [paletteRep bitmapData];
 		
 		for(j=1; j<10; j++) {
-			memcpy(paletteData+(256*j*3), paletteData, 256*3);
+//			memcpy(paletteData+(256*j*3), paletteData, 256*3);
 		}
 
 }

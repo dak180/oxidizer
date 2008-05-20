@@ -237,7 +237,7 @@
 		NSImage *paletteImage = [[NSImage alloc] init];
 		NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 																pixelsWide:256
-																pixelsHigh:10
+																pixelsHigh:1
 															 bitsPerSample:8
 														   samplesPerPixel:3
 																  hasAlpha:NO 
@@ -280,7 +280,7 @@
 		NSImage *paletteImage = [[NSImage alloc] init];
 		NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 																pixelsWide:256
-																pixelsHigh:10
+																pixelsHigh:1
 															 bitsPerSample:8
 														   samplesPerPixel:3
 																  hasAlpha:NO 

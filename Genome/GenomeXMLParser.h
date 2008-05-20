@@ -17,13 +17,19 @@
 	
 	
 	NSMutableSet *_currentTransforms;
-	NSMutableSet *_currentColours;
-	
+//	NSMutableSet *_currentColours;
+
+	NSMutableArray *_currentColours;	
 	NSMutableArray *_genomes;
 	
 	NSManagedObjectContext *_moc;	
 	
 	unsigned  int _transformCount;
+	
+	double palette[256][3]; 
+	
+	BOOL   useColourMap;
+
 
 }
 
