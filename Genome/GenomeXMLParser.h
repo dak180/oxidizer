@@ -14,6 +14,7 @@
 	NSManagedObject *_currentGenome;
 	NSManagedObject *_currentTransform;
 	NSManagedObject *_currentColour;
+	NSManagedObject *_currentGenomeImages;
 	
 	
 	NSMutableSet *_currentTransforms;

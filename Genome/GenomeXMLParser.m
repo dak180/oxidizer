@@ -47,7 +47,6 @@
 	
 	if([elementName isEqualToString:@"flame"]) {
 		_currentGenome = [Genome createGenomeEntityFromAttributeDictionary:attributeDict inContext:_moc];
-		[_currentGenome retain];
 		_currentTransforms = [[NSMutableSet alloc] initWithCapacity:5];
 		_currentColours = [[NSMutableArray alloc] initWithCapacity:256];
 		useColourMap = NO;
@@ -101,7 +100,7 @@
 			[PaletteController fillBitmapRep:colourMapImageRep withPalette:palette[0] forHeight:1]; 
 			[colourMapImage addRepresentation:colourMapImageRep];
 			
-			[_currentGenome setValue:colourMapImage forKey: @"colour_map_image"];
+			[[_currentGenome valueForKey:@"images"] setValue:colourMapImage forKey: @"colour_map_image"];
 					
 			[colourMapImageRep release];
 			[colourMapImage release];

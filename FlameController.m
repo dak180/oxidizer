@@ -32,9 +32,12 @@
 	NSString *imagePath = [dictionary objectForKey:@"filename"];
 	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:imagePath]];
 	
-	[genome willChangeValueForKey:@"image"];
-	[genome setValue:flameImage forKey:@"image"];
-	[genome didChangeValueForKey:@"image"];
+	
+	NSManagedObject *genomeImageEntity = [genome valueForKey:@"images"];
+	
+	[genomeImageEntity willChangeValueForKey:@"image"];
+	[genomeImageEntity setValue:flameImage forKey:@"image"];
+	[genomeImageEntity didChangeValueForKey:@"image"];
 	
 	[flameImage release];	
 	[dictionary release];

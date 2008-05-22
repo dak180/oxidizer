@@ -235,7 +235,7 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	
 	if([[genomeEntity valueForKey:@"use_palette"] boolValue] == FALSE) {
-
+/*
 		predicate = [NSPredicate predicateWithFormat:@"parent_genome == %@", genomeEntity];
 							 
 		sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
@@ -253,6 +253,12 @@ NSString *variationName[1+flam3_nvariations] = {
 		[sort release];
 		[fetch release];	
 		[err release];
+ */
+		sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
+		sortDescriptors = [NSArray arrayWithObject: sort];
+		
+		cmaps = [[[genomeEntity valueForKey:@"cmap"] allObjects] sortedArrayUsingDescriptors:sortDescriptors];
+ 
 		/* use the cmap */
 
 		NSMutableArray *newCmaps = [PaletteController extrapolateArray:cmaps];
@@ -267,7 +273,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 		
 	/* xforms */
-	
+/*	
 	predicate = [NSPredicate predicateWithFormat:@"parent_genome == %@", genomeEntity];
 	
 	sort = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
@@ -281,9 +287,17 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSError*	err	= [[NSError alloc] init];
 	
 	xforms = [moc executeFetchRequest:fetch error:&err];
-	[sort release];
+
+ 
+    [sort release];
 	[fetch release];
 	[err release];
+*/
+
+	sort = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
+	sortDescriptors = [NSArray arrayWithObject: sort];
+
+	xforms = [[[genomeEntity valueForKey:@"xforms"] allObjects] sortedArrayUsingDescriptors:sortDescriptors];
 	
 	int old_num_xforms = [xforms count];
 	
@@ -357,7 +371,7 @@ NSString *variationName[1+flam3_nvariations] = {
 + (void) createXMLForXFormVariations:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc toElement:(NSXMLElement *)xform {
 	
 	NSArray *variations;
-	
+/*	
 	NSPredicate * predicate;
 	//	predicate = [NSPredicate predicateWithFormat:@"parent_xform.order == %ul", [[xformEntity valueForKey:@"order"] intValue]];
 	predicate = [NSPredicate predicateWithFormat:@"parent_xform == %@", xformEntity];
@@ -377,6 +391,12 @@ NSString *variationName[1+flam3_nvariations] = {
 	[fetch release];
 	
 	[err release];
+*/	
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"variation_index" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	
+	variations = [[[xformEntity valueForKey:@"variations"] allObjects] sortedArrayUsingDescriptors:sortDescriptors];
+	
 	
 	unsigned int i;
 	
@@ -638,6 +658,8 @@ NSString *variationName[1+flam3_nvariations] = {
 + (NSManagedObject *)createGenomeEntitiesFromElement:(NSXMLElement *)genome inContext:(NSManagedObjectContext *)moc {
 	
 	NSManagedObject *newGenomeEntity = [Genome createDefaultGenomeEntityInContext:moc];
+	NSManagedObject *newGenomeImageEntity = [Genome createDefaultGenomeImageEntityInContext:moc];
+	
 	NSXMLNode *tempAttribute;
 	NSString *tempString;
 	
@@ -750,10 +772,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		
 	}
 
-	tempAttribute = [genome attributeForName:@"hue"];
-	if(tempAttribute != nil) {
-		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"hue"];
-	}
+		
 	tempAttribute = [genome attributeForName:@"vibrancy"];
 	if(tempAttribute != nil) {
 		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"vibrancy"];
@@ -810,13 +829,19 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	tempAttribute = [genome attributeForName:@"palette"];
 	if(tempAttribute != nil) {
-	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[tempAttribute stringValue] intValue]]  forKey:@"palette"];
+	    [newGenomeImageEntity setValue:[NSNumber numberWithInt:[[tempAttribute stringValue] intValue]]  forKey:@"palette"];
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"use_palette"];
 	} else {
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"use_palette"];		
 		newColours = [[NSMutableSet alloc] initWithCapacity:256];
 	}
-/* deal the flame children */	
+	
+	tempAttribute = [genome attributeForName:@"hue"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"hue"];
+	}
+	
+	/* deal the flame children */	
 	
 	NSMutableSet *newTransforms = [[NSMutableSet alloc] initWithCapacity:5];
 		
@@ -900,7 +925,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		[PaletteController fillBitmapRep:colourMapImageRep withPalette:palette[0] forHeight:1]; 
 		[colourMapImage addRepresentation:colourMapImageRep];
 		
-		[newGenomeEntity setValue:colourMapImage forKey: @"colour_map_image"];
+		[newGenomeImageEntity setValue:colourMapImage forKey: @"colour_map_image"];
 		
 		
 		[colourMapImageRep release];
@@ -909,6 +934,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	}
 	[newGenomeEntity setValue:newColours forKey:@"cmap"];
 	[newGenomeEntity setValue:newTransforms forKey:@"xforms"];
+	[newGenomeEntity setValue:newGenomeImageEntity forKey:@"images"];
 	
 	if(newColours != nil) {
 		[newColours release];
@@ -1449,9 +1475,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	}
 }
 
-+ (NSManagedObject *)createDefaultGenomeEntityInContext:(NSManagedObjectContext *)moc {
-	
-	NSManagedObject *genomeEntity = [NSEntityDescription insertNewObjectForEntityForName:@"Genome" inManagedObjectContext:moc];
++ (NSManagedObject *)createDefaultGenomeImageEntityInContext:(NSManagedObjectContext *)moc {
+
+	NSManagedObject *genomeImageEntity = [NSEntityDescription insertNewObjectForEntityForName:@"GenomeImages" inManagedObjectContext:moc];
 	
 	NSImage *paletteImage = [[NSImage alloc] init];
 	NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
@@ -1468,11 +1494,18 @@ NSString *variationName[1+flam3_nvariations] = {
 	[PaletteController fillBitmapRep:paletteWithHueRep withPalette:1 usingHue:0.0];
 	[paletteImage addRepresentation:paletteWithHueRep];
 	
-	[genomeEntity setValue:paletteImage forKey: @"palette_image"];
-	
+	[genomeImageEntity setValue:paletteImage forKey: @"palette_image"];
 	
 	[paletteWithHueRep release];
 	[paletteImage release];
+	
+	return genomeImageEntity;
+}
+
++ (NSManagedObject *)createDefaultGenomeEntityInContext:(NSManagedObjectContext *)moc {
+	
+	NSManagedObject *genomeEntity = [NSEntityDescription insertNewObjectForEntityForName:@"Genome" inManagedObjectContext:moc];
+	
 	
 	[genomeEntity setValue:[NSColor colorWithDeviceRed:0.0 green:0.0 blue:0.0 alpha:1.0] forKey: @"background"];
 	
@@ -2667,6 +2700,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSManagedObject *newGenomeEntity = [Genome createDefaultGenomeEntityInContext:moc];
 	NSString *tempAttribute;
 	
+	NSManagedObject *genomeImageEntity = [Genome createGenomeImageEntityFromAttributeDictionary:genome inContext:moc];
+	[newGenomeEntity setValue:genomeImageEntity forKey:@"images"];
 	
 	tempAttribute = [genome objectForKey:@"name"];
 	if(tempAttribute != nil) {
@@ -2833,7 +2868,6 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	tempAttribute = [genome objectForKey:@"palette"];
 	if(tempAttribute != nil) {
-	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"palette"];
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"use_palette"];
 	} else {
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"use_palette"];		
@@ -2845,6 +2879,25 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	
 }
+
+
++ (NSManagedObject *)createGenomeImageEntityFromAttributeDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc {
+	
+	NSManagedObject *newGenomeImageEntity = [Genome createDefaultGenomeImageEntityInContext:moc];
+	NSString *tempAttribute;
+	
+	
+	tempAttribute = [genome objectForKey:@"palette"];
+	if(tempAttribute != nil) {
+	    [newGenomeImageEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"palette"];
+	}
+	[newGenomeImageEntity autorelease];
+	
+	return newGenomeImageEntity;
+	
+	
+}
+
 
 + (NSManagedObject *)createTransformEntity:(NSString *)name fromAttributeDictionary:(NSDictionary *)xform atPosition:(int)position inContext:(NSManagedObjectContext *)moc {
 	

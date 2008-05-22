@@ -56,6 +56,7 @@
 + (NSManagedObject *)createVariationEntityFromElement:(NSXMLElement *)xform ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc;
 
 + (NSManagedObject *)createDefaultGenomeEntityInContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createDefaultGenomeImageEntityInContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc;
 
@@ -80,5 +81,6 @@
 + (NSManagedObject *)createGenomeEntityFromAttributeDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createVariationEntitiesFromAttributes:(NSDictionary *)xform inContext:(NSManagedObjectContext *)moc;				
 + (NSManagedObject *)createVariationEntityFromAttributeDictionary:(NSDictionary *)variationDictionary ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc;
++ (NSManagedObject *)createGenomeImageEntityFromAttributeDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc;
 
 @end
