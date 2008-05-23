@@ -237,11 +237,6 @@ static double *_paletteData = NULL;
 			
 		}																								
 		
-		paletteData = [paletteRep bitmapData];
-		
-		for(j=1; j<10; j++) {
-//			memcpy(paletteData+(256*j*3), paletteData, 256*3);
-		}
 
 }
 

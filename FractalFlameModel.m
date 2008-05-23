@@ -23,6 +23,7 @@
 #import "GreaterThanThreeTransformer.h"
 #import "QuickTime/QuickTime.h"
 #import "Genome/Genome.h"
+#import "Genome/GenomeImages.h"
 
 #include <sys/types.h>
 #include <sys/sysctl.h>
@@ -638,8 +639,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	if (returnCode == 0) {
 
+		GenomeImages *images = [[genomes objectAtIndex:0] valueForKey:@"images"];
 		
-		[[genomes objectAtIndex:0] performSelectorOnMainThread:@selector(setImageFromFile:) withObject:pngFileName waitUntilDone:YES];
+		[images performSelectorOnMainThread:@selector(setImageFromFile:) withObject:pngFileName waitUntilDone:YES];
 		
 		
 		BOOL returnBool;

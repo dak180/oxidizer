@@ -73,8 +73,9 @@
 + (NSMutableSet *)createTransformEntitiesFromArray:(NSArray *)xforms inContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createVariationEntitiesFromArray:(NSArray *)variations inContext:(NSManagedObjectContext *)moc;
 + (NSManagedObject *)createVariationEntityFromDictionary:(NSDictionary *)variationDictionary ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)mocPasteboardType;
-+ (void) createColourMapFromArray:(NSArray *)colourMap forGenome:(NSManagedObject *)genomeEntity inContext:(NSManagedObjectContext *)moc;
-
++ (void) createColourMapFromArray:(NSArray *)colourMap forGenome:(NSManagedObject *)genomeEntity 
+				   andImageEntity:(NSManagedObject *)genomeImageEntity 
+						inContext:(NSManagedObjectContext *)moc;
 /* event based parsing */
 + (NSManagedObject *) createColourMapFromAttributeDictionary:(NSDictionary *)colour inContext:(NSManagedObjectContext *)moc;	
 + (NSManagedObject *)createTransformEntity:(NSString *)name fromAttributeDictionary:(NSDictionary *)xform atPosition:(int)position inContext:(NSManagedObjectContext *)moc;
@@ -82,5 +83,5 @@
 + (NSMutableSet *)createVariationEntitiesFromAttributes:(NSDictionary *)xform inContext:(NSManagedObjectContext *)moc;				
 + (NSManagedObject *)createVariationEntityFromAttributeDictionary:(NSDictionary *)variationDictionary ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc;
 + (NSManagedObject *)createGenomeImageEntityFromAttributeDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc;
-
++ (void) addEditsFromAttributeDictionary:(NSDictionary *)edits toGenome:(NSManagedObject *)genomeEntity;
 @end

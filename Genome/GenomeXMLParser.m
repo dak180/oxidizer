@@ -69,9 +69,9 @@
 
 	} else if([elementName isEqualToString:@"symmetry"]) {
 		[_currentGenome setValue:[attributeDict objectForKey:@"kind"] forKey:@"symmetry"];
+	} else if([elementName isEqualToString:@"edits"]) {
+		[Genome addEditsFromAttributeDictionary:attributeDict toGenome:_currentGenome];
 	}
-	
-	
 	
 }
 

@@ -644,8 +644,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSEnumerator *flameEnumerator = [flameElements objectEnumerator];
 	
 	
+	NSManagedObject *genome;
+	
 	while ((flameElement = [flameEnumerator nextObject])) {
-		[genomes addObject:[Genome createGenomeEntitiesFromElement:flameElement inContext:moc]]; 
+		genome = [Genome createGenomeEntitiesFromElement:flameElement inContext:moc];
+		[genomes addObject:genome]; 
 	}
 	
 	[doc release];
@@ -2018,6 +2021,7 @@ NSString *variationName[1+flam3_nvariations] = {
 + (NSManagedObject *)createGenomeEntityFromDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc {
 	
 	NSManagedObject *newGenomeEntity = [Genome createDefaultGenomeEntityInContext:moc];
+	NSManagedObject *newGenomeImageEntity = [Genome createDefaultGenomeImageEntityInContext:moc];
 	NSObject *tempObject;
 	NSString *tempString;
 	
@@ -2128,12 +2132,6 @@ NSString *variationName[1+flam3_nvariations] = {
 		[newGenomeEntity setValue:[NSColor colorWithDeviceRed:red green:green blue:blue alpha:1.0] forKey:@"background"];
 	}
 	
-	
-	tempObject = [genome objectForKey:@"hue"];
-	if(tempObject != nil) {
-	    [newGenomeEntity setValue:tempObject forKey:@"hue"];
-	}
-	
 	tempObject = [genome objectForKey:@"vibrancy"];
 	if(tempObject != nil) {
 	    [newGenomeEntity setValue:tempObject forKey:@"vibrancy"];
@@ -2194,13 +2192,19 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	tempObject = [genome objectForKey:@"palette"];
 	if(tempObject != nil) {
-	    [newGenomeEntity setValue:tempObject forKey:@"palette"];
+	    [newGenomeImageEntity setValue:tempObject forKey:@"palette"];
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"use_palette"];
 	} else {
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"use_palette"];		
 		newColours = [[NSMutableSet alloc] initWithCapacity:256];
 	}
 
+	[newGenomeEntity setValue:newGenomeImageEntity forKey:@"images"];
+	
+	tempObject = [genome objectForKey:@"hue"];
+	if(tempObject != nil) {
+	    [newGenomeEntity setValue:tempObject forKey:@"hue"];
+	}	
 	
 	/* deal the flame children */	
 
@@ -2209,12 +2213,21 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	NSArray *colourMap = [genome objectForKey:@"colors"];	
 	if (colourMap != nil) {
-		[Genome createColourMapFromArray:colourMap forGenome:newGenomeEntity inContext:moc];
+		[Genome createColourMapFromArray:colourMap forGenome:newGenomeEntity andImageEntity:newGenomeImageEntity inContext:moc];
 	}
 	
 	
 	NSDictionary *edits = [genome objectForKey:@"edit"];
-	NSAttributedString *previousEdits = [[NSAttributedString alloc] initWithString:[edits objectForKey:@"previous_edits"]];
+	NSAttributedString *previousEdits;
+	NSString *pEdits =  [edits objectForKey:@"previous_edits"];
+	if(pEdits == nil) {
+		previousEdits = [[NSAttributedString alloc] initWithString:@""];
+		
+	} else {
+		previousEdits = [[NSAttributedString alloc] initWithString:pEdits];
+		
+	}
+
 	[newGenomeEntity setValue:previousEdits forKey:@"edits"];
 
 	[newGenomeEntity setValue:[edits objectForKey:@"nick"] forKey:@"nick"];
@@ -2632,7 +2645,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	return variation;
 }
 
-+ (void) createColourMapFromArray:(NSArray *)colourMap forGenome:(NSManagedObject *)genomeEntity inContext:(NSManagedObjectContext *)moc {
++ (void) createColourMapFromArray:(NSArray *)colourMap forGenome:(NSManagedObject *)genomeEntity 
+												  andImageEntity:(NSManagedObject *)genomeImageEntity 
+						                               inContext:(NSManagedObjectContext *)moc {
 	
 	int i, index;
 	double red, green, blue;
@@ -2679,13 +2694,11 @@ NSString *variationName[1+flam3_nvariations] = {
 																				bitmapFormat:0
 																				 bytesPerRow:3*256
 																				bitsPerPixel:24]; 
-	[PaletteController fillBitmapRep:colourMapImageRep withColours:tempColours forHeight:15]; 
+	
+	[PaletteController fillBitmapRep:colourMapImageRep withColours:tempColours forHeight:1]; 
 	[colourMapImage addRepresentation:colourMapImageRep];
 	
-	[genomeEntity setValue:colourMapImage forKey:@"colour_map_image"];
-	
-	
-	
+	[genomeImageEntity setValue:colourMapImage forKey:@"colour_map_image"];
 	
 	[colourMapImageRep release];
 	[colourMapImage release];
@@ -3351,7 +3364,17 @@ NSString *variationName[1+flam3_nvariations] = {
 			
 }
 
++ (void) addEditsFromAttributeDictionary:(NSDictionary *)edits toGenome:(NSManagedObject *)genomeEntity {
+	
 
+	/* create edit element with new details */ 
+	[genomeEntity setValue:[edits objectForKey:@"nick"] forKey:@"nick"];
+	[genomeEntity setValue:[edits objectForKey:@"url"] forKey:@"url"];
+	[genomeEntity setValue:[edits objectForKey:@"comment"] forKey:@"comment"];
+	[genomeEntity setValue:[edits objectForKey:@"date"] forKey:@"date"];
+	[genomeEntity setValue:@"" forKey:@"previous_edits"];
+	
+}
 
 @end
 

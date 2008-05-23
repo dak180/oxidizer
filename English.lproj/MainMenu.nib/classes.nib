@@ -14,19 +14,19 @@
 		</dict>
 		<dict>
 			<key>CLASS</key>
-			<string>DragDropAndSaveImageView</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSImageView</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
 			<string>NSSegmentedControl</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSControl</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>DragDropAndSaveImageView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSImageView</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -107,6 +107,54 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>customizeToolbar</key>
+				<string>id</string>
+				<key>newFlame</key>
+				<string>id</string>
+				<key>openFile</key>
+				<string>id</string>
+				<key>renderMovie</key>
+				<string>id</string>
+				<key>renderStill</key>
+				<string>id</string>
+				<key>renderStillToWindow</key>
+				<string>id</string>
+				<key>renderStills</key>
+				<string>id</string>
+				<key>runLuaScript</key>
+				<string>id</string>
+				<key>saveAsFlam3</key>
+				<string>id</string>
+				<key>saveFlam3</key>
+				<string>id</string>
+				<key>showBreedingWindow</key>
+				<string>id</string>
+				<key>showGenePoolWindow</key>
+				<string>id</string>
+				<key>showGradientWindow</key>
+				<string>id</string>
+				<key>showRectangleWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>OxidizerDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>bc</key>
+				<string>BreedingController</string>
+				<key>ffm</key>
+				<string>FractalFlameModel</string>
+				<key>oxidizerWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
 				<key>changeColourMap</key>
 				<string>id</string>
 				<key>changeColourMapAndHideWindow</key>
@@ -149,54 +197,6 @@
 				<key>xformController</key>
 				<string>NSArrayController</string>
 				<key>xformWindow</key>
-				<string>NSWindow</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>customizeToolbar</key>
-				<string>id</string>
-				<key>newFlame</key>
-				<string>id</string>
-				<key>openFile</key>
-				<string>id</string>
-				<key>renderMovie</key>
-				<string>id</string>
-				<key>renderStill</key>
-				<string>id</string>
-				<key>renderStillToWindow</key>
-				<string>id</string>
-				<key>renderStills</key>
-				<string>id</string>
-				<key>runLuaScript</key>
-				<string>id</string>
-				<key>saveAsFlam3</key>
-				<string>id</string>
-				<key>saveFlam3</key>
-				<string>id</string>
-				<key>showBreedingWindow</key>
-				<string>id</string>
-				<key>showGenePoolWindow</key>
-				<string>id</string>
-				<key>showGradientWindow</key>
-				<string>id</string>
-				<key>showRectangleWindow</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>OxidizerDelegate</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>bc</key>
-				<string>BreedingController</string>
-				<key>ffm</key>
-				<string>FractalFlameModel</string>
-				<key>oxidizerWindow</key>
 				<string>NSWindow</string>
 			</dict>
 			<key>SUPERCLASS</key>
