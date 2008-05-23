@@ -134,7 +134,14 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 				
 //		NSLog(@"appFolder %@", [defaults dictionaryRepresentation]);
-		NSURL *url = [NSURL fileURLWithPath: [appFolder stringByAppendingPathComponent: @"Oxidizer.sqliteO2"]];
+		NSString *psPath = [appFolder stringByAppendingPathComponent: @"Oxidizer.sqliteO2"];
+		
+		NSFileManager *fileManager = [NSFileManager defaultManager];
+		
+		[fileManager removeItemAtPath:psPath error:&error];
+		
+		
+		NSURL *url = [NSURL fileURLWithPath:psPath];
 		
 		id newStore = [coordinator addPersistentStoreWithType: NSSQLiteStoreType
 												configuration: nil
