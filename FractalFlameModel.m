@@ -78,6 +78,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 									[NSNumber numberWithBool:NO], @"use_alpha",
 									[NSNumber numberWithBool:YES], @"float_preview",
 									applicationSupportFolder, @"xml_folder",
+									[NSNumber numberWithBool:YES], @"auto_save_on_render",
 									nil]
 		 ];
 	
@@ -112,7 +113,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		[moc setPersistentStoreCoordinator: coordinator];
 
-		
+/*		
 		
 		NSString *STORE_TYPE = NSInMemoryStoreType;
 		//    NSString *STORE_FILENAME = @"flam3.genome";
@@ -126,8 +127,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 														  URL:nil
 													  options:nil
 														error:&error];
-/*
 
+*/
 		NSError *error;
 		
 		NSString *appFolder = [defaults stringForKey:@"xml_folder"];
@@ -148,7 +149,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 														  URL: url
 													  options: nil	
 														error: &error];        		
-*/		
+		
 		if (newStore == nil) {
 			NSLog(@"Store Configuration Failure\n%@",
 				  ([error localizedDescription] != nil) ?
