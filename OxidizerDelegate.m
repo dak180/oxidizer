@@ -222,6 +222,12 @@ void print_stack(lua_State* interpreter){
 		[item setImage:[NSImage imageNamed:@"text-x-script"]];
 		[item setTarget:self];
 		[item setAction:@selector(runLuaScript:)];
+	} else if ( [itemIdentifier isEqualToString:@"transformation_editor"] ) {
+		[item setLabel:@"XForm Editor"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"transform-scale"]];
+		[item setTarget:self];
+		[item setAction:@selector(showRectangleWindow:)];
 	}
 	
 	return [item autorelease];
@@ -237,6 +243,7 @@ void print_stack(lua_State* interpreter){
 									 @"render_movie", 
 									 @"render_stills", 
 									 NSToolbarSeparatorItemIdentifier,
+									 @"transformation_editor", 
 									 @"breed_flam3", 
 									 @"gene_pool", 
 									 NSToolbarSeparatorItemIdentifier,
@@ -255,6 +262,7 @@ void print_stack(lua_State* interpreter){
 									 @"render_movie", 
 									 @"render_stills", 
 									 NSToolbarSeparatorItemIdentifier,
+									 @"transformation_editor", 
 									 @"breed_flam3", 
 									 @"gene_pool", 
 									 NSToolbarSeparatorItemIdentifier,

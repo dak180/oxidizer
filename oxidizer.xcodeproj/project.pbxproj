@@ -46,6 +46,7 @@
 		A49E2A680D86FDC9008198BE /* GradientWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A49E2A670D86FDC9008198BE /* GradientWindow.nib */; };
 		A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
 		A4A3810E0A4F236700E7364C /* DnDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3810D0A4F236700E7364C /* DnDImageView.m */; };
+		A4AD8DD20DE857F200201C58 /* transform-scale.png in Resources */ = {isa = PBXBuildFile; fileRef = A4AD8DD10DE857F200201C58 /* transform-scale.png */; };
 		A4BE79470DA6DD3700160702 /* GradientController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79440DA6DD3700160702 /* GradientController.m */; };
 		A4BE79480DA6DD3700160702 /* GradientNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79460DA6DD3700160702 /* GradientNibController.m */; };
 		A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */; };
@@ -148,6 +149,7 @@
 		A4A3027C0A28995D002828D9 /* BreedingController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = BreedingController.m; sourceTree = "<group>"; };
 		A4A3810C0A4F236700E7364C /* DnDImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDImageView.h; sourceTree = "<group>"; };
 		A4A3810D0A4F236700E7364C /* DnDImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DnDImageView.m; sourceTree = "<group>"; };
+		A4AD8DD10DE857F200201C58 /* transform-scale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "transform-scale.png"; path = "icons/Tango/transform-scale.png"; sourceTree = "<group>"; };
 		A4BE79430DA6DD3700160702 /* GradientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientController.h; path = GradientEditor/GradientController.h; sourceTree = "<group>"; };
 		A4BE79440DA6DD3700160702 /* GradientController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientController.m; path = GradientEditor/GradientController.m; sourceTree = "<group>"; };
 		A4BE79450DA6DD3700160702 /* GradientNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientNibController.h; path = GradientEditor/GradientNibController.h; sourceTree = "<group>"; };
@@ -290,6 +292,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A4AD8DD10DE857F200201C58 /* transform-scale.png */,
 				A410568C0C5F760A0075334E /* stills.png */,
 				A410568D0C5F760A0075334E /* text-x-script.png */,
 				A42963130C5685B100D56561 /* Credits.html */,
@@ -458,7 +461,6 @@
 				A40CA26B0CF0B59D000C28FB /* flam3-genome in Resources */,
 				A40CA2690CF0B58D000C28FB /* flam3-render in Resources */,
 				A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */,
-				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */,
 				A410568E0C5F760A0075334E /* stills.png in Resources */,
@@ -468,9 +470,11 @@
 				A4F49CF00AAB1D5400FA4BE8 /* oxidizer_dna.png in Resources */,
 				A4F3EF1E0AB5DE3100A282F2 /* image-x-generic.png in Resources */,
 				A4F3EF200AB5DE3B00A282F2 /* video-x-generic.png in Resources */,
-				A422B9A10B162E7800019559 /* GenePool.nib in Resources */,
 				A44201EE0B21E551000B94D9 /* genepool.png in Resources */,
+				A4AD8DD20DE857F200201C58 /* transform-scale.png in Resources */,
 				A42963140C5685B100D56561 /* Credits.html in Resources */,
+				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
+				A422B9A10B162E7800019559 /* GenePool.nib in Resources */,
 				A41963670C5E484B002EDD7B /* FileViews.nib in Resources */,
 				A404B32F0D14345E00FE81AC /* RectangleWindow.nib in Resources */,
 				A49E2A680D86FDC9008198BE /* GradientWindow.nib in Resources */,
