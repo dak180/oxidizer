@@ -113,7 +113,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[moc setPersistentStoreCoordinator: coordinator];
 
 		
-	/*	
+		
 		NSString *STORE_TYPE = NSInMemoryStoreType;
 		//    NSString *STORE_FILENAME = @"flam3.genome";
 		
@@ -126,7 +126,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 														  URL:nil
 													  options:nil
 														error:&error];
-*/
+/*
 
 		NSError *error;
 		
@@ -148,7 +148,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 														  URL: url
 													  options: nil	
 														error: &error];        		
-		
+*/		
 		if (newStore == nil) {
 			NSLog(@"Store Configuration Failure\n%@",
 				  ([error localizedDescription] != nil) ?

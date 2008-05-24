@@ -60,9 +60,10 @@
 		f = [fTextField floatValue];
 	}
 
+	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+	[self updatePreview:self];
 	[self addUndoEntry];
 
-	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
 }
 
 - (IBAction)modeChanged:(id)sender {
