@@ -102,7 +102,9 @@ NSString *mocPasteboardType = @"GenomeMoc";
 		[genomeData getBytes:&sourceEntity];
 		NSData *xml = [Genome createXMLFromEntities:[NSArray arrayWithObject:sourceEntity]  fromContext:sourceMoc forThumbnail:NO];
 		NSArray *genome = [Genome createGenomeEntitiesFromXML:xml inContext:destinationMoc];
-		[[genome objectAtIndex:0] setValue:[sourceEntity valueForKey:@"image"] forKey:@"image"];
+//		[[genome objectAtIndex:0] setValue:[sourceEntity valueForKey:@"image"] forKey:@"image"];
+		[[[genome objectAtIndex:0] valueForKey:@"images"] setValue:[[sourceEntity valueForKey:@"images"] valueForKey:@"image"] forKey:@"image"];
+
 	}
 	
 	[self rearrangeObjects];

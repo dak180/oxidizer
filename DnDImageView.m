@@ -43,7 +43,7 @@ NSPasteboard *pboard = [NSPasteboard pasteboardWithName:(NSString *) NSDragPboar
 	
 	NSArrayController *breedGenomeController = [binding objectForKey:NSObservedObjectKey];
 	NSManagedObject *mo = [[breedGenomeController selectedObjects] objectAtIndex:0];
-	NSImage *image = [mo valueForKey:@"image"];
+	NSImage *image = [[mo valueForKey:@"images"] valueForKey:@"image"];
 	
     NSArray *types = [NSArray arrayWithObjects:@"Genomes", @"GenomeMoc", nil];
 

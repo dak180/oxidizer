@@ -564,7 +564,7 @@
 		if (returnCode == 0) {
 			
 			NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:pngFileName]];
-			[[genome objectAtIndex:0] setValue:flameImage forKey:@"image"];
+			[[[genome objectAtIndex:0] valueForKey:@"images"] setValue:flameImage forKey:@"image"];
 			[flameImage release];
 
 		}		
