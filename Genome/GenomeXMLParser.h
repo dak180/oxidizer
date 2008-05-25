@@ -16,6 +16,8 @@
 	NSManagedObject *_currentColour;
 	NSManagedObject *_currentGenomeImages;
 	
+	NSMutableString *_previousEdits;
+	
 	
 	NSMutableSet *_currentTransforms;
 //	NSMutableSet *_currentColours;
@@ -26,6 +28,7 @@
 	NSManagedObjectContext *_moc;	
 	
 	unsigned  int _transformCount;
+	unsigned  int _editDepth;
 	
 	double palette[256][3]; 
 	

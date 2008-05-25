@@ -50,6 +50,9 @@
 		_currentTransforms = [[NSMutableSet alloc] initWithCapacity:5];
 		_currentColours = [[NSMutableArray alloc] initWithCapacity:256];
 		useColourMap = NO;
+		_transformCount = 0;
+		_editDepth = 0;
+		_previousEdits = [[NSMutableString alloc] initWithString:@""];
 	} else if([elementName isEqualToString:@"xform"] || [elementName isEqualToString:@"finalxform"])  {
 		_transformCount++;
 		_currentTransform = [Genome createTransformEntity:elementName fromAttributeDictionary:attributeDict atPosition:_transformCount inContext:_moc];
@@ -69,8 +72,16 @@
 
 	} else if([elementName isEqualToString:@"symmetry"]) {
 		[_currentGenome setValue:[attributeDict objectForKey:@"kind"] forKey:@"symmetry"];
-	} else if([elementName isEqualToString:@"edits"]) {
-		[Genome addEditsFromAttributeDictionary:attributeDict toGenome:_currentGenome];
+	} else if([elementName isEqualToString:@"edit"]) {
+		switch(_editDepth) {
+			case 0:
+				[Genome addEditsFromAttributeDictionary:attributeDict toGenome:_currentGenome];
+				break;
+			default:
+				[Genome AppendEditStringFromAttributeDictionary:attributeDict toString:_previousEdits];
+				break;
+		}
+		_editDepth++;
 	}
 	
 }
@@ -106,12 +117,15 @@
 			[colourMapImage release];
 
 		}
-
+		NSAttributedString *tmp = [[NSAttributedString alloc] initWithString:_previousEdits];
+		[_currentGenome setValue:tmp forKey:@"edits"];
         /* add the genome to the array */
 		[_genomes addObject:_currentGenome];
 		[_currentGenome release];
 		[_currentTransforms release];		
 		[_currentColours release];		
+		[_previousEdits release];
+		[tmp release];
 	} else if([elementName isEqualToString:@"xform"] || [elementName isEqualToString:@"finalxform"])  {
 		/* add the xform to the set */
 		[_currentTransforms addObject:_currentTransform];
@@ -119,7 +133,13 @@
 	} else if([elementName isEqualToString:@"color"])  {
 		[_currentColours addObject:_currentColour];
 		[_currentColour release];
+	}else if([elementName isEqualToString:@"edit"]) {
+		if(_editDepth > 1) {
+			[_previousEdits appendString:@"</edit>"];
+		}
+		_editDepth--;
 	}
+	
 	
 }
 

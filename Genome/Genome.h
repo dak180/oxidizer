@@ -84,4 +84,5 @@
 + (NSManagedObject *)createVariationEntityFromAttributeDictionary:(NSDictionary *)variationDictionary ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc;
 + (NSManagedObject *)createGenomeImageEntityFromAttributeDictionary:(NSDictionary *)genome inContext:(NSManagedObjectContext *)moc;
 + (void) addEditsFromAttributeDictionary:(NSDictionary *)edits toGenome:(NSManagedObject *)genomeEntity;
++ (void) AppendEditStringFromAttributeDictionary:(NSDictionary *)edits toString:(NSMutableString *)previousEdits;
 @end

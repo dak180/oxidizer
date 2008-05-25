@@ -122,8 +122,6 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSArray *sortDescriptors;
 	NSArray *xforms; 
 	
-	NSFetchRequest *fetch;
-	NSPredicate *predicate;						 
 	NSSortDescriptor *sort;
 	NSString *tempString;
 	
@@ -235,25 +233,7 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	
 	if([[genomeEntity valueForKey:@"use_palette"] boolValue] == FALSE) {
-/*
-		predicate = [NSPredicate predicateWithFormat:@"parent_genome == %@", genomeEntity];
-							 
-		sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
-		sortDescriptors = [NSArray arrayWithObject: sort];
-		
-		fetch = [[NSFetchRequest alloc] init];
-		[fetch setEntity:[NSEntityDescription entityForName:@"CMap" inManagedObjectContext:moc]];
-		[fetch setPredicate: predicate];
-		[fetch setSortDescriptors: sortDescriptors];
 
-		NSError*	err	= [[NSError alloc] init];
-		
-		
-		cmaps = [moc executeFetchRequest:fetch error:&err];
-		[sort release];
-		[fetch release];	
-		[err release];
- */
 		sort = [[NSSortDescriptor alloc] initWithKey:@"index" ascending:YES];
 		sortDescriptors = [NSArray arrayWithObject: sort];
 		
@@ -273,26 +253,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 		
 	/* xforms */
-/*	
-	predicate = [NSPredicate predicateWithFormat:@"parent_genome == %@", genomeEntity];
-	
-	sort = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
-	sortDescriptors = [NSArray arrayWithObject: sort];
-	
-	fetch = [[NSFetchRequest alloc] init];
-	[fetch setEntity:[NSEntityDescription entityForName:@"XForm" inManagedObjectContext:moc]];
-	[fetch setPredicate: predicate];
-	[fetch setSortDescriptors: sortDescriptors];
-	
-	NSError*	err	= [[NSError alloc] init];
-	
-	xforms = [moc executeFetchRequest:fetch error:&err];
 
- 
-    [sort release];
-	[fetch release];
-	[err release];
-*/
 
 	sort = [[NSSortDescriptor alloc] initWithKey:@"order" ascending:YES];
 	sortDescriptors = [NSArray arrayWithObject: sort];
@@ -2996,7 +2957,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	tempObject = [xform objectForKey:@"symmetry"];
 	if (tempObject != nil) {
-		[xFormEntity setValue:[NSNumber numberWithInt:[tempObject intValue]] forKey:@"symmetry"];			
+		[xFormEntity setValue:[NSNumber numberWithDouble:[tempObject doubleValue]] forKey:@"symmetry"];			
 	}
 	
 	[xFormEntity setValue:[Genome createVariationEntitiesFromAttributes:xform inContext:moc] forKey:@"variations"];
@@ -3371,8 +3332,45 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genomeEntity setValue:[edits objectForKey:@"nick"] forKey:@"nick"];
 	[genomeEntity setValue:[edits objectForKey:@"url"] forKey:@"url"];
 	[genomeEntity setValue:[edits objectForKey:@"comment"] forKey:@"comment"];
-	[genomeEntity setValue:[edits objectForKey:@"date"] forKey:@"date"];
-	[genomeEntity setValue:@"" forKey:@"previous_edits"];
+	
+}
+
+
++ (void) AppendEditStringFromAttributeDictionary:(NSDictionary *)edits toString:(NSMutableString *)previousEdits {
+
+	[previousEdits appendString:@"<edit "];
+
+	if([edits objectForKey:@"nick"] != nil) {
+		[previousEdits appendString:@"nick=\""];
+		[previousEdits appendString:[edits objectForKey:@"nick"]];
+		[previousEdits appendString:@"\" "];
+	}
+	
+	if([edits objectForKey:@"url"] != nil) {
+		[previousEdits appendString:@"url=\""];
+		[previousEdits appendString:[edits objectForKey:@"url"]];
+		[previousEdits appendString:@"\" "];
+	}
+	
+	if([edits objectForKey:@"comment"] != nil) {
+		[previousEdits appendString:@"comment=\""];
+		[previousEdits appendString:[edits objectForKey:@"comment"]];
+		[previousEdits appendString:@"\" "];
+	}
+
+	if([edits objectForKey:@"date"] != nil) {
+		[previousEdits appendString:@"date=\""];
+		[previousEdits appendString:[edits objectForKey:@"date"]];
+		[previousEdits appendString:@"\" "];
+	}
+	
+	if([edits objectForKey:@"action"] != nil) {
+		[previousEdits appendString:@"action=\""];
+		[previousEdits appendString:[edits objectForKey:@"action"]];
+		[previousEdits appendString:@"\" "];
+	}	
+
+	[previousEdits appendString:@">"];
 	
 }
 
