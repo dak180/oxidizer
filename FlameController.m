@@ -407,10 +407,10 @@
 
 	[cmapController rearrangeObjects];
 	[PaletteController fillBitmapRep:_colourWithHueRep withColours:arrangedObjects forHeight:15];
-	NSManagedObject *genome = [self getSelectedGenome];
-	[genome willChangeValueForKey:@"colour_map_image"];
-	[genome setValue:colourImage forKey:@"colour_map_image"]; 	 
-	[genome didChangeValueForKey:@"colour_map_image"];
+	NSManagedObject *genomeImages = [[self getSelectedGenome] valueForKey:@"images"];
+	[genomeImages willChangeValueForKey:@"colour_map_image"];
+	[genomeImages setValue:colourImage forKey:@"colour_map_image"]; 	 
+	[genomeImages didChangeValueForKey:@"colour_map_image"];
 	[colourWithHue setNeedsDisplay:YES];
 
 }
@@ -420,12 +420,11 @@
 	[cmapController rearrangeObjects];
 	
 	[PaletteController fillBitmapRep:_colourWithHueRep withColours:[cmapController arrangedObjects] forHeight:15];
-	NSManagedObject *genome = [self getSelectedGenome];
-	[genome willChangeValueForKey:@"colour_map_image"];
-	[genome setValue:colourImage forKey:@"colour_map_image"]; 	 
-	[genome didChangeValueForKey:@"colour_map_image"];
+	NSManagedObject *genomeImages = [[self getSelectedGenome] valueForKey:@"images"];
+	[genomeImages willChangeValueForKey:@"colour_map_image"];
+	[genomeImages setValue:colourImage forKey:@"colour_map_image"]; 	 
+	[genomeImages didChangeValueForKey:@"colour_map_image"];
 	[colourWithHue setNeedsDisplay:YES];	
-//	[cmapWindow  setIsVisible:FALSE];
 
 }
 
