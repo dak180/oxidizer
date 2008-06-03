@@ -60,6 +60,19 @@
 		f = [fTextField floatValue];
 	}
 
+	if(_editPostTransformations) {
+		if(a == 1.0 &&
+		   b == 0.0 &&
+		   c == 0.0 &&
+		   d == 0.0 &&
+		   e == 1.0 &&
+		   f == 0.0 ) {
+			[_currentTransform setValue:[NSNumber numberWithBool:NO] forKey:@"post_flag"];
+		} else {
+			[_currentTransform setValue:[NSNumber numberWithBool:YES] forKey:@"post_flag"];			
+		}
+	}
+	
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
 	[self updatePreview:self];
 	[self addUndoEntry];
@@ -206,6 +219,19 @@
 		f = [fTextField floatValue];
 	}
 	
+	if(_editPostTransformations) {
+		if(a != 1.0 &&
+		   b != 0.0 &&
+		   c != 0.0 &&
+		   d != 0.0 &&
+		   e != 1.0 &&
+		   f != 0.0 ) {
+			[_currentTransform setValue:[NSNumber numberWithBool:YES] forKey:@"post_flag"];
+		} else {
+			[_currentTransform setValue:[NSNumber numberWithBool:NO] forKey:@"post_flag"];			
+		}
+	}
+	
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
 	[self addUndoEntry];
 }
@@ -239,7 +265,7 @@
 		[eTextField bind:@"value" toObject:treeController withKeyPath:@"selection.post_1_1" options:nil];	
 		[fTextField unbind:@"value"];
 		[fTextField bind:@"value" toObject:treeController withKeyPath:@"selection.post_2_1" options:nil];	
-		[_currentTransform setValue:[NSNumber numberWithBool:YES] forKey:@"post_flag"];
+//		[_currentTransform setValue:[NSNumber numberWithBool:YES] forKey:@"post_flag"];
 		_editPostTransformations = YES;
 	}
 	
