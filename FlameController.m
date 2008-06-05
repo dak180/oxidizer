@@ -249,7 +249,7 @@
 
 - (void)setPreviewForCurrentFlame:(NSImage *)preview {
 
-	NSManagedObject *genome = [self getSelectedGenome];
+	NSManagedObject *genome = [[self getSelectedGenome] valueForKey:@"images"];
 
 //	[genome willChangeValueForKey:@"image"];
 	[genome setValue:preview forKey:@"image"];
@@ -260,7 +260,7 @@
 
 - (void)setPreviewForCurrentFlameFromFile:(NSString *)previewPath {
 	
-	NSManagedObject *genome = [self getSelectedGenome];
+	NSManagedObject *genome = [[self getSelectedGenome] valueForKey:@"images"];
 
 //	NSImage *flameImage = [[NSImage alloc] initByReferencingFile:previewPath];
 	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:previewPath]];

@@ -11,6 +11,31 @@
 
 @implementation GenomeImages
 
+- (void)willSave {
+	
+    NSImage *tmpImage = [self primitiveValueForKey:@"image"];
+    if (tmpImage != nil) {
+        [self setPrimitiveValue:[NSArchiver archivedDataWithRootObject:tmpImage] forKey:@"imageData"];
+    } else {
+        [self setPrimitiveValue:nil forKey:@"imageData"];
+	}
+	
+
+    [super willSave];
+}
+
+- (void)awakeFromFetch {
+	
+	//	[super awakeFromFetch];
+	
+    NSData *imageData = [self valueForKey:@"imageData"];
+    if (imageData != nil) {
+        NSImage *image = [NSUnarchiver unarchiveObjectWithData:imageData];
+        [self setPrimitiveValue:image forKey:@"image"];
+    }
+	
+}
+
 - (double)hue {
 	
 	double newHue;

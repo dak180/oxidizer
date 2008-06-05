@@ -28,16 +28,9 @@
 
 - (void)willSave {
 
-    NSImage *tmpImage = [self primitiveValueForKey:@"image"];
-    if (tmpImage != nil) {
-        [self setPrimitiveValue:[NSArchiver archivedDataWithRootObject:tmpImage] forKey:@"imageData"];
-    } else {
-        [self setPrimitiveValue:nil forKey:@"imageData"];
-	}
-
     NSColor *tmpColour = [self primitiveValueForKey:@"background"];
     if (tmpColour != nil) {
-        [self setPrimitiveValue:[NSArchiver archivedDataWithRootObject:tmpImage] forKey:@"backgroundData"];
+        [self setPrimitiveValue:[NSArchiver archivedDataWithRootObject:tmpColour] forKey:@"backgroundData"];
     } else {
         [self setPrimitiveValue:nil forKey:@"backgroundData"];
 	}
@@ -52,14 +45,6 @@
 }
 
 - (void)awakeFromFetch {
-
-//	[super awakeFromFetch];
-
-    NSData *imageData = [self valueForKey:@"imageData"];
-    if (imageData != nil) {
-        NSImage *image = [NSUnarchiver unarchiveObjectWithData:imageData];
-        [self setPrimitiveValue:image forKey:@"image"];
-    }
 
     NSData *colourData = [self valueForKey:@"backgroundData"];
     if (colourData != nil) {
