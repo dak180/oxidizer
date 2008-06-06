@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 56 tasks, 246 threads, 2 processors
-Load average: 1.54, Mach factor: 0.62
+Default processor set: 57 tasks, 220 threads, 2 processors
+Load average: 1.16, Mach factor: 0.84
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -430,7 +430,7 @@ configure:6829: result: strip
 configure:7115: checking if gcc supports -fno-rtti -fno-exceptions
 configure:7133: gcc -c -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
-cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
+                                                                                  
 configure:7137: $? = 0
 configure:7150: result: no
 configure:7165: checking for gcc option to produce PIC

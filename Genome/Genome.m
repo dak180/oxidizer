@@ -248,7 +248,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		
 	
 	} else {
-		[genome addAttribute:[NSXMLNode attributeWithName:@"palette" stringValue:[[genomeEntity valueForKey:@"palette"] stringValue]]];
+		[genome addAttribute:[NSXMLNode attributeWithName:@"palette" stringValue:[[[genomeEntity valueForKey:@"images"]  valueForKey:@"palette"] stringValue]]];
 	}
 	
 		
@@ -1656,7 +1656,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		*/ 
 		 
 	} else {
-		[genome setObject:[genomeEntity valueForKey:@"palette"] forKey:@"palette"];
+		[genome setObject:[[genomeEntity valueForKey:@"images"] valueForKey:@"palette"] forKey:@"palette"];
 	}
 	
 	
