@@ -177,14 +177,18 @@
 	
 	if(use == YES) {
 
-		[self willAccessValueForKey: @"palette"];
-		int index = [[self primitiveValueForKey: @"palette"] intValue];
-		[self didAccessValueForKey: @"palette"];
+		[self willAccessValueForKey: @"images"];
+		NSManagedObject *images = [self primitiveValueForKey: @"images"];
+		[self didAccessValueForKey: @"images"];
+		
+		[images willAccessValueForKey: @"palette"];
+		int index = [[images primitiveValueForKey: @"palette"] intValue];
+		[images didAccessValueForKey: @"palette"];
 		
 		if(index < 0) {			
-			[self willChangeValueForKey: @"palette"];
-			[self setPrimitiveValue:[NSNumber numberWithInt:0] forKey: @"palette"];
-			[self didChangeValueForKey: @"palette"];			
+			[images willChangeValueForKey: @"palette"];
+			[images setPrimitiveValue:[NSNumber numberWithInt:0] forKey: @"palette"];
+			[images didChangeValueForKey: @"palette"];			
 		}
 	
 	}
@@ -298,5 +302,8 @@
 	[self didChangeValueForKey: @"hue"];
 }
 
-
+- (NSManagedObject *)parent_genome {
+		
+    return self;
+}
 @end

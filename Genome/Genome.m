@@ -877,7 +877,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		NSImage *colourMapImage = [[NSImage alloc] init];
 		NSBitmapImageRep *colourMapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 																					  pixelsWide:256
-																					  pixelsHigh:1
+																					  pixelsHigh:15
 																				   bitsPerSample:8
 																				 samplesPerPixel:3
 																						hasAlpha:NO 
@@ -886,7 +886,7 @@ NSString *variationName[1+flam3_nvariations] = {
 																					bitmapFormat:0
 																					 bytesPerRow:3*256
 																					bitsPerPixel:24]; 
-		[PaletteController fillBitmapRep:colourMapImageRep withPalette:palette[0] forHeight:1]; 
+		[PaletteController fillBitmapRep:colourMapImageRep withPalette:palette[0] forHeight:15]; 
 		[colourMapImage addRepresentation:colourMapImageRep];
 		
 		[newGenomeImageEntity setValue:colourMapImage forKey: @"colour_map_image"];
@@ -1446,7 +1446,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSImage *paletteImage = [[NSImage alloc] init];
 	NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 																				  pixelsWide:256
-																				  pixelsHigh:1
+																				  pixelsHigh:15
 																			   bitsPerSample:8
 																			 samplesPerPixel:3
 																					hasAlpha:NO 
@@ -1455,7 +1455,7 @@ NSString *variationName[1+flam3_nvariations] = {
 																				bitmapFormat:0
 																				 bytesPerRow:3*256
 																				bitsPerPixel:24]; 
-	[PaletteController fillBitmapRep:paletteWithHueRep withPalette:1 usingHue:0.0];
+	[PaletteController fillBitmapRep:paletteWithHueRep withPalette:1 usingHue:0.0 forHeight:15];
 	[paletteImage addRepresentation:paletteWithHueRep];
 	
 	[genomeImageEntity setValue:paletteImage forKey: @"palette_image"];
@@ -2646,7 +2646,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSImage *colourMapImage = [[NSImage alloc] init];
 	NSBitmapImageRep *colourMapImageRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 																				  pixelsWide:256
-																				  pixelsHigh:1
+																				  pixelsHigh:15
 																			   bitsPerSample:8
 																			 samplesPerPixel:3
 																					hasAlpha:NO 
@@ -2656,7 +2656,7 @@ NSString *variationName[1+flam3_nvariations] = {
 																				 bytesPerRow:3*256
 																				bitsPerPixel:24]; 
 	
-	[PaletteController fillBitmapRep:colourMapImageRep withColours:tempColours forHeight:1]; 
+	[PaletteController fillBitmapRep:colourMapImageRep withColours:tempColours forHeight:15]; 
 	[colourMapImage addRepresentation:colourMapImageRep];
 	
 	[genomeImageEntity setValue:colourMapImage forKey:@"colour_map_image"];

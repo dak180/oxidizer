@@ -68,7 +68,7 @@ static double *_paletteData = NULL;
 		paletteImage = [[NSImage alloc] init];
 		[paletteImage addRepresentation:paletteRep];
 	
-	    [PaletteController fillBitmapRep:paletteRep withPalette:i usingHue:0.0];
+	    [PaletteController fillBitmapRep:paletteRep withPalette:i usingHue:0.0 forHeight:1];
 	
 		paletteDictionary = [[NSMutableDictionary alloc] initWithCapacity:2]; 
 		[paletteDictionary setValue:paletteImage forKey:@"paletteimage"];	
@@ -205,7 +205,7 @@ static double *_paletteData = NULL;
 }
 
 
-+(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue {
++(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue forHeight:(int)height {
 
 	double rgbValues[3];
 	double hsv[3];
@@ -236,7 +236,12 @@ static double *_paletteData = NULL;
 			paletteData++;
 			
 		}																								
-		
+
+	paletteData = [paletteRep bitmapData];
+
+	for(j=1; j<height; j++) {
+		memcpy(paletteData+(256*j*3), paletteData, 256*3);
+	}
 
 }
 

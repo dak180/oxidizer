@@ -139,7 +139,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		NSFileManager *fileManager = [NSFileManager defaultManager];
 		
-		[fileManager removeItemAtPath:psPath error:&error];
+		[fileManager removeFileAtPath:psPath handler:nil];
 		
 		
 		NSURL *url = [NSURL fileURLWithPath:psPath];

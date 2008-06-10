@@ -63,7 +63,7 @@
 		NSImage *paletteImage = [[NSImage alloc] init];
 		NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 																					  pixelsWide:256
-																					  pixelsHigh:1
+																					  pixelsHigh:15
 																				   bitsPerSample:8
 																				 samplesPerPixel:3
 																						hasAlpha:NO 
@@ -73,7 +73,7 @@
 																					 bytesPerRow:3*256
 																					bitsPerPixel:24]; 
 		
-		[PaletteController fillBitmapRep:paletteWithHueRep withPalette:index usingHue:newHue];
+		[PaletteController fillBitmapRep:paletteWithHueRep withPalette:index usingHue:newHue forHeight:15];
 		[paletteImage addRepresentation:paletteWithHueRep];
 		
 		[self setPrimitiveValue:paletteImage forKey: @"palette_image"];
@@ -107,7 +107,7 @@
 		NSImage *paletteImage = [[NSImage alloc] init];
 		NSBitmapImageRep *paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 																					  pixelsWide:256
-																					  pixelsHigh:1
+																					  pixelsHigh:15
 																				   bitsPerSample:8
 																				 samplesPerPixel:3
 																						hasAlpha:NO 
@@ -116,7 +116,7 @@
 																					bitmapFormat:0
 																					 bytesPerRow:3*256
 																					bitsPerPixel:24]; 
-		[PaletteController fillBitmapRep:paletteWithHueRep withPalette:index usingHue:hue];
+		[PaletteController fillBitmapRep:paletteWithHueRep withPalette:index usingHue:hue forHeight:15];
 		[paletteImage addRepresentation:paletteWithHueRep];
 		
 		[self setPrimitiveValue:paletteImage forKey: @"palette_image"];

@@ -52,7 +52,7 @@
 		
 		_paletteWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 															pixelsWide:256
-															pixelsHigh:1
+															pixelsHigh:15
 														 bitsPerSample:8
 													   samplesPerPixel:3
 															  hasAlpha:NO 
@@ -64,7 +64,7 @@
 
 		_colourWithHueRep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
 															pixelsWide:256
-															pixelsHigh:1
+															pixelsHigh:15
 														 bitsPerSample:8
 													   samplesPerPixel:3
 															  hasAlpha:NO 
@@ -156,7 +156,7 @@
 {
    
    NSImage *image;
-    [PaletteController fillBitmapRep:_paletteWithHueRep withPalette:0 usingHue:0.0];
+    [PaletteController fillBitmapRep:_paletteWithHueRep withPalette:0 usingHue:0.0 forHeight:15];
 	image = [[NSImage alloc] init];
 	[image addRepresentation:_paletteWithHueRep];
 	[paletteWithHue setImage:image];
