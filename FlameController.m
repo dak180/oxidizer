@@ -279,7 +279,7 @@
 
 - (IBAction)changePaletteAndHidePaletteWindow:(id)sender {
 
-	NSManagedObject *genome = [self getSelectedGenome];
+	NSManagedObject *genome = [[self getSelectedGenome] valueForKey:@"images"];
 	
 	int paletteNumber = [paletteController changePaletteAndHidePaletteWindow];
 	
