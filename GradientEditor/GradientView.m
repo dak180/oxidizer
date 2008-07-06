@@ -45,7 +45,22 @@
 - (void)drawRect:(NSRect)rect {
     // Drawing code here.
 	
-	NSDictionary *selectedSwatch = [[gradientArrayController selectedObjects] objectAtIndex:0];
+	NSArray *selectedObjects =  [gradientArrayController selectedObjects];
+	NSDictionary *selectedSwatch;
+	
+	if  ([selectedObjects count] > 0) {
+		selectedSwatch = [selectedObjects objectAtIndex:0];	
+	} else {
+		if ([[gradientArrayController arrangedObjects] count] == 0) {
+			
+			[(GradientController *)delegate newGradient:self];
+			selectedSwatch = [[gradientArrayController arrangedObjects] objectAtIndex:0];
+		} else {
+			
+			selectedSwatch = nil;
+		}
+	}
+	
 	NSArray *gradientArray = [gradientArrayController arrangedObjects];
 
 	CGContextRef context = [[NSGraphicsContext currentContext]graphicsPort];
