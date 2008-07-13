@@ -127,6 +127,12 @@
 
 	}
 
+	if([aspect compare:@"1:1"] ==  NSOrderedSame) {
+		
+		return 1.0;
+		
+	}
+	
 	scanner = [NSScanner scannerWithString:aspect];
 	if([scanner scanInt:&tmpValue]) {
 	

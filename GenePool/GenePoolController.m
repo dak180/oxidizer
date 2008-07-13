@@ -85,17 +85,43 @@
 - (IBAction)moveSelectedToEditor:(id)sender {
 	
 	int i;
-	
+	int time = 0;
+
 	NSMutableArray *newGenomes = [[NSMutableArray alloc] initWithCapacity:[genePoolButtons count]];
 	
 	NSManagedObjectContext *moc = [ffm getNSManagedObjectContext];
+
+	NSArray *genomeArray;
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomeArray = [moc executeFetchRequest:fetch error:nil];
+	
+	if(genomeArray != nil && [genomeArray count] > 0) {
+		
+		time = [[[genomeArray objectAtIndex:0] valueForKey:@"time"] intValue];
+		time += 15;
+		
+	}	
+	[fetch release];	  
+	[sort release];
+	
 	
 	for(i=0; i<[genePoolButtons count]; i++) {
 		if ([[genePoolButtons objectAtIndex:i] state] == NSOffState) {
 			NSData *genomeXML = [model getGenomeForIndex:i];
 			[genomeXML retain];
-			NSLog(@"%@", [[NSString alloc] initWithData:genomeXML encoding:NSUTF8StringEncoding]);
-			[newGenomes addObjectsFromArray:[Genome createGenomeEntitiesFromXML:genomeXML inContext:moc]];
+//			NSLog(@"%@", [[NSString alloc] initWithData:genomeXML encoding:NSUTF8StringEncoding]);
+			NSArray *tmpGenomeArray = [Genome createGenomeEntitiesFromXML:genomeXML inContext:moc];
+			[(NSManagedObject *)[tmpGenomeArray objectAtIndex:0] setValue:[NSNumber numberWithInt:time] forKey:@"time"];
+			time += 15;
+			[newGenomes addObjectsFromArray:tmpGenomeArray];
+			
 			[genomeXML release];
 		}
 	}
