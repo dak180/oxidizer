@@ -87,14 +87,6 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
-			<key>CLASS</key>
-			<string>FirstResponder</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
 			<key>ACTIONS</key>
 			<dict>
 				<key>randomSeed</key>
@@ -113,9 +105,19 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
 			<key>ACTIONS</key>
 			<dict>
 				<key>appendFile</key>
+				<string>id</string>
+				<key>cancelTask</key>
 				<string>id</string>
 				<key>changePaletteAndHidePaletteWindow</key>
 				<string>id</string>
@@ -136,6 +138,8 @@
 			<dict>
 				<key>environment</key>
 				<string>EnvironmentController</string>
+				<key>etaTextField</key>
+				<string>NSTextField</string>
 				<key>flameController</key>
 				<string>NSArrayController</string>
 				<key>flameTable</key>
@@ -165,14 +169,14 @@
 				<key>saveThumbnailsView</key>
 				<string>NSView</string>
 				<key>taskAllFramesIndicator</key>
-				<string>NSProgressIndicator</string>
+				<string>ProgressIndicatorWithCancel</string>
 				<key>taskFrameIndicator</key>
-				<string>NSProgressIndicator</string>
+				<string>ProgressIndicatorWithCancel</string>
 				<key>taskProgressWindow</key>
 				<string>NSWindow</string>
 			</dict>
 			<key>SUPERCLASS</key>
-			<string>NSObject</string>
+			<string>NSObjectController</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -207,6 +211,14 @@
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>ProgressIndicatorWithCancel</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSProgressIndicator</string>
 		</dict>
 		<dict>
 			<key>CLASS</key>

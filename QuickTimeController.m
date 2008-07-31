@@ -31,6 +31,8 @@
 #define		kTrackStart			0
 #define		kMediaStart			0
 
+#define MOVIE 0
+#define IMAGE 1
 
 @implementation QuickTimeController
 
@@ -52,7 +54,9 @@
 		
 		resRefNum = 0;
 		resId = movieInDataForkResID;
-
+		
+		lastSelectionType = -1;
+		lastSelectionIndex = -1;
 
 	}
 	return self;
@@ -368,6 +372,8 @@
 		return;
 	}
 	
+	lastSelectionType = MOVIE;
+	lastSelectionIndex = selectionIndex;
 	
 	videAtom = QTFindChildByID(settings, kParentAtomIsContainer, kQTSettingsVideo, 1, NULL );
 	tmplAtom = QTFindChildByID(settings, videAtom, scTemporalSettingsType, 1, NULL );
@@ -409,16 +415,28 @@
 	memcpy(&c, [[[imageComponents objectAtIndex:componentIndex] objectForKey:@"component"] bytes], sizeof(c));
 	
 
-	geExporter = OpenComponent(c);
+	if(lastSelectionType != IMAGE || lastSelectionIndex != componentIndex) {
+		CloseComponent(geExporter);
+        geExporter = NULL;
+	} 
+	
+	if(geExporter == NULL) {
+		geExporter = OpenComponent(c);				
+	} 
+	
+	lastSelectionType = IMAGE;
+	lastSelectionIndex = componentIndex;
 
 	if(CallComponentCanDo(geExporter, kGraphicsExportRequestSettingsSelect)) {
 		err = GraphicsExportRequestSettings(geExporter, NULL, NULL);
 		if(err != noErr) {
 			NSLog(@"Got error %d when calling GraphicsExportRequestSettings", err);
-			CloseComponent(geExporter);
+//			CloseComponent(geExporter);
+//			geExporter = NULL;
 			return;
 		}
 	}
+
 
 /*
 	Handle theText;
@@ -555,8 +573,8 @@
 	cErr = GraphicsExportSetOutputFile(geExporter, &spec);
 	cErr = GraphicsExportDoExport (geExporter, &actualSizeWritten );
 		
-	CloseComponent(geExporter);
-	geExporter = NULL;
+//	CloseComponent(geExporter);
+//	geExporter = NULL;
 	CloseComponent(tiffImportComponent);
 	
 

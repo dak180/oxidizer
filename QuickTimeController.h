@@ -34,6 +34,8 @@
 	NSMutableDictionary *movieDict;
 
 	int selectionIndex;
+	int lastSelectionIndex;
+	int lastSelectionType;
 	
 	DataHandler movieDataHandlerRef;
 	Movie  tempMovie;
