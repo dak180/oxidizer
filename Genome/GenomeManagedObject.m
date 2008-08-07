@@ -273,6 +273,81 @@
 	
 }	
 
+
+- (void)setHeight:(double)newHeight {
+	
+	
+	[self willAccessValueForKey: @"aspect_lock"];
+    bool lock = [[self primitiveValueForKey: @"aspect_lock"] boolValue] ;
+    [self didAccessValueForKey: @"aspect_lock"];
+	
+	if (lock) {
+		
+		
+		[self willAccessValueForKey: @"aspect_lock_aspect"];
+		double aspect = [[self primitiveValueForKey: @"aspect_lock_aspect"] doubleValue] ;
+		[self didAccessValueForKey: @"aspect_lock_aspect"];
+		
+		
+		double newWidth = newHeight * aspect;
+		
+		
+		/* we need to set the value for the width but can't call setWidth without
+		 changing up the aspect again leading to a change of width so
+		 copy some of setWidth's code
+		 */
+		
+		[self willAccessValueForKey: @"zoom_lock"];
+		bool lock = [[self primitiveValueForKey: @"zoom_lock"] boolValue] ;
+		[self didAccessValueForKey: @"zoom_lock"];
+		
+		
+		if (lock) {
+			
+			[self willAccessValueForKey: @"width"];
+			double oldWidth = [[self primitiveValueForKey: @"width"] doubleValue];
+			[self didAccessValueForKey: @"width"];
+			
+			double scale = newWidth/oldWidth;
+			
+			[self willAccessValueForKey: @"scale"];
+			double zoom = [[self primitiveValueForKey: @"scale"] doubleValue];
+			[self didAccessValueForKey: @"scale"];
+			
+			[self willChangeValueForKey: @"scale"];
+			[self setPrimitiveValue:[NSNumber numberWithDouble:(zoom * scale)] forKey: @"scale"];
+			[self didChangeValueForKey: @"scale"];
+			
+		}
+		
+		[self willChangeValueForKey: @"width"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:newWidth] forKey: @"width"];
+		[self didChangeValueForKey: @"width"];
+		
+		
+	}  else {
+		
+		/* update aspect */
+		[self willAccessValueForKey: @"width"];
+		double oldWidth = [[self primitiveValueForKey: @"width"] doubleValue];
+		[self didAccessValueForKey: @"width"];
+		
+		
+		[self willChangeValueForKey: @"aspect_lock_aspect"];
+		[self setPrimitiveValue:[NSNumber numberWithDouble:(oldWidth/newHeight)] forKey:@"aspect_lock_aspect"] ;
+		[self didChangeValueForKey: @"aspect_lock_aspect"];
+		
+	}	
+	
+	
+	[self willChangeValueForKey: @"height"];
+	[self setPrimitiveValue:[NSNumber numberWithDouble:newHeight] forKey: @"height"];
+	[self didChangeValueForKey: @"height"];
+	
+}	
+
+
+
 - (void)setTime:(int)newTime {
 
 	[self willChangeValueForKey: @"time"];
