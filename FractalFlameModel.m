@@ -1437,6 +1437,15 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	return YES;
 } 
+
+
+- (void)controlTextDidEndEditing:(NSNotification *)aNotification {
+	
+	[self previewCurrentFlame:self];
+	
+}
+
+
 @end
 
 
