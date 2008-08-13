@@ -1439,9 +1439,23 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 } 
 
 
+- (void)controlTextDidChange:(NSNotification *)aNotification {
+		
+	objectBeginEdited = [aNotification object];
+		
+}
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification {
 	
-	[self previewCurrentFlame:self];
+	/*
+	Paste number 56333: NSSlider mouseUp handling
+	http://paste.lisp.org/display/56333
+	*/
+	if(objectBeginEdited != nil) {
+		[self previewCurrentFlame:self];		
+	}
+	
+	objectBeginEdited = nil;
+	
 	
 }
 

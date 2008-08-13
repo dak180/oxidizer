@@ -87,6 +87,8 @@
 	int last_frame;
 	int frame_time;
 	int dtime;
+	
+	id objectBeginEdited;
 
 @public
 
