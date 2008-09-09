@@ -55,6 +55,7 @@
 		A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
 		A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
+		A4D69FE00E77004D00A1F11B /* AutoPreviewSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D69FDF0E77004D00A1F11B /* AutoPreviewSlider.m */; };
 		A4DA85880966DB7D00FFCF4D /* FractalFlameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */; };
 		A4DA858E0966DD2A00FFCF4D /* EnvironmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */; };
 		A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
@@ -162,6 +163,8 @@
 		A4D3633D09AB9CE20078025F /* genome.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = genome.xcdatamodel; sourceTree = "<group>"; };
 		A4D604A909658A6C0001CD1D /* PaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PaletteController.h; sourceTree = "<group>"; };
 		A4D604AA09658A6C0001CD1D /* PaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PaletteController.m; sourceTree = "<group>"; };
+		A4D69FDE0E77004D00A1F11B /* AutoPreviewSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoPreviewSlider.h; path = Controls/AutoPreviewSlider.h; sourceTree = "<group>"; };
+		A4D69FDF0E77004D00A1F11B /* AutoPreviewSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AutoPreviewSlider.m; path = Controls/AutoPreviewSlider.m; sourceTree = "<group>"; };
 		A4DA85860966DB7D00FFCF4D /* FractalFlameModel.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FractalFlameModel.h; sourceTree = "<group>"; };
 		A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FractalFlameModel.m; sourceTree = "<group>"; };
 		A4DA858C0966DD2A00FFCF4D /* EnvironmentController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = EnvironmentController.h; sourceTree = "<group>"; };
@@ -201,6 +204,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A44EDD100E76F9050039AF9D /* Controls */,
 				A40EF5260DD71DEA003329A6 /* Genome */,
 				A4C6CDE30DC3701800E2EEFB /* ProgressWindow */,
 				A49E2A520D86F0E7008198BE /* GradientEditor */,
@@ -379,6 +383,15 @@
 			name = GenePool;
 			sourceTree = "<group>";
 		};
+		A44EDD100E76F9050039AF9D /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				A4D69FDE0E77004D00A1F11B /* AutoPreviewSlider.h */,
+				A4D69FDF0E77004D00A1F11B /* AutoPreviewSlider.m */,
+			);
+			name = Controls;
+			sourceTree = "<group>";
+		};
 		A49E2A520D86F0E7008198BE /* GradientEditor */ = {
 			isa = PBXGroup;
 			children = (
@@ -534,6 +547,7 @@
 				A40EF52C0DD71DEA003329A6 /* GenomeManagedObject.m in Sources */,
 				A40EF52F0DD71E0A003329A6 /* GenomeXMLParser.m in Sources */,
 				A43E448D0DE5F58F0001BB6A /* GenomeImages.m in Sources */,
+				A4D69FE00E77004D00A1F11B /* AutoPreviewSlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
