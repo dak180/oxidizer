@@ -12,6 +12,7 @@
 
 		_undoStack = [[NSMutableArray alloc]  initWithCapacity:20] ;
 		_undoStackPointer = -1;
+		_defaults = [NSUserDefaults standardUserDefaults];
 	}
 	
     return self;
@@ -346,7 +347,7 @@
 
 - (IBAction)updatePreview:(id)sender {
 	
-	if(_autoUpdatePreview || [sender class] == [NSButton class]) {
+	if([_defaults  boolForKey:@"render_preview_on_change"] || [sender class] == [NSButton class]) {
 
 		NSManagedObject *genome = [_currentTransform valueForKey:@"parent_genome"];
 		[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread:) toTarget:_ffm withObject:[NSArray arrayWithObject:genome]]; 

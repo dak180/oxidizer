@@ -141,26 +141,6 @@ void print_stack(lua_State* interpreter){
 	
     NSString *applicationSupportFolder = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Oxidizer"];
 	[[NSFileManager defaultManager] createDirectoryAtPath:applicationSupportFolder attributes:nil];
-	
-	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];		
-	
-	[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-		NSUserName(),  @"nick",
-		@"http://oxidizer.sf.net", @"url",
-		@"Made by Oxidizer", @"comment",
-		threads, @"threads",
-		[NSNumber numberWithBool:NO], @"save_thumbnails",
-		[NSNumber numberWithBool:NO], @"show_render",
-		@"1", @"qs",
-		@"1", @"ss",
-		@"PAL 4:3", @"aspect",
-		@"Double", @"buffer_type",
-		[NSNumber numberWithBool:NO], @"use_alpha",
-		[NSNumber numberWithBool:YES], @"float_preview",
-		applicationSupportFolder, @"xml_folder",
-		nil]
-		];
-
 
 }
 

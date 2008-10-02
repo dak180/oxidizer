@@ -79,6 +79,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 									[NSNumber numberWithBool:YES], @"float_preview",
 									applicationSupportFolder, @"xml_folder",
 									[NSNumber numberWithBool:YES], @"auto_save_on_render",
+									[NSNumber numberWithBool:NO], @"render_preview_on_change",									
 									nil]
 		 ];
 	
@@ -604,10 +605,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (IBAction)previewCurrentFlame:(id)sender {
 
-	NSArray *genomes = [NSArray arrayWithObject:[flames getSelectedGenome]];
+	if([defaults  boolForKey:@"render_preview_on_change"] || [sender class] == [NSButton class]) {
 
-	[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread:) toTarget:self withObject:genomes]; 
-
+		NSArray *genomes = [NSArray arrayWithObject:[flames getSelectedGenome]];
+		[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread:) toTarget:self withObject:genomes]; 
+	}
 }
 
 - (void ) previewCurrentFlameInThread:(NSArray *)genomes  {

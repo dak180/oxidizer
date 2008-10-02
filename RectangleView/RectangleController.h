@@ -50,6 +50,8 @@
 	NSMutableArray *_undoStack;
 	int _undoStackPointer;
 	
+	NSUserDefaults *_defaults;
+	
 }
 - (IBAction)showWindow:(id)sender;
 - (IBAction)viewSizeChanged:(id)sender;
