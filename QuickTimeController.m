@@ -103,11 +103,10 @@
 	
 
 			// generate a name for our movie file
-		NSString *tempName = [NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]];
+		NSString *tempName = [NSString stringWithCString:tempnam(nil, "oxidizer_qt_temp_") encoding:[NSString defaultCStringEncoding]];
 		if (nil == tempName) {
 			return NO;
 		}
-
 
 		// create a file data reference for our movie
 		outErr = QTNewDataReferenceFromFullPathCFString((CFStringRef)tempName,
@@ -520,7 +519,10 @@
 
 	err =GetMoviesError();
 
-	DisposeHandle(settings);
+    if (settings) {
+        DisposeHandle (settings);
+    }	
+
 	CloseComponent(exporter);
 	
 	return;

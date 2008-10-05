@@ -43,8 +43,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 		_stillsParameters = [[NSMutableDictionary alloc] initWithCapacity:2];
 		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"first_frame"];
 		[_stillsParameters setObject:[NSNumber numberWithInt:0] forKey:@"last_frame"];
+		[_stillsParameters setObject:@"PNG" forKey:@"image_format"];
+		[_stillsParameters setObject:[NSNumber numberWithInt:90] forKey:@"jpeg_quality"];
+		[_stillsParameters setObject:[NSNumber numberWithBool:NO] forKey:@"png_is_16bit"];
 
 
+		_stillsFormatArray = [NSArray arrayWithObjects:@"PNG", @"JPEG", nil];
+		[_stillsFormatArray retain];
+		
+		
 		unsigned int cpuCount ;
 		size_t len = sizeof(cpuCount);
 		static int mib[2] = { CTL_HW, HW_NCPU };
@@ -396,7 +403,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	dtime = 1;
 
 	first_frame = (int) [[genome valueForKey:@"time"] intValue];
-	last_frame = (int) [[[genomes lastObject] valueForKey:@"time"] intValue] - 1;
+	last_frame = (int) [[[genomes lastObject] valueForKey:@"time"] intValue];
 		
 	if (last_frame < first_frame) {
 		last_frame = first_frame;
@@ -553,7 +560,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	dtime = 1;
 	
 	first_frame = (int) [[parameters valueForKey:@"first_frame"] intValue];
-	last_frame = (int) [[parameters valueForKey:@"last_frame"] intValue] - 1;
+	last_frame = (int) [[parameters valueForKey:@"last_frame"] intValue];
 	
 	if (last_frame < first_frame) {
 		last_frame = first_frame;
@@ -707,7 +714,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 }
 
 
-
+/*
 -(QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr
 {
   *outErr = -1;
@@ -751,7 +758,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
   
 }
-
+*/
 
 - (void) deleteOldGenomes {
 

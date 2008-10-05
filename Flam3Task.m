@@ -396,6 +396,20 @@
 + (int)runFlamAnimateAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary 
 	                                      usingTaskFrameIndicator:(ProgressIndicatorWithCancel *)taskFrameIndicator
 			                              usingETALabel:(NSTextField *)etaLabel {
+
+	/*
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	
+	if([defaults boolForKey:@"auto_save_on_render"]) {
+		NSLog(@"env: %@\n", environmentDictionary);
+		
+		[xml writeToFile:[[defaults stringForKey:@"xml_folder"] stringByAppendingPathComponent:[[NSDate date] 
+																								descriptionWithCalendarFormat:@"%Y%m%d%H%M%S%F.xml"
+																								timeZone:nil
+																								locale:nil]]
+			  atomically:YES];
+	}
+	*/
 	
 	NSTask *task;
     task = [[NSTask alloc] init];

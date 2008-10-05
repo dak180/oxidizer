@@ -5,6 +5,14 @@
 	<key>IBClasses</key>
 	<array>
 		<dict>
+			<key>CLASS</key>
+			<string>ImageFormatIsJPEG</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSValueTransformer</string>
+		</dict>
+		<dict>
 			<key>ACTIONS</key>
 			<dict>
 				<key>getImageExportSettings</key>
@@ -148,6 +156,8 @@
 				<string>FlameController</string>
 				<key>frameIndicator</key>
 				<string>NSLevelIndicator</string>
+				<key>objectBeginEdited</key>
+				<string>id</string>
 				<key>oxidizerWindow</key>
 				<string>NSWindow</string>
 				<key>palette</key>
@@ -219,6 +229,14 @@
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSProgressIndicator</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>ImageFormatIsPNG</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSValueTransformer</string>
 		</dict>
 		<dict>
 			<key>CLASS</key>
