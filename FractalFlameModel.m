@@ -538,6 +538,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	
 	[taskEnvironment setObject:[parameters objectForKey:@"prefix"] forKey:@"prefix"];
+	if([[parameters objectForKey:@"image_format"] compare:@"PNG"] == 0) {
+		[taskEnvironment setObject:@"png" forKey:@"format"];
+		if([[parameters objectForKey:@"png_is_16bit"] boolValue]) {
+			[taskEnvironment setObject:@"bpc" forKey:@"16"];			
+		}
+	} else {
+		[taskEnvironment setObject:@"jpg" forKey:@"format"];		
+		[taskEnvironment setObject:[parameters objectForKey:@"jpeg_quality"] forKey:@"jpeg"];		
+	}
 	
 	
 	int ftime;

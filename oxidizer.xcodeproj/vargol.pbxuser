@@ -464,6 +464,11 @@
 			A48874560E9930130038CE19 /* PBXTextBookmark */ = A48874560E9930130038CE19 /* PBXTextBookmark */;
 			A48874570E9930130038CE19 /* PBXTextBookmark */ = A48874570E9930130038CE19 /* PBXTextBookmark */;
 			A48874580E9930130038CE19 /* PBXTextBookmark */ = A48874580E9930130038CE19 /* PBXTextBookmark */;
+			A488745A0E996C470038CE19 /* PBXBookmark */ = A488745A0E996C470038CE19 /* PBXBookmark */;
+			A488745C0E996E470038CE19 /* PBXTextBookmark */ = A488745C0E996E470038CE19 /* PBXTextBookmark */;
+			A488745D0E996E470038CE19 /* PBXTextBookmark */ = A488745D0E996E470038CE19 /* PBXTextBookmark */;
+			A488745E0E996E470038CE19 /* PBXTextBookmark */ = A488745E0E996E470038CE19 /* PBXTextBookmark */;
+			A48874610E996E470038CE19 /* PBXTextBookmark */ = A48874610E996E470038CE19 /* PBXTextBookmark */;
 			A49DBD8C0E98D16B00BA5F98 = A49DBD8C0E98D16B00BA5F98 /* PBXTextBookmark */;
 			A49DBD8D0E98D16B00BA5F98 = A49DBD8D0E98D16B00BA5F98 /* PBXTextBookmark */;
 			A49DBD8E0E98D16B00BA5F98 = A49DBD8E0E98D16B00BA5F98 /* PBXTextBookmark */;
@@ -999,8 +1004,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = Foundation;
-		modificationTime = 244920337.766011;
-		state = 1;
+		modificationTime = 244936256.578769;
+		state = 0;
 		symbolName = "-[_NSZombie release]";
 	};
 	A422B9A30B16308200019559 /* GenePoolNibController.m */ = {
@@ -1109,7 +1114,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 244920309.029114;
+		modificationTime = 244936255.071201;
 		state = 1;
 		symbolName = malloc_printf;
 	};
@@ -3355,6 +3360,50 @@
 		vrLen = 1866;
 		vrLoc = 0;
 	};
+	A488745A0E996C470038CE19 /* PBXBookmark */ = {
+		isa = PBXBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+	};
+	A488745C0E996E470038CE19 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A404B37D0D143FF600FE81AC /* RectangleController.m */;
+		name = "RectangleController.m: 64";
+		rLen = 32;
+		rLoc = 1181;
+		rType = 0;
+		vrLen = 912;
+		vrLoc = 776;
+	};
+	A488745D0E996E470038CE19 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A404B37D0D143FF600FE81AC /* RectangleController.m */;
+		name = "RectangleController.m: 64";
+		rLen = 32;
+		rLoc = 1181;
+		rType = 0;
+		vrLen = 912;
+		vrLoc = 776;
+	};
+	A488745E0E996E470038CE19 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */;
+		name = "ImageFormatIsJPEG.m: 20";
+		rLen = 0;
+		rLoc = 423;
+		rType = 0;
+		vrLen = 535;
+		vrLoc = 0;
+	};
+	A48874610E996E470038CE19 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 550";
+		rLen = 0;
+		rLoc = 15978;
+		rType = 0;
+		vrLen = 1803;
+		vrLoc = 14866;
+	};
 	A49DBD8C0E98D16B00BA5F98 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = A4DA85860966DB7D00FFCF4D /* FractalFlameModel.h */;
@@ -4088,7 +4137,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 244920309.030746;
+		modificationTime = 244936255.072666;
 		state = 1;
 		symbolName = malloc_error_break;
 	};
@@ -4110,8 +4159,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = frctgo;
-		modificationTime = 244920337.766643;
-		state = 1;
+		modificationTime = 244936256.607195;
+		state = 0;
 		symbolName = main;
 	};
 	A4BE79430DA6DD3700160702 /* GradientController.h */ = {
@@ -4686,20 +4735,20 @@
 	};
 	A4DA85860966DB7D00FFCF4D /* FractalFlameModel.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {951, 2142}}";
-			sepNavSelRange = "{2341, 17}";
-			sepNavVisRange = "{0, 1866}";
+			sepNavIntBoundsRect = "{{0, 0}, {951, 2380}}";
+			sepNavSelRange = "{3279, 57}";
+			sepNavVisRange = "{2557, 1323}";
 			sepNavVisRect = "{{0, 1257}, {965, 661}}";
-			sepNavWindowFrame = "{{280, 238}, {1010, 790}}";
+			sepNavWindowFrame = "{{379, 170}, {1010, 790}}";
 		};
 	};
 	A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1041, 19852}}";
-			sepNavSelRange = "{1618, 12}";
-			sepNavVisRange = "{1056, 2134}";
+			sepNavIntBoundsRect = "{{0, 0}, {1041, 20734}}";
+			sepNavSelRange = "{15978, 0}";
+			sepNavVisRange = "{14866, 1803}";
 			sepNavVisRect = "{{0, 16823}, {1036, 669}}";
-			sepNavWindowFrame = "{{351, -265}, {1100, 957}}";
+			sepNavWindowFrame = "{{310, 71}, {1100, 957}}";
 		};
 	};
 	A4DA858C0966DD2A00FFCF4D /* EnvironmentController.h */ = {
