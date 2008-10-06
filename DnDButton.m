@@ -32,7 +32,7 @@
 	pboard = [sender draggingPasteboard];
 	
 	if ([[pboard types] containsObject:[DnDArrayController dragType]]) {
-		if ((sourceDragMask & NSDragOperationGeneric) != 0) {
+		if ((sourceDragMask & (NSDragOperationGeneric|NSDragOperationCopy)) != 0) {
 			return NSDragOperationGeneric;
 		}
 	}
@@ -61,7 +61,7 @@
 	
 	genomeData = [enumerator nextObject];
 	[genomeData getBytes:&sourceEntity];
-	NSData *xml = [Genome createXMLFromEntities:[NSArray arrayWithObject:sourceEntity]  fromContext:sourceMoc forThumbnail:NO];
+	NSData *xml = [Genome createXMLFromEntities:[NSArray arrayWithObject:sourceEntity]  fromContext:sourceMoc forThumbnail:YES];
 	[genePoolController setButton:self withGenome:xml];
 	
 	return YES;

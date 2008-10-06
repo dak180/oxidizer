@@ -135,12 +135,15 @@
 	[genePoolProgressWindow makeKeyAndOrderFront:self];
 
 	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 	
+	srandom(time(NULL));
 	
 	for(i=0; i<genomeCount; i++) {
+
+		[env setObject:[NSNumber numberWithLong:time(NULL)] forKey:@"isaac_seed"];				
+		[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];				
+
 		if (buttonState[i] == NSOnState) {
 			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Creating new Genome %d", i]];
 			[genePoolProgressText displayIfNeeded];

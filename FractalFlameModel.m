@@ -87,6 +87,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 									applicationSupportFolder, @"xml_folder",
 									[NSNumber numberWithBool:YES], @"auto_save_on_render",
 									[NSNumber numberWithBool:NO], @"render_preview_on_change",									
+									[NSNumber numberWithBool:NO], @"limit_quality",									
+									[NSNumber numberWithDouble:100.0], @"preview_quality",									
+									[NSNumber numberWithDouble:128.0], @"preview_size",									
 									nil]
 		 ];
 	

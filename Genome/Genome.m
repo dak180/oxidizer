@@ -114,6 +114,9 @@ NSString *variationName[1+flam3_nvariations] = {
 
 }
 
+
+
+
 + (NSXMLNode *)createXMLFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc forThumbnail:(BOOL)thumbnail {
 	
 	NSXMLElement *genome = [NSXMLElement elementWithName:@"flame"];
@@ -141,11 +144,14 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome addAttribute:[NSXMLNode attributeWithName:@"time" stringValue:[[genomeEntity valueForKey:@"time"] stringValue]]];
 	
 	if (thumbnail) {
+		
+		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+		
 		int realWidth  = [[genomeEntity valueForKey:@"width"] intValue];
 		int realHeight = [[genomeEntity valueForKey:@"height"] intValue];
 		double realScale =  [[genomeEntity valueForKey:@"scale"] doubleValue];
 	
-		double scaleFactor = realHeight > realWidth ? 128.0 / realHeight : 128.0 / realWidth;
+		double scaleFactor = realHeight > realWidth ? [defaults doubleForKey:@"preview_size"] / realHeight : [defaults doubleForKey:@"preview_size"] / realWidth;
 		
 		[genome addAttribute:[NSXMLNode attributeWithName:@"size" 
 											  stringValue:[NSString stringWithFormat:@"%d %d",
@@ -154,6 +160,27 @@ NSString *variationName[1+flam3_nvariations] = {
 		
 		[genome addAttribute:[NSXMLNode attributeWithName:@"scale" 
 										stringValue:[NSString stringWithFormat:@"%0.7f", (realScale * scaleFactor)]]];
+
+		
+		if([defaults boolForKey:@"limit_quality"]) {
+			double maxQuality =  [defaults doubleForKey:@"preview_quality"];
+			double zoom = [[genomeEntity valueForKey:@"zoom"] doubleValue];
+			double actualQuality = [[genomeEntity valueForKey:@"quality"] doubleValue];
+			double quality ;
+			if (zoom > 0.0) {
+				zoom = pow(zoom, 2.0) * 2.0;
+				actualQuality *= zoom; 
+				if (actualQuality * zoom <= maxQuality) {
+					quality = actualQuality;
+				} else {
+					quality = maxQuality / zoom;
+				}
+			} else {
+				quality = actualQuality > maxQuality ? maxQuality : actualQuality;
+			}
+			
+			[genome addAttribute:[NSXMLNode attributeWithName:@"quality" stringValue:[NSString stringWithFormat:@"%0.7f",quality]]];
+		}
 		
 		
 	} else {
@@ -163,20 +190,23 @@ NSString *variationName[1+flam3_nvariations] = {
 												  [[genomeEntity valueForKey:@"height"] intValue]]]];
 
 		[genome addAttribute:[NSXMLNode attributeWithName:@"scale" stringValue:[[genomeEntity valueForKey:@"scale"] stringValue]]];
-	
+
+		
+		[genome addAttribute:[NSXMLNode attributeWithName:@"quality" stringValue:[[genomeEntity valueForKey:@"quality"] stringValue]]];
+
+		
 	}
 
-
+	if ([[genomeEntity valueForKey:@"zoom"] doubleValue] != 0.0) {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"zoom" stringValue:[[genomeEntity valueForKey:@"zoom"] stringValue]]];
+	}	
+	
 	[genome addAttribute:[NSXMLNode attributeWithName:@"center" 
 									stringValue:[NSString stringWithFormat:@"%0.7f %0.7f",
 										[[genomeEntity valueForKey:@"centre_x"] doubleValue], 
 										[[genomeEntity valueForKey:@"centre_y"] doubleValue]]]];
 
-	if ([[genomeEntity valueForKey:@"zoom"] doubleValue] != 0.0) {
-		[genome addAttribute:[NSXMLNode attributeWithName:@"zoom" stringValue:[[genomeEntity valueForKey:@"zoom"] stringValue]]];
-	}	
 	[genome addAttribute:[NSXMLNode attributeWithName:@"oversample" stringValue:[[genomeEntity valueForKey:@"oversample"] stringValue]]];
-	[genome addAttribute:[NSXMLNode attributeWithName:@"quality" stringValue:[[genomeEntity valueForKey:@"quality"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"passes" stringValue:[[genomeEntity valueForKey:@"batches"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_samples" stringValue:[[genomeEntity valueForKey:@"jitter"] stringValue]]];
 
@@ -1946,10 +1976,27 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	NSAttributedString *xmlValue = [genome valueForKey:@"edits"];
 	
+	
 	/* create edit element with new details */ 
-	[newEdit setObject:[genome valueForKey:@"nick"] forKey:@"nick"];
-	[newEdit setObject:[genome valueForKey:@"url"] forKey:@"url"];
-	[newEdit setObject:[genome valueForKey:@"comment"] forKey:@"comm"];
+	
+	if([genome valueForKey:@"nick"] == nil) {
+		[newEdit setObject:@"" forKey:@"nick"];		
+	} else {		
+		[newEdit setObject:[genome valueForKey:@"nick"] forKey:@"nick"];
+	}
+
+	if([genome valueForKey:@"url"] == nil) {
+		[newEdit setObject:@"" forKey:@"url"];		
+	} else {		
+		[newEdit setObject:[genome valueForKey:@"url"] forKey:@"url"];
+	}
+
+	if([genome valueForKey:@"comment"] == nil) {
+		[newEdit setObject:@"" forKey:@"comm"];		
+	} else {		
+		[newEdit setObject:[genome valueForKey:@"comment"] forKey:@"comm"];
+	}
+	
 	[newEdit setObject:date forKey:@"date"];
 	if([xmlValue string] != nil) {
 		[newEdit setObject:[xmlValue string] forKey:@"previous_edits"];
