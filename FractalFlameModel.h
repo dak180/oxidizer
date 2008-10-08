@@ -109,7 +109,7 @@
 
 - (BOOL)saveToFile:(NSBitmapImageRep *)rep;
 
-- (QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
+//- (QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
 - (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context;
 - (NSManagedObjectContext *)getNSManagedObjectContext;
 

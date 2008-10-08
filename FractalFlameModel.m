@@ -1480,6 +1480,12 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 }
 
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification {
+	
+		[self previewCurrentFlame:self];		
+	
+}
+
 
 @end
 
