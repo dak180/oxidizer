@@ -21,6 +21,8 @@
 #import "BreedingController.h"
 #import "Flam3Task.h"
 #import "GreaterThanThreeTransformer.h"
+#import "ImageFormatIsJPEG.h"
+#import "ImageFormatIsPNG.h"
 #import "QuickTime/QuickTime.h"
 #import "Genome/Genome.h"
 #import "Genome/GenomeImages.h"
@@ -99,21 +101,36 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		_currentFilename = nil;
 		
-		[NSBundle loadNibNamed:@"FileViews" owner:self];
-		[NSBundle loadNibNamed:@"TaskProgress" owner:self];
-
 		
 		GreaterThanThreeTransformer *gttt;
-		
-	// create an autoreleased instance of our value transformer
+  
 		gttt = [[[GreaterThanThreeTransformer alloc] init] autorelease];
 		
-	// register it with the name that we refer to it with
+		// register it with the name that we refer to it with
 		[NSValueTransformer setValueTransformer:gttt
-                                forName:@"GreaterThanThree"];
-
-
-  		
+										forName:@"GreaterThanThree"];
+		
+		
+  
+		// create an autoreleased instance of our value transformer
+		ImageFormatIsJPEG *ifij = [[[ImageFormatIsJPEG alloc] init] autorelease];
+		
+		// register it with the name that we refer to it with
+		[NSValueTransformer setValueTransformer:ifij
+										forName:@"ImageFormatIsJPEG"];
+		
+		// create an autoreleased instance of our value transformer
+		ImageFormatIsPNG *ifip = [[[ImageFormatIsPNG alloc] init] autorelease];
+		
+		// register it with the name that we refer to it with
+		[NSValueTransformer setValueTransformer:ifip
+										forName:@"ImageFormatIsPNG"];
+		
+		
+		[NSBundle loadNibNamed:@"FileViews" owner:self];
+		[NSBundle loadNibNamed:@"TaskProgress" owner:self];
+		
+		
 		
 		moc = [[NSManagedObjectContext alloc] init];
 		
