@@ -60,6 +60,8 @@
 	NSArray *cmapSortDescriptors;
 	NSArray *_spatialFilterArray;
 	NSArray *_stillsFormatArray;
+	NSArray *_interpolationTypes;
+	NSArray *_temporalFilters;
 	
 	NSMutableArray *_progressInd;
 	

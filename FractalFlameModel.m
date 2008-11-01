@@ -52,8 +52,13 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 		_stillsFormatArray = [NSArray arrayWithObjects:@"PNG", @"JPEG", nil];
 		[_stillsFormatArray retain];
-		
-		
+
+		_interpolationTypes = [NSArray arrayWithObjects:@"Log", @"Linear", @"Old", @"Older", nil];
+		[_interpolationTypes retain];
+
+		_temporalFilters = [NSArray arrayWithObjects:@"Box", @"Gaussian", @"Exponent", nil];
+		[_temporalFilters retain];
+
 		unsigned int cpuCount ;
 		size_t len = sizeof(cpuCount);
 		static int mib[2] = { CTL_HW, HW_NCPU };

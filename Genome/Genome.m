@@ -256,10 +256,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	if([[genomeEntity valueForKey:@"interpolation"] intValue] == 1) {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"interpolation" stringValue:@"smooth"]];		
-	} /* else {
-		[genome addAttribute:[NSXMLNode attributeWithName:@"interpolation" stringValue:@"linear"]];			
-	} */
-	
+	} 
+
+	NSString *interpolation = [genomeEntity valueForKey:@"interpolation_type"];
+	[genome addAttribute:[NSXMLNode attributeWithName:@"interpolation_type" stringValue:[interpolation lowercaseString]]];
+
 
 	if ([[genomeEntity valueForKey:@"motion_exp"] doubleValue] != 0.0) {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"motion_exponent" stringValue:[[genomeEntity valueForKey:@"motion_exp"] stringValue]]];
@@ -821,7 +822,14 @@ NSString *variationName[1+flam3_nvariations] = {
 	} else {
 		[newGenomeEntity setValue:[NSNumber numberWithInt:0]  forKey:@"interpolation"];
 	}
+	
 
+	tempAttribute = [genome attributeForName:@"interpolation_type"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[[tempAttribute stringValue] capitalizedString] forKey:@"interpolation_type"];
+	} else 
+		
+		
 	tempAttribute = [genome attributeForName:@"motion_exponent"];
 	if(tempAttribute != nil) {
 		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"motion_exp"];
@@ -1645,6 +1653,8 @@ NSString *variationName[1+flam3_nvariations] = {
 		[genome setObject:@"linear" forKey:@"interpolation"];
 	}
 
+	[genome setObject:[[genomeEntity valueForKey:@"interpolation_type"] lowercaseString] forKey:@"interpolation_type"];
+
 	[genome setObject:[genomeEntity valueForKey:@"motion_exp"] forKey:@"motion_exponent"];
 	[genome setObject:[genomeEntity valueForKey:@"spatial_filter_radius"] forKey:@"filter"];
 	
@@ -2180,6 +2190,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	} else {
 		[newGenomeEntity setValue:[NSNumber numberWithInt:0]  forKey:@"interpolation"];
 	}
+	
+	tempString = [genome objectForKey:@"interpolation_type"];
+	[newGenomeEntity setValue:[tempString capitalizedString]  forKey:@"interpolation_type"];
 	
 	tempObject = [genome objectForKey:@"motion_exponent"];
 	if(tempObject != nil) {
@@ -2876,6 +2889,11 @@ NSString *variationName[1+flam3_nvariations] = {
 		[newGenomeEntity setValue:[NSNumber numberWithInt:1]  forKey:@"interpolation"];
 	} else {
 		[newGenomeEntity setValue:[NSNumber numberWithInt:0]  forKey:@"interpolation"];
+	}
+
+	tempAttribute = [genome objectForKey:@"interpolation_type"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[tempAttribute capitalizedString]  forKey:@"interpolation_type"];
 	}
 	
 	tempAttribute = [genome objectForKey:@"motion_exponent"];
