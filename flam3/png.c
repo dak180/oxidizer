@@ -14,12 +14,9 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-
-static char *jpeg_c_id =
-"@(#) $Id: png.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -44,12 +41,13 @@ void write_png(FILE *file, void *image, int width, int height, flam3_img_comment
   void **rows = malloc(sizeof(void *) * height);
   char *nick = getenv("nick");
   char *url = getenv("url");
+  char *id = getenv("id");
   char *ai; /* For argi */
   int pngcom_enable = argi("enable_png_comments", 1);
 
   text[0].compression = PNG_TEXT_COMPRESSION_NONE;
   text[0].key = "flam3_version";
-  text[0].text = VERSION;
+  text[0].text = flam3_version();
 
   text[1].compression = PNG_TEXT_COMPRESSION_NONE;
   text[1].key = "flam3_nickname";
@@ -60,20 +58,24 @@ void write_png(FILE *file, void *image, int width, int height, flam3_img_comment
   text[2].text = url;
   
   text[3].compression = PNG_TEXT_COMPRESSION_NONE;
-  text[3].key = "flam3_error_rate";
-  text[3].text = fpc->badvals;
+  text[3].key = "flam3_id";
+  text[3].text = id;
 
   text[4].compression = PNG_TEXT_COMPRESSION_NONE;
-  text[4].key = "flam3_samples";
-  text[4].text = fpc->numiters;
+  text[4].key = "flam3_error_rate";
+  text[4].text = fpc->badvals;
 
   text[5].compression = PNG_TEXT_COMPRESSION_NONE;
-  text[5].key = "flam3_time";
-  text[5].text = fpc->rtime;
+  text[5].key = "flam3_samples";
+  text[5].text = fpc->numiters;
 
-  text[6].compression = PNG_TEXT_COMPRESSION_zTXt;
-  text[6].key = "flam3_genome";
-  text[6].text = fpc->genome;
+  text[6].compression = PNG_TEXT_COMPRESSION_NONE;
+  text[6].key = "flam3_time";
+  text[6].text = fpc->rtime;
+
+  text[7].compression = PNG_TEXT_COMPRESSION_zTXt;
+  text[7].key = "flam3_genome";
+  text[7].text = fpc->genome;
 
   for (i = 0; i < height; i++)
     rows[i] = image + i * width * 4 * bpc;

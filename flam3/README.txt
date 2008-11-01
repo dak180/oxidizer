@@ -26,9 +26,8 @@ As usual, to configure, build, and install:
     make
     sudo make install
 
-This package depends on the expat xml library, the jpeg library, and
-the png library.  If you don't have one already you can find it with
-http://rpmfind.net.
+This package depends on development packages for libz, libpng,
+libjpeg, and libxml2.
 
 To test it, run
 
@@ -45,7 +44,7 @@ interpolate between the two <flame> elements.
 
 envar           default         meaning
 =====           =======         =======
-prefix          ""              prefix names of output files with this string.
+prefix          (empty)         prefix names of output files with this string.
 begin           j               time of first frame to render (j=first time in input file) (animate only)
 end             n-1             time of last frame to render (n=last time specified in the input file) (animate only)
 time            NA              time of first and last frame (ie do one frame) (animate only)
@@ -61,26 +60,36 @@ ss              1               size scale, multiply size (in pixels) of all fra
 jpeg            NA              jpeg quality for compression, default is native jpeg default
 format          png             "jpg" or "ppm" or "png"
 pixel_aspect    1.0             aspect ratio of pixels (width over height), eg 0.90909 for NTSC
-seed            random          integer seed for random numbers, defaults to time+pid
+isaac_seed      random          string to be used in generating random seed.  defaults to time(0)
+seed            random          integer seed for random numbers, defaults to time+pid.  deprecated.
+nthreads        auto            number of threads to use (render and animate)
 verbose         0               if non-zero then print progress meter on stderr
 bits            33              also 16, 32, or 64: sets bit-width of internal buffers (33 means 32-bit floating-point)
 bpc             8               bits per channel of color: only png supports 16 (render/animate)
 image           filename        replace palette with png, jpg, or ppm image
-use_vars        -1              comma separated list of variation #'s to use when generating a random flame (genome only)
-tries           50              number of tries to make to find a good genome.
-method          NA              method for crossover: alternate, interpolate, or union.
-symmetry        NA              set symmetry of result.
-clone           NA              clone input (this is an alternative to mutate)
-strip           NA              strip input, frame and nframes control which one.
-transparency    0               make bknd transparent, if format supports it
+use_vars        -1              comma sep list of variation #'s to use when generating a random flame (genome only)
+dont_use_vars   unset           comma sep list of variation #'s to NOT use when generating a random flame. (genome only)
+cross0          NA              randomly select one genome from this file to genetically cross (genome only)
+cross1          NA                with one genome from this file (genome only)
+method          NA              method for genetic cross: alternate, interpolate, or union. (genome only)
+mutate          NA              randomly mutate a random genome from this file (genome only)
+symmetry        NA              set symmetry of result. (genome only)
+clone           NA              clone random flame in input (genome only)
+clone_all       NA              clones all flames in file.  useful for applying template to all flames (genome only)
+animate         NA              interpolates between all flames in a file, using times specified in file (genome only)
+sequence        NA              360 degree rotation 'loops' times of each control point plus rotating transitions (genome only)
+loops           NA              number of times to rotate each control point in sequence (genome only)
+tries           50              number of tries to make to find a good genome. (genome only)
+strip           NA              strip input, frame and nframes control which one. (genome only)
+transparency    0               make bknd transparent, if format supports it (render/animate)
 name_enable     0               use 'name' attr in <flame> to name image output if present (render only)
 nick            ""              nickname to use in <edit> tags / img comments
 url             ""              url to use in <edit> tags / img comments
 id		""		ID  to use in <edit> tags / img comments
 comment         ""              comment string for <edit> tags (genome only)
 use_mem         auto            floating point number of bytes of memory to use (render only)
-nthreads        auto            number of threads to use (render and animate)
 noedits         unset           omit edit tags from output (genome only)
+write_genome    0               write out genome associated with center of motion blur window (animate only)
 print_edit_depth 0              depth to truncate <edit> tag structure.  0 prints all <edit> tags (genome only)
 intpalette      unset           round palette entries for importing into older Apophysis versions (genome only)
 insert_palette  unset           insert the palette into the image.
@@ -117,7 +126,7 @@ Mutation is done by giving an input flame file to alter:
 
     env template=vidres.flam3 flam3-genome > parent.flam3
     env prefix=parent. flam3-render < parent.flam3
-    env template=vidres.flam3 mutate=vidres.flam3 repeat=10 flam3-genome > mutation.flam3
+    env template=vidres.flam3 mutate=parent.flam3 repeat=10 flam3-genome > mutation.flam3
     flam3-render < mutation.flam3
 
 Normally one wouldn't use the same file for the template and the file
@@ -141,19 +150,15 @@ for example:
     flam3-animate < seq.flam3
 
 creates and renders a 60 frame animation.  there are two flames in
-test.flam3, so the animation consists three stags: the first one
+test.flam3, so the animation consists three stages: the first one
 rotating, then a transition, then the second one rotating.  each stage
-has 20 frames as specified on the command line.  but with only 20
-frames to complete 360 degrees the shape will is moving quite quickly
-so you will see "strobing" from the temporal subsamples used for
-motion blur.  to eliminate them increase the number of batches by
-editing test.flam3 and increasing it from 10 to 100.  if you want to
+has 20 frames as specified on the command line.  if you want to
 render only some fraction of a whole animation file, specify the begin
 and end times:
 
     env begin=20 end=40 flam3-animate < seq.flam3
 
-the other two methods are harder to use becaues they produce file that
+the other two methods are harder to use because they produce files that
 are only good for one frame of animation.  the output consists of 3
 control points, one for the time requested, one before and one after.
 that allows proper motion blur.  for example:
@@ -235,11 +240,12 @@ The complete list of variations:
   51. flower
   52. conic
   53. parabola
-  54. split
-  55. move
   
 see http://flam3.com/flame.pdf for descriptions & formulas for each of
-these.
+these.  note that, by default, if a random flame is requested and neither
+'use_vars' or 'dont_use_vars' are specified, the following variations are
+not used: noise, blur, gaussian_blur, radial_blur, ngon, square, rays, 
+and cross.
 
 ======================================
 
@@ -248,6 +254,63 @@ todo:  eliminate all static storage.
 ======================================
 
 changelog:
+
+09/06/08 Added 'clone_all' to flam3_genome to allow application of 
+    template to all flames in a file at once, and 'animate' to write
+    a full sequence of interpolations out.  'animate' is similar to 
+    'sequence' except that no control point rotation is performed.  
+    Fixed non-functional 'write_genome' env var for flam3_animate.  
+    Two bugs associated with interpolating from a log interpolation_type
+    to a non-log interpolation_type fixed (rotate angle reduction and 
+    special inverted identity).  when using flam3_rotate in 'spin_inter'
+    the interp type of the first genome is now used rather than the
+    current genome's interp type.  Enforced upper and lower bounds for
+    xform color and upper bound for interpolated colormap values
+    as "smooth" interpolation led to values out of range.  If "smooth"
+    interpolation is specified for all flames in a file, the first and
+    second-to-last genome is switched to "linear" with a warning.
+    spatial filters with non-box-filter window functions fixed.
+    Release as 2.7.16.
+    
+
+08/25/08 Added new interpolation types 'old' and 'older', for use in 
+    recreating old animations.  'linear' mode now does not rotate padded
+    xforms (results in prettier symmetric singularities). switched to
+    using a 'padding' flag instead of a 'just initialized' flag; padding 
+    flag used for implementation of 'old' and 'older' types.  
+    interpolation_space now deprecated, instead use interpolation_type. 
+    flam3_align is now idempotent (multiple applications do not change
+    the control points.)  Default number of temporal samples bumped to 
+    1000.  Removed CVS headers from source code (now using SVN).
+    Default interpolation mode now log. Removed 'move' and 'split' vars.
+    changes to flam3-genome: sequence mode now returns linear 
+    interpolation mode for all control points except first/last of edges 
+    - these cps will use the original interpolation mode;  inter and 
+    rotate modes will now return padded genomes for all control points,
+    all with linear interpolation specified.  instead of centering 
+    sometimes reframe by golden mean plus noise. Release as 2.7.15.
+
+07/21/08 Add configuration option for atomic-ops.  bug fix: do not
+    truncate floating point palettes.  new motion blur features: add
+    temporal_filter_type, can be "box" (default) or "gaussian" or
+    "exp".  Temporal_filter_width and temporal_filter_exp are parms to
+    it.  'blur' env var no longer used.  Small bug fix: iteration
+    count depends only on the size of the output image, not the padded
+    image (the gutter).  When interpolating, only do -pi/pi adjustment
+    for non-asymmetric cases.  Julian/juliascope variations use the
+    alternate inverted identity for interpolation (reduces wedge
+    effect).  Add python script for regression and consistency
+    checking. Add svn revision number to version string (in the
+    software not of the package). Release as 2.7.14.
+
+05/28/08 Restored upper limit on particle coordinates.  Release as
+    2.7.13.
+
+05/16/08 Added man pages.  Removed upper limit on particle
+    coordinates.  fixed FSF address in comments.  update to automake
+    1.10.1.  added eps to denom of perspective fraction to avoid
+    infinities (thanks fred).  Put contents of 'id' env var in png/jpg
+    comment block.  Release as 2.7.12.
 
 04/05/08 Added 16 bit per channel support to PNG via bpc envar.
     isaac.h is now installed with the flam3 headers.  Strip indexing
@@ -331,6 +394,8 @@ changelog:
     julia variation dependency on non-thread-safe random bit function.
     removed random number storage for radial blur variation.
     release 2.7.3.
+    07/26/08: Note, incompat. change made to direction of cp->rotate
+    (as of 2.7.3, rotates shortest distance instead of clockwise) 
 
 02/09/07 use isaac random number generator to avoid differences
 	 between mac/pc/linux.  use multiple threads to take advantage

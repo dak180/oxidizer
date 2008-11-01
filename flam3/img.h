@@ -14,17 +14,14 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-
-static char *jpeg_h_id =
-"@(#) $Id: img.h,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include <stdio.h>
 #include "flam3.h"
 
-#define FLAM3_PNG_COM 7
+#define FLAM3_PNG_COM 8
 
 #ifdef WIN32
    #define snprintf _snprintf

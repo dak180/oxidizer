@@ -14,7 +14,7 @@
 
    You should have received a copy of the GNU General Public License
    along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+   Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 /* this file is included into flam3.c once for each buffer bit-width */
@@ -59,6 +59,7 @@ static void iter_thread(void *fth) {
    static double progress_history[64];
    static int progress_history_mark = 0;
    double eta = 0.0;
+   bucket cmap_scaled[CMAP_SIZE];
    
    if (fthp->timer_initialize) {
    	progress_timer = 0;
@@ -147,6 +148,19 @@ static void iter_thread(void *fth) {
       /* Add the badcount to the counter */
       ficp->badvals += badcount;
 
+      /* Premultiply the cmap by the color_scalar, if necessary */
+      if (!ficp->fname_specified) {
+         bucket_double *dmap = (bucket_double *)(ficp->dmap);
+         int c,ch;
+         for (c=0;c<CMAP_SIZE;c++) {
+            for (ch=0;ch<4;ch++) {
+               cmap_scaled[c][ch] = ficp->color_scalar * dmap[c][ch];
+            }
+         }
+      }
+                  
+
+
       /* Put them in the bucket accumulator */
       for (j = 0; j < sub_batch_size*4; j+=4) {
          double p0, p1, p00, p11;
@@ -194,7 +208,7 @@ static void iter_thread(void *fth) {
 
             } else {
 
-               bucket *cmap = (bucket *)(ficp->cmap);
+//               bucket *cmap = (bucket *)(ficp->cmap);
                bucket *buckets = (bucket *)(ficp->buckets);
 
                color_index0 = (int) (p[2] * CMAP_SIZE);
@@ -206,18 +220,10 @@ static void iter_thread(void *fth) {
                b = buckets + (int)(ficp->ws0 * p0 - ficp->wb0s0) +
                    ficp->width * (int)(ficp->hs1 * p1 - ficp->hb1s1);
 
-               /* Scale the colors based on the motion filter for this temp sample */
-               if (ficp->color_scalar != 1.0) {
-                  bump_no_overflow(b[0][0], cmap[color_index0][0]*ficp->color_scalar);
-                  bump_no_overflow(b[0][1], cmap[color_index0][1]*ficp->color_scalar);
-                  bump_no_overflow(b[0][2], cmap[color_index0][2]*ficp->color_scalar);
-                  bump_no_overflow(b[0][3], cmap[color_index0][3]*ficp->color_scalar);
-               } else {
-                  bump_no_overflow(b[0][0], cmap[color_index0][0]);
-                  bump_no_overflow(b[0][1], cmap[color_index0][1]);
-                  bump_no_overflow(b[0][2], cmap[color_index0][2]);
-                  bump_no_overflow(b[0][3], cmap[color_index0][3]);
-               }
+               bump_no_overflow(b[0][0], cmap_scaled[color_index0][0]);
+               bump_no_overflow(b[0][1], cmap_scaled[color_index0][1]);
+               bump_no_overflow(b[0][2], cmap_scaled[color_index0][2]);
+               bump_no_overflow(b[0][3], cmap_scaled[color_index0][3]);
 
             }
          }
@@ -255,6 +261,7 @@ static void render_rectangle(flam3_frame *spec, void *out,
       depends on times.  fix by making all batches happen at the same time */
    int ntemporal_samples = spec->genomes[0].ntemporal_samples;
    bucket cmap[CMAP_SIZE];
+   bucket_double dmap[CMAP_SIZE];
    unsigned char *cmap2=NULL;
    int gutter_width;
    double vibrancy = 0.0;
@@ -278,6 +285,8 @@ static void render_rectangle(flam3_frame *spec, void *out,
    int thread_status;
    int thi;
    time_t tstart,tend;
+   
+   double sumfilt;
 
    tstart = time(NULL);
 
@@ -374,55 +383,65 @@ static void render_rectangle(flam3_frame *spec, void *out,
 #endif
    }
 
-   temporal_filter = (double *) malloc(sizeof(double) * nbatches);
+   temporal_filter = (double *) malloc(sizeof(double) * nbatches * ntemporal_samples);
    temporal_deltas = (double *) malloc(sizeof(double) * nbatches * ntemporal_samples);
-   motion_filter = (double *) malloc(sizeof(double) * nbatches * ntemporal_samples);
 
    if (nbatches*ntemporal_samples > 1) {
 
+      double nn = nbatches*ntemporal_samples;
+      double maxfilt = 0.0;
+      sumfilt=0.0;
+
+      /* Define temporal deltas from center time */
+      for (i = 0; i < nbatches*ntemporal_samples; i++)
+            temporal_deltas[i] = (2.0 * ((double) i / ((nbatches*ntemporal_samples) - 1)) - 1.0)
+                                  * (spec->genomes[0].temporal_filter_width/2.0);
+
       /* fill in the coefs */
-      for (i = 0; i < nbatches*ntemporal_samples; i++) {
-         double slpx;
+      if (flam3_temporal_exp == spec->genomes[0].temporal_filter_type) {
+         for (i = 0; i < nbatches*ntemporal_samples; i++) {
+            double slpx;
 
-         if (spec->genomes[0].motion_exp>=0)
-            slpx = ((double)i+1.0)/(nbatches*ntemporal_samples);
-         else
-            slpx = (double)(nbatches*ntemporal_samples - i) / (nbatches*ntemporal_samples);
+            if (spec->genomes[0].temporal_filter_exp>=0)
+               slpx = ((double)i+1.0)/(nbatches*ntemporal_samples);
+            else
+               slpx = (double)(nbatches*ntemporal_samples - i) / (nbatches*ntemporal_samples);
 
-         temporal_deltas[i] = (2.0 * ((double) i / ((nbatches*ntemporal_samples) - 1)) - 1.0)
-        * spec->temporal_filter_radius;
+            /* Scale the color based on these values */
+            temporal_filter[i] = pow(slpx,fabs(spec->genomes[0].temporal_filter_exp));
+	    if (maxfilt < temporal_filter[i]) maxfilt = temporal_filter[i];
+	    
+         }
 
-         /* Scale the color based on these values */
-         motion_filter[i] = pow(slpx,fabs(spec->genomes[0].motion_exp));
+      } else if (flam3_temporal_gaussian == spec->genomes[0].temporal_filter_type) {
+
+         double nn2 = nn/2.0;
+         for (i = 0; i < nbatches*ntemporal_samples; i++) {
+            temporal_filter[i] = flam3_spatial_filter(flam3_gaussian_kernel,
+                            flam3_spatial_support[flam3_gaussian_kernel]*fabs(i - nn2)/nn2);
+	    if (maxfilt < temporal_filter[i]) maxfilt = temporal_filter[i];
+         }
+
+      } else { // (flam3_temporal_box == spec->genomes[0].temporal_filter_type)
+         for (i=0; i<nn; i++)
+            temporal_filter[i] = 1.0;
+	    
+	 maxfilt = 1.0;
       }
-      for (i = 0; i < nbatches; i++) {
-         temporal_filter[i] = 1.0;
-      }
 
-      if (normalize_vector(temporal_filter, nbatches)) {
-         fprintf(stderr, "temporal filter value is too small: %g.\n",
-                           spec->temporal_filter_radius);
-         exit(1);
+      /* Adjust the filter so that the max is 1.0, and */
+      /* calculate the K2 scaling factor  */
+      for (i=0; i<nn; i++) {
+         temporal_filter[i] /= maxfilt;
+	 sumfilt = sumfilt + temporal_filter[i];
       }
+      sumfilt = sumfilt / nn;
 
    } else {
+      sumfilt = 1.0;
       temporal_filter[0] = 1.0;
       temporal_deltas[0] = 0.0;
-      motion_filter[0] = 1.0;
    }
-
-#if 0
-   fprintf(stderr,"Temporal Deltas:\n");
-   for (j = 0; j < nbatches*ntemporal_samples; j++)
-      fprintf(stderr, "%4f\n", temporal_deltas[j]);
-   fprintf(stderr,"Motion Filter:\n");
-   for (j = 0; j < nbatches*ntemporal_samples; j++)
-      fprintf(stderr, "%4f\n", motion_filter[j]);
-   fprintf(stderr,"Temporal Filter:\n");
-   for (j = 0; j < nbatches; j++)
-      fprintf(stderr, "%4f\n", temporal_filter[j]);
-   fprintf(stderr, "\n");
-#endif
 
    /* the number of additional rows of buckets we put at the edge so
       that the filter doesn't go off the edge */
@@ -678,7 +697,7 @@ if (1) {
 #endif
       for (temporal_sample_num = 0; temporal_sample_num < ntemporal_samples; temporal_sample_num++) {
          double temporal_sample_time;
-         double color_scalar = motion_filter[batch_num*ntemporal_samples + temporal_sample_num];
+         double color_scalar = temporal_filter[batch_num*ntemporal_samples + temporal_sample_num];
 
          temporal_sample_time = spec->time +
         temporal_deltas[batch_num*ntemporal_samples + temporal_sample_num];
@@ -694,13 +713,15 @@ if (1) {
             for (j = 0; j < CMAP_SIZE; j++) {
                for (k = 0; k < 3; k++) {
 #if 1
-                  cmap[j][k] = (int) (cp.palette[(j * 256) / CMAP_SIZE][k] * WHITE_LEVEL);
+//                  cmap[j][k] = (int) (cp.palette[(j * 256) / CMAP_SIZE][k] * WHITE_LEVEL);
+                  dmap[j][k] = (cp.palette[(j * 256) / CMAP_SIZE][k] * WHITE_LEVEL);
 #else
                   /* monochrome if you don't have any cmaps */
-                  cmap[j][k] = WHITE_LEVEL;
+//                  dmap[j][k] = WHITE_LEVEL;
 #endif
                }
-               cmap[j][3] = WHITE_LEVEL;
+//               cmap[j][3] = WHITE_LEVEL;
+               dmap[j][3] = WHITE_LEVEL;
             }
          }
 
@@ -749,7 +770,8 @@ if (1) {
 
          }
 
-         nsamples = sample_density * nbuckets / (oversample * oversample);
+//         nsamples = sample_density * nbuckets / (oversample * oversample);
+         nsamples = sample_density * image_width * image_height;
 #if 0
          fprintf(stderr, "sample_density=%g nsamples=%g nbuckets=%ld time=%g\n",
        sample_density, nsamples, nbuckets, temporal_sample_time);
@@ -776,7 +798,8 @@ if (1) {
             fic.cmap = (void *)cmap2;
          } else {
             fic.fname_specified = 0;
-            fic.cmap = (void *)cmap;
+//            fic.cmap = (void *)cmap;
+            fic.dmap = (void *)dmap;
          }
 
          fic.color_scalar = color_scalar;
@@ -860,11 +883,10 @@ if (1) {
       }
 
       k1 =(cp.contrast * cp.brightness *
-      PREFILTER_WHITE * 268.0 *
-      temporal_filter[batch_num]) / 256;
+      PREFILTER_WHITE * 268.0 ) / 256;
       area = image_width * image_height / (ppux * ppuy);
       k2 = (oversample * oversample * nbatches) /
-   (cp.contrast * area * WHITE_LEVEL * sample_density);
+   (cp.contrast * area * WHITE_LEVEL * sample_density * sumfilt);
 #if 0
       printf("iw=%d,ih=%d,ppux=%f,ppuy=%f\n",image_width,image_height,ppux,ppuy);
       printf("contrast=%f, brightness=%f, PREFILTER=%d, temporal_filter=%f\n",
@@ -1219,7 +1241,7 @@ if (1) {
 
    free(temporal_filter);
    free(temporal_deltas);
-   free(motion_filter);
+//   free(motion_filter);
 #ifdef HAVE_LIBPTHREAD
    free(myThreads);
 #endif

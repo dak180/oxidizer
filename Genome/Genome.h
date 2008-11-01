@@ -64,7 +64,7 @@
 + (NSArray *)createArrayFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc;
 + (NSMutableDictionary *)createDictionaryFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc;
 + (NSMutableDictionary *)createDictionaryFromTransformEntity:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
-+ (NSMutableArray *)creatArrayForTransformVariations:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
++ (NSMutableArray *)createArrayForTransformVariations:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc;
 + (NSMutableArray *)createArrayForCMap:(NSArray *)cmaps;
 + (NSMutableDictionary *) createDictionaryForEditUsingEntity:(NSManagedObject *)genome;
 

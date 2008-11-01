@@ -1,7 +1,9 @@
 AUTOMAKE_OPTIONS = foreign no-dependencies
 
-AM_CFLAGS = -g -O3 -ffast-math -DPACKAGE_DATA_DIR=\"$(pkgdatadir)\"
+SVN_DEF = -D'SVN_REV="$(shell svnversion -n .)"'
+AM_CFLAGS = -g -O3 -ffast-math -DPACKAGE_DATA_DIR=\"$(pkgdatadir)\" $(SVN_DEF)
 
+man1_MANS = flam3-animate.man flam3-genome.man flam3-render.man flam3-convert.man
 bin_PROGRAMS = flam3-animate flam3-genome flam3-render flam3-convert
 lib_LTLIBRARIES = libflam3.la
 include_HEADERS = flam3.h isaac.h isaacs.h
@@ -25,7 +27,8 @@ pkgdata_DATA = flam3-palettes.xml
 
 EXTRA_DIST = rect.c flam3.h private.h isaac.h isaacs.h img.h test.flam3 vidres.flam3 \
    flam3.dsw render.dsp animate.dsp genome.dsp convert.dsp \
-   mkinstalldirs README.txt COPYING.txt flam3-palettes.xml
+   mkinstalldirs README.txt COPYING.txt flam3-palettes.xml \
+   flam3-animate.man flam3-render.man flam3-genome.man flam3-convert.man 
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = flam3.pc

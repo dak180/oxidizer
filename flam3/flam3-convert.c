@@ -14,11 +14,8 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
-
-static char *libifs_c_id =
-"@(#) $Id: flam3-convert.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include "private.h"
 
@@ -82,7 +79,7 @@ void parse_control_point_old(char **ss, flam3_genome *cp) {
 
    memset(cp, 0, sizeof(flam3_genome));
 
-   flam3_add_xforms(cp, flam3_nxforms);
+   flam3_add_xforms(cp, flam3_nxforms, 0);
 
    for (i = 0; i < flam3_nxforms; i++) {
       cp->xform[i].density = 0.0;

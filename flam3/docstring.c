@@ -14,18 +14,19 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-static char *docstring_c_id =
-"@(#) $Id: docstring.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include "config.h"
 #include "flam3.h"
 
 
-static char *the_docstring =
-"FLAM3 - cosmic recursive fractal flames version " VERSION "\n"
+static char *the_docstring0 =
+  "FLAM3 - cosmic recursive fractal flames version ";
+
+static char *the_docstring1 =
+"\n\n"
 "This software is licensed under the GPL.  You should have access\n"
 "to the source code; see http://www.fsf.org/licenses/gpl.html.\n"
 "\n"
@@ -51,7 +52,7 @@ static char *the_docstring =
 "\n"
 "envar           default     meaning\n"
 "=====           =======     =======\n"
-"prefix          \"\"          prefix names of output files with this string.\n"
+"prefix          (empty)     prefix names of output files with this string.\n"
 "begin           j           time of first frame to render (j=first time specified in file) (animate only)\n"
 "end             n-1         time of last frame to render (n=last time specified in the input file) (animate only)\n"
 "time            NA          time of first and last frame (ie do one frame) (animate only)\n"
@@ -74,13 +75,21 @@ static char *the_docstring =
 "bits            33          also 16, 32, or 64: sets bit-width of internal buffers (33 means 32-bit floating-point)\n"
 "bpc             8           bits per color channel: png supports 16, all others are 8 only (render/animate)\n"
 "image           filename    replace palette with png, jpg, or ppm image\n"
-"tries           50          number of tries to make to find a good genome.\n"
 "use_vars        -1          comma separated list of variation #'s to use when generating a random flame (genome only)\n"
 "dont_use_vars   NA          comma separated list of variation #'s to NOT use when generating a random flame (genome only)\n"
-"method          NA          method for crossover: alternate, interpolate, or union.\n"
-"symmetry        NA          set symmetry of result.\n"
-"clone           NA          clone input (this is an alternative to mutate).\n"
-"transparency    0           make bknd transparent, if format supports it\n"
+"cross0          NA          randomly select one genome from this file to genetically cross (genome only)\n"
+"cross1          NA            with one genome from this file (genome only)\n"
+"method          NA          method used for genetic cross: alternate, interpolate, or union. (genome only)\n"
+"mutate          NA          randomly mutate a random genome from this file (genome only)\n"
+"symmetry        NA          set symmetry of result. (genome only)\n"
+"clone           NA          clone random flame in input (genome only)\n"
+"clone_all       NA          clones all flames in file.  useful for applying template to all flames (genome only)\n"
+"animate         NA          interpolates between all flames in a file, using times specified in file (genome only)\n"
+"sequence        NA          360 degree rotation 'loops' times of each control point plus rotating transitions (genome only)\n"
+"loops           NA          number of times to rotate each control point in sequence (genome only)\n"
+"tries           50          number of tries to make to find a good genome. (genome only)\n"
+"strip           NA          strip input, frame and nframes control which one. (genome only)\n"
+"transparency    0           make bknd transparent, if format supports it (render/animate)\n"
 "name_enable     0           use 'name' attr in <flame> to name image output if present (render only)\n"
 "nick            \"\"          nickname to use in <edit> tags / img comments\n"
 "url             \"\"          url to use in <edit> tags / img comments\n"
@@ -126,7 +135,7 @@ static char *the_docstring =
 "\n"
 "    env template=vidres.flam3 flam3-genome > parent.flam3\n"
 "    env prefix=parent. flam3-render < parent.flam3\n"
-"    env template=vidres.flam3 mutate=vidres.flam3 repeat=10 flam3-genome > mutation.flam3\n"
+"    env template=vidres.flam3 mutate=parent.flam3 repeat=10 flam3-genome > mutation.flam3\n"
 "    flam3-render < mutation.flam3\n"
 "\n"
 "Normally one wouldn't use the same file for the template and the file\n"
@@ -152,11 +161,7 @@ static char *the_docstring =
 "creates and renders a 60 frame animation.  there are two flames in\n"
 "test.flam3, so the animation consists three stags: the first one\n"
 "rotating, then a transition, then the second one rotating.  each stage\n"
-"has 20 frames as specified on the command line.  but with only 20\n"
-"frames to complete 360 degrees the shape will is moving quite quickly\n"
-"so you will see strobing from the temporal subsamples used for\n"
-"motion blur.  to eliminate them increase the number of batches by\n"
-"editing test.flam3 and increasing it from 10 to 100.  if you want to\n"
+"has 20 frames as specified on the command line.  if you want to\n"
 "render only some fraction of a whole animation file, specify the begin\n"
 "and end times:\n"
 "\n"
@@ -186,7 +191,9 @@ static char *the_docstring =
 
 void docstring() {
     int i;
-    puts(the_docstring);
+    fputs(the_docstring0, stdout);
+    fputs(flam3_version(), stdout);
+    fputs(the_docstring1, stdout);
     for (i = 0; i < flam3_nvariations; i++)
    printf("  %2d. %s\n", i, flam3_variation_names[i]);
 }

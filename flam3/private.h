@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 
@@ -74,6 +74,7 @@ typedef struct {
    double ws0, wb0s0, hs1, hb1s1; /* shortcuts for indexing */
    int fname_specified; /* Set to 1 if there was a filename specified for colormap */
    void *cmap; /* Points to bucket-based cmap if standard, uchar if fname specified */
+   void *dmap; /* Points to bucket_double-based cmap */
    double color_scalar; /* <1.0 if non-uniform motion blur is set */
    void *buckets; /* Points to the first accumulator */
    double badvals; /* accumulates all badvalue resets */

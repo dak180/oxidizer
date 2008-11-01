@@ -14,12 +14,9 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
-
-static char *jpeg_c_id =
-"@(#) $Id: jpeg.c,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,10 +35,12 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
    size_t i;
    char *nick = getenv("nick");
    char *url = getenv("url");
+   char *id = getenv("id");
    char *ai; /* For argi */
    int jpegcom_enable = argi("enable_jpeg_comments",1);
 
-   char nick_string[64], url_string[128], bv_string[64],ni_string[64],rt_string[64];
+   char nick_string[64], url_string[128], id_string[128];
+   char bv_string[64],ni_string[64],rt_string[64];
    char genome_string[65536], ver_string[64];
    
    /* Create the mandatory comment strings */
@@ -49,7 +48,7 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
    snprintf(bv_string,64,"flam3_error_rate: %s",fpc->badvals);
    snprintf(ni_string,64,"flam3_samples: %s",fpc->numiters);
    snprintf(rt_string,64,"flam3_time: %s",fpc->rtime);
-   snprintf(ver_string,64,"flam3_version: %s",VERSION);
+   snprintf(ver_string,64,"flam3_version: %s",flam3_version());
 
    info.err = jpeg_std_error(&jerr);
    jpeg_create_compress(&info);
@@ -79,6 +78,11 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
         if (0 != url) {
             snprintf(url_string,128,"flam3_url: %s",url);
             jpeg_write_marker(&info, JPEG_COM, (unsigned char *)url_string, (int)strlen(url_string));
+        }
+        
+        if (0 != id) {
+            snprintf(id_string,128,"flam3_id: %s",id);
+            jpeg_write_marker(&info, JPEG_COM, (unsigned char *)id_string, (int)strlen(id_string));
         }
 
         jpeg_write_marker(&info, JPEG_COM, (unsigned char *)bv_string, (int)strlen(bv_string));

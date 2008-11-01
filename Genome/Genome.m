@@ -22,7 +22,7 @@
 #import "PaletteController.h"
 #import "GenomeXMLParser.h"
 
-#define flam3_nvariations 56
+#define flam3_nvariations 54
 
 NSString *variationName[1+flam3_nvariations] = {
 	@"linear",
@@ -78,9 +78,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	@"super_shape",
 	@"flower",
 	@"conic",
-	@"parabola",
-	@"split",
-	@"move"
+	@"parabola"
 };
 
 @implementation Genome
@@ -210,6 +208,22 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome addAttribute:[NSXMLNode attributeWithName:@"passes" stringValue:[[genomeEntity valueForKey:@"batches"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_samples" stringValue:[[genomeEntity valueForKey:@"jitter"] stringValue]]];
 
+	[genome addAttribute:[NSXMLNode attributeWithName:@"oversample" stringValue:[[genomeEntity valueForKey:@"oversample"] stringValue]]];
+	[genome addAttribute:[NSXMLNode attributeWithName:@"passes" stringValue:[[genomeEntity valueForKey:@"batches"] stringValue]]];
+	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_samples" stringValue:[[genomeEntity valueForKey:@"jitter"] stringValue]]];
+	
+	NSString *filter = [genomeEntity valueForKey:@"temporal_filter_type"];
+	if([filter isEqualToString:@"Box"]) {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_type" stringValue:@"box"]];				
+	} else if([filter isEqualToString:@"Gaussian"]) {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_type" stringValue:@"gaussian"]];		
+	} else if([filter isEqualToString:@"Exponent"]) {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_type" stringValue:@"exp"]];		
+	}
+	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_width" stringValue:[[genomeEntity valueForKey:@"temporal_filter_width"] stringValue]]];
+	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_exp" stringValue:[[genomeEntity valueForKey:@"temporal_filter_exp"] stringValue]]];
+	
+	
 	[genome addAttribute:[NSXMLNode attributeWithName:@"estimator_radius" stringValue:[[genomeEntity valueForKey:@"de_max_filter"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"estimator_minimum" stringValue:[[genomeEntity valueForKey:@"de_min_filter"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"estimator_curve" stringValue:[[genomeEntity valueForKey:@"de_alpha"] stringValue]]];
@@ -477,14 +491,6 @@ NSString *variationName[1+flam3_nvariations] = {
 					[xform addAttribute:[NSXMLNode attributeWithName:@"parabola_height" stringValue:[[variation valueForKey:@"parameter_1"] stringValue]]];
 					[xform addAttribute:[NSXMLNode attributeWithName:@"parabola_width" stringValue:[[variation valueForKey:@"parameter_2"] stringValue]]];
 					break;	
-				case 54:
-					[xform addAttribute:[NSXMLNode attributeWithName:@"split_xsize" stringValue:[[variation valueForKey:@"parameter_1"] stringValue]]];
-					[xform addAttribute:[NSXMLNode attributeWithName:@"split_ysize" stringValue:[[variation valueForKey:@"parameter_2"] stringValue]]];
-					break;	
-				case 55:
-					[xform addAttribute:[NSXMLNode attributeWithName:@"move_x" stringValue:[[variation valueForKey:@"parameter_1"] stringValue]]];
-					[xform addAttribute:[NSXMLNode attributeWithName:@"move_y" stringValue:[[variation valueForKey:@"parameter_2"] stringValue]]];
-					break;	
 				default:
 					break;
 			}
@@ -725,6 +731,28 @@ NSString *variationName[1+flam3_nvariations] = {
 	if(tempAttribute != nil) {
 	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[tempAttribute stringValue] intValue]]  forKey:@"jitter"];
 	}
+	
+
+	tempAttribute = [genome attributeForName:@"temporal_filter_type"];
+	if(tempAttribute != nil) {
+		if([[tempAttribute stringValue] isEqualToString:@"box"]) {
+			[newGenomeEntity setValue:@"Box"  forKey:@"temporal_filter_type"];
+		} else if([[tempAttribute stringValue] isEqualToString:@"gaussian"]) {
+			[newGenomeEntity setValue:@"Gaussian"  forKey:@"temporal_filter_type"];
+		} else if([[tempAttribute stringValue] isEqualToString:@"exp"]) {
+			[newGenomeEntity setValue:@"Exponent"  forKey:@"temporal_filter_type"];
+		}	
+	}
+
+	tempAttribute = [genome attributeForName:@"temporal_filter_width"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"temporal_filter_width"];
+	}	
+
+	tempAttribute = [genome attributeForName:@"temporal_filter_exp"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"temporal_filter_exp"];
+	}	
 	
 	tempAttribute = [genome attributeForName:@"estimator_radius"];
 	if(tempAttribute != nil) {
@@ -1385,30 +1413,6 @@ NSString *variationName[1+flam3_nvariations] = {
 			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"parabola_width"] stringValue] doubleValue]] 
 						 forKey:@"parameter_2"];
 			break;	
-		case 54:
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
-			
-			[variation setValue:@"X Size:" forKey:@"parameter_1_name"];
-			[variation setValue:@"Y Size:" forKey:@"parameter_2_name"];
-			
-			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"split_xsize"] stringValue] doubleValue]] 
-						 forKey:@"parameter_1"];
-			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"split_ysize"] stringValue] doubleValue]] 
-						 forKey:@"parameter_2"];
-			break;	
-		case 55:
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
-			
-			[variation setValue:@"Move X:" forKey:@"parameter_1_name"];
-			[variation setValue:@"Move Y:" forKey:@"parameter_2_name"];
-			
-			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"move_x"] stringValue] doubleValue]] 
-						 forKey:@"parameter_1"];
-			[variation setValue:[NSNumber numberWithDouble:[[[xform attributeForName:@"move_y"] stringValue] doubleValue]] 
-						 forKey:@"parameter_2"];
-			break;	
 		default:
 			break;
 	}
@@ -1605,6 +1609,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome setObject:[genomeEntity valueForKey:@"quality"] forKey:@"quality"];
 	[genome setObject:[genomeEntity valueForKey:@"batches"] forKey:@"passes"];
 	[genome setObject:[genomeEntity valueForKey:@"jitter"] forKey:@"temporal_samples"];
+	[genome setObject:[genomeEntity valueForKey:@"temporal_filter_type"] forKey:@"temporal_filter_type"];
+	[genome setObject:[genomeEntity valueForKey:@"temporal_filter_width"] forKey:@"temporal_filter_width"];
+	[genome setObject:[genomeEntity valueForKey:@"temporal_filter_exp"] forKey:@"temporal_filter_exp"];
 	[genome setObject:[genomeEntity valueForKey:@"de_max_filter"] forKey:@"estimator_radius"];
 	[genome setObject:[genomeEntity valueForKey:@"de_min_filter"] forKey:@"estimator_minimum"];
 	[genome setObject:[genomeEntity valueForKey:@"de_alpha"] forKey:@"estimator_curve"];
@@ -1783,7 +1790,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	[xform setObject:[xformEntity valueForKey:@"colour_0"] forKey:@"color"];
 	[xform setObject:[xformEntity valueForKey:@"symmetry"] forKey:@"symmetry"];
 	
-	[xform setObject:[Genome creatArrayForTransformVariations:xformEntity fromContext:moc] forKey:@"variations"];
+	[xform setObject:[Genome createArrayForTransformVariations:xformEntity fromContext:moc] forKey:@"variations"];
 	
 	return xform;
 	
@@ -1791,7 +1798,7 @@ NSString *variationName[1+flam3_nvariations] = {
 }
 
 
-+ (NSMutableArray *) creatArrayForTransformVariations:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc {
++ (NSMutableArray *) createArrayForTransformVariations:(NSManagedObject *)xformEntity fromContext:(NSManagedObjectContext *)moc {
 	
 	NSArray *variations;
 	NSMutableArray *variationsArray;
@@ -1907,14 +1914,6 @@ NSString *variationName[1+flam3_nvariations] = {
 				case 53:
 					[variationDictionary setObject:[variation valueForKey:@"parameter_1"] forKey:@"parabola_height"];
 					[variationDictionary setObject:[variation valueForKey:@"parameter_2"] forKey:@"parabola_width"];
-					break;	
-				case 54:
-					[variationDictionary setObject:[variation valueForKey:@"parameter_1"] forKey:@"split_xsize"];
-					[variationDictionary setObject:[variation valueForKey:@"parameter_2"] forKey:@"split_ysize"];
-					break;	
-				case 55:
-					[variationDictionary setObject:[variation valueForKey:@"parameter_1"] forKey:@"move_x"];
-					[variationDictionary setObject:[variation valueForKey:@"parameter_2"] forKey:@"move_y"];
 					break;	
 				default:
 					break;
@@ -2100,6 +2099,21 @@ NSString *variationName[1+flam3_nvariations] = {
 	    [newGenomeEntity setValue:tempObject forKey:@"jitter"];
 	}
 	
+
+	tempObject = [genome objectForKey:@"temporal_filter_type"];
+	if(tempObject != nil) {
+	    [newGenomeEntity setValue:tempObject forKey:@"temporal_filter_type"];
+	}
+
+	tempObject = [genome objectForKey:@"temporal_filter_width"];
+	if(tempObject != nil) {
+	    [newGenomeEntity setValue:tempObject forKey:@"temporal_filter_width"];
+	}
+
+	tempObject = [genome objectForKey:@"temporal_filter_exp"];
+	if(tempObject != nil) {
+	    [newGenomeEntity setValue:tempObject forKey:@"temporal_filter_exp"];
+	}
 	
 	tempObject = [genome objectForKey:@"estimator_radius"];
 	if(tempObject != nil) {
@@ -2621,28 +2635,6 @@ NSString *variationName[1+flam3_nvariations] = {
 			[variation setValue:[variationDictionary objectForKey:@"parabola_height"] forKey:@"parameter_1"];
 			[variation setValue:[variationDictionary objectForKey:@"parabola_width"] forKey:@"parameter_2"];			
 			break;	
-
-		case 54:
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
-			
-			[variation setValue:@"X Size:" forKey:@"parameter_1_name"];
-			[variation setValue:@"Y Size:" forKey:@"parameter_2_name"];
-			
-			[variation setValue:[variationDictionary objectForKey:@"split_xsize"] forKey:@"parameter_1"];
-			[variation setValue:[variationDictionary objectForKey:@"split_ysize"] forKey:@"parameter_2"];			
-			break;	
-
-		case 55:
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
-			
-			[variation setValue:@"Move X:" forKey:@"parameter_1_name"];
-			[variation setValue:@"Move Y:" forKey:@"parameter_2_name"];
-			
-			[variation setValue:[variationDictionary objectForKey:@"move_x"] forKey:@"parameter_1"];
-			[variation setValue:[variationDictionary objectForKey:@"move_y"] forKey:@"parameter_2"];			
-			break;	
 			
 		default:
 			break;
@@ -2791,6 +2783,29 @@ NSString *variationName[1+flam3_nvariations] = {
 	if(tempAttribute != nil) {
 	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"jitter"];
 	}
+
+	
+	
+	tempAttribute = [genome objectForKey:@"temporal_filter_type"];
+	if(tempAttribute != nil) {
+		if([tempAttribute isEqualToString:@"box"]) {
+			[newGenomeEntity setValue:@"Box"  forKey:@"temporal_filter_type"];
+		} else if([tempAttribute isEqualToString:@"gaussian"]) {
+			[newGenomeEntity setValue:@"Gaussian"  forKey:@"temporal_filter_type"];
+		} else if([tempAttribute isEqualToString:@"exp"]) {
+			[newGenomeEntity setValue:@"Exponent"  forKey:@"temporal_filter_type"];
+		}	
+	}	
+	
+	tempAttribute = [genome objectForKey:@"temporal_filter_width"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"temporal_filter_width"];
+	}	
+	
+	tempAttribute = [genome objectForKey:@"temporal_filter_exp"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"temporal_filter_exp"];
+	}	
 	
 	tempAttribute = [genome objectForKey:@"estimator_radius"];
 	if(tempAttribute != nil) {
@@ -3309,29 +3324,7 @@ NSString *variationName[1+flam3_nvariations] = {
 			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"parabola_height"] doubleValue]] forKey:@"parameter_1"];
 			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"parabola_width"] doubleValue]] forKey:@"parameter_2"];			
 			break;	
-			
-		case 54:
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
-			
-			[variation setValue:@"X Size:" forKey:@"parameter_1_name"];
-			[variation setValue:@"Y Size:" forKey:@"parameter_2_name"];
-			
-			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"split_xsize"] doubleValue]] forKey:@"parameter_1"];
-			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"split_ysize"] doubleValue]] forKey:@"parameter_2"];			
-			break;	
-			
-		case 55:
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_1"];
-			[variation setValue:[NSNumber numberWithBool:YES] forKey:@"use_parameter_2"];
-			
-			[variation setValue:@"Move X:" forKey:@"parameter_1_name"];
-			[variation setValue:@"Move Y:" forKey:@"parameter_2_name"];
-			
-			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"move_x"] doubleValue]] forKey:@"parameter_1"];
-			[variation setValue:[NSNumber numberWithDouble:[[variationDictionary objectForKey:@"move_y"] doubleValue]] forKey:@"parameter_2"];			
-			break;	
-			
+						
 		default:
 			break;
 	}

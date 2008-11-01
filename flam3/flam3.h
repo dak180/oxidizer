@@ -14,7 +14,7 @@
 
     You should have received a copy of the GNU General Public License
     along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
 */
 
 
@@ -25,9 +25,6 @@
 #include <libxml/parser.h>
 #include "isaac.h"
 
-
-static char *flam3_h_id =
-"@(#) $Id: flam3.h,v 1.7 2008/04/06 15:22:12 vargol Exp $";
 
 char *flam3_version();
 
@@ -46,13 +43,12 @@ typedef double flam3_palette[256][3];
 
 int flam3_get_palette(int palette_index, flam3_palette p, double hue_rotation);
 
-
 #define flam3_variation_random (-1)
 #define flam3_variation_random_fromspecified (-2)
 
 extern char *flam3_variation_names[];
 
-#define flam3_nvariations 56
+#define flam3_nvariations 54
 #define flam3_nxforms     12
 
 #define flam3_parent_fn_len     30
@@ -60,8 +56,10 @@ extern char *flam3_variation_names[];
 #define flam3_interpolation_linear 0
 #define flam3_interpolation_smooth 1
 
-#define flam3_intspace_linear 0
-#define flam3_intspace_log    1
+#define flam3_inttype_linear 0
+#define flam3_inttype_log    1
+#define flam3_inttype_compat 2 /* Linear and old behaviour */
+#define flam3_inttype_older  3 /* rotate padded xforms     */
 
 #define flam3_palette_interpolation_hsv   0
 #define flam3_palette_interpolation_sweep 1
@@ -122,8 +120,6 @@ extern char *flam3_variation_names[];
 #define VAR_FLOWER 51
 #define VAR_CONIC 52
 #define VAR_PARABOLA 53
-#define VAR_SPLIT 54
-#define VAR_MOVE 55
 
 typedef void (*flam3_iterator)(void *, double);
 
@@ -173,7 +169,7 @@ typedef struct {
    double color[2];     /* color coords for this function. 0 - 1 */
    double symmetry;     /* 1=this is a symmetry xform, 0=not */
    
-   int just_initialized;/* Set to 1 during initialization, 0 otherwise */
+   int padding;/* Set to 1 for padding xforms */
    double wind[2]; /* winding numbers */
 
    int precalc_sqrt_flag;
@@ -268,13 +264,13 @@ typedef struct {
    double parabola_width;
    
    /* Split */
-   double split_xsize;
-   double split_ysize;
-   double split_shift;
+//   double split_xsize;
+//   double split_ysize;
+//   double split_shift;
    
    /* Move */
-   double move_x;
-   double move_y;
+//   double move_x;
+//   double move_y;
    
    /* If perspective is used, precalculate these values */
    /* from the _angle and _dist                         */
@@ -309,7 +305,8 @@ typedef struct {
    /* function pointers for faster iterations */
    int num_active_vars;
    double active_var_weights[flam3_nvariations];
-   flam3_iterator varFunc[flam3_nvariations];
+   //flam3_iterator varFunc[flam3_nvariations];
+   int varFunc[flam3_nvariations];
 
 } flam3_xform;
 
@@ -317,7 +314,7 @@ typedef struct {
    char flame_name[flam3_name_len+1]; /* 64 chars plus a null */
    double time;
    int interpolation;
-   int interpolation_space;
+   int interpolation_type;
    int palette_interpolation;
    int num_xforms;
    int final_xform_index;
@@ -375,14 +372,17 @@ typedef struct {
    double hue_rotation1;
    double palette_blend;
 
-   double motion_exp; /* Motion blur parameter that controls how the colors are scaled */
+//   double motion_exp; /* Motion blur parameter that controls how the colors are scaled */
+
+   int temporal_filter_type; /* Temporal filters */
+   double temporal_filter_width, temporal_filter_exp;
 
 
 } flam3_genome;
 
 
 /* xform manipulation */
-void flam3_add_xforms(flam3_genome *cp, int num_to_add);
+void flam3_add_xforms(flam3_genome *cp, int num_to_add, int interp_padding);
 void flam3_delete_xform(flam3_genome *thiscp, int idx_to_delete);
 void flam3_copy(flam3_genome *dest, flam3_genome *src);
 void flam3_copyx(flam3_genome *dest, flam3_genome *src, int num_std, int num_final);
@@ -425,7 +425,7 @@ void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors,
 
 void flam3_estimate_bounding_box(flam3_genome *g, double eps, int nsamples,
              double *bmin, double *bmax, randctx *rc);
-void flam3_rotate(flam3_genome *g, double angle); /* angle in degrees */
+void flam3_rotate(flam3_genome *g, double angle, int interp_type); /* angle in degrees */
 void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc);
 void establish_asymmetric_refangles(flam3_genome *cp, int ncps);
 
@@ -437,7 +437,7 @@ void flam3_apply_template(flam3_genome *cp, flam3_genome *templ);
 int flam3_count_nthreads(void);
 
 typedef struct {
-   double         temporal_filter_radius;
+//   double         temporal_filter_radius;
    double         pixel_aspect_ratio;    /* width over height of each pixel */
    flam3_genome  *genomes;
    int            ngenomes;
@@ -501,5 +501,9 @@ void flam3_srandom();
 #define flam3_hanning_kernel 12
 #define flam3_quadratic_kernel 13
 
+/* Temporal filters */
+#define flam3_temporal_box 0
+#define flam3_temporal_gaussian 1
+#define flam3_temporal_exp 2
 
 #endif
