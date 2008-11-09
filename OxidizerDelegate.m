@@ -436,11 +436,28 @@ void print_stack(lua_State* interpreter){
 	lua_pcall(interpreter,0,0,0);
 
 	lua_getglobal(interpreter, "oxidizer_status");
-	NSDictionary *returnValues = (NSDictionary *)lua_objc_topropertylist(interpreter, 1);
+	NSObject *returnThing = (NSString *)lua_objc_topropertylist(interpreter, 1);
 
 	lua_getglobal(interpreter, "oxidizer_genomes");
 	NSObject *returnObject = lua_objc_topropertylist(interpreter, 2);
 
+	if ([returnThing isKindOfClass:[NSString class]] && (![(NSString *)returnThing isEqualToString:@""]) ) {
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:(NSString *)returnThing];
+		[finishedPanel runModal];	
+		
+		lua_close(interpreter);
+		interpreter = nil;
+		return;
+		
+	}
+	
+	NSDictionary *returnValues = (NSDictionary *)returnThing;
+
+	
 	if ([[returnValues valueForKey:@"action"] isEqualToString:@"not_set"]) {
 		
 		
