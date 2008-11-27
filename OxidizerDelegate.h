@@ -7,6 +7,7 @@
 #import "GenePoolNibController.h"
 #import "RectangleNibController.h"
 #import "GradientNibController.h"
+#import "QuickViewController.h"
 #include "LuaObjCBridge/LuaObjCBridge.h"
 
 @interface OxidizerDelegate : NSObject {
@@ -14,6 +15,7 @@
 	IBOutlet NSWindow *oxidizerWindow;
 	IBOutlet FractalFlameModel *ffm;
 	IBOutlet BreedingController *bc;
+    IBOutlet QuickViewController *_qvc;
 	
 	
 @private
@@ -22,6 +24,7 @@
 	GenePoolNibController *gpnc;
 	RectangleNibController *rnc;
 //	GradientNibController *gnc;
+
 	lua_State* interpreter;
 	
 }

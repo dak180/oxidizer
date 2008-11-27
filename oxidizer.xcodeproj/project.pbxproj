@@ -27,6 +27,8 @@
 		A40EF52F0DD71E0A003329A6 /* GenomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A40EF52E0DD71E0A003329A6 /* GenomeXMLParser.m */; };
 		A410568E0C5F760A0075334E /* stills.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568C0C5F760A0075334E /* stills.png */; };
 		A410568F0C5F760A0075334E /* text-x-script.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568D0C5F760A0075334E /* text-x-script.png */; };
+		A41086650EDB356500529FF8 /* QuickViewButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A41086640EDB356500529FF8 /* QuickViewButton.m */; };
+		A410867B0EDB36AA00529FF8 /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A410867A0EDB36AA00529FF8 /* QuickView.xib */; };
 		A41963670C5E484B002EDD7B /* FileViews.nib in Resources */ = {isa = PBXBuildFile; fileRef = A41963660C5E484B002EDD7B /* FileViews.nib */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
@@ -52,10 +54,13 @@
 		A4B9F1C80E9D119F0004246F /* AutoPreviewStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */; };
 		A4BE79470DA6DD3700160702 /* GradientController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79440DA6DD3700160702 /* GradientController.m */; };
 		A4BE79480DA6DD3700160702 /* GradientNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79460DA6DD3700160702 /* GradientNibController.m */; };
+		A4C1D4E30ECF2D9D008A717E /* TemporalFilterIsExponent.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C1D4E20ECF2D9D008A717E /* TemporalFilterIsExponent.m */; };
 		A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */; };
 		A4C5BDCB0DA91D6D002BE1C2 /* libflam3.0.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */; };
 		A4C6CDE60DC3708600E2EEFB /* ProgressIndicatorWithCancel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */; };
 		A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */; };
+		A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4D056FB0EDF3BBC005F122C /* QuickView.xib */; };
+		A4D056FF0EDF3BBC005F122C /* QuickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D056FD0EDF3BBC005F122C /* QuickViewController.m */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
 		A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
 		A4D69FE00E77004D00A1F11B /* AutoPreviewSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D69FDF0E77004D00A1F11B /* AutoPreviewSlider.m */; };
@@ -119,6 +124,9 @@
 		A40EF52E0DD71E0A003329A6 /* GenomeXMLParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenomeXMLParser.m; sourceTree = "<group>"; };
 		A410568C0C5F760A0075334E /* stills.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = stills.png; path = icons/Tango/stills.png; sourceTree = SOURCE_ROOT; };
 		A410568D0C5F760A0075334E /* text-x-script.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "text-x-script.png"; path = "icons/Tango/text-x-script.png"; sourceTree = SOURCE_ROOT; };
+		A41086630EDB356500529FF8 /* QuickViewButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewButton.h; path = Controls/QuickViewButton.h; sourceTree = "<group>"; };
+		A41086640EDB356500529FF8 /* QuickViewButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewButton.m; path = Controls/QuickViewButton.m; sourceTree = "<group>"; };
+		A410867A0EDB36AA00529FF8 /* QuickView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = QuickView.xib; path = QuckView/QuickView.xib; sourceTree = "<group>"; };
 		A41963660C5E484B002EDD7B /* FileViews.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = FileViews.nib; path = FileViews/FileViews.nib; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
@@ -164,11 +172,16 @@
 		A4BE79440DA6DD3700160702 /* GradientController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientController.m; path = GradientEditor/GradientController.m; sourceTree = "<group>"; };
 		A4BE79450DA6DD3700160702 /* GradientNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientNibController.h; path = GradientEditor/GradientNibController.h; sourceTree = "<group>"; };
 		A4BE79460DA6DD3700160702 /* GradientNibController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientNibController.m; path = GradientEditor/GradientNibController.m; sourceTree = "<group>"; };
+		A4C1D4E10ECF2D9D008A717E /* TemporalFilterIsExponent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TemporalFilterIsExponent.h; sourceTree = "<group>"; };
+		A4C1D4E20ECF2D9D008A717E /* TemporalFilterIsExponent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TemporalFilterIsExponent.m; sourceTree = "<group>"; };
 		A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = /usr/lib/libxml2.dylib; sourceTree = "<absolute>"; };
 		A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libflam3.0.dylib; path = build_folder_for_flam3/lib/libflam3.0.dylib; sourceTree = "<group>"; };
 		A4C6CDE40DC3708600E2EEFB /* ProgressIndicatorWithCancel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgressIndicatorWithCancel.h; path = ProgressWindow/ProgressIndicatorWithCancel.h; sourceTree = "<group>"; };
 		A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProgressIndicatorWithCancel.m; path = ProgressWindow/ProgressIndicatorWithCancel.m; sourceTree = "<group>"; };
 		A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = TaskProgress.nib; path = ProgressWindow/TaskProgress.nib; sourceTree = "<group>"; };
+		A4D056FB0EDF3BBC005F122C /* QuickView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = QuickView.xib; path = QuickView/QuickView.xib; sourceTree = "<group>"; };
+		A4D056FC0EDF3BBC005F122C /* QuickViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewController.h; path = QuickView/QuickViewController.h; sourceTree = "<group>"; };
+		A4D056FD0EDF3BBC005F122C /* QuickViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewController.m; path = QuickView/QuickViewController.m; sourceTree = "<group>"; };
 		A4D3633D09AB9CE20078025F /* genome.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = genome.xcdatamodel; sourceTree = "<group>"; };
 		A4D604A909658A6C0001CD1D /* PaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PaletteController.h; sourceTree = "<group>"; };
 		A4D604AA09658A6C0001CD1D /* PaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PaletteController.m; sourceTree = "<group>"; };
@@ -213,6 +226,7 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A49B5B200ED02ADE00121E88 /* QuickView */,
 				A48873330E9924540038CE19 /* ValueTransformers */,
 				A44EDD100E76F9050039AF9D /* Controls */,
 				A40EF5260DD71DEA003329A6 /* Genome */,
@@ -330,6 +344,7 @@
 				A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */,
 				A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */,
 				A44201ED0B21E551000B94D9 /* genepool.png */,
+				A410867A0EDB36AA00529FF8 /* QuickView.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -398,6 +413,8 @@
 				A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */,
 				A4D69FDE0E77004D00A1F11B /* AutoPreviewSlider.h */,
 				A4D69FDF0E77004D00A1F11B /* AutoPreviewSlider.m */,
+				A41086630EDB356500529FF8 /* QuickViewButton.h */,
+				A41086640EDB356500529FF8 /* QuickViewButton.m */,
 			);
 			name = Controls;
 			sourceTree = "<group>";
@@ -411,8 +428,20 @@
 				A48873350E9924DB0038CE19 /* ImageFormatIsPNG.m */,
 				A48874310E992E410038CE19 /* ImageFormatIsJPEG.h */,
 				A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */,
+				A4C1D4E10ECF2D9D008A717E /* TemporalFilterIsExponent.h */,
+				A4C1D4E20ECF2D9D008A717E /* TemporalFilterIsExponent.m */,
 			);
 			name = ValueTransformers;
+			sourceTree = "<group>";
+		};
+		A49B5B200ED02ADE00121E88 /* QuickView */ = {
+			isa = PBXGroup;
+			children = (
+				A4D056FB0EDF3BBC005F122C /* QuickView.xib */,
+				A4D056FC0EDF3BBC005F122C /* QuickViewController.h */,
+				A4D056FD0EDF3BBC005F122C /* QuickViewController.m */,
+			);
+			name = QuickView;
 			sourceTree = "<group>";
 		};
 		A49E2A520D86F0E7008198BE /* GradientEditor */ = {
@@ -515,6 +544,8 @@
 				A404B32F0D14345E00FE81AC /* RectangleWindow.nib in Resources */,
 				A49E2A680D86FDC9008198BE /* GradientWindow.nib in Resources */,
 				A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */,
+				A410867B0EDB36AA00529FF8 /* QuickView.xib in Resources */,
+				A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -574,6 +605,9 @@
 				A48873360E9924DB0038CE19 /* ImageFormatIsPNG.m in Sources */,
 				A48874330E992E410038CE19 /* ImageFormatIsJPEG.m in Sources */,
 				A4B9F1C80E9D119F0004246F /* AutoPreviewStepper.m in Sources */,
+				A4C1D4E30ECF2D9D008A717E /* TemporalFilterIsExponent.m in Sources */,
+				A41086650EDB356500529FF8 /* QuickViewButton.m in Sources */,
+				A4D056FF0EDF3BBC005F122C /* QuickViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

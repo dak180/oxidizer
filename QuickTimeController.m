@@ -574,7 +574,9 @@
 	
 	cErr = GraphicsExportSetOutputFile(geExporter, &spec);
 	cErr = GraphicsExportDoExport (geExporter, &actualSizeWritten );
-		
+
+	[tiff release];
+
 //	CloseComponent(geExporter);
 //	geExporter = NULL;
 	CloseComponent(tiffImportComponent);

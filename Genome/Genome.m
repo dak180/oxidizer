@@ -262,9 +262,9 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome addAttribute:[NSXMLNode attributeWithName:@"interpolation_type" stringValue:[interpolation lowercaseString]]];
 
 
-	if ([[genomeEntity valueForKey:@"motion_exp"] doubleValue] != 0.0) {
-		[genome addAttribute:[NSXMLNode attributeWithName:@"motion_exponent" stringValue:[[genomeEntity valueForKey:@"motion_exp"] stringValue]]];
-	}
+//	if ([[genomeEntity valueForKey:@"motion_exp"] doubleValue] != 0.0) {
+//		[genome addAttribute:[NSXMLNode attributeWithName:@"motion_exponent" stringValue:[[genomeEntity valueForKey:@"motion_exp"] stringValue]]];
+//	}
 
 	[genome addAttribute:[NSXMLNode attributeWithName:@"filter" stringValue:[[genomeEntity valueForKey:@"spatial_filter_radius"] stringValue]]];
 	
@@ -832,7 +832,9 @@ NSString *variationName[1+flam3_nvariations] = {
 		
 	tempAttribute = [genome attributeForName:@"motion_exponent"];
 	if(tempAttribute != nil) {
-		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"motion_exp"];
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"temporal_filter_exp"];
+		[newGenomeEntity setValue:@"Exponent"  forKey:@"temporal_filter_type"];
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:1.0] forKey:@"temporal_filter_width"];
 	}
 	
 
@@ -1655,7 +1657,7 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	[genome setObject:[[genomeEntity valueForKey:@"interpolation_type"] lowercaseString] forKey:@"interpolation_type"];
 
-	[genome setObject:[genomeEntity valueForKey:@"motion_exp"] forKey:@"motion_exponent"];
+//	[genome setObject:[genomeEntity valueForKey:@"motion_exp"] forKey:@"motion_exponent"];
 	[genome setObject:[genomeEntity valueForKey:@"spatial_filter_radius"] forKey:@"filter"];
 	
 	if ([[genomeEntity valueForKey:@"spatial_filter_func"] isEqualToString:@"B-Spline"]) {
@@ -2196,9 +2198,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	tempObject = [genome objectForKey:@"motion_exponent"];
 	if(tempObject != nil) {
-	    [newGenomeEntity setValue:tempObject forKey:@"motion_exp"];
+	    [newGenomeEntity setValue:tempObject forKey:@"temporal_filter_exp"];
+	    [newGenomeEntity setValue:@"Exponent" forKey:@"temporal_filter_type"];
+	    [newGenomeEntity setValue:[NSNumber numberWithDouble:1.0] forKey:@"temporal_filter_width"];
 	}
-	
+
 	
 	tempObject = [genome objectForKey:@"filter"];
 	if(tempObject != nil) {
@@ -2898,8 +2902,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	tempAttribute = [genome objectForKey:@"motion_exponent"];
 	if(tempAttribute != nil) {
-		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"motion_exp"];
-	}
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:[tempAttribute doubleValue]] forKey:@"temporal_filter_exp"];
+		[newGenomeEntity setValue:@"Exponent"  forKey:@"temporal_filter_type"];
+		[newGenomeEntity setValue:[NSNumber numberWithDouble:1.0] forKey:@"temporal_filter_width"];
+	}	
+
 	
 	
 	tempAttribute = [genome objectForKey:@"filter"];

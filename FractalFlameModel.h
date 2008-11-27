@@ -47,7 +47,6 @@
     IBOutlet ProgressIndicatorWithCancel *taskFrameIndicator;
     IBOutlet NSTextField *etaTextField;
 	
-	
 	BOOL _saveThumbnail;
 	BOOL _showRender;
 	
@@ -135,6 +134,7 @@
 - (void) renderAnimation;
 - (void) renderAnimationStills; 
 - (void) renderStillToWindow;
+- (NSImage *) renderThumbnail;
 
 - (BOOL) okayToRender;
 

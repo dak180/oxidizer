@@ -554,7 +554,13 @@ void print_stack(lua_State* interpreter){
 	return [ffm renderGenomeToPng:filename] ? 0 : 1;
 }
 
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	
+	
+	[NSBundle loadNibNamed:@"QuickView" owner:_qvc];
 
+	
+}
 @end
 
 

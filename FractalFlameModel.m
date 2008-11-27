@@ -23,6 +23,7 @@
 #import "GreaterThanThreeTransformer.h"
 #import "ImageFormatIsJPEG.h"
 #import "ImageFormatIsPNG.h"
+#import "TemporalFilterIsExponent.h"
 #import "QuickTime/QuickTime.h"
 #import "Genome/Genome.h"
 #import "Genome/GenomeImages.h"
@@ -131,9 +132,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[NSValueTransformer setValueTransformer:ifip
 										forName:@"ImageFormatIsPNG"];
 		
+		TemporalFilterIsExponent *tfie = [[[TemporalFilterIsExponent alloc] init] autorelease];
+		
+		// register it with the name that we refer to it with
+		[NSValueTransformer setValueTransformer:tfie
+										forName:@"TemporalFilterIsExponent"];
 		
 		[NSBundle loadNibNamed:@"FileViews" owner:self];
 		[NSBundle loadNibNamed:@"TaskProgress" owner:self];
+//		[NSBundle loadNibNamed:@"QuickView" owner:_qvc];
 		
 		
 		
@@ -230,7 +237,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	[previewWindow center];
 	[taskProgressWindow center];
-	
 
 	
 	savePanel = [NSSavePanel savePanel];
@@ -334,7 +340,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[previewView setToolTip:@"Preview: This is the image you have just rendered. You can save a copy by dragging the image to the finder/desktop."];
 
 		[self showPreviewWindow];
-		
 
 	}
 
@@ -642,6 +647,49 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[pool release];
 }
 
+- (NSImage *) renderThumbnail {
+	
+	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
+															NSTemporaryDirectory(),
+															[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
+															nil]];
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	[fileManager createDirectoryAtPath:previewFolder attributes:nil];
+	
+	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"thumbnail.png", nil]];
+	
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];	
+	[taskEnvironment setObject:pngFileName forKey:@"out"];
+	
+	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
+	
+	
+//	NSDate *start = [NSDate date];
+	
+	
+	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
+	
+	if (returnCode != 0) {
+		
+		[moc unlock];
+		return nil;
+	}	
+	
+	[moc unlock];
+	
+	NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:pngFileName]];
+	
+	if ([fileManager fileExistsAtPath:pngFileName]) {
+		bool returnBool = [fileManager removeFileAtPath:pngFileName handler:nil];
+		returnBool = [fileManager removeFileAtPath:previewFolder handler:nil];
+	}	
+	
+	return [flameImage autorelease];
+	
+}
 
 
 - (IBAction)previewCurrentFlame:(id)sender {
