@@ -28,7 +28,6 @@
 		A410568E0C5F760A0075334E /* stills.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568C0C5F760A0075334E /* stills.png */; };
 		A410568F0C5F760A0075334E /* text-x-script.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568D0C5F760A0075334E /* text-x-script.png */; };
 		A41086650EDB356500529FF8 /* QuickViewButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A41086640EDB356500529FF8 /* QuickViewButton.m */; };
-		A410867B0EDB36AA00529FF8 /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A410867A0EDB36AA00529FF8 /* QuickView.xib */; };
 		A41963670C5E484B002EDD7B /* FileViews.nib in Resources */ = {isa = PBXBuildFile; fileRef = A41963660C5E484B002EDD7B /* FileViews.nib */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
@@ -126,7 +125,6 @@
 		A410568D0C5F760A0075334E /* text-x-script.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "text-x-script.png"; path = "icons/Tango/text-x-script.png"; sourceTree = SOURCE_ROOT; };
 		A41086630EDB356500529FF8 /* QuickViewButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewButton.h; path = Controls/QuickViewButton.h; sourceTree = "<group>"; };
 		A41086640EDB356500529FF8 /* QuickViewButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewButton.m; path = Controls/QuickViewButton.m; sourceTree = "<group>"; };
-		A410867A0EDB36AA00529FF8 /* QuickView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = QuickView.xib; path = QuckView/QuickView.xib; sourceTree = "<group>"; };
 		A41963660C5E484B002EDD7B /* FileViews.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = FileViews.nib; path = FileViews/FileViews.nib; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
@@ -344,7 +342,6 @@
 				A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */,
 				A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */,
 				A44201ED0B21E551000B94D9 /* genepool.png */,
-				A410867A0EDB36AA00529FF8 /* QuickView.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -544,7 +541,6 @@
 				A404B32F0D14345E00FE81AC /* RectangleWindow.nib in Resources */,
 				A49E2A680D86FDC9008198BE /* GradientWindow.nib in Resources */,
 				A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */,
-				A410867B0EDB36AA00529FF8 /* QuickView.xib in Resources */,
 				A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
