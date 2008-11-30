@@ -424,6 +424,10 @@
 	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];	
 
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[env setObject:[defaults stringForKey:@"nick"] forKey:@"nick"];	
+	[env setObject:[defaults stringForKey:@"url"] forKey:@"url"];	
+
 	/* fiddle symmetry to be a value between -8 and -1 and 1 and 8 */
 	int symmetry;
 	
@@ -484,6 +488,10 @@
 	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];	
 
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[env setObject:[defaults stringForKey:@"nick"] forKey:@"nick"];	
+	[env setObject:[defaults stringForKey:@"url"] forKey:@"url"];	
+	
 	/* fiddle symmetry to be a value between -8 and -1 and 1 and 8 */
 	int symmetry;
 	

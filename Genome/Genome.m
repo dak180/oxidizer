@@ -166,9 +166,10 @@ NSString *variationName[1+flam3_nvariations] = {
 			double actualQuality = [[genomeEntity valueForKey:@"quality"] doubleValue];
 			double quality ;
 			if (zoom > 0.0) {
-				zoom = pow(zoom, 2.0) * 2.0;
+				zoom = pow(2.0, zoom);
+				zoom *= zoom;
 				actualQuality *= zoom; 
-				if (actualQuality * zoom <= maxQuality) {
+				if (actualQuality <= maxQuality) {
 					quality = actualQuality;
 				} else {
 					quality = maxQuality / zoom;
@@ -933,9 +934,32 @@ NSString *variationName[1+flam3_nvariations] = {
 			[newTransforms addObject:newXformEntity];
 			[newXformEntity release];
 		} else if([[child name] isEqualToString:@"edit"]) {
-			NSAttributedString *edits = [[NSAttributedString alloc] initWithString:[child XMLStringWithOptions:NSXMLNodePrettyPrint|NSXMLNodeCompactEmptyElement]];
-			[newGenomeEntity setValue:edits forKey:@"edits"];
-			[edits release];
+			
+			[newGenomeEntity setValue:[[child attributeForName:@"nick"] stringValue] forKey:@"nick"];
+			[newGenomeEntity setValue:[[child attributeForName:@"url"] stringValue] forKey:@"url"];
+			[newGenomeEntity setValue:[[child attributeForName:@"comm"] stringValue] forKey:@"comment"];
+			
+			if([child childCount] > 0) {
+				
+				NSEnumerator *childEnumerator = [[child children] objectEnumerator];
+				NSXMLElement *editChild;
+				
+				NSMutableString *previousEdits = [NSMutableString stringWithCapacity:1];
+				while(editChild = [childEnumerator nextObject]) {
+					[previousEdits appendString:[editChild XMLStringWithOptions:NSXMLNodePrettyPrint|NSXMLNodeCompactEmptyElement]];
+				}
+
+				NSAttributedString *edits = [[NSAttributedString alloc] initWithString:previousEdits];
+				[newGenomeEntity setValue:edits forKey:@"edits"];
+				[edits release];
+
+			} else {
+				
+				NSAttributedString *edits = [[NSAttributedString alloc] initWithString:@""];
+				[newGenomeEntity setValue:edits forKey:@"edits"];
+				[edits release];
+			}
+
 		}
 	
 		
@@ -1154,6 +1178,7 @@ NSString *variationName[1+flam3_nvariations] = {
 
 + (NSManagedObject *)createVariationEntityFromElement:(NSXMLElement *)xform ofVariationType:(int)kind andWeight:(double)weight inContext:(NSManagedObjectContext *)moc {
 	
+	[xform retain];
 	NSManagedObject *variation = [NSEntityDescription insertNewObjectForEntityForName:@"Variations" inManagedObjectContext:moc];
 	
 	[variation setValue:variationName[kind] forKey:@"name"]; 
@@ -1427,6 +1452,7 @@ NSString *variationName[1+flam3_nvariations] = {
 			break;
 	}
 
+	[xform release];
 	[variation autorelease];
 	
 	return variation;
@@ -3396,7 +3422,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	/* create edit element with new details */ 
 	[genomeEntity setValue:[edits objectForKey:@"nick"] forKey:@"nick"];
 	[genomeEntity setValue:[edits objectForKey:@"url"] forKey:@"url"];
-	[genomeEntity setValue:[edits objectForKey:@"comment"] forKey:@"comment"];
+	[genomeEntity setValue:[edits objectForKey:@"comm"] forKey:@"comment"];
 	
 }
 
