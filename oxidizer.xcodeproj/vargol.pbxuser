@@ -362,6 +362,10 @@
 			A4AD75C10E52048700A79F3E = A4AD75C10E52048700A79F3E /* PBXTextBookmark */;
 			A4AD7F150EE46EA9003711EC /* PBXTextBookmark */ = A4AD7F150EE46EA9003711EC /* PBXTextBookmark */;
 			A4AD7F180EE46EA9003711EC /* PBXTextBookmark */ = A4AD7F180EE46EA9003711EC /* PBXTextBookmark */;
+			A4AD7F270EE47154003711EC /* PBXTextBookmark */ = A4AD7F270EE47154003711EC /* PBXTextBookmark */;
+			A4AD7F280EE47154003711EC /* PBXTextBookmark */ = A4AD7F280EE47154003711EC /* PBXTextBookmark */;
+			A4AD7F290EE47154003711EC /* PBXTextBookmark */ = A4AD7F290EE47154003711EC /* PBXTextBookmark */;
+			A4AD7F2A0EE47154003711EC /* PBXTextBookmark */ = A4AD7F2A0EE47154003711EC /* PBXTextBookmark */;
 			A4B9F1CD0E9D123F0004246F = A4B9F1CD0E9D123F0004246F /* PBXTextBookmark */;
 			A4B9F1CE0E9D123F0004246F = A4B9F1CE0E9D123F0004246F /* PBXTextBookmark */;
 			A4B9F1D20E9D123F0004246F = A4B9F1D20E9D123F0004246F /* PBXTextBookmark */;
@@ -897,8 +901,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = Foundation;
-		modificationTime = 249776960.27087;
-		state = 1;
+		modificationTime = 249852239.810011;
+		state = 0;
 		symbolName = "-[_NSZombie release]";
 	};
 	A422B9A30B16308200019559 /* GenePoolNibController.m */ = {
@@ -1028,7 +1032,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 249758011.434102;
+		modificationTime = 249852238.80725;
 		state = 1;
 		symbolName = malloc_printf;
 	};
@@ -1337,7 +1341,7 @@
 		ignoreCount = 0;
 		lineNumber = 2031;
 		location = Oxidizer;
-		modificationTime = 249758011.43298;
+		modificationTime = 249852238.806624;
 		state = 1;
 	};
 	A49D17F20EE2E137003272A1 /* PBXTextBookmark */ = {
@@ -1544,7 +1548,7 @@
 		ignoreCount = 0;
 		lineNumber = 944;
 		location = Oxidizer;
-		modificationTime = 249758011.4333261;
+		modificationTime = 249852238.806631;
 		state = 1;
 	};
 	A49D18B90EE2FB64003272A1 /* PBXTextBookmark */ = {
@@ -1756,7 +1760,7 @@
 		ignoreCount = 0;
 		lineNumber = 46;
 		location = Oxidizer;
-		modificationTime = 249758011.43291;
+		modificationTime = 249852238.805426;
 		state = 1;
 	};
 	A4A1110A0E9A4A39009D2E7F /* PBXTextBookmark */ = {
@@ -2299,6 +2303,46 @@
 		vrLen = 1700;
 		vrLoc = 0;
 	};
+	A4AD7F270EE47154003711EC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A40EF5280DD71DEA003329A6 /* Genome.m */;
+		name = "Genome.m: 118";
+		rLen = 143;
+		rLoc = 2600;
+		rType = 0;
+		vrLen = 1222;
+		vrLoc = 3040;
+	};
+	A4AD7F280EE47154003711EC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 888";
+		rLen = 0;
+		rLoc = 25366;
+		rType = 0;
+		vrLen = 668;
+		vrLoc = 25061;
+	};
+	A4AD7F290EE47154003711EC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A40EF5280DD71DEA003329A6 /* Genome.m */;
+		name = "Genome.m: 118";
+		rLen = 143;
+		rLoc = 2600;
+		rType = 0;
+		vrLen = 1222;
+		vrLoc = 3040;
+	};
+	A4AD7F2A0EE47154003711EC /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */;
+		name = "FractalFlameModel.m: 907";
+		rLen = 0;
+		rLoc = 25825;
+		rType = 0;
+		vrLen = 643;
+		vrLoc = 25274;
+	};
 	A4B9F1C60E9D119F0004246F /* AutoPreviewStepper.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1132, 409}}";
@@ -2404,7 +2448,7 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = libSystem.B.dylib;
-		modificationTime = 249758011.434133;
+		modificationTime = 249852238.807275;
 		state = 1;
 		symbolName = malloc_error_break;
 	};
@@ -2419,8 +2463,8 @@
 		hitCount = 0;
 		ignoreCount = 0;
 		location = frctgo;
-		modificationTime = 249776960.270839;
-		state = 1;
+		modificationTime = 249852239.842199;
+		state = 0;
 		symbolName = main;
 	};
 	A4BE79430DA6DD3700160702 /* GradientController.h */ = {
@@ -2467,7 +2511,7 @@
 		ignoreCount = 0;
 		lineNumber = 571;
 		location = Oxidizer;
-		modificationTime = 249758011.43297;
+		modificationTime = 249852238.806614;
 		state = 1;
 	};
 	A4C1D4E10ECF2D9D008A717E /* TemporalFilterIsExponent.h */ = {
@@ -2879,7 +2923,7 @@
 		ignoreCount = 0;
 		lineNumber = 337;
 		location = Oxidizer;
-		modificationTime = 249758011.432959;
+		modificationTime = 249852238.805445;
 		state = 1;
 	};
 	A4D6049809657B3E0001CD1D /* Oxidizer */ = {
@@ -3058,9 +3102,9 @@
 	};
 	A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {2268, 21616}}";
-			sepNavSelRange = "{6030, 12}";
-			sepNavVisRange = "{5597, 875}";
+			sepNavIntBoundsRect = "{{0, 0}, {756, 22470}}";
+			sepNavSelRange = "{25825, 0}";
+			sepNavVisRange = "{25274, 643}";
 			sepNavVisRect = "{{0, 16823}, {1036, 669}}";
 			sepNavWindowFrame = "{{259, 68}, {1100, 957}}";
 		};

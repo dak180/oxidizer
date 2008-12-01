@@ -885,6 +885,8 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 
 - (IBAction)editGenomes:(id)sender {
 
+	if ([sender isKindOfClass:[NSSegmentedControl class]]) {
+		
 	 NSSegmentedControl *segments = (NSSegmentedControl *)sender;
 	 switch([segments selectedSegment]) {
 		case 0: 
@@ -901,6 +903,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 			break;
 	}
 		
+	} else {
+		[flames showFlameWindow];		
+	}
 	
 
 }
