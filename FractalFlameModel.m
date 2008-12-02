@@ -649,6 +649,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (NSImage *) renderThumbnail {
 	
+	
+	
 	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
 															NSTemporaryDirectory(),
 															[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
@@ -669,8 +671,12 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 //	NSDate *start = [NSDate date];
 	
+	int returnCode =  [Flam3Task runFlam3RenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:YES] 
+								 withEnvironment:taskEnvironment 
+							     usingTaskFrameIndicator:taskFrameIndicator 
+								 usingETALabel:etaTextField];
 	
-	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
+//	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
 	
 	if (returnCode != 0) {
 		
@@ -1237,9 +1243,17 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		
 	NSManagedObjectContext *thisMoc = [[genomes objectAtIndex:0] managedObjectContext];
 	
+	[taskAllFramesIndicator setMaxValue:[genomes count]];
+	
+	[taskProgressWindow setTitle:@"Rendering Image"];
+	[taskProgressWindow makeKeyAndOrderFront:self];
+
+	
 	int i;
 	for(i=0; i<[genomes count]; i++) {
-		
+
+		[taskAllFramesIndicator setDoubleValue:i];
+
 		NSArray *genome = [NSArray arrayWithObject:[genomes objectAtIndex:i]];
 		
 		
@@ -1248,7 +1262,11 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		NSLog(@"time to create XML: %f", [[NSDate date] timeIntervalSinceDate:reftime]);
 		[genomeXML retain];
 		NSDate *reftime2 = [NSDate date];
-		int returnCode = [self runFlam3StillRenderAsTask:genomeXML withEnvironment:taskEnvironment];
+		
+		
+		int returnCode = [Flam3Task runFlam3RenderAsTask:genomeXML withEnvironment:taskEnvironment usingTaskFrameIndicator:taskFrameIndicator usingETALabel:etaTextField];
+		
+//		int returnCode = [self runFlam3StillRenderAsTask:genomeXML withEnvironment:taskEnvironment];
 		NSLog(@"time to create thumbnail: %f", [[NSDate date] timeIntervalSinceDate:reftime2]);
 		[genomeXML release];
 		
@@ -1263,9 +1281,10 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 			NSLog(@"Render Failed");
 			
 		}
-		
+				
 	}
 	
+	[taskProgressWindow setIsVisible:NO];
 	
 	BOOL returnBool;
 	
