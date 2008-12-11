@@ -71,7 +71,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	@"square",
 	@"rays",
 	@"blade",
-	@"secant",
+	@"secant2",
 	@"twintrian",
 	@"cross",
 	@"disc2",
@@ -205,24 +205,21 @@ NSString *variationName[1+flam3_nvariations] = {
 										[[genomeEntity valueForKey:@"centre_x"] doubleValue], 
 										[[genomeEntity valueForKey:@"centre_y"] doubleValue]]]];
 
-	[genome addAttribute:[NSXMLNode attributeWithName:@"oversample" stringValue:[[genomeEntity valueForKey:@"oversample"] stringValue]]];
+	[genome addAttribute:[NSXMLNode attributeWithName:@"supersample" stringValue:[[genomeEntity valueForKey:@"oversample"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"passes" stringValue:[[genomeEntity valueForKey:@"batches"] stringValue]]];
 	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_samples" stringValue:[[genomeEntity valueForKey:@"jitter"] stringValue]]];
 
-	[genome addAttribute:[NSXMLNode attributeWithName:@"oversample" stringValue:[[genomeEntity valueForKey:@"oversample"] stringValue]]];
-	[genome addAttribute:[NSXMLNode attributeWithName:@"passes" stringValue:[[genomeEntity valueForKey:@"batches"] stringValue]]];
-	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_samples" stringValue:[[genomeEntity valueForKey:@"jitter"] stringValue]]];
-	
 	NSString *filter = [genomeEntity valueForKey:@"temporal_filter_type"];
 	if([filter isEqualToString:@"Box"]) {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_type" stringValue:@"box"]];				
+		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_width" stringValue:[[genomeEntity valueForKey:@"temporal_filter_width"] stringValue]]];
 	} else if([filter isEqualToString:@"Gaussian"]) {
+		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_width" stringValue:[[genomeEntity valueForKey:@"temporal_filter_width"] stringValue]]];
 		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_type" stringValue:@"gaussian"]];		
 	} else if([filter isEqualToString:@"Exponent"]) {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_type" stringValue:@"exp"]];		
+		[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_exp" stringValue:[[genomeEntity valueForKey:@"temporal_filter_exp"] stringValue]]];
 	}
-	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_width" stringValue:[[genomeEntity valueForKey:@"temporal_filter_width"] stringValue]]];
-	[genome addAttribute:[NSXMLNode attributeWithName:@"temporal_filter_exp" stringValue:[[genomeEntity valueForKey:@"temporal_filter_exp"] stringValue]]];
 	
 	
 	[genome addAttribute:[NSXMLNode attributeWithName:@"estimator_radius" stringValue:[[genomeEntity valueForKey:@"de_max_filter"] stringValue]]];
@@ -544,10 +541,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	NSXMLElement *newEditElement;
 	NSXMLElement *oldRootElement;
-	NSXMLDocument *oldDoc = nil;
+
 	NSError *xmlError;
+	
 	NSString *date;
-	NSString *oldDocAsXML;
+	NSMutableString *oldDocAsXML;
 	
 	struct tm *localt;
 	time_t mytime;
@@ -573,20 +571,28 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	NSAttributedString *xmlValue = [genome valueForKey:@"edits"];
 	
-	oldDocAsXML = [xmlValue string];
-	
-	if(oldDocAsXML != nil && [oldDocAsXML compare:@""] != NSOrderedSame) {
+
+	if([xmlValue string] != nil && [[xmlValue string] compare:@""] != NSOrderedSame) {
+
+		oldDocAsXML = [NSString stringWithFormat:@"%@%@%@", @"<dummy>", [xmlValue string], @"</dummy>"];
+
+		NSXMLElement *oldEdits = [[NSXMLElement alloc] initWithXMLString:oldDocAsXML error:&xmlError];
 		
-		oldDoc = [[NSXMLDocument alloc] initWithXMLString:oldDocAsXML options:NSXMLNodePrettyPrint|NSXMLNodeCompactEmptyElement|NSXMLNodeCompactEmptyElement error:&xmlError];
-		if(oldDoc == nil) {
+		if(oldEdits == nil) {
 			NSLog(@"%@\n", [xmlError localizedDescription]);
 			[xmlError release];
 		}
+			
+		int i, childCount = [oldEdits childCount];;
 		
-		oldRootElement = [oldDoc rootElement];
-		[oldRootElement detach];
-		[newEditElement addChild:oldRootElement];
-		[oldDoc release];
+		for(i=0; i<childCount; i++) {
+			oldRootElement = (NSXMLElement *)[oldEdits childAtIndex:0];
+			[oldRootElement detach];
+			[newEditElement addChild:oldRootElement];
+			
+		}
+
+		[oldEdits release];
 
 	}
 
@@ -719,6 +725,12 @@ NSString *variationName[1+flam3_nvariations] = {
 	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[tempAttribute stringValue] intValue]]  forKey:@"oversample"];
 	}
 
+	/* another changed attribute */
+	tempAttribute = [genome attributeForName:@"supersample"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[[tempAttribute stringValue] intValue]]  forKey:@"oversample"];
+	}
+	
 	tempAttribute = [genome attributeForName:@"quality"];
 	if(tempAttribute != nil) {
 		[newGenomeEntity setValue:[NSNumber numberWithDouble:[[tempAttribute stringValue] doubleValue]] forKey:@"quality"];
@@ -1641,7 +1653,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	[genome setObject:[genomeEntity valueForKey:@"scale"] forKey:@"scale"];
 	[genome setObject:[genomeEntity valueForKey:@"centre_x"] forKey:@"centre_x"];
 	[genome setObject:[genomeEntity valueForKey:@"centre_y"] forKey:@"centre_y"];
-	[genome setObject:[genomeEntity valueForKey:@"oversample"] forKey:@"oversample"];
+	[genome setObject:[genomeEntity valueForKey:@"oversample"] forKey:@"supersample"];
 	[genome setObject:[genomeEntity valueForKey:@"quality"] forKey:@"quality"];
 	[genome setObject:[genomeEntity valueForKey:@"batches"] forKey:@"passes"];
 	[genome setObject:[genomeEntity valueForKey:@"jitter"] forKey:@"temporal_samples"];
@@ -2118,6 +2130,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	}
 	
 	tempObject = [genome objectForKey:@"oversample"];
+	if(tempObject != nil) {
+	    [newGenomeEntity setValue:tempObject forKey:@"oversample"];
+	}
+
+	tempObject = [genome objectForKey:@"supersample"];
 	if(tempObject != nil) {
 	    [newGenomeEntity setValue:tempObject forKey:@"oversample"];
 	}
@@ -2808,6 +2825,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	}
 	
 	tempAttribute = [genome objectForKey:@"oversample"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"oversample"];
+	}
+
+	tempAttribute = [genome objectForKey:@"supersample"];
 	if(tempAttribute != nil) {
 	    [newGenomeEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"oversample"];
 	}

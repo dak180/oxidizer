@@ -50,4 +50,6 @@
 
 - (IBAction) buttonPressed:(id)sender; 
 
+- (NSManagedObject *)getEntity:(id) observedObject;
+
 @end

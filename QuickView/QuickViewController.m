@@ -32,8 +32,34 @@
 	
 	NSDictionary *bindInfo = [[qvb getQuickViewTarget] infoForBinding:NSValueBinding];
 	
-	NSManagedObject *observedObject =  [bindInfo valueForKey:@"NSObservedObject"];
+	NSManagedObject *observedObject = [bindInfo valueForKey:@"NSObservedObject"];
+	NSEntityDescription *entity =  [[self getEntity:observedObject] entity];
+	NSDictionary *attributes = [entity attributesByName];
+	
 	NSString *keyPath =  [bindInfo valueForKey:@"NSObservedKeyPath"];
+	NSString *key = [[keyPath componentsSeparatedByString:@"."] lastObject];
+
+	NSAttributeDescription *description = [attributes objectForKey:key];
+	NSArray *predicates = [description validationPredicates];
+	double high = DBL_MIN;
+	double low = DBL_MAX;
+
+	NSEnumerator *predicateEnumerator = [predicates objectEnumerator];
+	NSPredicate *predicate;
+	while(predicate = [predicateEnumerator nextObject]) {
+		
+		if([predicate isKindOfClass:[NSComparisonPredicate class]]) {
+			NSComparisonPredicate *compare = (NSComparisonPredicate *)predicate;
+			
+			if ([compare predicateOperatorType] == NSGreaterThanOrEqualToPredicateOperatorType) {
+				low = [[[compare rightExpression] constantValue] doubleValue];
+			} else if ([compare predicateOperatorType] == NSLessThanOrEqualToPredicateOperatorType) {
+				high = [[[compare rightExpression] constantValue] doubleValue];				
+			}
+		}
+		
+	}
+	
 	NSArray *selected = [(NSArrayController *)observedObject selectedObjects]; 
 	
 	NSLog (@"%@",selected);
@@ -43,9 +69,19 @@
 	NSLog (@"%@",bindInfo);
 
 	double number = [[observedObject valueForKeyPath:keyPath] doubleValue];
+
+	if(low == DBL_MAX) {
+		low = 0.0;
+	}
+
+	if(high == DBL_MIN) {
+		if (low == number) {
+			high = number + 1.0;
+		} else {
+			high = number + (number - low);			
+		}
+	}
 	
-	double high = number + 1.0;
-	double low = number > 1	? number - 1.0 : 0.0;
 	double delta = (high - low) / 25.0;
 	
 	int i;
@@ -64,6 +100,16 @@
 	
 } 
 
-
+- (NSManagedObject *) getEntity:(id) observedObject {
+	
+	if([observedObject isKindOfClass:[NSArrayController class]] == YES) {
+		
+		return [[observedObject selectedObjects] objectAtIndex:0];
+		
+	} else {
+		return observedObject;
+	}
+	
+}
 
 @end
