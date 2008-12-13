@@ -381,6 +381,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 }
 
+/*
+- (void) createSheepMoviePreviewGenome {
+	
+	env sequence=input.flam3 nframes=160 flam3-genome > seq.flam3
+//	env dtime=10 flam3-animate < seq.flam3
+	
+}
+*/
+
 - (void)renderAnimationInNewThread {
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

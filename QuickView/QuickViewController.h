@@ -14,7 +14,7 @@
 
 	IBOutlet FractalFlameModel *_ffm;
 	
-	IBOutlet DnDImageView *_div1;
+	IBOutlet NSImageView *_div1;
 	IBOutlet DnDImageView *_div2;
 	IBOutlet DnDImageView *_div3;
 	IBOutlet DnDImageView *_div4;
@@ -39,17 +39,27 @@
 	IBOutlet DnDImageView *_div23;
 	IBOutlet DnDImageView *_div24;
 	IBOutlet DnDImageView *_div25;
-	
+		
 	IBOutlet NSWindow *_qvw;
+
+	IBOutlet NSTextField *_min;
+	IBOutlet NSTextField *_max;
 	
 	NSArray *_imagesArray;
+		
+	NSManagedObject *_observedEntity;
+	NSString *_key;
 	
-	
+	double _originalValue;
 	
 }
 
 - (IBAction) buttonPressed:(id)sender; 
+- (IBAction) renderRange:(id)sender;
 
+- (void) setObservedEntity:(NSManagedObject *)oe;
+- (void) setKey:(NSString *)kp;
+			
 - (NSManagedObject *)getEntity:(id) observedObject;
 
 @end
