@@ -47,6 +47,7 @@
 		A48874330E992E410038CE19 /* ImageFormatIsJPEG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */; };
 		A49E2A5B0D86F1D1008198BE /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49E2A5A0D86F1D1008198BE /* GradientView.m */; };
 		A49E2A680D86FDC9008198BE /* GradientWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A49E2A670D86FDC9008198BE /* GradientWindow.nib */; };
+		A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49F64680EF5516F00ACB40A /* QuickViewImageView.m */; };
 		A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
 		A4A3810E0A4F236700E7364C /* DnDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3810D0A4F236700E7364C /* DnDImageView.m */; };
 		A4AD8DD20DE857F200201C58 /* transform-scale.png in Resources */ = {isa = PBXBuildFile; fileRef = A4AD8DD10DE857F200201C58 /* transform-scale.png */; };
@@ -159,6 +160,8 @@
 		A49E2A590D86F1D1008198BE /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientView.h; path = GradientEditor/GradientView.h; sourceTree = SOURCE_ROOT; };
 		A49E2A5A0D86F1D1008198BE /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientView.m; path = GradientEditor/GradientView.m; sourceTree = SOURCE_ROOT; };
 		A49E2A670D86FDC9008198BE /* GradientWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = GradientWindow.nib; path = GradientEditor/GradientWindow.nib; sourceTree = SOURCE_ROOT; };
+		A49F64670EF5516F00ACB40A /* QuickViewImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewImageView.h; path = Controls/QuickViewImageView.h; sourceTree = "<group>"; };
+		A49F64680EF5516F00ACB40A /* QuickViewImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewImageView.m; path = Controls/QuickViewImageView.m; sourceTree = "<group>"; };
 		A4A3027B0A28995D002828D9 /* BreedingController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BreedingController.h; sourceTree = "<group>"; };
 		A4A3027C0A28995D002828D9 /* BreedingController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = BreedingController.m; sourceTree = "<group>"; };
 		A4A3810C0A4F236700E7364C /* DnDImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDImageView.h; sourceTree = "<group>"; };
@@ -434,6 +437,8 @@
 		A49B5B200ED02ADE00121E88 /* QuickView */ = {
 			isa = PBXGroup;
 			children = (
+				A49F64670EF5516F00ACB40A /* QuickViewImageView.h */,
+				A49F64680EF5516F00ACB40A /* QuickViewImageView.m */,
 				A4D056FB0EDF3BBC005F122C /* QuickView.xib */,
 				A4D056FC0EDF3BBC005F122C /* QuickViewController.h */,
 				A4D056FD0EDF3BBC005F122C /* QuickViewController.m */,
@@ -604,6 +609,7 @@
 				A4C1D4E30ECF2D9D008A717E /* TemporalFilterIsExponent.m in Sources */,
 				A41086650EDB356500529FF8 /* QuickViewButton.m in Sources */,
 				A4D056FF0EDF3BBC005F122C /* QuickViewController.m in Sources */,
+				A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

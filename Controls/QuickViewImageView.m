@@ -18,9 +18,10 @@
 */
 
 
-#import "DnDImageView.h"
+#import "QuickViewImageView.h"
+#import "QuickViewController.h"
 
-@implementation DnDImageView
+@implementation QuickViewImageView
 
 - (unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
@@ -39,6 +40,8 @@ NSPoint location;
 NSSize size;
 NSPasteboard *pboard = [NSPasteboard pasteboardWithName:(NSString *) NSDragPboard];
 
+	/* ignore this it is example code for later */
+	
 	NSDictionary *binding = [self infoForBinding:NSValueBinding];
 	
 	NSArrayController *breedGenomeController = [binding objectForKey:NSObservedObjectKey];
@@ -68,8 +71,17 @@ NSPasteboard *pboard = [NSPasteboard pasteboardWithName:(NSString *) NSDragPboar
 	}
 }
 
-- (void)mouseUp:(NSEvent *)e {
-	NSLog(@"Here");
+- (void)mouseUp:(NSEvent *)e {	
+	[(QuickViewController *)delegate selectValue:self];	
 }
+
+
+- (void) setQuickViewValue:(double)val {	
+	_value = val;	
+} 
+
+- (double) quickViewValue {	
+	return _value;	
+} 
 
 @end

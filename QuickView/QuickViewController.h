@@ -7,38 +7,38 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "DnDImageView.h"
+#import "QuickViewImageView.h"
 #import "FractalFlameModel.h"
 
 @interface QuickViewController : NSObject {
 
 	IBOutlet FractalFlameModel *_ffm;
 	
-	IBOutlet NSImageView *_div1;
-	IBOutlet DnDImageView *_div2;
-	IBOutlet DnDImageView *_div3;
-	IBOutlet DnDImageView *_div4;
-	IBOutlet DnDImageView *_div5;
-	IBOutlet DnDImageView *_div6;
-	IBOutlet DnDImageView *_div7;
-	IBOutlet DnDImageView *_div8;
-	IBOutlet DnDImageView *_div9;
-	IBOutlet DnDImageView *_div10;
-	IBOutlet DnDImageView *_div11;
-	IBOutlet DnDImageView *_div12;
-	IBOutlet DnDImageView *_div13;
-	IBOutlet DnDImageView *_div14;
-	IBOutlet DnDImageView *_div15;
-	IBOutlet DnDImageView *_div16;
-	IBOutlet DnDImageView *_div17;
-	IBOutlet DnDImageView *_div18;
-	IBOutlet DnDImageView *_div19;
-	IBOutlet DnDImageView *_div20;	
-	IBOutlet DnDImageView *_div21;
-	IBOutlet DnDImageView *_div22;
-	IBOutlet DnDImageView *_div23;
-	IBOutlet DnDImageView *_div24;
-	IBOutlet DnDImageView *_div25;
+	IBOutlet QuickViewImageView *_div1;
+	IBOutlet QuickViewImageView *_div2;
+	IBOutlet QuickViewImageView *_div3;
+	IBOutlet QuickViewImageView *_div4;
+	IBOutlet QuickViewImageView *_div5;
+	IBOutlet QuickViewImageView *_div6;
+	IBOutlet QuickViewImageView *_div7;
+	IBOutlet QuickViewImageView *_div8;
+	IBOutlet QuickViewImageView *_div9;
+	IBOutlet QuickViewImageView *_div10;
+	IBOutlet QuickViewImageView *_div11;
+	IBOutlet QuickViewImageView *_div12;
+	IBOutlet QuickViewImageView *_div13;
+	IBOutlet QuickViewImageView *_div14;
+	IBOutlet QuickViewImageView *_div15;
+	IBOutlet QuickViewImageView *_div16;
+	IBOutlet QuickViewImageView *_div17;
+	IBOutlet QuickViewImageView *_div18;
+	IBOutlet QuickViewImageView *_div19;
+	IBOutlet QuickViewImageView *_div20;	
+	IBOutlet QuickViewImageView *_div21;
+	IBOutlet QuickViewImageView *_div22;
+	IBOutlet QuickViewImageView *_div23;
+	IBOutlet QuickViewImageView *_div24;
+	IBOutlet QuickViewImageView *_div25;
 		
 	IBOutlet NSWindow *_qvw;
 
@@ -56,6 +56,9 @@
 
 - (IBAction) buttonPressed:(id)sender; 
 - (IBAction) renderRange:(id)sender;
+- (IBAction) restoreOriginalValue:(id) sender;
+- (IBAction) selectValue:(id) sender;
+
 
 - (void) setObservedEntity:(NSManagedObject *)oe;
 - (void) setKey:(NSString *)kp;

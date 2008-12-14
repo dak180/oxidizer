@@ -404,6 +404,8 @@
 			<dict>
 				<key>buttonPressed</key>
 				<string>id</string>
+				<key>renderRange</key>
+				<string>id</string>
 			</dict>
 			<key>CLASS</key>
 			<string>QuickViewController</string>
@@ -412,7 +414,7 @@
 			<key>OUTLETS</key>
 			<dict>
 				<key>_div1</key>
-				<string>DnDImageView</string>
+				<string>NSImageView</string>
 				<key>_div10</key>
 				<string>DnDImageView</string>
 				<key>_div11</key>
@@ -463,6 +465,10 @@
 				<string>DnDImageView</string>
 				<key>_ffm</key>
 				<string>FractalFlameModel</string>
+				<key>_max</key>
+				<string>NSTextField</string>
+				<key>_min</key>
+				<string>NSTextField</string>
 				<key>_qvw</key>
 				<string>NSWindow</string>
 			</dict>

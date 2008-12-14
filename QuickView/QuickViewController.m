@@ -103,6 +103,7 @@
 //		[observedObject setValue:[NSNumber numberWithDouble:low] forKeyPath:keyPath];
 		[_observedEntity setValue:[NSNumber numberWithDouble:low] forKey:_key];
 		[[_imagesArray objectAtIndex:i] setImage:[(FractalFlameModel *)_ffm renderThumbnail]];
+		[[_imagesArray objectAtIndex:i] setQuickViewValue:low];
 		[[_imagesArray objectAtIndex:i] setToolTip:[NSString stringWithFormat:@"value: %g", low]];
 		[[_imagesArray objectAtIndex:i] display];
 		low += delta;
@@ -110,6 +111,23 @@
 	}
 	
 	[_observedEntity setValue:[NSNumber numberWithDouble:_originalValue] forKeyPath:_key];
+	
+}
+
+
+- (IBAction) selectValue:(id) sender {
+	
+		[_observedEntity setValue:[NSNumber numberWithDouble:[(QuickViewImageView *)sender quickViewValue]] forKeyPath:_key];
+		[_ffm previewCurrentFlame:self];
+	
+
+}
+- (IBAction) restoreOriginalValue:(id) sender {
+	
+	
+	[_observedEntity setValue:[NSNumber numberWithDouble:_originalValue] forKeyPath:_key];
+	[_ffm previewCurrentFlame:self];
+
 	
 }
 
