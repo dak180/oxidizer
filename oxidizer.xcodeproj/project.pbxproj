@@ -11,7 +11,6 @@
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		A404B32F0D14345E00FE81AC /* RectangleWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A404B32E0D14345E00FE81AC /* RectangleWindow.nib */; };
 		A404B3320D14355600FE81AC /* RectangleView.h in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = A404B3300D14355600FE81AC /* RectangleView.h */; };
 		A404B3330D14355600FE81AC /* RectangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B3310D14355600FE81AC /* RectangleView.m */; };
 		A404B37E0D143FF600FE81AC /* RectangleController.h in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = A404B37C0D143FF600FE81AC /* RectangleController.h */; };
@@ -28,16 +27,15 @@
 		A410568E0C5F760A0075334E /* stills.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568C0C5F760A0075334E /* stills.png */; };
 		A410568F0C5F760A0075334E /* text-x-script.png in Resources */ = {isa = PBXBuildFile; fileRef = A410568D0C5F760A0075334E /* text-x-script.png */; };
 		A41086650EDB356500529FF8 /* QuickViewButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A41086640EDB356500529FF8 /* QuickViewButton.m */; };
-		A41963670C5E484B002EDD7B /* FileViews.nib in Resources */ = {isa = PBXBuildFile; fileRef = A41963660C5E484B002EDD7B /* FileViews.nib */; };
 		A41A053409758FA10063196F /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A053309758FA10063196F /* QuickTime.framework */; };
 		A41A06CB0975BE5E0063196F /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A41A06CA0975BE5E0063196F /* QTKit.framework */; };
 		A41E6CC00B0F429900713916 /* DnDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A41E6CBF0B0F429900713916 /* DnDButton.m */; };
-		A422B9A10B162E7800019559 /* GenePool.nib in Resources */ = {isa = PBXBuildFile; fileRef = A422B9A00B162E7800019559 /* GenePool.nib */; };
 		A422B9A50B16308200019559 /* GenePoolNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9A30B16308200019559 /* GenePoolNibController.m */; };
 		A422B9A80B16316E00019559 /* GenePoolController.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9A70B16316E00019559 /* GenePoolController.m */; };
 		A422B9AB0B1631A000019559 /* GenePoolModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9AA0B1631A000019559 /* GenePoolModel.m */; };
 		A4233E9409EFF3010047DC34 /* QuickTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4233E9309EFF3010047DC34 /* QuickTimeController.m */; };
 		A42963140C5685B100D56561 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = A42963130C5685B100D56561 /* Credits.html */; };
+		A431DB010F07C88A00E826A2 /* FileViews.nib in Resources */ = {isa = PBXBuildFile; fileRef = A431DAFF0F07C88A00E826A2 /* FileViews.nib */; };
 		A4327AB20C4E58B600B1D18D /* LuaObjCBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */; };
 		A4327AE90C4E58E400B1D18D /* LuaObjCBridge.framework in Copy Private Frameworks */ = {isa = PBXBuildFile; fileRef = A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */; };
 		A43E448D0DE5F58F0001BB6A /* GenomeImages.m in Sources */ = {isa = PBXBuildFile; fileRef = A43E448C0DE5F58F0001BB6A /* GenomeImages.m */; };
@@ -46,11 +44,14 @@
 		A48873360E9924DB0038CE19 /* ImageFormatIsPNG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48873350E9924DB0038CE19 /* ImageFormatIsPNG.m */; };
 		A48874330E992E410038CE19 /* ImageFormatIsJPEG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */; };
 		A49E2A5B0D86F1D1008198BE /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49E2A5A0D86F1D1008198BE /* GradientView.m */; };
-		A49E2A680D86FDC9008198BE /* GradientWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A49E2A670D86FDC9008198BE /* GradientWindow.nib */; };
 		A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49F64680EF5516F00ACB40A /* QuickViewImageView.m */; };
 		A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
 		A4A3810E0A4F236700E7364C /* DnDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3810D0A4F236700E7364C /* DnDImageView.m */; };
 		A4AD8DD20DE857F200201C58 /* transform-scale.png in Resources */ = {isa = PBXBuildFile; fileRef = A4AD8DD10DE857F200201C58 /* transform-scale.png */; };
+		A4B166260F06738D001530F3 /* GenePool.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4B166250F06738D001530F3 /* GenePool.nib */; };
+		A4B166280F06738D001530F3 /* RectangleWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4B166270F06738D001530F3 /* RectangleWindow.nib */; };
+		A4B1662A0F06738D001530F3 /* GradientWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4B166290F06738D001530F3 /* GradientWindow.nib */; };
+		A4B1662C0F06738D001530F3 /* TaskProgress.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4B1662B0F06738D001530F3 /* TaskProgress.nib */; };
 		A4B9F1C80E9D119F0004246F /* AutoPreviewStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */; };
 		A4BE79470DA6DD3700160702 /* GradientController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79440DA6DD3700160702 /* GradientController.m */; };
 		A4BE79480DA6DD3700160702 /* GradientNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79460DA6DD3700160702 /* GradientNibController.m */; };
@@ -58,7 +59,6 @@
 		A4C47C6D0997BDE100BCE5E8 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */; };
 		A4C5BDCB0DA91D6D002BE1C2 /* libflam3.0.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */; };
 		A4C6CDE60DC3708600E2EEFB /* ProgressIndicatorWithCancel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */; };
-		A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */; };
 		A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4D056FB0EDF3BBC005F122C /* QuickView.xib */; };
 		A4D056FF0EDF3BBC005F122C /* QuickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D056FD0EDF3BBC005F122C /* QuickViewController.m */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
@@ -107,7 +107,7 @@
 		32CA4F630368D1EE00C91783 /* oxidizer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = oxidizer_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Oxidizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Oxidizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A404B32E0D14345E00FE81AC /* RectangleWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = RectangleWindow.nib; path = RectangleView/RectangleWindow.nib; sourceTree = "<group>"; };
+		A404B32E0D14345E00FE81AC /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = RectangleView/English.lproj/RectangleWindow.nib; sourceTree = "<group>"; };
 		A404B3300D14355600FE81AC /* RectangleView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RectangleView.h; path = RectangleView/RectangleView.h; sourceTree = "<group>"; };
 		A404B3310D14355600FE81AC /* RectangleView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = RectangleView.m; path = RectangleView/RectangleView.m; sourceTree = "<group>"; };
 		A404B37C0D143FF600FE81AC /* RectangleController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RectangleController.h; path = RectangleView/RectangleController.h; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 		A410568D0C5F760A0075334E /* text-x-script.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "text-x-script.png"; path = "icons/Tango/text-x-script.png"; sourceTree = SOURCE_ROOT; };
 		A41086630EDB356500529FF8 /* QuickViewButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewButton.h; path = Controls/QuickViewButton.h; sourceTree = "<group>"; };
 		A41086640EDB356500529FF8 /* QuickViewButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewButton.m; path = Controls/QuickViewButton.m; sourceTree = "<group>"; };
-		A41963660C5E484B002EDD7B /* FileViews.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = FileViews.nib; path = FileViews/FileViews.nib; sourceTree = "<group>"; };
+		A415EF2D0F0175A000AC96D0 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		A41CF2D80C340AFE001582CC /* flam3-render */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-render"; path = "build_folder_for_flam3/bin/flam3-render"; sourceTree = SOURCE_ROOT; };
@@ -134,7 +134,7 @@
 		A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */ = {isa = PBXFileReference; explicitFileType = file; name = libjpeg.62.dylib; path = build_folder_for_flam3/lib/libjpeg.62.dylib; sourceTree = SOURCE_ROOT; };
 		A41E6CBE0B0F429900713916 /* DnDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DnDButton.h; sourceTree = "<group>"; };
 		A41E6CBF0B0F429900713916 /* DnDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DnDButton.m; sourceTree = "<group>"; };
-		A422B9A00B162E7800019559 /* GenePool.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = GenePool.nib; path = GenePool/GenePool.nib; sourceTree = "<group>"; };
+		A422B9A00B162E7800019559 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = GenePool/English.lproj/GenePool.nib; sourceTree = "<group>"; };
 		A422B9A30B16308200019559 /* GenePoolNibController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = GenePoolNibController.m; path = GenePool/GenePoolNibController.m; sourceTree = "<group>"; };
 		A422B9A40B16308200019559 /* GenePoolNibController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GenePoolNibController.h; path = GenePool/GenePoolNibController.h; sourceTree = "<group>"; };
 		A422B9A60B16316E00019559 /* GenePoolController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GenePoolController.h; path = GenePool/GenePoolController.h; sourceTree = "<group>"; };
@@ -145,6 +145,8 @@
 		A4233E9309EFF3010047DC34 /* QuickTimeController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuickTimeController.m; sourceTree = "<group>"; };
 		A42608820C41109600DDB92E /* flam3-animate */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-animate"; path = "build_folder_for_flam3/bin/flam3-animate"; sourceTree = SOURCE_ROOT; };
 		A42963130C5685B100D56561 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; path = Credits.html; sourceTree = SOURCE_ROOT; };
+		A431DB000F07C88A00E826A2 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = FileViews/English.lproj/FileViews.nib; sourceTree = "<group>"; };
+		A431DB080F07C91F00E826A2 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/FileViews.nib; sourceTree = "<group>"; };
 		A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = LuaObjCBridge.framework; path = LuaObjCBridge/build/Release/LuaObjCBridge.framework; sourceTree = "<group>"; };
 		A43E448B0DE5F58F0001BB6A /* GenomeImages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenomeImages.h; sourceTree = "<group>"; };
 		A43E448C0DE5F58F0001BB6A /* GenomeImages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenomeImages.m; sourceTree = "<group>"; };
@@ -159,7 +161,7 @@
 		A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFormatIsJPEG.m; sourceTree = "<group>"; };
 		A49E2A590D86F1D1008198BE /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientView.h; path = GradientEditor/GradientView.h; sourceTree = SOURCE_ROOT; };
 		A49E2A5A0D86F1D1008198BE /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientView.m; path = GradientEditor/GradientView.m; sourceTree = SOURCE_ROOT; };
-		A49E2A670D86FDC9008198BE /* GradientWindow.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = GradientWindow.nib; path = GradientEditor/GradientWindow.nib; sourceTree = SOURCE_ROOT; };
+		A49E2A670D86FDC9008198BE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = GradientEditor/English.lproj/GradientWindow.nib; sourceTree = "<group>"; };
 		A49F64670EF5516F00ACB40A /* QuickViewImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewImageView.h; path = Controls/QuickViewImageView.h; sourceTree = "<group>"; };
 		A49F64680EF5516F00ACB40A /* QuickViewImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewImageView.m; path = Controls/QuickViewImageView.m; sourceTree = "<group>"; };
 		A4A3027B0A28995D002828D9 /* BreedingController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = BreedingController.h; sourceTree = "<group>"; };
@@ -167,6 +169,10 @@
 		A4A3810C0A4F236700E7364C /* DnDImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDImageView.h; sourceTree = "<group>"; };
 		A4A3810D0A4F236700E7364C /* DnDImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DnDImageView.m; sourceTree = "<group>"; };
 		A4AD8DD10DE857F200201C58 /* transform-scale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "transform-scale.png"; path = "icons/Tango/transform-scale.png"; sourceTree = "<group>"; };
+		A4B1662D0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/GenePool.nib; sourceTree = "<group>"; };
+		A4B1662E0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/GradientWindow.nib; sourceTree = "<group>"; };
+		A4B1662F0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/RectangleWindow.nib; sourceTree = "<group>"; };
+		A4B166450F0674C3001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/TaskProgress.nib; sourceTree = "<group>"; };
 		A4B9F1C60E9D119F0004246F /* AutoPreviewStepper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoPreviewStepper.h; path = Controls/AutoPreviewStepper.h; sourceTree = "<group>"; };
 		A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AutoPreviewStepper.m; path = Controls/AutoPreviewStepper.m; sourceTree = "<group>"; };
 		A4BE79430DA6DD3700160702 /* GradientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientController.h; path = GradientEditor/GradientController.h; sourceTree = "<group>"; };
@@ -179,7 +185,7 @@
 		A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libflam3.0.dylib; path = build_folder_for_flam3/lib/libflam3.0.dylib; sourceTree = "<group>"; };
 		A4C6CDE40DC3708600E2EEFB /* ProgressIndicatorWithCancel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProgressIndicatorWithCancel.h; path = ProgressWindow/ProgressIndicatorWithCancel.h; sourceTree = "<group>"; };
 		A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProgressIndicatorWithCancel.m; path = ProgressWindow/ProgressIndicatorWithCancel.m; sourceTree = "<group>"; };
-		A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = TaskProgress.nib; path = ProgressWindow/TaskProgress.nib; sourceTree = "<group>"; };
+		A4C6CE290DC3728000E2EEFB /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = ProgressWindow/English.lproj/TaskProgress.nib; sourceTree = "<group>"; };
 		A4D056FB0EDF3BBC005F122C /* QuickView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = QuickView.xib; path = QuickView/QuickView.xib; sourceTree = "<group>"; };
 		A4D056FC0EDF3BBC005F122C /* QuickViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewController.h; path = QuickView/QuickViewController.h; sourceTree = "<group>"; };
 		A4D056FD0EDF3BBC005F122C /* QuickViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewController.m; path = QuickView/QuickViewController.m; sourceTree = "<group>"; };
@@ -333,12 +339,12 @@
 				A4E52D560A0141A400382558 /* flam3-palettes.xml */,
 				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
-				A41963660C5E484B002EDD7B /* FileViews.nib */,
+				A431DAFF0F07C88A00E826A2 /* FileViews.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
-				A422B9A00B162E7800019559 /* GenePool.nib */,
-				A404B32E0D14345E00FE81AC /* RectangleWindow.nib */,
-				A49E2A670D86FDC9008198BE /* GradientWindow.nib */,
-				A4C6CE290DC3728000E2EEFB /* TaskProgress.nib */,
+				A4B166250F06738D001530F3 /* GenePool.nib */,
+				A4B166270F06738D001530F3 /* RectangleWindow.nib */,
+				A4B166290F06738D001530F3 /* GradientWindow.nib */,
+				A4B1662B0F06738D001530F3 /* TaskProgress.nib */,
 				A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */,
 				A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */,
 				A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */,
@@ -541,12 +547,12 @@
 				A4AD8DD20DE857F200201C58 /* transform-scale.png in Resources */,
 				A42963140C5685B100D56561 /* Credits.html in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
-				A422B9A10B162E7800019559 /* GenePool.nib in Resources */,
-				A41963670C5E484B002EDD7B /* FileViews.nib in Resources */,
-				A404B32F0D14345E00FE81AC /* RectangleWindow.nib in Resources */,
-				A49E2A680D86FDC9008198BE /* GradientWindow.nib in Resources */,
-				A4C6CE2A0DC3728000E2EEFB /* TaskProgress.nib in Resources */,
+				A4B166260F06738D001530F3 /* GenePool.nib in Resources */,
+				A4B166280F06738D001530F3 /* RectangleWindow.nib in Resources */,
+				A4B1662A0F06738D001530F3 /* GradientWindow.nib in Resources */,
+				A4B1662C0F06738D001530F3 /* TaskProgress.nib in Resources */,
 				A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */,
+				A431DB010F07C88A00E826A2 /* FileViews.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -628,8 +634,54 @@
 			isa = PBXVariantGroup;
 			children = (
 				29B97319FDCFA39411CA2CEA /* English */,
+				A415EF2D0F0175A000AC96D0 /* French */,
 			);
 			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		A431DAFF0F07C88A00E826A2 /* FileViews.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A431DB000F07C88A00E826A2 /* English */,
+				A431DB080F07C91F00E826A2 /* French */,
+			);
+			name = FileViews.nib;
+			sourceTree = "<group>";
+		};
+		A4B166250F06738D001530F3 /* GenePool.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A422B9A00B162E7800019559 /* English */,
+				A4B1662D0F067398001530F3 /* French */,
+			);
+			name = GenePool.nib;
+			sourceTree = "<group>";
+		};
+		A4B166270F06738D001530F3 /* RectangleWindow.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A404B32E0D14345E00FE81AC /* English */,
+				A4B1662F0F067398001530F3 /* French */,
+			);
+			name = RectangleWindow.nib;
+			sourceTree = "<group>";
+		};
+		A4B166290F06738D001530F3 /* GradientWindow.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A49E2A670D86FDC9008198BE /* English */,
+				A4B1662E0F067398001530F3 /* French */,
+			);
+			name = GradientWindow.nib;
+			sourceTree = "<group>";
+		};
+		A4B1662B0F06738D001530F3 /* TaskProgress.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A4C6CE290DC3728000E2EEFB /* English */,
+				A4B166450F0674C3001530F3 /* French */,
+			);
+			name = TaskProgress.nib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
