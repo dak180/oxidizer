@@ -30,14 +30,19 @@
 	QuickViewButton *qvb = (QuickViewButton *)sender;
 	
 	NSDictionary *bindInfo = [[qvb getQuickViewTarget] infoForBinding:NSValueBinding];
+	NSString *key;
+	NSString *keyPath = [bindInfo valueForKey:@"NSObservedKeyPath"];
+	NSArray *keys = [keyPath componentsSeparatedByString:@"."];
 	
 	NSManagedObject *observedObject = [bindInfo valueForKey:@"NSObservedObject"];
-	[self setObservedEntity:[self getEntity:observedObject]];
+	[self setObservedEntity:[self getEntity:observedObject keyArray:keys]];
 	NSEntityDescription *entity = [_observedEntity entity];
 	NSDictionary *attributes = [entity attributesByName];
 	
-	NSString *keyPath = [bindInfo valueForKey:@"NSObservedKeyPath"];
-	NSString *key = [[keyPath componentsSeparatedByString:@"."] lastObject];
+	
+	key = [[keyPath componentsSeparatedByString:@"."] lastObject];
+	
+	
 	[self setKey:key];
 
 	NSAttributeDescription *description = [attributes objectForKey:key];
@@ -163,15 +168,33 @@
 	
 } 
 
-- (NSManagedObject *) getEntity:(id) observedObject {
+- (NSManagedObject *) getEntity:(id) observedObject keyArray:(NSArray *) keys {
 	
-	if([observedObject isKindOfClass:[NSArrayController class]] == YES) {
+	if ([keys count] > 1) {
+		int i;
+		NSManagedObject *obj;
+		if([(NSString *)[keys objectAtIndex:0] isEqualToString:@"selection"]) {
+			obj = [[observedObject selectedObjects] objectAtIndex:0];
+		} else {
+		    obj = [observedObject valueForKey:[keys objectAtIndex:0]];			
+		}
+		for(i=1; i<[keys count] - 1; i++) {
+			obj = [obj valueForKey:[keys objectAtIndex:i]];
+		}
 		
-		return [[observedObject selectedObjects] objectAtIndex:0];
+		return obj;
 		
 	} else {
-		return observedObject;
+				return observedObject;
+		
 	}
+	
+	
+//	if([observedObject isKindOfClass:[NSArrayController class]] == YES) {
+//		return [[observedObject selectedObjects] objectAtIndex:0];
+//	} else {
+//		return observedObject;
+//	}
 	
 }
 

@@ -63,6 +63,6 @@
 - (void) setObservedEntity:(NSManagedObject *)oe;
 - (void) setKey:(NSString *)kp;
 			
-- (NSManagedObject *)getEntity:(id) observedObject;
+- (NSManagedObject *)getEntity:(id) observedObject keyArray:(NSArray *)keys;
 
 @end
