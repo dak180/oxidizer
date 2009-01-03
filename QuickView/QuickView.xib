@@ -2,10 +2,10 @@
 <archive type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="7.02">
 	<data>
 		<int key="IBDocument.SystemTarget">1040</int>
-		<string key="IBDocument.SystemVersion">9F33</string>
+		<string key="IBDocument.SystemVersion">9G55</string>
 		<string key="IBDocument.InterfaceBuilderVersion">672</string>
-		<string key="IBDocument.AppKitVersion">949.34</string>
-		<string key="IBDocument.HIToolboxVersion">352.00</string>
+		<string key="IBDocument.AppKitVersion">949.43</string>
+		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
 			<integer value="2"/>
@@ -1388,6 +1388,22 @@
 					</object>
 					<int key="connectionID">174</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="585299556"/>
+						<reference key="destination" ref="414903853"/>
+					</object>
+					<int key="connectionID">175</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">nextKeyView</string>
+						<reference key="source" ref="414903853"/>
+						<reference key="destination" ref="585299556"/>
+					</object>
+					<int key="connectionID">177</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -1451,7 +1467,6 @@
 							<reference ref="496479098"/>
 							<reference ref="158000544"/>
 							<reference ref="757353153"/>
-							<reference ref="302236349"/>
 							<reference ref="432673218"/>
 							<reference ref="816120072"/>
 							<reference ref="716264351"/>
@@ -1459,6 +1474,7 @@
 							<reference ref="129213726"/>
 							<reference ref="265936151"/>
 							<reference ref="378166895"/>
+							<reference ref="302236349"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
@@ -1823,10 +1839,10 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="471641186"/>
-							<reference ref="585299556"/>
 							<reference ref="414903853"/>
 							<reference ref="506821037"/>
 							<reference ref="772680395"/>
+							<reference ref="585299556"/>
 						</object>
 						<reference key="parent" ref="1006"/>
 					</object>
@@ -2025,9 +2041,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{198, 73}, {1044, 722}}</string>
+					<string>{{567, 111}, {1044, 722}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{198, 73}, {1044, 722}}</string>
+					<string>{{567, 111}, {1044, 722}}</string>
 					<integer value="1"/>
 					<string>{196, 240}</string>
 					<string>{{202, 428}, {480, 270}}</string>
@@ -2143,7 +2159,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">174</int>
+			<int key="maxID">177</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

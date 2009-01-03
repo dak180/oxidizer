@@ -88,6 +88,11 @@
 		}
 	}
 	
+	if([(NSString *)[keys lastObject]  isEqualToString:@"rotate"]) {
+		low = 0.0;
+		high = 360.0;
+	}
+	
 	[_min setDoubleValue:low];
 	[_max setDoubleValue:high];
 		
