@@ -27,6 +27,8 @@
 
 - (IBAction) buttonPressed:(id)sender {
 	
+	[self setExternalQuickViewObject:nil];
+	
 	QuickViewButton *qvb = (QuickViewButton *)sender;
 	
 	NSDictionary *bindInfo = [[qvb getQuickViewTarget] infoForBinding:NSValueBinding];
@@ -107,6 +109,12 @@
 	double high  = [_max doubleValue];
 	double delta = (high - low) / 24.0;
 
+	if(_externalQuickView != nil) {
+		[_externalQuickView setMinimum:low andMaximum:high];
+		[_externalQuickView renderQuickViews];
+		return;
+	}
+	
 	int i;
 	for(i = 0 ; i < 25; i++) {
 		
@@ -127,13 +135,23 @@
 
 - (IBAction) selectValue:(id) sender {
 	
-		[_observedEntity setValue:[NSNumber numberWithDouble:[(QuickViewImageView *)sender quickViewValue]] forKeyPath:_key];
-		[_ffm previewCurrentFlame:self];
+	if(_externalQuickView != nil) {
+		[_externalQuickView setToValue:[(QuickViewImageView *)sender quickViewValue]];
+		return;
+	}
+	
+	[_observedEntity setValue:[NSNumber numberWithDouble:[(QuickViewImageView *)sender quickViewValue]] forKeyPath:_key];
+	[_ffm previewCurrentFlame:self];
 	
 
 }
 - (IBAction) restoreOriginalValue:(id) sender {
 	
+
+	if(_externalQuickView != nil) {
+		[_externalQuickView resetToOriginalValue];
+		return;
+	}
 	
 	[_observedEntity setValue:[NSNumber numberWithDouble:_originalValue] forKeyPath:_key];
 	[_ffm previewCurrentFlame:self];
@@ -195,12 +213,45 @@
 	}
 	
 	
-//	if([observedObject isKindOfClass:[NSArrayController class]] == YES) {
-//		return [[observedObject selectedObjects] objectAtIndex:0];
-//	} else {
-//		return observedObject;
-//	}
+}
+
+/* external API */
+
+- (int) quickViewCount {
+	return 25;
+}
+
+- (void) renderForIndex:(int)index withValue:(double) value {
+		
+	[[_imagesArray objectAtIndex:index] setImage:[(FractalFlameModel *)_ffm renderThumbnail]];
+	[[_imagesArray objectAtIndex:index] setQuickViewValue:value];
+	[[_imagesArray objectAtIndex:index] setToolTip:[NSString stringWithFormat:@"value: %g", value]];
+	[[_imagesArray objectAtIndex:index] display];
+		
+}
+
+- (void) setExternalQuickViewObject:(id)eqvo {
+
+	if(eqvo != nil) {
+		[eqvo retain];		
+	}
 	
+	if(_externalQuickView != nil) {
+		[_externalQuickView release];
+	}
+	
+	_externalQuickView = eqvo;
+	
+	return;	
+	
+}
+
+- (void) setMinimum:(NSNumber *)min andMaximum:(NSNumber *)max {
+
+	[_min setDoubleValue:[min doubleValue]];
+	[_max setDoubleValue:[max doubleValue]];
+
+
 }
 
 @end

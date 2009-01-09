@@ -3,8 +3,9 @@
 #import <Cocoa/Cocoa.h>
 #import "RectangleView.h"
 #import "FractalFlameModel.h"
+#import "QuickViewController.h"
 
-@interface RectangleController : NSObject
+@interface RectangleController : NSObject <QuickViewProtocol>
 {
     IBOutlet RectangleView *rectangleView;
     IBOutlet NSWindow *rectangleWindow;
@@ -52,6 +53,15 @@
 	
 	NSUserDefaults *_defaults;
 	
+	double _rotation;
+	
+	QuickViewController *_qvc;
+	
+	double _qvRotationMin;
+	double _qvRotationMax;
+	
+	NSMutableDictionary *_qvStore;
+	
 }
 - (IBAction)showWindow:(id)sender;
 - (IBAction)viewSizeChanged:(id)sender;
@@ -69,6 +79,8 @@
 - (IBAction) undoEntry:(id)sender;
 - (IBAction) redoEntry:(id)sender;
 
+//- (IBAction) rotationQuickView:(id )sender;
+
 /* delegete messages */
 
 - (void)controlTextDidChange:(NSNotification *)aNotification;
@@ -78,9 +90,14 @@
 
 /* preview */
 - (void)setFractalFlameModel:(FractalFlameModel *)ffm;
+- (void)setQuickViewController:(QuickViewController *)qvc;
 
 /* undo stack */
 - (void) resetUndoStack;
 - (void) addUndoEntry;
+
+/* rotation QuickView */
+- (void) doRotation:(double )degrees;
+- (void) setQuickViewController:(QuickViewController *)qvc;
 
 @end

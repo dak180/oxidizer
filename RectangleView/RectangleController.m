@@ -13,6 +13,7 @@
 		_undoStack = [[NSMutableArray alloc]  initWithCapacity:20] ;
 		_undoStackPointer = -1;
 		_defaults = [NSUserDefaults standardUserDefaults];
+		_qvStore = [[NSMutableDictionary alloc] initWithCapacity:7];
 	}
 	
     return self;
@@ -25,9 +26,6 @@
 	[rectangleView setDelegate:self]; 
 	_autoUpdatePreview = NO;
 	_editPostTransformations = NO;
-
-
-	
 } 
 
 - (IBAction)showWindow:(id)sender
@@ -99,16 +97,48 @@
 
 - (IBAction)rotationChanged:(id)sender {
 	
-	float rotation;
+//	float rotation;
 	
 	NSSegmentedCell *cellButton = [sender selectedCell];
 	
+	switch([cellButton selectedSegment]) {
+		case 0:
+			[self doRotation:-[rotate floatValue]];
+			break;
+		case 1:
+			[self doRotation:[rotate floatValue]];
+			break;
+		case 2:
+			_qvRotationMin = 0.0;
+			_qvRotationMax = 360.0;
+			
+			[_qvStore setObject:[NSNumber numberWithFloat:a] forKey:@"a"];
+			[_qvStore setObject:[NSNumber numberWithFloat:b] forKey:@"b"];
+			[_qvStore setObject:[NSNumber numberWithFloat:c] forKey:@"c"];
+			[_qvStore setObject:[NSNumber numberWithFloat:d] forKey:@"d"];
+			[_qvStore setObject:[NSNumber numberWithFloat:e] forKey:@"e"];
+			[_qvStore setObject:[NSNumber numberWithFloat:f] forKey:@"f"];
+			
+			[_qvc setMinimum:[NSNumber numberWithInt:0] andMaximum:[NSNumber numberWithInt:360]];
+//			[self rotationQuickView:self];
+			[self renderQuickViews];
+			break;
+		default:
+			return;
+	}
+	if([cellButton selectedSegment] == 0) {
+		[self doRotation:-[rotate floatValue]];
+	} else {
+		[self doRotation:[rotate floatValue]];
+	}
+
+/*	
 	if([cellButton selectedSegment] == 0) {
 		rotation = radians(-[rotate floatValue]);
 	} else {
 		rotation = radians([rotate floatValue]);		
 	}
-		
+
     float cosRotation = cos(rotation);
 	float sinRotation = sin(rotation);
 	
@@ -124,7 +154,9 @@
 
 	[self setCoeffsA:a b:b c:c d:d e:e f:f];
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
-	[self updatePreview:self];
+
+*/ 
+    [self updatePreview:self];
 
 	[self addUndoEntry];
 
@@ -477,6 +509,143 @@
 	[undoButton setEnabled:NO];
 	[redoButton setEnabled:NO];
 	
+}
+
+- (void) doRotation:(double )degrees {
+
+	double rotation = radians(degrees);
+	
+	float cosRotation = cos(rotation);
+	float sinRotation = sin(rotation);
+	
+	CGFloat tmpA  = a;
+	
+	a = (a * cosRotation) - (d * sinRotation);
+	d = (tmpA * sinRotation) + (d * cosRotation);
+	
+	CGFloat tmpB  = b;
+	
+	b = (b * cosRotation) - (e * sinRotation);
+	e = (tmpB * sinRotation) + (e * cosRotation);
+	
+	[self setCoeffsA:a b:b c:c d:d e:e f:f];
+	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+	
+}
+
+/*
+- (IBAction) rotationQuickView:(id )sender {
+	
+	[_qvc setExternalQuickViewObject:self];
+	
+	[_qvStore setObject:[NSNumber numberWithFloat:a] forKey:@"a"];
+	[_qvStore setObject:[NSNumber numberWithFloat:b] forKey:@"b"];
+	[_qvStore setObject:[NSNumber numberWithFloat:c] forKey:@"c"];
+	[_qvStore setObject:[NSNumber numberWithFloat:d] forKey:@"d"];
+	[_qvStore setObject:[NSNumber numberWithFloat:e] forKey:@"e"];
+	[_qvStore setObject:[NSNumber numberWithFloat:f] forKey:@"f"];
+	
+	double rotation = 360.0 /((double)[_qvc quickViewCount] - 1.0);
+	int i;
+	for(i=0; i<[_qvc quickViewCount]; i++) {
+		[self doRotation:rotation];
+		[_qvc renderForIndex:i withValue:i*rotation];
+	}
+
+	a = [[_qvStore objectForKey:@"a"] floatValue];
+	b = [[_qvStore objectForKey:@"b"] floatValue];
+	c = [[_qvStore objectForKey:@"c"] floatValue];
+	d = [[_qvStore objectForKey:@"d"] floatValue];
+	e = [[_qvStore objectForKey:@"e"] floatValue];
+	f = [[_qvStore objectForKey:@"f"] floatValue];
+	
+	[self setCoeffsA:a b:b c:c d:d e:e f:f];
+	
+}
+*/
+
+- (void)setQuickViewController:(QuickViewController *)qvc {
+	
+	_qvc = qvc;
+	
+}
+
+- (void)setRotate:(double) rotation {
+	NSLog(@"rotation: %f", rotation);
+}
+
+- (double)rotate {
+	NSLog(@"getting rotation");
+	return 0;
+}
+
+
+-(void) setMinimum:(double) min andMaximum:(double) max {
+
+	_qvRotationMin = min;
+	_qvRotationMax = max;
+
+	
+}
+
+-(void) renderQuickViews {
+
+	[_qvc setExternalQuickViewObject:self];
+	
+	double rotationDelta = (_qvRotationMax - _qvRotationMin) / ((double)[_qvc quickViewCount] - 1.0);
+	
+	NSMutableDictionary *qvStore = [NSMutableDictionary dictionaryWithCapacity:6];
+	
+	[qvStore setObject:[NSNumber numberWithFloat:a] forKey:@"a"];
+	[qvStore setObject:[NSNumber numberWithFloat:b] forKey:@"b"];
+	[qvStore setObject:[NSNumber numberWithFloat:c] forKey:@"c"];
+	[qvStore setObject:[NSNumber numberWithFloat:d] forKey:@"d"];
+	[qvStore setObject:[NSNumber numberWithFloat:e] forKey:@"e"];
+	[qvStore setObject:[NSNumber numberWithFloat:f] forKey:@"f"];
+
+	int i;
+
+	[self doRotation:_qvRotationMin];		
+	[_qvc renderForIndex:0 withValue:_qvRotationMin];
+	
+	for(i=1; i<[_qvc quickViewCount]; i++) {
+		[self doRotation:rotationDelta];
+		[_qvc renderForIndex:i withValue:_qvRotationMin + (i*rotationDelta)];
+	}
+
+	a = [[qvStore objectForKey:@"a"] floatValue];
+	b = [[qvStore objectForKey:@"b"] floatValue];
+	c = [[qvStore objectForKey:@"c"] floatValue];
+	d = [[qvStore objectForKey:@"d"] floatValue];
+	e = [[qvStore objectForKey:@"e"] floatValue];
+	f = [[qvStore objectForKey:@"f"] floatValue];
+	
+	[self setCoeffsA:a b:b c:c d:d e:e f:f];
+	
+	
+}
+
+-(void) resetToOriginalValue {
+
+	a = [[_qvStore objectForKey:@"a"] floatValue];
+	b = [[_qvStore objectForKey:@"b"] floatValue];
+	c = [[_qvStore objectForKey:@"c"] floatValue];
+	d = [[_qvStore objectForKey:@"d"] floatValue];
+	e = [[_qvStore objectForKey:@"e"] floatValue];
+	f = [[_qvStore objectForKey:@"f"] floatValue];
+	
+	[self setCoeffsA:a b:b c:c d:d e:e f:f];
+	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+    [self updatePreview:self];
+	
+}
+
+-(void) setToValue:(double) value {
+	[self resetToOriginalValue];
+	[self doRotation:value];
+	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
+    [self updatePreview:self];
+
 }
 
 

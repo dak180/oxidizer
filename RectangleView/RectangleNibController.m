@@ -36,4 +36,11 @@
 	
 }
 
+
+- (void)setQVC:(QuickViewController *)qvc {
+	
+	[rectangleController setQuickViewController:qvc];
+	
+}
+
 @end

@@ -350,6 +350,7 @@ void print_stack(lua_State* interpreter){
 	
 	[rnc setMOC:[ffm getNSManagedObjectContext]];
 	[rnc setFFM:ffm];
+	[rnc setQVC:_qvc];
 	[rnc showRectangleWindow:sender]; 
 }
 

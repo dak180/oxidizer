@@ -23,7 +23,7 @@
 	GenePoolController *gpc;
 	GenePoolNibController *gpnc;
 	RectangleNibController *rnc;
-//	GradientNibController *gnc;
+	
 
 	lua_State* interpreter;
 	

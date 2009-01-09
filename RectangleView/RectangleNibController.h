@@ -22,5 +22,6 @@
 - (IBAction)showRectangleWindow:(id)sender;
 - (void)setMOC:(NSManagedObjectContext *)moc;
 - (void)setFFM:(FractalFlameModel *)ffm;
+- (void)setQVC:(QuickViewController *)qvc;
 
 @end
