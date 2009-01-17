@@ -1,9 +1,9 @@
 /* RectangleController */
 
 #import <Cocoa/Cocoa.h>
+#import "QuickViewController.h"
 #import "RectangleView.h"
 #import "FractalFlameModel.h"
-#import "QuickViewController.h"
 
 @interface RectangleController : NSObject <QuickViewProtocol>
 {
@@ -57,8 +57,8 @@
 	
 	QuickViewController *_qvc;
 	
-	double _qvRotationMin;
-	double _qvRotationMax;
+	double _qvMin;
+	double _qvMax;
 	
 	NSMutableDictionary *_qvStore;
 	

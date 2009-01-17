@@ -76,17 +76,20 @@
 		
 	NSLog (@"%@",bindInfo);
 
-	_originalValue = [[observedObject valueForKeyPath:keyPath] doubleValue];
+    [self setOriginalValue:[observedObject valueForKeyPath:keyPath]];	
+//	_originalValue = [[observedObject valueForKeyPath:keyPath] doubleValue];
 
+	double originalValue;
+	
 	if(low == DBL_MAX) {
 		low = 0.0;
 	}
 
 	if(high == DBL_MIN) {
-		if (low == _originalValue) {
-			high = _originalValue + 1.0;
+		if (low == originalValue) {
+			high = originalValue + 1.0;
 		} else {
-			high = _originalValue + (_originalValue - low);			
+			high = originalValue + (originalValue - low);			
 		}
 	}
 	
@@ -121,14 +124,14 @@
 //		[observedObject setValue:[NSNumber numberWithDouble:low] forKeyPath:keyPath];
 		[_observedEntity setValue:[NSNumber numberWithDouble:low] forKey:_key];
 		[[_imagesArray objectAtIndex:i] setImage:[(FractalFlameModel *)_ffm renderThumbnail]];
-		[[_imagesArray objectAtIndex:i] setQuickViewValue:low];
+		[[_imagesArray objectAtIndex:i] setQuickViewValue:[NSNumber numberWithDouble:low]];
 		[[_imagesArray objectAtIndex:i] setToolTip:[NSString stringWithFormat:@"value: %g", low]];
 		[[_imagesArray objectAtIndex:i] display];
 		low += delta;
 		
 	}
 	
-	[_observedEntity setValue:[NSNumber numberWithDouble:_originalValue] forKeyPath:_key];
+	[_observedEntity setValue:_originalValue forKeyPath:_key];
 	
 }
 
@@ -140,7 +143,8 @@
 		return;
 	}
 	
-	[_observedEntity setValue:[NSNumber numberWithDouble:[(QuickViewImageView *)sender quickViewValue]] forKeyPath:_key];
+	[_observedEntity setValue:[(QuickViewImageView *)sender quickViewValue] forKeyPath:_key];
+//	[_observedEntity setValue:[NSNumber numberWithDouble:[(QuickViewImageView *)sender quickViewValue]] forKeyPath:_key];
 	[_ffm previewCurrentFlame:self];
 	
 
@@ -153,7 +157,7 @@
 		return;
 	}
 	
-	[_observedEntity setValue:[NSNumber numberWithDouble:_originalValue] forKeyPath:_key];
+	[_observedEntity setValue:_originalValue forKeyPath:_key];
 	[_ffm previewCurrentFlame:self];
 
 	
@@ -221,11 +225,11 @@
 	return 25;
 }
 
-- (void) renderForIndex:(int)index withValue:(double) value {
+- (void) renderForIndex:(int)index withValue:(id) value {
 		
 	[[_imagesArray objectAtIndex:index] setImage:[(FractalFlameModel *)_ffm renderThumbnail]];
 	[[_imagesArray objectAtIndex:index] setQuickViewValue:value];
-	[[_imagesArray objectAtIndex:index] setToolTip:[NSString stringWithFormat:@"value: %g", value]];
+	[[_imagesArray objectAtIndex:index] setToolTip:[NSString stringWithFormat:@"value: %@", value]];
 	[[_imagesArray objectAtIndex:index] display];
 		
 }
@@ -253,5 +257,22 @@
 
 
 }
+
+- (void) setOriginalValue:(id)value {
+	
+	if(value != nil) {
+		[value retain];		
+	}
+	
+	if(_originalValue != nil) {
+		[_originalValue release];
+	}
+	
+	_originalValue = value;
+	
+	return;	
+	
+}
+
 
 @end

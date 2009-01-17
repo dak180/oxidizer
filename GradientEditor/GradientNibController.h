@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <GradientController.h>
+#import "GradientController.h"
 
 
 @interface GradientNibController : NSObject {
@@ -18,8 +18,10 @@
 	
 }
 
-- (IBAction)showGradientWindow:(id)sender;
-- (void)setCMapController:(NSArrayController *)controller;
+- (IBAction) showGradientWindow:(id)sender;
+- (void) setCMapController:(NSArrayController *)controller;
 - (void) setFlameController:(id)controller;
+- (void) setQuickViewController:(id)qvc;
+
 
 @end

@@ -76,11 +76,18 @@ NSPasteboard *pboard = [NSPasteboard pasteboardWithName:(NSString *) NSDragPboar
 }
 
 
-- (void) setQuickViewValue:(double)val {	
+- (void) setQuickViewValue:(id)val {	
+	
+	if(val != nil) {
+		[val retain];
+	}
+	
+	[_value release];
+	
 	_value = val;	
 } 
 
-- (double) quickViewValue {	
+- (id) quickViewValue {	
 	return _value;	
 } 
 

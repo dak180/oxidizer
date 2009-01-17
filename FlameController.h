@@ -37,6 +37,7 @@
     IBOutlet NSArrayController *cmapController;
     IBOutlet NSColorWell *colourWell;
     IBOutlet NSImageView *colourWithHue;
+    IBOutlet id _qvc;
 
 	 NSBitmapImageRep *_paletteWithHueRep;
 	 NSBitmapImageRep *_colourWithHueRep;

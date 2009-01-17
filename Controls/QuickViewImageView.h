@@ -23,10 +23,10 @@
 	
 	IBOutlet id delegate;
 	
-	double _value;
+	id _value;
 }
 
-- (void) setQuickViewValue:(double)val;
-- (double) quickViewValue;
+- (void) setQuickViewValue:(id)val;
+- (id) quickViewValue;
 
 @end

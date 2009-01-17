@@ -51,7 +51,7 @@
 	NSManagedObject *_observedEntity;
 	NSString *_key;
 	
-	double _originalValue;
+	id _originalValue;
 	
 	NSObject <QuickViewProtocol> *_externalQuickView;
 	
@@ -71,8 +71,9 @@
 - (NSManagedObject *)getEntity:(id) observedObject keyArray:(NSArray *)keys;
 
 - (int) quickViewCount;
-- (void) renderForIndex:(int)index withValue:(double) value;
+- (void) renderForIndex:(int)index withValue:(id) value;
 - (void) setExternalQuickViewObject:(id)eqvo;
 - (void) setMinimum:(NSNumber *)min andMaximum:(NSNumber *)max;
+- (void) setOriginalValue:(id)value;
 
 @end

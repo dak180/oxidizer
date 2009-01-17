@@ -109,8 +109,8 @@
 			[self doRotation:[rotate floatValue]];
 			break;
 		case 2:
-			_qvRotationMin = 0.0;
-			_qvRotationMax = 360.0;
+			_qvMin = 0.0;
+			_qvMax = 360.0;
 			
 			[_qvStore setObject:[NSNumber numberWithFloat:a] forKey:@"a"];
 			[_qvStore setObject:[NSNumber numberWithFloat:b] forKey:@"b"];
@@ -582,8 +582,8 @@
 
 -(void) setMinimum:(double) min andMaximum:(double) max {
 
-	_qvRotationMin = min;
-	_qvRotationMax = max;
+	_qvMin = min;
+	_qvMax = max;
 
 	
 }
@@ -592,7 +592,7 @@
 
 	[_qvc setExternalQuickViewObject:self];
 	
-	double rotationDelta = (_qvRotationMax - _qvRotationMin) / ((double)[_qvc quickViewCount] - 1.0);
+	double rotationDelta = (_qvMax - _qvMin) / ((double)[_qvc quickViewCount] - 1.0);
 	
 	NSMutableDictionary *qvStore = [NSMutableDictionary dictionaryWithCapacity:6];
 	
@@ -605,12 +605,12 @@
 
 	int i;
 
-	[self doRotation:_qvRotationMin];		
-	[_qvc renderForIndex:0 withValue:_qvRotationMin];
+	[self doRotation:_qvMin];		
+	[_qvc renderForIndex:0 withValue:[NSNumber numberWithDouble:_qvMin]];
 	
 	for(i=1; i<[_qvc quickViewCount]; i++) {
 		[self doRotation:rotationDelta];
-		[_qvc renderForIndex:i withValue:_qvRotationMin + (i*rotationDelta)];
+		[_qvc renderForIndex:i withValue:[NSNumber numberWithDouble:_qvMin + (i*rotationDelta)]];
 	}
 
 	a = [[qvStore objectForKey:@"a"] floatValue];
@@ -640,9 +640,9 @@
 	
 }
 
--(void) setToValue:(double) value {
+-(void) setToValue:(id) value {
 	[self resetToOriginalValue];
-	[self doRotation:value];
+	[self doRotation:[value doubleValue]];
 	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
     [self updatePreview:self];
 

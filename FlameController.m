@@ -19,7 +19,7 @@
 
 #import "FlameController.h"
 #import "Genome.h"
-
+#import "QuickViewController.h"
 
 @implementation FlameController : NSObject
 
@@ -313,6 +313,7 @@
 		[gnc setCMapController:cmapController];
 		[gnc setFlameController:self];
 		[gnc showGradientWindow:self]; 
+		[gnc setQuickViewController:(QuickViewController *)_qvc];
 
 //		[cmapWindow setIsVisible:TRUE]; 
 		

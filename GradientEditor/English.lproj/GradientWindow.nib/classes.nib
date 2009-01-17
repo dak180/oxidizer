@@ -36,6 +36,19 @@
 			<string>NSView</string>
 		</dict>
 		<dict>
+			<key>CLASS</key>
+			<string>QuickViewButton</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>quickViewTarget</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSButton</string>
+		</dict>
+		<dict>
 			<key>ACTIONS</key>
 			<dict>
 				<key>applyNewPalette</key>
@@ -43,6 +56,14 @@
 				<key>editPalette</key>
 				<string>id</string>
 				<key>newGradient</key>
+				<string>id</string>
+				<key>qvRotateBlue</key>
+				<string>id</string>
+				<key>qvRotateGreen</key>
+				<string>id</string>
+				<key>qvRotateIndex</key>
+				<string>id</string>
+				<key>qvRotateRed</key>
 				<string>id</string>
 				<key>showWindow</key>
 				<string>id</string>

@@ -28,4 +28,9 @@
 	[gradientController setFlameController:controller];
 }
 
+- (void)setQuickViewController:(id)qvc {
+	
+	[gradientController setQuickViewController:qvc];	
+}
+
 @end

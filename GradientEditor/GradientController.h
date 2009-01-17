@@ -7,15 +7,16 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <GradientView.h>
+#import "GradientView.h"
+#import "QuickViewProtocol.h"
 
-
-@interface GradientController : NSObject {
+@interface GradientController : NSObject  <QuickViewProtocol> {
 
 	IBOutlet GradientView *gradientView;
     IBOutlet NSWindow *gradientWindow;
     IBOutlet NSArrayController *arrayController;
 	IBOutlet NSTableView *gradientTableView;
+	
 
 @private 
 	
@@ -23,7 +24,14 @@
 	NSMutableArray *colours;
 	NSArrayController *cmap;
 	id flameController;
+	id _qvc;
 	
+	double _qvMin;
+	double _qvMax;
+	id _qvOriginalValue;
+	id _qvOriginalValuesObject;
+	
+	unsigned int _rotateType;
 }
 
 - (void)tableViewSelectionDidChange:(NSNotification *)notification;
@@ -33,7 +41,10 @@
 - (IBAction)editPalette:(id)sender;
 - (IBAction)applyNewPalette:(id)sender;
 - (IBAction)newGradient:(id)sender;
-
+- (IBAction)qvRotateIndex:(id)sender;
+- (IBAction)qvRotateRed:(id)sender;
+- (IBAction)qvRotateGreen:(id)sender;
+- (IBAction)qvRotateBlue:(id)sender;
 
 - (void) fillGradientImageRep; 
 
@@ -44,4 +55,12 @@
 - (void) setSelectedColour:(NSDictionary *)colour;
 
 - (void) addColour;
+
+- (void)setQuickViewController:(id)qvc;
+- (void) rotateIndex;
+- (void) rotateIndexes;
+- (void) rotateColour:(NSString *)colourKey;
+- (void)setOriginalValue:(id)value;
+- (void)setOriginalValuesObject:(id)value;
+
 @end
