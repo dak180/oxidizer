@@ -46,7 +46,7 @@
     IBOutlet ProgressIndicatorWithCancel *taskAllFramesIndicator;
     IBOutlet ProgressIndicatorWithCancel *taskFrameIndicator;
     IBOutlet NSTextField *etaTextField;
-	
+
 	BOOL _saveThumbnail;
 	BOOL _showRender;
 	

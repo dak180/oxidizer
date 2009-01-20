@@ -79,6 +79,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 		NSString *applicationSupportFolder = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"Oxidizer"];
 		[[NSFileManager defaultManager] createDirectoryAtPath:applicationSupportFolder attributes:nil];
 		
+		NSMutableArray *scripts = [NSMutableArray arrayWithCapacity:10];
+		[scripts addObject:@"first"];
+		[scripts addObject:@"second"];
+		
 		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
 									NSUserName(),  @"nick",
 									@"http://oxidizer.sf.net", @"url",
@@ -97,7 +101,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 									[NSNumber numberWithBool:NO], @"render_preview_on_change",									
 									[NSNumber numberWithBool:NO], @"limit_quality",									
 									[NSNumber numberWithDouble:100.0], @"preview_quality",									
-									[NSNumber numberWithDouble:128.0], @"preview_size",									
+									[NSNumber numberWithDouble:128.0], @"preview_size",		
+									scripts, @"MRU_scripts",
 									nil]
 		 ];
 	

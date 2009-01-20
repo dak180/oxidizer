@@ -27,6 +27,8 @@
 
 	lua_State* interpreter;
 	
+	NSString *_lastLuaScript;
+	
 }
 
 
@@ -57,6 +59,9 @@
 - (IBAction)renderStills:(id)sender;
 
 - (IBAction)runLuaScript:(id)sender;
+- (IBAction)runLastLuaScript:(id) sender;
+	
+- (void) setLastLuaScript: (NSString *)lls;
 - (int) renderFromLua:(NSArray *) genomes;
 - (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename;
 

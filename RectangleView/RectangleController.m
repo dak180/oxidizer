@@ -533,36 +533,7 @@
 	
 }
 
-/*
-- (IBAction) rotationQuickView:(id )sender {
-	
-	[_qvc setExternalQuickViewObject:self];
-	
-	[_qvStore setObject:[NSNumber numberWithFloat:a] forKey:@"a"];
-	[_qvStore setObject:[NSNumber numberWithFloat:b] forKey:@"b"];
-	[_qvStore setObject:[NSNumber numberWithFloat:c] forKey:@"c"];
-	[_qvStore setObject:[NSNumber numberWithFloat:d] forKey:@"d"];
-	[_qvStore setObject:[NSNumber numberWithFloat:e] forKey:@"e"];
-	[_qvStore setObject:[NSNumber numberWithFloat:f] forKey:@"f"];
-	
-	double rotation = 360.0 /((double)[_qvc quickViewCount] - 1.0);
-	int i;
-	for(i=0; i<[_qvc quickViewCount]; i++) {
-		[self doRotation:rotation];
-		[_qvc renderForIndex:i withValue:i*rotation];
-	}
 
-	a = [[_qvStore objectForKey:@"a"] floatValue];
-	b = [[_qvStore objectForKey:@"b"] floatValue];
-	c = [[_qvStore objectForKey:@"c"] floatValue];
-	d = [[_qvStore objectForKey:@"d"] floatValue];
-	e = [[_qvStore objectForKey:@"e"] floatValue];
-	f = [[_qvStore objectForKey:@"f"] floatValue];
-	
-	[self setCoeffsA:a b:b c:c d:d e:e f:f];
-	
-}
-*/
 
 - (void)setQuickViewController:(QuickViewController *)qvc {
 	
