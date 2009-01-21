@@ -79,7 +79,7 @@
     [self setOriginalValue:[observedObject valueForKeyPath:keyPath]];	
 //	_originalValue = [[observedObject valueForKeyPath:keyPath] doubleValue];
 
-	double originalValue;
+	double originalValue = [_originalValue doubleValue];
 	
 	if(low == DBL_MAX) {
 		low = 0.0;
