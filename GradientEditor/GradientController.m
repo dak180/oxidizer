@@ -609,6 +609,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
+	[_qvc showWindow];
+
 	int qvIndex;
 	int i;
     int colourIndex;
@@ -666,6 +668,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
+	[_qvc showWindow];
+
 	int qvIndex;
 	int i;
     int colourIndex;
@@ -735,6 +739,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	_rotateType = RED_ROTATE;
 	
+	[_qvc showWindow];
 	[self  rotateColour:@"red"];
 	
 }
@@ -749,6 +754,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	_rotateType = GREEN_ROTATE;
 	
+	[_qvc showWindow];
 	[self  rotateColour:@"green"];
 	
 }
@@ -763,6 +769,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	_rotateType = BLUE_ROTATE;
 	
+	[_qvc showWindow];
 	[self  rotateColour:@"blue"];
 	
 }

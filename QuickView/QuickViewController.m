@@ -49,6 +49,8 @@
 
 	NSAttributeDescription *description = [attributes objectForKey:key];
 	NSArray *predicates = [description validationPredicates];
+	[self setValueClass:[description attributeValueClassName]];
+	
 	double high = DBL_MIN;
 	double low = DBL_MAX;
 
@@ -121,11 +123,18 @@
 	int i;
 	for(i = 0 ; i < 25; i++) {
 		
-//		[observedObject setValue:[NSNumber numberWithDouble:low] forKeyPath:keyPath];
-		[_observedEntity setValue:[NSNumber numberWithDouble:low] forKey:_key];
-		[[_imagesArray objectAtIndex:i] setImage:[(FractalFlameModel *)_ffm renderThumbnail]];
-		[[_imagesArray objectAtIndex:i] setQuickViewValue:[NSNumber numberWithDouble:low]];
-		[[_imagesArray objectAtIndex:i] setToolTip:[NSString stringWithFormat:@"value: %g", low]];
+		NSString *valueAsString = [NSString stringWithFormat:@"%g",low];
+
+		if([_valueClass isEqualToString:@"NSString"]) {
+			[_observedEntity setValue:valueAsString forKey:_key];
+			[[_imagesArray objectAtIndex:i] setImage:[(FractalFlameModel *)_ffm renderThumbnail]];
+			[[_imagesArray objectAtIndex:i] setQuickViewValue:valueAsString];
+		} else {			
+			[_observedEntity setValue:[NSNumber numberWithDouble:low] forKey:_key];
+			[[_imagesArray objectAtIndex:i] setImage:[(FractalFlameModel *)_ffm renderThumbnail]];
+			[[_imagesArray objectAtIndex:i] setQuickViewValue:[NSNumber numberWithDouble:low]];
+		}
+		[[_imagesArray objectAtIndex:i] setToolTip:valueAsString];
 		[[_imagesArray objectAtIndex:i] display];
 		low += delta;
 		
@@ -143,7 +152,11 @@
 		return;
 	}
 	
-	[_observedEntity setValue:[(QuickViewImageView *)sender quickViewValue] forKeyPath:_key];
+	id qvValue = [(QuickViewImageView *)sender quickViewValue];
+	if(qvValue == nil) {
+		return;
+	}
+	[_observedEntity setValue:qvValue forKeyPath:_key];
 //	[_observedEntity setValue:[NSNumber numberWithDouble:[(QuickViewImageView *)sender quickViewValue]] forKeyPath:_key];
 	[_ffm previewCurrentFlame:self];
 	
@@ -190,6 +203,22 @@
 	}
 	
 	_key = kp;
+	
+	return;
+	
+} 
+
+- (void) setValueClass:(NSString *)vc {
+	
+	if(vc != nil) {
+		[vc retain];		
+	}
+	
+	if(_valueClass != nil) {
+		[_valueClass release];
+	}
+	
+	_valueClass = vc;
 	
 	return;
 	
@@ -274,5 +303,10 @@
 	
 }
 
+- (void) showWindow {
+
+	[_qvw makeKeyAndOrderFront:self];
+
+}
 
 @end

@@ -50,6 +50,7 @@
 		
 	NSManagedObject *_observedEntity;
 	NSString *_key;
+	NSString *_valueClass;
 	
 	id _originalValue;
 	
@@ -67,6 +68,7 @@
 
 - (void) setObservedEntity:(NSManagedObject *)oe;
 - (void) setKey:(NSString *)kp;
+- (void) setValueClass:(NSString *)vc;
 			
 - (NSManagedObject *)getEntity:(id) observedObject keyArray:(NSArray *)keys;
 
@@ -75,5 +77,6 @@
 - (void) setExternalQuickViewObject:(id)eqvo;
 - (void) setMinimum:(NSNumber *)min andMaximum:(NSNumber *)max;
 - (void) setOriginalValue:(id)value;
+- (void) showWindow;
 
 @end
