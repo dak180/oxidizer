@@ -541,6 +541,8 @@
 	
 }
 
+
+/*
 - (void)setRotate:(double) rotation {
 	NSLog(@"rotation: %f", rotation);
 }
@@ -549,7 +551,7 @@
 	NSLog(@"getting rotation");
 	return 0;
 }
-
+*/
 
 -(void) setMinimum:(double) min andMaximum:(double) max {
 
@@ -576,6 +578,8 @@
 
 	int i;
 
+	[_qvc showWindow];
+	
 	[self doRotation:_qvMin];		
 	[_qvc renderForIndex:0 withValue:[NSNumber numberWithDouble:_qvMin]];
 	
