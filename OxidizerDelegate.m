@@ -412,7 +412,7 @@ void print_stack(lua_State* interpreter){
 	} 
 	
 	
-	[self setLastLuaScript:[NSString stringWithContentsOfFile:[op filename]]];
+	[self setLastLuaScript:[op filename]];
 	
 	[self runLastLuaScript:self];
 	
@@ -430,8 +430,10 @@ void print_stack(lua_State* interpreter){
 }
 
 - (IBAction) runLastLuaScript:(id) sender {
-	
-	int luaScriptLength = [_lastLuaScript lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
+
+
+	NSString *lastScript = [NSString stringWithContentsOfFile:_lastLuaScript];
+	int luaScriptLength = [lastScript lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	
 	interpreter=lua_objc_init();
 		
@@ -454,7 +456,7 @@ void print_stack(lua_State* interpreter){
 	lua_setglobal(interpreter, "oxidizer_status");
 
 	
-	luaL_loadbuffer(interpreter,[_lastLuaScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
+	luaL_loadbuffer(interpreter,[lastScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
 	lua_pcall(interpreter,0,0,0);
 
 	lua_getglobal(interpreter, "oxidizer_status");
