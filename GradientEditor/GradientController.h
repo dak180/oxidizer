@@ -62,5 +62,6 @@
 - (void) rotateColour:(NSString *)colourKey;
 - (void)setOriginalValue:(id)value;
 - (void)setOriginalValuesObject:(id)value;
+- (void)addColourSquare:(NSMutableDictionary *)colour;
 
 @end

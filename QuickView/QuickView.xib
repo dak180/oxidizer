@@ -8,7 +8,7 @@
 		<string key="IBDocument.HIToolboxVersion">353.00</string>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2"/>
+			<integer value="1"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -29,12 +29,13 @@
 			<object class="NSWindowTemplate" id="1005">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, -212}, {1044, 722}}</string>
+				<string key="NSWindowRect">{{346, 155}, {1044, 722}}</string>
 				<int key="NSWTFlags">1610612736</int>
-				<string key="NSWindowTitle">Window</string>
+				<string key="NSWindowTitle">Quick View</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
-				<string key="NSWindowContentMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSWindowContentMaxSize">{1044, 722}</string>
+				<string key="NSWindowContentMinSize">{1044, 722}</string>
 				<object class="NSView" key="NSWindowView" id="1006">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -862,7 +863,7 @@
 												<reference key="NSSupport" ref="283468364"/>
 												<reference key="NSControlView" ref="772680395"/>
 												<int key="NSButtonFlags">-2038284033</int>
-												<int key="NSButtonFlags2">129</int>
+												<int key="NSButtonFlags2">1</int>
 												<string key="NSAlternateContents"/>
 												<string key="NSKeyEquivalent"/>
 												<int key="NSPeriodicDelay">200</int>
@@ -911,7 +912,7 @@
 								<reference key="NSSupport" ref="283468364"/>
 								<reference key="NSControlView" ref="378166895"/>
 								<int key="NSButtonFlags">-2038284033</int>
-								<int key="NSButtonFlags2">129</int>
+								<int key="NSButtonFlags2">1</int>
 								<string key="NSAlternateContents"/>
 								<string key="NSKeyEquivalent"/>
 								<int key="NSPeriodicDelay">200</int>
@@ -923,7 +924,9 @@
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
-				<string key="NSMaxSize">{3.40282e+38, 3.40282e+38}</string>
+				<string key="NSMinSize">{1044, 744}</string>
+				<string key="NSMaxSize">{1044, 744}</string>
+				<string key="NSFrameAutosaveName">oxidizer_quickview</string>
 			</object>
 			<object class="NSUserDefaultsController" id="825997757">
 				<bool key="NSSharedInstance">YES</bool>
@@ -1945,6 +1948,10 @@
 					<string>1.NSWindowTemplate.visibleAtLaunch</string>
 					<string>1.WindowOrigin</string>
 					<string>1.editorWindowContentRectSynchronizationRect</string>
+					<string>1.windowTemplate.hasMaxSize</string>
+					<string>1.windowTemplate.hasMinSize</string>
+					<string>1.windowTemplate.maxSize</string>
+					<string>1.windowTemplate.minSize</string>
 					<string>10.CustomClassName</string>
 					<string>10.IBPluginDependency</string>
 					<string>11.IBPluginDependency</string>
@@ -2041,12 +2048,16 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilderKit</string>
 					<string>com.apple.InterfaceBuilderKit</string>
-					<string>{{567, 111}, {1044, 722}}</string>
+					<string>{{203, 164}, {1044, 722}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{567, 111}, {1044, 722}}</string>
-					<integer value="1"/>
+					<string>{{203, 164}, {1044, 722}}</string>
+					<integer value="0"/>
 					<string>{196, 240}</string>
 					<string>{{202, 428}, {480, 270}}</string>
+					<integer value="1" id="5"/>
+					<reference ref="5"/>
+					<string>{1044, 722}</string>
+					<string>{1044, 722}</string>
 					<string>QuickViewImageView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2206,6 +2217,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSMutableArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>_qvc</string>
 							<string>cmapController</string>
 							<string>cmapWindow</string>
 							<string>colourWell</string>
@@ -2222,6 +2234,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>NSArrayController</string>
 							<string>NSWindow</string>
 							<string>NSColorWell</string>
