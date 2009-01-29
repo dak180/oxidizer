@@ -305,10 +305,11 @@
 	
 	/* generate random XML */
 	
-	srandom(time(NULL));
+//	srandom(time(NULL));
 	
 	[environmentDictionary setValue:[NSNumber numberWithLong:random()] forKey:@"seed"];
-	
+	[environmentDictionary setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
+
 	
 	/* fiddle symmetry to be a value between -8 and -1 and 1 and 8 */
 	int symmetry;

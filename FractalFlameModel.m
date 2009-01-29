@@ -678,6 +678,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
 	[taskEnvironment retain];	
+	
+	[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"qs"];
+	[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"ss"];
+	
 	[taskEnvironment setObject:pngFileName forKey:@"out"];
 	
 	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
@@ -752,6 +756,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
 	[taskEnvironment retain];	
 	[taskEnvironment setObject:pngFileName forKey:@"out"];
+	[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"qs"];
+	[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"ss"];
 	
 
 	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
@@ -956,6 +962,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskProgressWindow setTitle:@"Generating Random Genome"];
 	[taskProgressWindow makeKeyAndOrderFront:self];
 	
+	srandom(time(NULL));
 	/* generate random XML */
 	NSData *newGenome = [BreedingController createRandomGenomeXMLwithEnvironment:[self environmentDictionary]];
 	
