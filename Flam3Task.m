@@ -486,6 +486,8 @@
 									 informativeTextWithFormat:errorMessage];
 		[finishedPanel runModal];	
 		
+		taskStatus = 99;
+		
 	}
 	
 	[taskFrameIndicator setCancel:NO];

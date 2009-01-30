@@ -641,6 +641,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[taskAllFramesIndicator setDoubleValue:progressValue];
 		
 		int returnCode = [self runFlam3MovieFrameRenderAsTask:xml withEnvironment:taskEnvironment];
+		
+		if(returnCode != 0) {
+			
+			break;
+		}
 
 		progressValue += dtime;
 	}
