@@ -411,6 +411,16 @@ void print_stack(lua_State* interpreter){
 		return;	
 	} 
 	
+	[_luaLibraryController addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[[op filename] lastPathComponent], @"file_name", 
+									  [[op filename] stringByDeletingLastPathComponent], @"file_path", 
+									  nil]]; 				
+/*	
+	id defaultValues = [NSUserDefaults standardUserDefaults];
+	id scripts = [defaultValues objectForKey:@"MRU_scripts"];
+	NSMutableArray *newScripts = [NSMutableArray arrayWithArray:scripts];
+	[newScripts addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[[op filename] lastPathComponent], @"file_name", [[op filename] stringByDeletingLastPathComponent], @"file_path", nil]];
+	[defaultValues setObject:newScripts forKey:@"MRU_scripts"];
+*/
 	
 	[self setLastLuaScript:[op filename]];
 	
@@ -558,6 +568,47 @@ void print_stack(lua_State* interpreter){
 	interpreter = nil;
 	
 	return;
+	
+}
+
+- (IBAction) luaLibraryAction:(id) sender {
+
+	NSString *filename;
+	NSDictionary *script;
+	
+	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
+	switch([segments selectedSegment]) {
+		case 0: 
+			script = [[_luaLibraryController selectedObjects] lastObject];
+			filename = [[script objectForKey:@"file_path"] stringByAppendingPathComponent:[script objectForKey:@"file_name"]];
+			[self setLastLuaScript:filename];
+			[self runLastLuaScript:self];
+			break;
+		case 1:		
+			{
+				NSOpenPanel *op;
+				
+				/* create or get the shared instance of NSSavePanel */
+				op = [NSOpenPanel openPanel];
+				/* set up new attributes */
+				[op setRequiredFileType:@"lua"];
+				
+				/* display the NSOpenPanel */
+				int runResult = [op runModal];
+				/* if successful, save file under designated name */
+				if(runResult == NSCancelButton || [op filename] == nil) {
+					break;	
+				} 
+				
+				[_luaLibraryController addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:[[op filename] lastPathComponent], @"file_name", 
+												                                                    [[op filename] stringByDeletingLastPathComponent], @"file_path", 
+												                                                    nil]]; 				
+			}
+			break;
+		case 2:
+			[_luaLibraryController  remove:sender];
+			break;
+	}
 	
 }
 

@@ -80,8 +80,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[[NSFileManager defaultManager] createDirectoryAtPath:applicationSupportFolder attributes:nil];
 		
 		NSMutableArray *scripts = [NSMutableArray arrayWithCapacity:10];
-		[scripts addObject:@"first"];
-		[scripts addObject:@"second"];
+		[scripts addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"first", @"file_name", @"path", @"file_path", nil]];
+   	    [scripts addObject:[NSMutableDictionary dictionaryWithObjectsAndKeys:@"second", @"file_name", @"path2", @"file_path", nil]];
+//		[scripts addObject:@"second"];
 		
 		[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
 									NSUserName(),  @"nick",

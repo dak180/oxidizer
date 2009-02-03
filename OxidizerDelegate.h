@@ -16,6 +16,7 @@
 	IBOutlet FractalFlameModel *ffm;
 	IBOutlet BreedingController *bc;
     IBOutlet QuickViewController *_qvc;
+    IBOutlet NSArrayController *_luaLibraryController;
 	
 	
 @private
@@ -60,7 +61,8 @@
 
 - (IBAction)runLuaScript:(id)sender;
 - (IBAction)runLastLuaScript:(id) sender;
-	
+- (IBAction)luaLibraryAction:(id) sender;
+
 - (void) setLastLuaScript: (NSString *)lls;
 - (int) renderFromLua:(NSArray *) genomes;
 - (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename;
