@@ -18,6 +18,7 @@
 #define BLUE_ROTATE 2
 #define GREEN_ROTATE 3
 #define INDEXES_ROTATE 4
+#define HUES_ROTATE 4
 
 
 int sortUsingIndex(id colour1, id colour2, void *context);
@@ -77,14 +78,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 				[arrayController removeObjects:selected];
 			}
 			break;
-		case 2:
-			[(QuickViewController *)_qvc setMinimum:[NSNumber numberWithInt:0] andMaximum:[NSNumber numberWithInt:255]];
-			
-			_qvMin = 0.0;
-			_qvMax = 255.0;
-			
-			_rotateType = INDEXES_ROTATE;
-			[self rotateIndexes];
+		default:
 			break;
 	}
 	
@@ -96,6 +90,8 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 
 - (IBAction)applyNewPalette:(id)sender {
+	
+	
 	NSManagedObject *cmapEntity;
 	
 	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
@@ -120,56 +116,78 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 }
 
 - (IBAction)newGradient:(id)sender {
-	
+
 	[[arrayController content] removeAllObjects];
-
+	
 	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:255];
-
+	
 	int i;
 	
- 	for(i=0; i<2; i++) {
-		
-//		NSBitmapImageRep *paletteRep;
-//		NSImage *paletteImage;
+	for(i=0; i<2; i++) {
 		
 		NSMutableDictionary *colour = [NSMutableDictionary dictionaryWithCapacity:6];
 		[colour setObject:[NSNumber numberWithDouble:i] forKey:@"red"];
 		[colour setObject:[NSNumber numberWithDouble:i] forKey:@"green"];
 		[colour setObject:[NSNumber numberWithDouble:i] forKey:@"blue"];
 		[colour setObject:[NSNumber numberWithInt:i*255] forKey:@"index"];
-
+		
 		[self addColourSquare:colour];
-	
-		/*
-		paletteRep= [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
-															pixelsWide:COLOUR_SQUARE_SIDE
-															pixelsHigh:COLOUR_SQUARE_SIDE
-														 bitsPerSample:8
-													   samplesPerPixel:3
-															  hasAlpha:NO 
-															  isPlanar:NO
-														colorSpaceName:NSDeviceRGBColorSpace
-														  bitmapFormat:0
-														   bytesPerRow:3*256
-														  bitsPerPixel:24]; 
 		
-		paletteImage = [[NSImage alloc] init];
-		[paletteImage addRepresentation:paletteRep];
-		
-		[colour setObject:paletteRep forKey:@"bitmapRep"];
-		[colour setObject:paletteImage forKey:@"image"];
-		
-		[PaletteController fillColour:colour forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
-*/		
 		[tempArray addObject:colour];
-				
-	}   	
-	
+		
+		
+	}				
+
 	[arrayController addObjects:tempArray];
 	[self fillGradientImageRep];
 	[arrayController setSelectionIndex:0];
 	[tempArray release];
 	
+}
+
+- (IBAction)gradientSegmentedControl:(id)sender {
+	
+	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
+	NSArray *selected;
+	
+	switch([segments selectedSegment]) {
+		case 0: 
+
+            [self newGradient:sender];
+			
+			break;
+		case 1:
+			[(QuickViewController *)_qvc setMinimum:[NSNumber numberWithInt:0] andMaximum:[NSNumber numberWithInt:255]];
+			
+			_qvMin = 0.0;
+			_qvMax = 1.0;
+			
+			_rotateType = INDEXES_ROTATE;
+			[self rotateHues];
+			
+			[gradientView setSelectedSwatch:nil];
+			[self fillGradientImageRep];
+			[gradientView display];	
+			break;
+		case 2:
+
+			[(QuickViewController *)_qvc setMinimum:[NSNumber numberWithInt:0] andMaximum:[NSNumber numberWithInt:255]];
+			 
+			_qvMin = 0.0;
+			_qvMax = 255.0;
+			 
+			_rotateType = HUES_ROTATE;
+			[self rotateIndexes];
+			[gradientView setSelectedSwatch:nil];
+			[self fillGradientImageRep];
+			[gradientView display];	
+			
+			break;
+
+				
+	}   	
+	
+
 }
 
 - (void) setColourArray:(NSArray *)newArray {
@@ -509,7 +527,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			[self rotateIndex];
 			break;
 		case INDEXES_ROTATE:
-			[self rotateIndexes];
+//			[self rotateIndexes];
+			[self rotateHues];
 			break;
 		case RED_ROTATE:
 			[self rotateColour:@"red"];
@@ -525,26 +544,13 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 
 -(void) resetToOriginalValue {
-	int i;
-	
+
 	switch(_rotateType) {
 		case INDEX_ROTATE:
 			[_qvOriginalValuesObject setObject:[NSNumber numberWithInt:[(NSNumber *)_qvOriginalValue intValue]] forKey:@"index"] ;
 			[PaletteController fillColour:_qvOriginalValue forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 			break;
 		case INDEXES_ROTATE:
-/*			
-			[[arrayController content] removeAllObjects];
-			for(i=0; i<[_qvOriginalValue count]; i++) {
-				
-				NSMutableDictionary *oldColour = (NSMutableDictionary *)[_qvOriginalValue objectAtIndex:i];
-				[self addColourSquare:oldColour];
-//				[PaletteController fillColour:oldColour forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
-				
-				[arrayController addObject:oldColour];
-				
-			}	
- */
 			[self setColourArray:_qvOriginalValue];
 			break;
 		case RED_ROTATE:
@@ -713,6 +719,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 	}	
 	
+	NSArray *tmp = [PaletteController extrapolateDoubleArray:[arrayController arrangedObjects]];
+	[self setColourArray:tmp];
 	
 	for (qvIndex =0; qvIndex < [_qvc quickViewCount]; qvIndex++) {
 		
@@ -858,6 +866,80 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	[self resetToOriginalValue];
 
 }
+
+
+- (void) rotateHues {
+	
+	NSManagedObject *cmapEntity;
+	
+	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
+	
+	[_qvc showWindow];
+	
+	int qvIndex;
+	int i;
+    int colourIndex;
+	
+	
+	double qvDelta = (_qvMax - _qvMin) / ([_qvc quickViewCount] - 1);
+	
+	[self setOriginalValue:[NSMutableArray arrayWithCapacity:10]];
+	
+	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+		
+		NSMutableDictionary *colour = (NSMutableDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
+		
+		NSMutableDictionary *oldColour = [NSMutableDictionary dictionaryWithCapacity:4];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[oldColour setObject:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
+		[_qvOriginalValue addObject:oldColour];
+		
+	}	
+	
+	
+	for (qvIndex =0; qvIndex < [_qvc quickViewCount]; qvIndex++) {
+		
+		NSMutableArray *indexValues = [NSMutableArray arrayWithCapacity:[_qvc quickViewCount]];
+		
+		[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
+		
+		[PaletteController rotateColourMap:[arrayController arrangedObjects] usingHue:qvDelta];
+		
+//		[arrayController rearrangeObjects];
+		
+		for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+			
+			NSDictionary *colour = [[arrayController arrangedObjects] objectAtIndex:i];
+			
+			cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
+			
+			colourIndex = [[colour objectForKey:@"index"] intValue];
+			
+			[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+			[cmapEntity setValue:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
+			[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
+			
+			NSMutableDictionary *newColour = [NSMutableDictionary dictionaryWithCapacity:4];
+			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+			[newColour setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
+			[indexValues addObject:newColour];
+			
+		}
+		
+		[(QuickViewController *)_qvc renderForIndex:qvIndex withValue:indexValues];
+		
+	} 
+	
+	[self resetToOriginalValue];
+	
+}
+
 
 
 - (void)setOriginalValue:(id)value {

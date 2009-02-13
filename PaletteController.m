@@ -345,6 +345,172 @@ static double *_paletteData = NULL;
 	
 }
 
++(NSMutableArray *) extrapolateDoubleArray:(NSArray *)colours {
+	
+	int i, j;
+	int index, lastIndex;
+	double red, green, blue;
+	double lastRed, lastGreen, lastBlue;
+	double redDelta, greenDelta, blueDelta;
+	
+	NSMutableDictionary *colour;
+	NSMutableDictionary *newColour;
+	
+	NSMutableArray *newColours = [[NSMutableArray alloc] initWithCapacity:256]; 
+	
+	NSEnumerator *colourEnumerator = [colours objectEnumerator];
+	
+	if([colours count] == 0) {
+		index = 255;
+		red   = 0;
+		green = 0;
+		blue  = 0;
+	} else {
+		colour = [colourEnumerator nextObject];
+		index = [[colour valueForKey:@"index"] intValue];
+		red   = [[colour valueForKey:@"red"] doubleValue];
+		green = [[colour valueForKey:@"green"] doubleValue];
+		blue  = [[colour valueForKey:@"blue"] doubleValue];
+	}
+	
+	
+	if (index > 0) {
+		
+		
+		redDelta = red / (double)(index - 1);  	
+		greenDelta = green / (double)(index - 1);  	
+		blueDelta = blue / (double)(index - 1);  	
+		
+		lastRed = 0.0;
+		lastGreen = 0.0;
+		lastBlue = 0.0;
+		
+		for(i=0; i<index; i++) {
+			
+			newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
+			
+			[newColour setObject:[NSNumber numberWithInt:i] forKey:@"index"];
+			[newColour setObject:[NSNumber numberWithInt:(int)(lastRed)] forKey:@"red"];
+			[newColour setObject:[NSNumber numberWithInt:(int)(lastGreen)] forKey:@"green"];
+			[newColour setObject:[NSNumber numberWithInt:(int)(lastBlue)] forKey:@"blue"];
+			
+			[newColours addObject:newColour];
+			[newColour release];
+			
+			lastRed += redDelta;
+			lastGreen += greenDelta;
+			lastBlue += blueDelta;
+		}
+		
+	}
+	
+	/* add the first colour from the array */
+	newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
+	[newColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];
+	[newColour setObject:[NSNumber numberWithDouble:(red)] forKey:@"red"];
+	[newColour setObject:[NSNumber numberWithDouble:(green)] forKey:@"green"];
+	[newColour setObject:[NSNumber numberWithDouble:(blue)] forKey:@"blue"];
+	[newColours addObject:newColour];
+	[newColour release];
+	
+	lastRed   = red;
+	lastGreen = green;
+	lastBlue  = blue;
+	lastIndex = index;
+	
+	for(i=1; i<[colours count]; i++) {
+		
+		colour = [colourEnumerator nextObject];	
+		index = [[colour valueForKey:@"index"]  intValue];
+		
+		if(lastIndex + 1 != index) { 
+			
+			red   = [[colour valueForKey:@"red"] doubleValue];
+			green = [[colour valueForKey:@"green"] doubleValue];
+			blue  = [[colour valueForKey:@"blue"] doubleValue];
+			
+			redDelta = (red - lastRed) / (double)(index - lastIndex);  	
+			greenDelta = (green  - lastGreen) / (double)(index - lastIndex);  	
+			blueDelta = (blue  - lastBlue)/ (double)(index - lastIndex);  	
+			
+			for(j = lastIndex + 1; j < index; j++) {
+				
+				lastRed += redDelta;
+				lastGreen += greenDelta;
+				lastBlue += blueDelta;
+				
+				newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
+				
+				[newColour setObject:[NSNumber numberWithInt:j] forKey:@"index"];
+				[newColour setObject:[NSNumber numberWithDouble:(lastRed)] forKey:@"red"];
+				[newColour setObject:[NSNumber numberWithDouble:(lastGreen)] forKey:@"green"];
+				[newColour setObject:[NSNumber numberWithDouble:(lastBlue)] forKey:@"blue"];
+				
+				[newColours addObject:newColour];
+				[newColour release];
+				
+				
+			}
+			
+		}
+		/* add the object from the colours array */
+		red   = [[colour valueForKey:@"red"] doubleValue];
+		green = [[colour valueForKey:@"green"] doubleValue];
+		blue  = [[colour valueForKey:@"blue"] doubleValue];
+		
+		lastRed = red;
+		lastGreen = green;
+		lastBlue = blue;
+		
+		newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
+		
+		[newColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];
+		[newColour setObject:[NSNumber numberWithDouble:(red)] forKey:@"red"];
+		[newColour setObject:[NSNumber numberWithDouble:(green)] forKey:@"green"];
+		[newColour setObject:[NSNumber numberWithDouble:(blue)] forKey:@"blue"];
+		[newColours addObject:newColour];
+		[newColour release];
+		
+		lastIndex = index;
+		
+	}  
+	
+	
+	
+	if (index < 255) {
+		
+		/* if we run out of colours so fade to black */	
+		
+		redDelta = red / (double)(255 - index);  	
+		greenDelta = green / (double)(255 - index);  	
+		blueDelta = blue / (double)(255 - index);  	
+		
+		for(i=index+1; i<256; i++) {
+			
+			newColour = [[NSMutableDictionary alloc] initWithCapacity:4];
+			
+			red -=redDelta;
+			green -= greenDelta;
+			blue -= blueDelta;
+			
+			
+			[newColour setObject:[NSNumber numberWithInt:i] forKey:@"index"];
+			[newColour setObject:[NSNumber numberWithDouble:(red)] forKey:@"red"];
+			[newColour setObject:[NSNumber numberWithDouble:(green)] forKey:@"green"];
+			[newColour setObject:[NSNumber numberWithDouble:(blue)] forKey:@"blue"];
+			
+			[newColours addObject:newColour];
+			[newColour release];
+		}
+		
+	}
+	
+	
+	[newColours autorelease];
+	return newColours;
+}
+
+
 +(NSMutableArray *) extrapolateArray:(NSArray *)colours {
 
 	int i, j;
@@ -533,6 +699,33 @@ static double *_paletteData = NULL;
 	
 }
 
++(void) rotateColourMap:(NSArray *)colourMap usingHue:(double)hue {
+	
+	double rgbValues[3];
+	double hsv[3];
+	
+    
+	NSMutableDictionary *colour;
+	NSEnumerator *enumerator = [colourMap objectEnumerator];
+	
+	
+	while((colour = [enumerator nextObject])) {
+		
+		rgbValues[0] = [[colour  objectForKey:@"red"] doubleValue];	
+		rgbValues[1] = [[colour  objectForKey:@"green"] doubleValue];	
+		rgbValues[2] = [[colour  objectForKey:@"blue"] doubleValue];	
+
+		rgb2hsv(rgbValues, hsv);
+		hsv[0] += hue * 6.0 ;
+		hsv2rgb(hsv, rgbValues);
+		
+		[colour setObject:[NSNumber numberWithDouble:rgbValues[0]] forKey:@"red"];
+		[colour setObject:[NSNumber numberWithDouble:rgbValues[1]] forKey:@"green"];
+		[colour setObject:[NSNumber numberWithDouble:rgbValues[2]] forKey:@"blue"];
+	}
+	
+	
+}
 
 @end
 

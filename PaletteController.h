@@ -43,11 +43,13 @@ double *initialisePalettes(void);
 - (IBAction)setNumber:(id)sender;
 - (IBAction)hidePaletteWindow:(id)sender;
 
-+(void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue forHeight:(int)height;
++ (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(int)paletteNumber usingHue:(double)hue forHeight:(int)height;
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withColours:(NSArray *)colours  forHeight:(int)height;
 + (void) fillBitmapRep:(NSBitmapImageRep *)paletteRep withPalette:(double *)palette forHeight:(int)height;
 + (void) fillColour:(NSDictionary *)colour forWidth:(int)width andHeight:(int)height;
 + (NSMutableArray *) extrapolateArray:(NSArray *)colours;
++(NSMutableArray *) extrapolateDoubleArray:(NSArray *)colours;
++ (void) rotateColourMap:(NSArray *)colourMap usingHue:(double)hue;
 
 - (void) setPalette:(unsigned int )palette colourArray:(NSArray *)colours  usePalette:(BOOL)useThePaletteNumber;
 - (int)changePaletteAndHidePaletteWindow;

@@ -45,6 +45,7 @@
 - (IBAction)qvRotateRed:(id)sender;
 - (IBAction)qvRotateGreen:(id)sender;
 - (IBAction)qvRotateBlue:(id)sender;
+- (IBAction)gradientSegmentedControl:(id)sender;
 
 - (void) fillGradientImageRep; 
 
@@ -59,6 +60,7 @@
 - (void)setQuickViewController:(id)qvc;
 - (void) rotateIndex;
 - (void) rotateIndexes;
+- (void) rotateHues;
 - (void) rotateColour:(NSString *)colourKey;
 - (void)setOriginalValue:(id)value;
 - (void)setOriginalValuesObject:(id)value;
