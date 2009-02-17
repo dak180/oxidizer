@@ -1142,10 +1142,49 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 }
 
 
+- (void)appendFromFile:(NSString *)filename inContext:(NSManagedObjectContext *)thisMoc{
+
+	int lastTime;
+	
+	/* get the current flames and find the max time */
+	NSArray *genomeArray;
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:thisMoc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomeArray = [moc executeFetchRequest:fetch error:nil];
+	
+	if(genomeArray != nil && [genomeArray count] > 0) {
+		
+		lastTime = [[[genomeArray objectAtIndex:0] valueForKey:@"time"] intValue];
+		lastTime += 50;
+		
+	} else {
+		
+		lastTime = 0;
+	}
+	
+	[docController noteNewRecentDocumentURL:[NSURL URLWithString:filename]];
+	[self appendGenomesFromXMLFile:filename fromTime:lastTime inContext:thisMoc];
+	[moc save:nil];
+	
+	
+	[fetch release];	  
+	[sort release];	
+	
+	
+}
+
+
+
 - (IBAction)appendFile:(id)sender {
 	
 	NSOpenPanel *op;
-	int runResult, lastTime;
+	int runResult;
 	
 	/* create or get the shared instance of NSSavePanel */
 	op = [NSOpenPanel openPanel];
@@ -1157,35 +1196,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	/* if successful, save file under designated name */
 	if(runResult == NSOKButton && [op filename] != nil) {
 		
-		/* get the current flames and find the max time */
-		NSArray *genomeArray;
-		
-		NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-		
-		[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
-		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:NO];
-		NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
-		[fetch setSortDescriptors: sortDescriptors];
-		
-		genomeArray = [moc executeFetchRequest:fetch error:nil];
-		
-		if(genomeArray != nil && [genomeArray count] > 0) {
-			
-			lastTime = [[[genomeArray objectAtIndex:0] valueForKey:@"time"] intValue];
-			lastTime += 50;
-			
-		} else {
-			
-			lastTime = 0;
-		}
-		
-		[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
-		[self appendGenomesFromXMLFile:[op filename] fromTime:lastTime inContext:moc];
-		[moc save:nil];
-		
-		
-		[fetch release];	  
-		[sort release];
+		[self appendFromFile:[op filename] inContext:moc];
 		
 	} 
 	

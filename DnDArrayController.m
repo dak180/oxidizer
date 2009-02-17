@@ -29,7 +29,7 @@ NSString *mocPasteboardType = @"GenomeMoc";
 {
     // register for drag and drop
     [tableView registerForDraggedTypes:
-		[NSArray arrayWithObjects:@"Genomes", mocPasteboardType, nil]];
+		[NSArray arrayWithObjects:@"Genomes", mocPasteboardType, NSFilenamesPboardType, nil]];
 
 	[super awakeFromNib];
 }
@@ -88,23 +88,35 @@ NSString *mocPasteboardType = @"GenomeMoc";
 	NSPasteboard *pasteBoard = [info draggingPasteboard];
 	
 	NSArray *moc = [pasteBoard propertyListForType:mocPasteboardType];
-	NSData *genomeData;
-	NSData *mocData = [moc objectAtIndex:0];
-
-	sourceMoc = [NSManagedObjectContext alloc];
-	[mocData getBytes:&sourceMoc];
 	
-	NSArray *rows = [[info draggingPasteboard] propertyListForType:@"Genomes"];
-	
-	NSEnumerator *enumerator = [rows objectEnumerator];
+	if(moc != nil) {
+			
+		NSData *genomeData;
+		NSData *mocData = [moc objectAtIndex:0];
 
-	while (genomeData = [enumerator nextObject]) {
-		[genomeData getBytes:&sourceEntity];
-		NSData *xml = [Genome createXMLFromEntities:[NSArray arrayWithObject:sourceEntity]  fromContext:sourceMoc forThumbnail:NO];
-		NSArray *genome = [Genome createGenomeEntitiesFromXML:xml inContext:destinationMoc];
-//		[[genome objectAtIndex:0] setValue:[sourceEntity valueForKey:@"image"] forKey:@"image"];
-		[[[genome objectAtIndex:0] valueForKey:@"images"] setValue:[[sourceEntity valueForKey:@"images"] valueForKey:@"image"] forKey:@"image"];
+		sourceMoc = [NSManagedObjectContext alloc];
+		[mocData getBytes:&sourceMoc];
+		
+		NSArray *rows = [pasteBoard propertyListForType:@"Genomes"];
+		
+		NSEnumerator *enumerator = [rows objectEnumerator];
 
+		while (genomeData = [enumerator nextObject]) {
+			[genomeData getBytes:&sourceEntity];
+			NSData *xml = [Genome createXMLFromEntities:[NSArray arrayWithObject:sourceEntity]  fromContext:sourceMoc forThumbnail:NO];
+			NSArray *genome = [Genome createGenomeEntitiesFromXML:xml inContext:destinationMoc];
+	//		[[genome objectAtIndex:0] setValue:[sourceEntity valueForKey:@"image"] forKey:@"image"];
+			[[[genome objectAtIndex:0] valueForKey:@"images"] setValue:[[sourceEntity valueForKey:@"images"] valueForKey:@"image"] forKey:@"image"];
+
+		}
+	} else {
+		
+		NSArray *filenames = [pasteBoard propertyListForType:NSFilenamesPboardType];
+		NSEnumerator *enumerator = [filenames objectEnumerator];
+		NSString *filename;
+		while (filename = [enumerator nextObject]) {		
+			[_ffm appendFromFile:filename inContext:destinationMoc];
+		}
 	}
 	
 	[self rearrangeObjects];

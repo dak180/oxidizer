@@ -156,6 +156,7 @@
 - (BOOL)openRecentFile:(NSString *)filename;
 - (IBAction)openFile:(id)sender;
 - (IBAction)appendFile:(id)sender;
+- (void)appendFromFile:(NSString *)filename inContext:(NSManagedObjectContext *)thisMoc;
 
 /* lua interface */
 - (NSArray *)passGenomesToLua;

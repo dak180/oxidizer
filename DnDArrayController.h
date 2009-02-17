@@ -18,11 +18,13 @@
 */
 
 #import <Cocoa/Cocoa.h>
+#import "FractalFlameModel.h"
 
 @interface DnDArrayController : NSArrayController
 {
 	
 IBOutlet NSTableView *tableView;
+IBOutlet FractalFlameModel *_ffm;
 
 }
 
