@@ -145,10 +145,45 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	
 }
 
+- (IBAction)randomGradient:(id)sender {
+	
+	[[arrayController content] removeAllObjects];
+	
+	NSMutableArray *tempArray = [[NSMutableArray alloc] initWithCapacity:255];
+	
+
+	srandom(time(NULL));
+	
+	int colourCount = (random() & 7) + 3 ;
+	int i;
+	
+	for(i=0; i<=colourCount; i++) {
+		
+		NSMutableDictionary *colour = [NSMutableDictionary dictionaryWithCapacity:6];
+		[colour setObject:[NSNumber numberWithDouble:((random() & 255) / 255.0)] forKey:@"red"];
+		[colour setObject:[NSNumber numberWithDouble:((random() & 255) / 255.0)] forKey:@"green"];
+		[colour setObject:[NSNumber numberWithDouble:((random() & 255) / 255.0)] forKey:@"blue"];
+		[colour setObject:[NSNumber numberWithInt:i*(255.0 / colourCount)] forKey:@"index"];
+		
+		[self addColourSquare:colour];
+		
+		[tempArray addObject:colour];
+		
+		
+	}				
+	
+	[arrayController addObjects:tempArray];
+	[self fillGradientImageRep];
+	[arrayController setSelectionIndex:0];
+	[tempArray release];
+	
+}
+
+
 - (IBAction)gradientSegmentedControl:(id)sender {
 	
 	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
-	NSArray *selected;
+
 	
 	switch([segments selectedSegment]) {
 		case 0: 
@@ -183,8 +218,9 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			[gradientView display];	
 			
 			break;
-
-				
+		case 3:
+			[self randomGradient:sender];
+			break;	
 	}   	
 	
 

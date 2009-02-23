@@ -46,6 +46,7 @@
 - (IBAction)qvRotateGreen:(id)sender;
 - (IBAction)qvRotateBlue:(id)sender;
 - (IBAction)gradientSegmentedControl:(id)sender;
+- (IBAction)newGradient:(id)sender;
 
 - (void) fillGradientImageRep; 
 
