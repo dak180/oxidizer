@@ -62,6 +62,7 @@
 - (void) rotateIndex;
 - (void) rotateIndexes;
 - (void) rotateHues;
+- (void) randomGradients;
 - (void) rotateColour:(NSString *)colourKey;
 - (void)setOriginalValue:(id)value;
 - (void)setOriginalValuesObject:(id)value;

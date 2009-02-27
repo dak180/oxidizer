@@ -4,6 +4,30 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>flam3</string>
+				<string>xml</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>oxidizer</string>
+			<key>CFBundleTypeName</key>
+			<string>flam3</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>net.vargolsoft.oxidizer.flam3</string>
+			</array>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
@@ -19,7 +43,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>0.5.9.1</string>
+	<string>0.5.9.2</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>

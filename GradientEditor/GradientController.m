@@ -18,7 +18,8 @@
 #define BLUE_ROTATE 2
 #define GREEN_ROTATE 3
 #define INDEXES_ROTATE 4
-#define HUES_ROTATE 4
+#define HUES_ROTATE 5
+#define RANDOM_GRADIENTS 6
 
 
 int sortUsingIndex(id colour1, id colour2, void *context);
@@ -197,7 +198,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			_qvMin = 0.0;
 			_qvMax = 1.0;
 			
-			_rotateType = INDEXES_ROTATE;
+			_rotateType = HUES_ROTATE;
 			[self rotateHues];
 			
 			[gradientView setSelectedSwatch:nil];
@@ -211,7 +212,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			_qvMin = 0.0;
 			_qvMax = 255.0;
 			 
-			_rotateType = HUES_ROTATE;
+			_rotateType = INDEXES_ROTATE;
 			[self rotateIndexes];
 			[gradientView setSelectedSwatch:nil];
 			[self fillGradientImageRep];
@@ -219,6 +220,20 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			
 			break;
 		case 3:
+			[(QuickViewController *)_qvc setMinimum:[NSNumber numberWithInt:0] andMaximum:[NSNumber numberWithInt:0]];
+
+			_qvMin = 0.0;
+			_qvMax = 0.0;
+			
+			_rotateType = RANDOM_GRADIENTS;
+
+			[self randomGradients];
+
+			[gradientView setSelectedSwatch:nil];
+			[self fillGradientImageRep];
+			[gradientView display];	
+			break;	
+		case 4:
 			[self randomGradient:sender];
 			break;	
 	}   	
@@ -563,7 +578,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			[self rotateIndex];
 			break;
 		case INDEXES_ROTATE:
-//			[self rotateIndexes];
+			[self rotateIndexes];
+			break;
+		case HUES_ROTATE:
 			[self rotateHues];
 			break;
 		case RED_ROTATE:
@@ -574,6 +591,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			break;
 		case BLUE_ROTATE:
 			[self rotateColour:@"blue"];
+			break;
+		case RANDOM_GRADIENTS:
+			[self randomGradients];
 			break;
 	}
 }
@@ -587,6 +607,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			[PaletteController fillColour:_qvOriginalValue forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 			break;
 		case INDEXES_ROTATE:
+		case HUES_ROTATE:
+		case RANDOM_GRADIENTS:
 			[self setColourArray:_qvOriginalValue];
 			break;
 		case RED_ROTATE:
@@ -620,6 +642,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			[PaletteController fillColour:_qvOriginalValue forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 			break;
 		case INDEXES_ROTATE:
+		case HUES_ROTATE:
 			for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
 				
 				NSMutableDictionary *colour = (NSMutableDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
@@ -629,8 +652,10 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 				[PaletteController fillColour:colour forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 
-			}	
-				
+			}					
+			break;
+		case RANDOM_GRADIENTS:
+			[self setColourArray:value];
 			break;
 		case RED_ROTATE:
 			[_qvOriginalValuesObject setObject:value forKey:@"red"] ;
@@ -724,16 +749,14 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 }
 
 
-
-
 - (void) rotateIndexes {
-		
+	
 	NSManagedObject *cmapEntity;
 	
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
 	[_qvc showWindow];
-
+	
 	int qvIndex;
 	int i;
     int colourIndex;
@@ -741,11 +764,11 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	double qvDelta = (_qvMax - _qvMin) / ([_qvc quickViewCount] - 1);
 	
 	[self setOriginalValue:[NSMutableArray arrayWithCapacity:10]];
-
+	
 	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
 		
 		NSMutableDictionary *colour = (NSMutableDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
-
+		
 		NSMutableDictionary *oldColour = [NSMutableDictionary dictionaryWithCapacity:4];
 		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
 		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
@@ -773,7 +796,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			colourIndex &= 255;
 			NSNumber *newIndex = [NSNumber numberWithInt:colourIndex];
 			[colour setObject:newIndex forKey:@"index"] ;
-//			[indexValues addObject:newIndex];
+			//			[indexValues addObject:newIndex];
 		}	
 		
 		[arrayController rearrangeObjects];
@@ -798,8 +821,97 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
 			[newColour setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
 			[indexValues addObject:newColour];
-
+			
 		}
+		
+		[(QuickViewController *)_qvc renderForIndex:qvIndex withValue:indexValues];
+		
+	} 
+	
+	[self resetToOriginalValue];
+	
+}
+
+
+- (void) randomGradients {
+		
+	
+	NSManagedObject *cmapEntity;
+
+	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
+	
+	[_qvc showWindow];
+
+	int qvIndex;
+	int i;
+
+	
+	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+		
+		NSMutableDictionary *colour = (NSMutableDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
+
+		NSMutableDictionary *oldColour = [NSMutableDictionary dictionaryWithCapacity:4];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[oldColour setObject:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
+		[_qvOriginalValue addObject:oldColour];
+		
+	}	
+	
+	[[arrayController content] removeAllObjects];
+	
+
+	
+	srandom(time(NULL));
+	
+
+	
+	
+//	NSMutableArray *tmp = [NSMutableArray arrayWithCapacity:10];
+	
+	for (qvIndex =0; qvIndex < [_qvc quickViewCount]; qvIndex++) {
+		
+		NSMutableArray *indexValues = [NSMutableArray arrayWithCapacity:[_qvc quickViewCount]];
+		
+		[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
+		
+		int colourCount = (random() & 7) + 3 ;
+		int i;
+		
+		double red, green, blue;
+		
+		int index;
+		
+//		[tmp removeAllObjects];
+
+		for(i=0; i<=colourCount; i++) {
+			
+			
+			red = ((random() & 255) / 255.0);
+			green = ((random() & 255) / 255.0);
+ 			blue = ((random() & 255) / 255.0);
+			
+			index = i*(255.0 / colourCount);
+			
+			cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
+			
+			[cmapEntity setValue:[NSNumber numberWithDouble:red] forKey:@"red"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:green] forKey:@"green"];
+			[cmapEntity setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
+			[cmapEntity setValue:[NSNumber numberWithInt:index] forKey:@"index"];
+			[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
+			
+			NSMutableDictionary *newColour = [NSMutableDictionary dictionaryWithCapacity:4];
+			[newColour setObject:[NSNumber numberWithDouble:red] forKey:@"red"];
+			[newColour setObject:[NSNumber numberWithDouble:green] forKey:@"green"];
+			[newColour setObject:[NSNumber numberWithDouble:blue] forKey:@"blue"];
+			[newColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];
+			[indexValues addObject:newColour];
+						
+		}				
+		
+
 		
 		[(QuickViewController *)_qvc renderForIndex:qvIndex withValue:indexValues];
 		
