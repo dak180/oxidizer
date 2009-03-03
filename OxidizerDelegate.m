@@ -262,7 +262,9 @@ void print_stack(lua_State* interpreter){
     [toolbar setAllowsUserCustomization:YES];
     [toolbar setAutosavesConfiguration:YES];
     [oxidizerWindow setToolbar:[toolbar autorelease]];
-	[oxidizerWindow center];
+	if(![oxidizerWindow setFrameUsingName:@"oxidizer"]) {
+		[oxidizerWindow center];	
+	}
 }
 
 

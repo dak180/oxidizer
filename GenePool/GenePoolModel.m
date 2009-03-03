@@ -131,8 +131,10 @@
 	[genePoolProgress setMaxValue:fillCount-1];
 	[genePoolProgress setDoubleValue:0.0];
 	[genePoolProgress setUsesThreadedAnimation:YES];
-	[genePoolProgressWindow center];
-	[genePoolProgressWindow makeKeyAndOrderFront:self];
+
+	if(![genePoolProgressWindow setFrameUsingName:@"gene_pool_progress"]) {
+		[genePoolProgressWindow center];	
+	}	[genePoolProgressWindow makeKeyAndOrderFront:self];
 
 	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
@@ -180,7 +182,9 @@
 	[genePoolProgress setMaxValue:genomeCount-1];
 	[genePoolProgress setDoubleValue:0.0];
 	[genePoolProgress setUsesThreadedAnimation:YES];
-	[genePoolProgressWindow center];
+	if(![genePoolProgressWindow setFrameUsingName:@"gene_pool_progress"]) {
+		[genePoolProgressWindow center];	
+	}	[genePoolProgressWindow makeKeyAndOrderFront:self];
 	[genePoolProgressWindow makeKeyAndOrderFront:self];
 	
 	

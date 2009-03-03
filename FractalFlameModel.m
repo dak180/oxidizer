@@ -240,10 +240,14 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 
 - (void)awakeFromNib {
-	
-	[previewWindow center];
-	[taskProgressWindow center];
 
+	if(![previewWindow setFrameUsingName:@"render_window"]) {
+		[previewWindow center];	
+	}
+
+	if(![taskProgressWindow setFrameUsingName:@"render_progress"]) {
+		[taskProgressWindow center];	
+	}
 	
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];
