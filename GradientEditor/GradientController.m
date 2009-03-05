@@ -634,7 +634,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 -(void) setToValue:(id) value {
 
 //	int oldIndex;
-	int i;
+	int i, colourIndex;
 	
 	switch(_rotateType) {
 		case INDEX_ROTATE:
@@ -642,6 +642,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			[PaletteController fillColour:_qvOriginalValue forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 			break;
 		case INDEXES_ROTATE:
+			[self setColourArray:value];
+			break;
 		case HUES_ROTATE:
 			for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
 				
@@ -763,6 +765,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	double qvDelta = (_qvMax - _qvMin) / ([_qvc quickViewCount] - 1);
 	
+	NSMutableArray *coloursCopy = [NSMutableArray arrayWithCapacity:10];
+	
 	[self setOriginalValue:[NSMutableArray arrayWithCapacity:10]];
 	
 	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
@@ -775,13 +779,25 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
 		[oldColour setObject:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
 		[_qvOriginalValue addObject:oldColour];
+
+		NSMutableDictionary *colourCopy = [NSMutableDictionary dictionaryWithCapacity:4];
+		[colourCopy setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+		[colourCopy setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+		[colourCopy setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[colourCopy setObject:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
+		[coloursCopy addObject:colourCopy];
 		
 	}	
+	
+	
 	
 	NSArray *tmp = [PaletteController extrapolateDoubleArray:[arrayController arrangedObjects]];
 	[self setColourArray:tmp];
 	
 	for (qvIndex =0; qvIndex < [_qvc quickViewCount]; qvIndex++) {
+		
+		
+		
 		
 		NSMutableArray *indexValues = [NSMutableArray arrayWithCapacity:[_qvc quickViewCount]];
 		
@@ -794,12 +810,68 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			colourIndex = [[colour objectForKey:@"index"] intValue];
 			colourIndex += qvDelta;
 			colourIndex &= 255;
+			
 			NSNumber *newIndex = [NSNumber numberWithInt:colourIndex];
 			[colour setObject:newIndex forKey:@"index"] ;
 			//			[indexValues addObject:newIndex];
+
+			
+		}	
+
+		[arrayController rearrangeObjects];
+		
+		BOOL hasZero = FALSE;
+		BOOL has255 = FALSE;
+
+		for(i=0; i<[coloursCopy count]; i++) {
+			
+			NSMutableDictionary *colour = (NSMutableDictionary *)[coloursCopy objectAtIndex:i];
+			
+			colourIndex = [[colour objectForKey:@"index"] intValue];
+			colourIndex += qvDelta;
+			colourIndex &= 255;
+			
+			if(colourIndex == 0) {
+				hasZero = TRUE;
+			} else if(colourIndex == 255) {
+				has255 = TRUE;
+			}	
+			
+			NSNumber *newIndex = [NSNumber numberWithInt:colourIndex];
+			[colour setObject:newIndex forKey:@"index"] ;
+			
+			NSMutableDictionary *newColour = [NSMutableDictionary dictionaryWithCapacity:4];
+			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+			[newColour setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
+			[indexValues addObject:newColour];
+			
 		}	
 		
-		[arrayController rearrangeObjects];
+		if(!hasZero) {
+			
+			NSDictionary *colour0 = [[arrayController arrangedObjects] objectAtIndex:0];
+			NSMutableDictionary *newColour0 = [NSMutableDictionary dictionaryWithCapacity:4];
+			[newColour0 setObject:[NSNumber numberWithDouble:[[colour0 objectForKey:@"red"] doubleValue]] forKey:@"red"];
+			[newColour0 setObject:[NSNumber numberWithDouble:[[colour0 objectForKey:@"green"] doubleValue]] forKey:@"green"];
+			[newColour0 setObject:[NSNumber numberWithDouble:[[colour0 objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+			[newColour0 setObject:[NSNumber numberWithInt:[[colour0 objectForKey:@"index"] intValue]] forKey:@"index"];
+			[indexValues insertObject:newColour0 atIndex:0];
+			
+		}
+		
+		if(!has255) {
+			
+			NSDictionary *colour255 = [[arrayController arrangedObjects] objectAtIndex:255];
+			NSMutableDictionary *newColour255 = [NSMutableDictionary dictionaryWithCapacity:4];
+			[newColour255 setObject:[NSNumber numberWithDouble:[[colour255 objectForKey:@"red"] doubleValue]] forKey:@"red"];
+			[newColour255 setObject:[NSNumber numberWithDouble:[[colour255 objectForKey:@"green"] doubleValue]] forKey:@"green"];
+			[newColour255 setObject:[NSNumber numberWithDouble:[[colour255 objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+			[newColour255 setObject:[NSNumber numberWithInt:[[colour255 objectForKey:@"index"] intValue]] forKey:@"index"];
+			[indexValues addObject:newColour255];
+		}
+		
 		
 		for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
 			
@@ -815,13 +887,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			[cmapEntity setValue:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
 			[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
 			
-			NSMutableDictionary *newColour = [NSMutableDictionary dictionaryWithCapacity:4];
-			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
-			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
-			[newColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
-			[newColour setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
-			[indexValues addObject:newColour];
-			
+		
 		}
 		
 		[(QuickViewController *)_qvc renderForIndex:qvIndex withValue:indexValues];
