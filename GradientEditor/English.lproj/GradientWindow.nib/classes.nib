@@ -16,8 +16,16 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
-				<key>gradientController</key>
+				<key>_cmapController</key>
+				<string>NSArrayController</string>
+				<key>_flameController</key>
+				<string>id</string>
+				<key>_fractalFlameModel</key>
+				<string>id</string>
+				<key>_gradientController</key>
 				<string>GradientController</string>
+				<key>_qvController</key>
+				<string>id</string>
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
@@ -78,6 +86,8 @@
 			<dict>
 				<key>arrayController</key>
 				<string>NSArrayController</string>
+				<key>colourView</key>
+				<string>NSImageView</string>
 				<key>flameController</key>
 				<string>id</string>
 				<key>gradientTableView</key>

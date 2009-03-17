@@ -16,6 +16,7 @@
     IBOutlet NSWindow *gradientWindow;
     IBOutlet NSArrayController *arrayController;
 	IBOutlet NSTableView *gradientTableView;
+	IBOutlet NSImageView *colourView;
 	
 
 @private 
@@ -23,8 +24,13 @@
 	NSMutableArray *cmapSortDescriptors;
 	NSMutableArray *colours;
 	NSArrayController *cmap;
+	NSBitmapImageRep *bitmap; 
+	NSImage *_colourPreview;
+	NSImage *_greyScalePreview;
+	
 	id flameController;
 	id _qvc;
+	id _model;
 	
 	double _qvMin;
 	double _qvMax;
@@ -49,6 +55,7 @@
 - (IBAction)newGradient:(id)sender;
 
 - (void) fillGradientImageRep; 
+- (void) gradientChanged; 
 
 - (NSArray *) getColourArray;
 - (void) setCMapController:(NSArrayController *)newCmap;
@@ -64,8 +71,11 @@
 - (void) rotateHues;
 - (void) randomGradients;
 - (void) rotateColour:(NSString *)colourKey;
-- (void)setOriginalValue:(id)value;
-- (void)setOriginalValuesObject:(id)value;
-- (void)addColourSquare:(NSMutableDictionary *)colour;
+- (void) setOriginalValue:(id)value;
+- (void) setOriginalValuesObject:(id)value;
+- (void) addColourSquare:(NSMutableDictionary *)colour;
+
+- (void) setFractalFlameModel:(id)model;
+- (void) setColourPreview:(NSImage *)image;
 
 @end

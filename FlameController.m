@@ -165,10 +165,10 @@
 	[colourImage addRepresentation:_colourWithHueRep];
 	[colourWithHue setImage:colourImage];
 	
-	if(gnc == nil) {
-		gnc = [[GradientNibController alloc] init];
+//	if(gnc == nil) {
+//		gnc = [[GradientNibController alloc] init];
 		[NSBundle loadNibNamed:@"GradientWindow" owner:gnc];
-	}
+//	}
 		    
 }
 
@@ -310,10 +310,11 @@
 	
 		[paletteWindow setIsVisible:TRUE]; 
 	} else {
-		[gnc setCMapController:cmapController];
+//		[gnc setCMapController:cmapController];
 		[gnc setFlameController:self];
 		[gnc showGradientWindow:self]; 
-		[gnc setQuickViewController:(QuickViewController *)_qvc];
+//		[gnc setQuickViewController:(QuickViewController *)_qvc];
+//		[gnc setFlameController:cmapController];
 
 //		[cmapWindow setIsVisible:TRUE]; 
 		

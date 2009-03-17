@@ -346,8 +346,11 @@
 	[selectedSwatch willChangeValueForKey:@"index"];
 	[selectedSwatch setObject:[NSNumber numberWithInt:colourIndex] forKey:@"index"];
 	[selectedSwatch didChangeValueForKey:@"index"];
-	
+
 	[self display];
+	
+	[(GradientController *)delegate gradientChanged];
+
 }
 
 @end

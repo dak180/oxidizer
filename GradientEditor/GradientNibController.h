@@ -12,7 +12,11 @@
 
 @interface GradientNibController : NSObject {
 
-	IBOutlet GradientController *gradientController;
+	IBOutlet GradientController *_gradientController;
+	IBOutlet NSArrayController *_cmapController;
+	IBOutlet id _fractalFlameModel;
+	IBOutlet id _qvController;
+	IBOutlet id _flameController;
 
 @private
 	
@@ -21,6 +25,7 @@
 - (IBAction) showGradientWindow:(id)sender;
 - (void) setCMapController:(NSArrayController *)controller;
 - (void) setFlameController:(id)controller;
+- (void) setFractalFlameModel:(id)model;
 - (void) setQuickViewController:(id)qvc;
 
 

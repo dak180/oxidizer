@@ -38,6 +38,7 @@
     IBOutlet NSColorWell *colourWell;
     IBOutlet NSImageView *colourWithHue;
     IBOutlet id _qvc;
+    IBOutlet GradientNibController *gnc;
 
 	 NSBitmapImageRep *_paletteWithHueRep;
 	 NSBitmapImageRep *_colourWithHueRep;
@@ -46,9 +47,7 @@
 @public 
     IBOutlet NSArrayController *xformController;
 
-@private
-	GradientNibController *gnc;
-
+	
 }
 
 + (void)attachImageToGenomeFromDictionary:(NSDictionary *)DictionaryInformation;

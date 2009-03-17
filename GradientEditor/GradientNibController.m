@@ -11,26 +11,39 @@
 
 @implementation GradientNibController
 
+- (void) awakeFromNib {
+	
+	[_gradientController setCMapController:_cmapController];
+	[_gradientController setFlameController:_flameController];
+	[_gradientController setQuickViewController:_qvController];
+	[_gradientController setFractalFlameModel:_fractalFlameModel];
+	
+}
 - (IBAction)showGradientWindow:(id)sender {
 	
-	[gradientController showWindow:sender];
+	[_gradientController showWindow:sender];
 
 }
 
 - (void)setCMapController:(NSArrayController *)controller {
 	
-	[gradientController setCMapController:controller];
+	[_gradientController setCMapController:controller];
 	
 }
 
 - (void) setFlameController:(id)controller {
 	
-	[gradientController setFlameController:controller];
+	[_gradientController setFlameController:controller];
 }
 
 - (void)setQuickViewController:(id)qvc {
 	
-	[gradientController setQuickViewController:qvc];	
+	[_gradientController setQuickViewController:qvc];	
+}
+
+- (void) setFractalFlameModel:(id)model {
+	
+	[_gradientController setFractalFlameModel:model];	
 }
 
 @end

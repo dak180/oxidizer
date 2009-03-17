@@ -38,6 +38,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 		[sort  release]; 
 		_qvMin = 0.0;
 		_qvMax = 255.0;
+		_colourPreview = nil;
 		
 	}     
 	return self;
@@ -55,8 +56,9 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	
 	
 	[gradientView setDelegate:self];
-	[self fillGradientImageRep]; 
+	[self gradientChanged]; 
     [gradientView display];
+	[self setColourArray:[cmap arrangedObjects]];
 	[gradientView setGradientArrayController:arrayController]; 
 
 	[gradientWindow makeKeyAndOrderFront:self];
@@ -84,13 +86,14 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	}
 	
 	[gradientView setSelectedSwatch:nil];
-	[self fillGradientImageRep];
+	[self gradientChanged];
 	[gradientView display];
 
 }
 
 
 - (IBAction)applyNewPalette:(id)sender {
+	
 	
 	
 	NSManagedObject *cmapEntity;
@@ -140,7 +143,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	}				
 
 	[arrayController addObjects:tempArray];
-	[self fillGradientImageRep];
+	[self gradientChanged];
 	[arrayController setSelectionIndex:0];
 	[tempArray release];
 	
@@ -174,7 +177,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	}				
 	
 	[arrayController addObjects:tempArray];
-	[self fillGradientImageRep];
+	[self gradientChanged];
 	[arrayController setSelectionIndex:0];
 	[tempArray release];
 	
@@ -202,7 +205,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			[self rotateHues];
 			
 			[gradientView setSelectedSwatch:nil];
-			[self fillGradientImageRep];
+			[self gradientChanged];
 			[gradientView display];	
 			break;
 		case 2:
@@ -215,7 +218,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			_rotateType = INDEXES_ROTATE;
 			[self rotateIndexes];
 			[gradientView setSelectedSwatch:nil];
-			[self fillGradientImageRep];
+			[self gradientChanged];
 			[gradientView display];	
 			
 			break;
@@ -230,7 +233,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 			[self randomGradients];
 
 			[gradientView setSelectedSwatch:nil];
-			[self fillGradientImageRep];
+			[self gradientChanged];
 			[gradientView display];	
 			break;	
 		case 4:
@@ -243,6 +246,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 - (void) setColourArray:(NSArray *)newArray {
 
+	int selectedIndex = [arrayController selectionIndex];
 	/* this appears to be a safe way yo remove everything */
 	[[arrayController content] removeAllObjects];
 	
@@ -291,7 +295,10 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	
 	[arrayController addObjects:tempArray];
 	[self fillGradientImageRep];
-	[arrayController setSelectionIndex:0];
+	if(selectedIndex > [[arrayController content] count]) {
+		selectedIndex = 0;
+	}
+	[arrayController setSelectionIndex:selectedIndex];
 	[tempArray release];
 	
 }
@@ -303,6 +310,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	[arrayController rearrangeObjects];
 	
 	[PaletteController fillBitmapRep:imageRep withColours:[arrayController arrangedObjects] forHeight:GRADIENT_IMAGE_HEIGHT];
+	
 	
 }
 
@@ -326,7 +334,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification {
 	
 	[PaletteController fillColour:[[arrayController selectedObjects] objectAtIndex:0] forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
-	[self fillGradientImageRep];
+	[self gradientChanged];
 	[gradientView display];
 }
 
@@ -447,6 +455,16 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 }
 
+- (void) setFractalFlameModel:(id)model {
+	
+	if(model != nil) {
+		[model retain];
+	}
+	
+	[_model release];
+	_model = model;
+	
+}
 
 - (NSDragOperation)tableView:(NSTableView*)aTableView
 				validateDrop:(id <NSDraggingInfo>)info
@@ -541,7 +559,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 	[PaletteController fillColour:colourDictionary forWidth:COLOUR_SQUARE_SIDE andHeight:COLOUR_SQUARE_SIDE];
 
-	[self fillGradientImageRep];
+	[self gradientChanged];
 	[gradientView display];
 
 	return YES;
@@ -634,7 +652,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 -(void) setToValue:(id) value {
 
 //	int oldIndex;
-	int i, colourIndex;
+	int i;
 	
 	switch(_rotateType) {
 		case INDEX_ROTATE:
@@ -675,7 +693,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	
 	[arrayController rearrangeObjects];	
-	[self fillGradientImageRep];
+	[self gradientChanged];
 	[gradientView display];
 	
 }
@@ -1180,6 +1198,18 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 }
 
+- (void)setColourPreview:(NSImage *)image {
+	
+	if(image != nil) {
+		[image retain];
+	}
+	
+	[_colourPreview release];
+	
+	_colourPreview = image;
+	
+}
+
 - (void) addColourSquare:(NSMutableDictionary *)colour {
 
 	NSBitmapImageRep *paletteRep;
@@ -1210,5 +1240,67 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	[paletteRep release];
 
 }
+
+- (void) getPreview {
+	
+	int rotateType = _rotateType;
+	_rotateType = RANDOM_GRADIENTS;
+	
+	int i;
+	
+	[self setOriginalValue:[NSMutableArray arrayWithCapacity:10]];
+	
+	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+		
+		NSMutableDictionary *colour = (NSMutableDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
+		
+		NSMutableDictionary *oldColour = [NSMutableDictionary dictionaryWithCapacity:4];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[oldColour setObject:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
+		[_qvOriginalValue addObject:oldColour];
+		
+	}	
+	
+	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
+		
+	NSManagedObject *cmapEntity;
+ 
+	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+		
+		NSDictionary *colour = (NSDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
+		
+		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
+		
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[cmapEntity setValue:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
+		[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
+	}
+	
+	[self willChangeValueForKey:@"_colourPreview"];
+
+	[self setColourPreview:[(FractalFlameModel *)_model renderThumbnail]];
+	
+	[self didChangeValueForKey:@"_colourPreview"];
+
+	[self resetToOriginalValue];
+	
+	_rotateType = rotateType;
+
+	
+}
+
+
+-(void) gradientChanged {
+	
+	[self fillGradientImageRep];
+	[self getPreview];
+	
+}
+
+
 
 @end
