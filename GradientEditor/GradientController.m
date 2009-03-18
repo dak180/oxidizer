@@ -56,10 +56,10 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	
 	
 	[gradientView setDelegate:self];
-	[self gradientChanged]; 
-    [gradientView display];
 	[self setColourArray:[cmap arrangedObjects]];
+	[self gradientChanged]; 
 	[gradientView setGradientArrayController:arrayController]; 
+    [gradientView display];
 
 	[gradientWindow makeKeyAndOrderFront:self];
 
@@ -1248,21 +1248,10 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	int i;
 	
-	[self setOriginalValue:[NSMutableArray arrayWithCapacity:10]];
-	
-	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+	NSArray *tempCmap = [NSMutableArray arrayWithArray:[cmap arrangedObjects]];
+	[tempCmap retain];
+//	[self setOriginalValue:[NSMutableArray arrayWithArray:[cmap arrangedObjects]]];
 		
-		NSMutableDictionary *colour = (NSMutableDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
-		
-		NSMutableDictionary *oldColour = [NSMutableDictionary dictionaryWithCapacity:4];
-		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"red"] doubleValue]] forKey:@"red"];
-		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"green"] doubleValue]] forKey:@"green"];
-		[oldColour setObject:[NSNumber numberWithDouble:[[colour objectForKey:@"blue"] doubleValue]] forKey:@"blue"];
-		[oldColour setObject:[NSNumber numberWithInt:[[colour objectForKey:@"index"] intValue]] forKey:@"index"];
-		[_qvOriginalValue addObject:oldColour];
-		
-	}	
-	
 	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
 		
 	NSManagedObject *cmapEntity;
@@ -1286,7 +1275,21 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	[self didChangeValueForKey:@"_colourPreview"];
 
-	[self resetToOriginalValue];
+	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
+	
+	
+	for(i=0; i<[tempCmap count]; i++) {
+		
+		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
+		
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[[tempCmap objectAtIndex:i] valueForKey:@"red"] doubleValue]] forKey:@"red"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[[tempCmap objectAtIndex:i] valueForKey:@"green"] doubleValue]] forKey:@"green"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[[tempCmap objectAtIndex:i] valueForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[cmapEntity setValue:[NSNumber numberWithInt:[[[tempCmap objectAtIndex:i] valueForKey:@"index"] intValue]] forKey:@"index"];
+		[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
+	}
+	
+	[tempCmap release];
 	
 	_rotateType = rotateType;
 
