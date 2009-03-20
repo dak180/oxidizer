@@ -27,6 +27,7 @@
 	NSBitmapImageRep *bitmap; 
 	NSImage *_colourPreview;
 	NSImage *_greyScalePreview;
+	NSArray *_cmapStore;
 	
 	id flameController;
 	id _qvc;
@@ -77,5 +78,8 @@
 
 - (void) setFractalFlameModel:(id)model;
 - (void) setColourPreview:(NSImage *)image;
+
+- (void) saveCmap;
+- (void) restoreCmap;
 
 @end

@@ -715,7 +715,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 - (void) rotateIndex {
 	
 	NSManagedObject *cmapEntity;
-	
+
+	[self saveCmap];
+
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
 	[_qvc showWindow];
@@ -762,7 +764,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 	} 
 	
-//	[colour setObject:[NSNumber numberWithDouble:[(NSNumber *)_qvOriginalValue intValue]] forKey:@"index"] ;
+	[self restoreCmap];
 	[self resetToOriginalValue];
 
 	
@@ -772,7 +774,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 - (void) rotateIndexes {
 	
 	NSManagedObject *cmapEntity;
-	
+
+	[self saveCmap];
+
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
 	[_qvc showWindow];
@@ -911,7 +915,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		[(QuickViewController *)_qvc renderForIndex:qvIndex withValue:indexValues];
 		
 	} 
-	
+
+	[self restoreCmap];
 	[self resetToOriginalValue];
 	
 }
@@ -921,6 +926,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 	
 	NSManagedObject *cmapEntity;
+
+	[self saveCmap];
 
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
@@ -1001,6 +1008,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 	} 
 
+	[self restoreCmap];
 	[self resetToOriginalValue];
 
 }
@@ -1054,6 +1062,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	NSManagedObject *cmapEntity;
 	
+	[self saveCmap];
+	
+	
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
 	int qvIndex;
@@ -1094,7 +1105,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 	} 
 
-//	[colour setObject:[NSNumber numberWithDouble:[(NSNumber *)_qvOriginalValue doubleValue]] forKey:colourKey] ;
+	[self restoreCmap];
 	[self resetToOriginalValue];
 
 }
@@ -1103,7 +1114,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 - (void) rotateHues {
 	
 	NSManagedObject *cmapEntity;
-	
+
+	[self saveCmap];
+
 	[(QuickViewController *)_qvc setExternalQuickViewObject:self];
 	
 	[_qvc showWindow];
@@ -1168,6 +1181,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 	} 
 	
+	[self restoreCmap];
 	[self resetToOriginalValue];
 	
 }
@@ -1248,10 +1262,11 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	int i;
 	
+	[self saveCmap];
+/*
 	NSArray *tempCmap = [NSMutableArray arrayWithArray:[cmap arrangedObjects]];
 	[tempCmap retain];
-//	[self setOriginalValue:[NSMutableArray arrayWithArray:[cmap arrangedObjects]]];
-		
+*/		
 	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
 		
 	NSManagedObject *cmapEntity;
@@ -1275,9 +1290,10 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	[self didChangeValueForKey:@"_colourPreview"];
 
+	/*
 	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
 	
-	
+
 	for(i=0; i<[tempCmap count]; i++) {
 		
 		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
@@ -1290,7 +1306,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	}
 	
 	[tempCmap release];
-	
+	*/
+
+	[self restoreCmap];
 	_rotateType = rotateType;
 
 	
@@ -1304,6 +1322,35 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 }
 
+- (void) restoreCmap {
+
+	int i;
+	NSManagedObject *cmapEntity;
+
+	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
+	
+	for(i=0; i<[_cmapStore count]; i++) {
+		
+		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
+		
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[[_cmapStore objectAtIndex:i] valueForKey:@"red"] doubleValue]] forKey:@"red"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[[_cmapStore objectAtIndex:i] valueForKey:@"green"] doubleValue]] forKey:@"green"];
+		[cmapEntity setValue:[NSNumber numberWithDouble:[[[_cmapStore objectAtIndex:i] valueForKey:@"blue"] doubleValue]] forKey:@"blue"];
+		[cmapEntity setValue:[NSNumber numberWithInt:[[[_cmapStore objectAtIndex:i] valueForKey:@"index"] intValue]] forKey:@"index"];
+		[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
+	}
+	
+	[_cmapStore release];
+	
+}
+
+- (void) saveCmap {
+	
+	_cmapStore = [NSMutableArray arrayWithArray:[cmap arrangedObjects]];
+	[_cmapStore retain];
+	//	[self setOriginalValue:[NSMutableArray arrayWithArray:[cmap arrangedObjects]]];
+	
+}
 
 
 @end
