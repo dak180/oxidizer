@@ -39,6 +39,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 		_qvMin = 0.0;
 		_qvMax = 255.0;
 		_colourPreview = nil;
+		_hue = 0.0;
 		
 	}     
 	return self;
@@ -101,9 +102,11 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
 	int i;
 	
-	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+	NSArray *newColourMap = [self getColourArray]; 
+	
+	for(i=0; i<[newColourMap count]; i++) {
 		
-		NSDictionary *colour = [[arrayController arrangedObjects] objectAtIndex:i];
+		NSDictionary *colour = [newColourMap objectAtIndex:i];
 		
 		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
 		
@@ -309,7 +312,9 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 	
 	[arrayController rearrangeObjects];
 	
-	[PaletteController fillBitmapRep:imageRep withColours:[arrayController arrangedObjects] forHeight:GRADIENT_IMAGE_HEIGHT];
+	[PaletteController fillBitmapRep:imageRep withColours:[self getColourArray] forHeight:GRADIENT_IMAGE_HEIGHT];
+	
+//	[PaletteController fillBitmapRep:imageRep withColours:[arrayController arrangedObjects] forHeight:GRADIENT_IMAGE_HEIGHT];
 	
 	
 }
@@ -414,7 +419,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 - (NSArray *) getColourArray {
 	
-	return [arrayController arrangedObjects];
+	return [PaletteController rotatedColourMap:[arrayController arrangedObjects] usingHue:_hue];
 }
 
 - (void) setCMapController:(NSArrayController *)newCmap {
@@ -693,6 +698,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 	
 	[arrayController rearrangeObjects];	
+	[self willChangeValueForKey:@"_hue"];
+	_hue = 0.0;
+	[self didChangeValueForKey:@"_hue"];
 	[self gradientChanged];
 	[gradientView display];
 	
@@ -1263,17 +1271,16 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	int i;
 	
 	[self saveCmap];
-/*
-	NSArray *tempCmap = [NSMutableArray arrayWithArray:[cmap arrangedObjects]];
-	[tempCmap retain];
-*/		
+
 	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
 		
 	NSManagedObject *cmapEntity;
  
-	for(i=0; i<[[arrayController arrangedObjects] count]; i++) {
+	NSArray *newCmap = [self getColourArray];
+	
+	for(i=0; i<[newCmap count]; i++) {
 		
-		NSDictionary *colour = (NSDictionary *)[[arrayController arrangedObjects] objectAtIndex:i];
+		NSDictionary *colour = (NSDictionary *)[newCmap objectAtIndex:i];
 		
 		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
 		
@@ -1289,24 +1296,6 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	[self setColourPreview:[(FractalFlameModel *)_model renderThumbnail]];
 	
 	[self didChangeValueForKey:@"_colourPreview"];
-
-	/*
-	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
-	
-
-	for(i=0; i<[tempCmap count]; i++) {
-		
-		cmapEntity = [NSEntityDescription insertNewObjectForEntityForName:@"CMap" inManagedObjectContext:[cmap managedObjectContext]];
-		
-		[cmapEntity setValue:[NSNumber numberWithDouble:[[[tempCmap objectAtIndex:i] valueForKey:@"red"] doubleValue]] forKey:@"red"];
-		[cmapEntity setValue:[NSNumber numberWithDouble:[[[tempCmap objectAtIndex:i] valueForKey:@"green"] doubleValue]] forKey:@"green"];
-		[cmapEntity setValue:[NSNumber numberWithDouble:[[[tempCmap objectAtIndex:i] valueForKey:@"blue"] doubleValue]] forKey:@"blue"];
-		[cmapEntity setValue:[NSNumber numberWithInt:[[[tempCmap objectAtIndex:i] valueForKey:@"index"] intValue]] forKey:@"index"];
-		[cmap insertObject:cmapEntity atArrangedObjectIndex:i];
-	}
-	
-	[tempCmap release];
-	*/
 
 	[self restoreCmap];
 	_rotateType = rotateType;
@@ -1352,5 +1341,10 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	
 }
 
+-(void) sliderValueChanged {
+	
+	[self gradientChanged];
+	
+}
 
 @end

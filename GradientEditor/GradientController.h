@@ -37,6 +37,7 @@
 	double _qvMax;
 	id _qvOriginalValue;
 	id _qvOriginalValuesObject;
+	double _hue;
 	
 	unsigned int _rotateType;
 }
@@ -81,5 +82,7 @@
 
 - (void) saveCmap;
 - (void) restoreCmap;
+
+-(void) sliderValueChanged;
 
 @end

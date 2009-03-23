@@ -50,6 +50,7 @@ double *initialisePalettes(void);
 + (NSMutableArray *) extrapolateArray:(NSArray *)colours;
 +(NSMutableArray *) extrapolateDoubleArray:(NSArray *)colours;
 + (void) rotateColourMap:(NSArray *)colourMap usingHue:(double)hue;
++(NSArray *) rotatedColourMap:(NSArray *)colourMap usingHue:(double)hue;
 
 - (void) setPalette:(unsigned int )palette colourArray:(NSArray *)colours  usePalette:(BOOL)useThePaletteNumber;
 - (int)changePaletteAndHidePaletteWindow;

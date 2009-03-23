@@ -727,6 +727,48 @@ static double *_paletteData = NULL;
 	
 }
 
++(NSArray *) rotatedColourMap:(NSArray *)colourMap usingHue:(double)hue {
+	
+	double rgbValues[3];
+	double hsv[3];
+	
+    NSMutableArray *returnArray = [NSMutableArray arrayWithCapacity:[colourMap count]];
+	
+	NSMutableDictionary *colour;
+	NSMutableDictionary *rotatedColour;
+	int index;
+	
+	NSEnumerator *enumerator = [colourMap objectEnumerator];
+	
+	
+	while((colour = [enumerator nextObject])) {
+		
+		rotatedColour = [NSMutableDictionary dictionaryWithCapacity:4];
+
+		rgbValues[0] = [[colour  objectForKey:@"red"] doubleValue];	
+		rgbValues[1] = [[colour  objectForKey:@"green"] doubleValue];	
+		rgbValues[2] = [[colour  objectForKey:@"blue"] doubleValue];	
+		index = [[colour  objectForKey:@"index"] intValue];
+		
+		rgb2hsv(rgbValues, hsv);
+		hsv[0] += hue * 6.0 ;
+		hsv2rgb(hsv, rgbValues);
+		
+		
+		[rotatedColour setObject:[NSNumber numberWithDouble:rgbValues[0]] forKey:@"red"];
+		[rotatedColour setObject:[NSNumber numberWithDouble:rgbValues[1]] forKey:@"green"];
+		[rotatedColour setObject:[NSNumber numberWithDouble:rgbValues[2]] forKey:@"blue"];
+		[rotatedColour setObject:[NSNumber numberWithInt:index] forKey:@"index"];
+		
+		[returnArray addObject:rotatedColour];
+	}
+	
+	return returnArray;
+	
+}
+
+
+
 @end
 
 double *initialisePalettes(void) {

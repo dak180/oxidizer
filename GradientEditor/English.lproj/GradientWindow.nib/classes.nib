@@ -45,6 +45,19 @@
 		</dict>
 		<dict>
 			<key>CLASS</key>
+			<string>GradientSlider</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>delegate</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSSlider</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
 			<string>QuickViewButton</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>

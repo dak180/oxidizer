@@ -10,9 +10,10 @@
 #import "FractalFlameModel.h"
 
 @interface AutoPreviewSlider : NSSlider {
-
+	
 	
 	IBOutlet FractalFlameModel *ffm;
 }
+
 
 @end
