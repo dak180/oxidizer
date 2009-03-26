@@ -551,7 +551,12 @@
 	(**dataReference).dataLength = [tiff length];
 	
 	cErr = GraphicsImportSetDataReference( tiffImportComponent, (Handle)dataReference, PointerDataHandlerSubType );
-	
+	if(cErr != noErr) {	
+		NSLog(@"GraphicsImportSetDataReference failed with error %ld", cErr);
+		[tiff release];
+		return;
+	}	
+
 	int componentIndex = [imageExportController selectionIndex];
 	
 	memcpy(&c, [[[imageComponents objectAtIndex:componentIndex] objectForKey:@"component"] bytes], sizeof(c));
@@ -569,12 +574,39 @@
 	
 				
 	cErr = GraphicsExportSetInputGraphicsImporter (geExporter, tiffImportComponent);
+	if(cErr != noErr) {	
+		NSLog(@"GraphicsExportSetInputGraphicsImporter failed with error %ld", cErr);
+
+		[tiff release];
+		CloseComponent(tiffImportComponent);
+		return;
+	}
+	
 	
 	FSSpec spec = [QuickTimeController getToFSSpecFromPath:filename];
 	
 	cErr = GraphicsExportSetOutputFile(geExporter, &spec);
+	if(cErr != noErr) {	
+		NSLog(@"GraphicsExportSetOutputFile failed with error %ld", cErr);
+		[tiff release];
+		CloseComponent(tiffImportComponent);
+		return;
+	}
 	cErr = GraphicsExportDoExport (geExporter, &actualSizeWritten );
-
+	if(cErr != noErr) {	
+		NSLog(@"GraphicsExportDoExport failed with error %ld", cErr);
+		[tiff release];
+		CloseComponent(tiffImportComponent);
+		return;
+	}
+	
+	if(actualSizeWritten == 0) {
+		NSLog(@"GraphicsExportDoExport wrote %ld bytes", actualSizeWritten);		
+		[tiff release];
+		CloseComponent(tiffImportComponent);
+		return;
+	}
+	
 	[tiff release];
 
 //	CloseComponent(geExporter);

@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 57 tasks, 238 threads, 2 processors
-Load average: 1.36, Mach factor: 0.75
+Default processor set: 59 tasks, 222 threads, 2 processors
+Load average: 1.80, Mach factor: 0.60
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -432,7 +432,7 @@ configure:6977: result: strip
 configure:7263: checking if gcc supports -fno-rtti -fno-exceptions
 configure:7281: gcc -c -O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc  -fno-rtti -fno-exceptions conftest.c >&5
 cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
-cc1: warning: command line option "-fno-rtti" is valid for C++/ObjC++ but not for C
+                                                                                  
 configure:7285: $? = 0
 configure:7298: result: no
 configure:7313: checking for gcc option to produce PIC
@@ -494,7 +494,7 @@ configure:19601: checking malloc.h usability
 configure:19618: gcc -c -O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc  conftest.c >&5
 conftest.c:55:20: error: malloc.h: No such file or directory
 conftest.c:55:20: error: malloc.h: No such file or directory
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccFZ35GD.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccutSXZb.out
 configure:19624: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -645,7 +645,7 @@ pnggccrd.c:376: error: assignment of read-only variable '_mask48_3'
 pnggccrd.c:377: error: assignment of read-only variable '_mask48_2'
 pnggccrd.c:378: error: assignment of read-only variable '_mask48_1'
 pnggccrd.c:379: error: assignment of read-only variable '_mask48_0'
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccIx3knw.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//cc1L9wAS.out
 configure:20582: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
