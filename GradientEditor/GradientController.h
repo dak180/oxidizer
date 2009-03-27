@@ -55,7 +55,9 @@
 - (IBAction)qvRotateBlue:(id)sender;
 - (IBAction)gradientSegmentedControl:(id)sender;
 - (IBAction)newGradient:(id)sender;
-
+- (IBAction)saveGradientToFile:(id) sender;
+- (IBAction)loadGradientFromFile:(id) sender;
+				
 - (void) fillGradientImageRep; 
 - (void) gradientChanged; 
 
@@ -84,5 +86,10 @@
 - (void) restoreCmap;
 
 -(void) sliderValueChanged;
+-(void) saveGradient:(NSString *)filename;
+-(bool) loadGradient:(NSString *) xmlFileName;
+-(void) getPreview;
+
+
 
 @end

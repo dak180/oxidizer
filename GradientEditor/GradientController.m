@@ -96,7 +96,6 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 - (IBAction)applyNewPalette:(id)sender {
 	
 	
-	
 	NSManagedObject *cmapEntity;
 	
 	[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
@@ -570,7 +569,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	return YES;
 }
 
-- (void) saveGradient {
+- (void) saveGradient:(NSString *)filename {
 	
 	
 	NSXMLElement *root;
@@ -579,10 +578,117 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	[root addAttribute:[NSXMLNode attributeWithName:@"version" stringValue:@"1"]];	
 	[PaletteController createXMLForGradient:[arrayController arrangedObjects] forElement:root];
 
+	NSXMLDocument *xmlDoc = [[NSXMLDocument alloc] initWithRootElement:root];
+	[xmlDoc setVersion:@"1.0"];
+	[xmlDoc setCharacterEncoding:@"UTF-8"];
+	
+	[xmlDoc autorelease];
+	
+	[[xmlDoc XMLDataWithOptions:NSXMLNodePrettyPrint|NSXMLNodeCompactEmptyElement] writeToFile:filename atomically:YES];
+	
 	return;
 	
 }
 
+
+- (IBAction) saveGradientToFile:(id) sender {
+	
+	NSSavePanel *savePanel = [NSSavePanel savePanel];
+	/* set up new attributes */
+	[savePanel setRequiredFileType:@"xml"];
+	[savePanel setPrompt:@"Save"];
+	BOOL runResult = [savePanel runModal];
+	NSString *filename;
+	
+	if(runResult == NSOKButton && [savePanel filename] != nil) {
+		filename = [savePanel filename];
+		[filename retain];
+	} else {
+		filename = nil;
+		return ;
+	}
+	
+	[self saveGradient:filename];
+			
+}
+
+
+- (IBAction) loadGradientFromFile:(id) sender {
+	
+	NSOpenPanel*op = [NSOpenPanel openPanel];
+	/* set up new attributes */
+	[op setRequiredFileType:@"xml"];
+	[op setPrompt:@"Load"];
+	BOOL runResult = [op runModal];
+	NSString *filename;
+	
+	if(runResult == NSOKButton && [op filename] != nil) {
+		filename = [op filename];
+		[filename retain];
+	} else {
+		filename = nil;
+		return ;
+	}
+	
+	BOOL result = [self loadGradient:filename];
+	if(result == NO) {
+		NSBeep();
+		return;
+	}
+	
+	[self getPreview];
+	return;
+}
+
+
+- (bool) loadGradient:(NSString *) xmlFileName {
+ 
+	NSMutableArray *newCmap;
+	NSXMLDocument *xmlDoc;
+    NSError *err=nil;
+    NSURL *furl = [NSURL fileURLWithPath:xmlFileName];
+    if (!furl) {
+        NSLog(@"Can't create an URL from file %@.", xmlFileName);
+        return NO;
+    }
+	
+    xmlDoc = [[NSXMLDocument alloc] initWithContentsOfURL:furl
+												  options:(NSXMLNodePreserveWhitespace|NSXMLNodePreserveCDATA)
+													error:&err];
+	
+	NSXMLNode *gradientNode = [xmlDoc rootElement];
+	
+	if([[gradientNode name] compare:@"gradient"] != 0) {
+		return NO;
+	}
+	
+//	NSArray *colors = [gradientNode children];
+	
+	newCmap = [NSMutableArray arrayWithCapacity:[colours count]];
+	
+//	int i = 0;
+	
+	NSEnumerator *elementEnumerator = [[gradientNode children] objectEnumerator];
+	NSXMLElement *colourNode;
+	
+	while ( (colourNode = [elementEnumerator nextObject])) {
+
+//	for(i=0; i<[colours count]; i++) {
+		//		NSXMLElement *colourNode = [colors objectAtIndex:i];
+		
+		NSMutableDictionary *colour = [NSMutableDictionary dictionaryWithCapacity:4];
+		
+		[colour setObject:[[colourNode attributeForName:@"index"] stringValue] forKey:@"index"];
+		[colour setObject:[[colourNode attributeForName:@"red"] stringValue] forKey:@"red"];
+		[colour setObject:[[colourNode attributeForName:@"green"] stringValue] forKey:@"green"];
+		[colour setObject:[[colourNode attributeForName:@"blue"] stringValue] forKey:@"blue"];
+
+		[newCmap addObject:colour];
+	}
+	[self setColourArray:newCmap];
+	
+	return YES;
+}
 
 /* quickView Protocol */
 
