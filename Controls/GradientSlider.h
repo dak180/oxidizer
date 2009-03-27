@@ -1,5 +1,5 @@
 //
-//  AutoPreviewSlider.h
+//  GradientSlider.h
 //  oxidizer
 //
 //  Created by David Burnett on 09/09/2008.
@@ -7,12 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "FractalFlameModel.h"
 
-@interface AutoPreviewSlider : NSSlider {
-
+@interface GradientSlider : NSSlider {
 	
-	IBOutlet FractalFlameModel *ffm;
+	
+	IBOutlet id delegate;
 }
 
 @end

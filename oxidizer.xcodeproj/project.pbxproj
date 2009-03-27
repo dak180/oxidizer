@@ -43,7 +43,6 @@
 		A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */ = {isa = PBXBuildFile; fileRef = A4421BE409CF3CE900E9D39F /* oxidizer.icns */; };
 		A48873360E9924DB0038CE19 /* ImageFormatIsPNG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48873350E9924DB0038CE19 /* ImageFormatIsPNG.m */; };
 		A48874330E992E410038CE19 /* ImageFormatIsJPEG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */; };
-		A49E175A0F781A3400F7F519 /* GradientSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A49E17590F781A3400F7F519 /* GradientSlider.m */; };
 		A49E2A5B0D86F1D1008198BE /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49E2A5A0D86F1D1008198BE /* GradientView.m */; };
 		A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49F64680EF5516F00ACB40A /* QuickViewImageView.m */; };
 		A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
@@ -53,6 +52,7 @@
 		A4B166280F06738D001530F3 /* RectangleWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4B166270F06738D001530F3 /* RectangleWindow.nib */; };
 		A4B1662A0F06738D001530F3 /* GradientWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4B166290F06738D001530F3 /* GradientWindow.nib */; };
 		A4B1662C0F06738D001530F3 /* TaskProgress.nib in Resources */ = {isa = PBXBuildFile; fileRef = A4B1662B0F06738D001530F3 /* TaskProgress.nib */; };
+		A4B6039A0F7D99EF001A76B3 /* GradientSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B603990F7D99EF001A76B3 /* GradientSlider.m */; };
 		A4B9F1C80E9D119F0004246F /* AutoPreviewStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */; };
 		A4BE79470DA6DD3700160702 /* GradientController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79440DA6DD3700160702 /* GradientController.m */; };
 		A4BE79480DA6DD3700160702 /* GradientNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79460DA6DD3700160702 /* GradientNibController.m */; };
@@ -160,8 +160,6 @@
 		A48873350E9924DB0038CE19 /* ImageFormatIsPNG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFormatIsPNG.m; sourceTree = "<group>"; };
 		A48874310E992E410038CE19 /* ImageFormatIsJPEG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFormatIsJPEG.h; sourceTree = "<group>"; };
 		A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFormatIsJPEG.m; sourceTree = "<group>"; };
-		A49E17580F781A3400F7F519 /* GradientSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GradientSlider.h; sourceTree = "<group>"; };
-		A49E17590F781A3400F7F519 /* GradientSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GradientSlider.m; sourceTree = "<group>"; };
 		A49E2A590D86F1D1008198BE /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientView.h; path = GradientEditor/GradientView.h; sourceTree = SOURCE_ROOT; };
 		A49E2A5A0D86F1D1008198BE /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientView.m; path = GradientEditor/GradientView.m; sourceTree = SOURCE_ROOT; };
 		A49E2A670D86FDC9008198BE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = GradientEditor/English.lproj/GradientWindow.nib; sourceTree = "<group>"; };
@@ -176,6 +174,8 @@
 		A4B1662E0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/GradientWindow.nib; sourceTree = "<group>"; };
 		A4B1662F0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/RectangleWindow.nib; sourceTree = "<group>"; };
 		A4B166450F0674C3001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/TaskProgress.nib; sourceTree = "<group>"; };
+		A4B603980F7D99EF001A76B3 /* GradientSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientSlider.h; path = Controls/GradientSlider.h; sourceTree = "<group>"; };
+		A4B603990F7D99EF001A76B3 /* GradientSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientSlider.m; path = Controls/GradientSlider.m; sourceTree = "<group>"; };
 		A4B9F1C60E9D119F0004246F /* AutoPreviewStepper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoPreviewStepper.h; path = Controls/AutoPreviewStepper.h; sourceTree = "<group>"; };
 		A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AutoPreviewStepper.m; path = Controls/AutoPreviewStepper.m; sourceTree = "<group>"; };
 		A4BE79430DA6DD3700160702 /* GradientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientController.h; path = GradientEditor/GradientController.h; sourceTree = "<group>"; };
@@ -420,8 +420,8 @@
 		A44EDD100E76F9050039AF9D /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				A49E17580F781A3400F7F519 /* GradientSlider.h */,
-				A49E17590F781A3400F7F519 /* GradientSlider.m */,
+				A4B603980F7D99EF001A76B3 /* GradientSlider.h */,
+				A4B603990F7D99EF001A76B3 /* GradientSlider.m */,
 				A4B9F1C60E9D119F0004246F /* AutoPreviewStepper.h */,
 				A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */,
 				A4D69FDE0E77004D00A1F11B /* AutoPreviewSlider.h */,
@@ -631,7 +631,7 @@
 				A41086650EDB356500529FF8 /* QuickViewButton.m in Sources */,
 				A4D056FF0EDF3BBC005F122C /* QuickViewController.m in Sources */,
 				A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */,
-				A49E175A0F781A3400F7F519 /* GradientSlider.m in Sources */,
+				A4B6039A0F7D99EF001A76B3 /* GradientSlider.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

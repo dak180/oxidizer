@@ -6,15 +6,15 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
-#import "AutoPreviewSlider.h"
+#import "GradientSlider.h"
 
 
-@implementation AutoPreviewSlider
+@implementation GradientSlider
 
 - (void)mouseDown:(NSEvent *)theEvent {
 	
 	[super mouseDown:theEvent];
-	[ffm previewCurrentFlame:self];
+	[delegate sliderValueChanged];
 }
 
 
