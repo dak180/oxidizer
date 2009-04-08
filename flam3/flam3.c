@@ -1,6 +1,6 @@
 /*
     FLAM3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
+    Copyright (C) 1992-2008 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@
 #include <limits.h>
 #include <math.h>
 #include <stdint.h>
+#include <errno.h>
 
 #ifdef HAVE_LIBPTHREAD
 #include <pthread.h>
@@ -31,18 +32,23 @@
 #ifdef __APPLE__
 #include <mach/mach.h>
 #include <mach/mach_error.h>
-#endif
-
+#define flam3_os "OSX"
+#else
 #ifdef WIN32
 #define WINVER 0x0500
 #include <windows.h>
+#define flam3_os "WIN"
+#else
+#define flam3_os "LNX"
 #endif
+#endif
+
 
 
 char *flam3_version() {
 
   if (strcmp(SVN_REV, "exported"))
-    return VERSION "." SVN_REV;
+    return flam3_os "-" VERSION "." SVN_REV;
   return VERSION;
 }
 
@@ -146,12 +152,14 @@ static void disc2_precalc(flam3_xform *xf);
 static void supershape_precalc(flam3_xform *xf);
 
 static int id_matrix(double s[3][2]);
+static double flam3_atof(char *nstr);
+static int flam3_atoi(char *nstr);
 static void copy_matrix(double to[3][2], double from[3][2]);
 static void convert_linear_to_polar(flam3_genome *cp, int ncps, int xfi, int cflag, double cxang[4][2], double cxmag[4][2], double cxtrn[4][2]);
 static void interp_and_convert_back(double *c, int ncps, int xfi, double cxang[4][2], double cxmag[4][2], double cxtrn[4][2],double store_array[3][2]);
 void prepare_xform_fn_ptrs(flam3_genome *, randctx *);
 static void initialize_xforms(flam3_genome *thiscp, int start_here);
-static void parse_flame_element(xmlNode *);
+static int parse_flame_element(xmlNode *);
 //static void parse_image_element(xmlNode *);
 static int apply_xform(flam3_genome *cp, int fn, double *p, double *q, randctx *rc);
 
@@ -958,6 +966,12 @@ static void var41_arch(void *helper, double weight)
    end;
    */
 
+   /*
+    * !!! Note !!!
+    * This code uses the variation weight in a non-standard fashion, and
+    * it may change or even be removed in future versions of flam3.
+    */
+
    flam3_iter_helper *f = (flam3_iter_helper *) helper;
 
    double ang = flam3_random_isaac_01(f->rc) * weight * M_PI;
@@ -982,7 +996,7 @@ static void var42_tangent(void *helper, double weight)
    flam3_iter_helper *f = (flam3_iter_helper *) helper;
 
    f->p0 += weight * sin(f->tx)/cos(f->ty);
-   f->p1 += weight * sin(f->ty)/cos(f->ty);
+   f->p1 += weight * tan(f->ty);
 
 }
 
@@ -1018,6 +1032,12 @@ static void var44_rays(void *helper, double weight)
    end;
    */
 
+   /*
+    * !!! Note !!!
+    * This code uses the variation weight in a non-standard fashion, and
+    * it may change or even be removed in future versions of flam3.
+    */
+
    flam3_iter_helper *f = (flam3_iter_helper *) helper;
 
    double ang = weight * flam3_random_isaac_01(f->rc) * M_PI;
@@ -1044,6 +1064,12 @@ static void var45_blade(void *helper, double weight)
    end;
    */
 
+   /*
+    * !!! Note !!!
+    * This code uses the variation weight in a non-standard fashion, and
+    * it may change or even be removed in future versions of flam3.
+    */
+
    flam3_iter_helper *f = (flam3_iter_helper *) helper;
 
    double r = flam3_random_isaac_01(f->rc) * weight * f->precalc_sqrt;
@@ -1058,6 +1084,12 @@ static void var45_blade(void *helper, double weight)
 static void var46_secant2(void *helper, double weight)
 {
    /* Intended as a 'fixed' version of secant */
+
+   /*
+    * !!! Note !!!
+    * This code uses the variation weight in a non-standard fashion, and
+    * it may change or even be removed in future versions of flam3.
+    */
 
    flam3_iter_helper *f = (flam3_iter_helper *) helper;
 
@@ -1088,12 +1120,21 @@ static void var47_twintrian(void *helper, double weight)
    end;
    */
 
+   /*
+    * !!! Note !!!
+    * This code uses the variation weight in a non-standard fashion, and
+    * it may change or even be removed in future versions of flam3.
+    */
+
    flam3_iter_helper *f = (flam3_iter_helper *) helper;
 
    double r = flam3_random_isaac_01(f->rc) * weight * f->precalc_sqrt;
    double sinr = sin(r);
    double cosr = cos(r);
    double diff = log10(sinr*sinr)+cosr;
+   
+   if (badvalue(diff))
+      diff = -30;
 
    f->p0 += weight * f->tx * diff;
    f->p1 += weight * f->tx * (diff - sinr*M_PI);
@@ -2164,6 +2205,8 @@ void flam3_interpolate_n(flam3_genome *result, int ncp,
    result->temporal_filter_type = cpi[0].temporal_filter_type;
 
    result->interpolation_type = cpi[0].interpolation_type;
+   
+   result->palette_mode = cpi[0].palette_mode;
    INTERP(brightness);
    INTERP(contrast);
    INTERP(gamma);
@@ -2672,7 +2715,8 @@ void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc) {
                 if (dst[i+ii].xform[xf].var[VAR_SPHERICAL]>0 ||
                       dst[i+ii].xform[xf].var[VAR_NGON]>0 || 
                       dst[i+ii].xform[xf].var[VAR_JULIAN]>0 || 
-                      dst[i+ii].xform[xf].var[VAR_JULIASCOPE]>0) {
+                      dst[i+ii].xform[xf].var[VAR_JULIASCOPE]>0 ||
+                      dst[i+ii].xform[xf].var[VAR_POLAR]>0 ) {
                  
                    dst[i].xform[xf].var[VAR_LINEAR] = -1.0;
                    /* Set the coefs appropriately */
@@ -3259,7 +3303,50 @@ static flam3_genome xml_current_cp;
 static flam3_genome *xml_all_cp;
 /*static flam3_image_store *im_store;*/
 static int xml_all_ncps;
+static int flam3_conversion_failed;
 /*static int xml_num_images;*/
+
+static int flam3_atoi(char *nstr) {
+
+    /* Note that this is NOT thread-safe, but simplifies things significantly. */
+    int res;
+    char *endp;
+
+    /* Reset errno */
+    errno=0;
+
+    /* Convert the string using strtol */
+    res = strtol(nstr, &endp, 10);
+
+    /* Check errno & return string */
+    if (endp!=nstr+strlen(nstr))
+       flam3_conversion_failed = 1;
+    if (errno)
+       flam3_conversion_failed = 1;
+
+    return(res);
+}
+
+static double flam3_atof(char *nstr) {
+
+    /* Note that this is NOT thread-safe, but simplifies things significantly. */
+    double res;
+    char *endp;
+
+    /* Reset errno */
+    errno=0;
+
+    /* Convert the string using strtod */
+    res = strtod(nstr, &endp);
+    
+    /* Check errno & return string */
+    if (endp!=nstr+strlen(nstr))
+       flam3_conversion_failed = 1;
+    if (errno)
+       flam3_conversion_failed = 1;
+
+    return(res);
+}
 
 static void clear_cp(flam3_genome *cp, int default_flag) {
     cp->palette_index = flam3_palette_random;
@@ -3308,6 +3395,7 @@ static void clear_cp(flam3_genome *cp, int default_flag) {
        cp->temporal_filter_type = flam3_temporal_box;
        cp->temporal_filter_width = 1.0;
        cp->temporal_filter_exp = 0.0;
+       cp->palette_mode = flam3_palette_mode_step;
 
     } else {
        /* Defaults are off, so set to UN-reasonable values. */
@@ -3334,6 +3422,7 @@ static void clear_cp(flam3_genome *cp, int default_flag) {
        cp->temporal_filter_type = -1;
        cp->temporal_filter_width = -1;
        cp->temporal_filter_exp = -999;
+       cp->palette_mode = -1;
     }
 
     if (cp->xform != NULL && cp->num_xforms > 0) {
@@ -3583,14 +3672,19 @@ static void parse_image_element(xmlNode *image_node) {
 }
 #endif
 
-static void parse_flame_element(xmlNode *flame_node) {
+static int parse_flame_element(xmlNode *flame_node) {
    flam3_genome *cp = &xml_current_cp;
    xmlNode *chld_node;
    xmlNodePtr edit_node;
    xmlAttrPtr att_ptr, cur_att;
    char *att_str;
    char *cpy;
+   char tmps[2];
    int i;
+
+   /* Reset the conversion error flag */
+   /* NOT threadsafe                  */
+   flam3_conversion_failed=0;
 
    /* Store this flame element in the current cp */
 
@@ -3600,7 +3694,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
    if (att_ptr==NULL) {
       fprintf(stderr, "Error : <flame> element has no attributes.\n");
-      exit(1);
+      return(1);
    }
 
    memset(cp->flame_name,0,flam3_name_len+1);
@@ -3611,7 +3705,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
       /* Compare attribute names */
       if (!xmlStrcmp(cur_att->name, (const xmlChar *)"time")) {
-         cp->time = atof(att_str);
+         cp->time = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"interpolation")) {
      if (!strcmp("linear", att_str)) {
          cp->interpolation = flam3_interpolation_linear;
@@ -3651,25 +3745,33 @@ static void parse_flame_element(xmlNode *flame_node) {
          }
 
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"palette")) {
-         cp->palette_index = atoi(att_str);
+         cp->palette_index = flam3_atoi(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"size")) {
-         sscanf(att_str, "%d %d", &cp->width, &cp->height);
+         if (sscanf(att_str, "%d %d%1s", &cp->width, &cp->height, tmps) != 2) {
+            fprintf(stderr,"error: invalid size attribute '%s'\n",att_str);
+            xmlFree(att_str);
+            return(1);
+         }
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"center")) {
-         sscanf(att_str, "%lf %lf", &cp->center[0], &cp->center[1]);
+         if (sscanf(att_str, "%lf %lf%1s", &cp->center[0], &cp->center[1], tmps) != 2) {
+            fprintf(stderr,"error: invalid center attribute '%s'\n",att_str);
+            xmlFree(att_str);
+            return(1);
+         }
          cp->rot_center[0] = cp->center[0];
          cp->rot_center[1] = cp->center[1];
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"scale")) {
-         cp->pixels_per_unit = atof(att_str);
+         cp->pixels_per_unit = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rotate")) {
-         cp->rotate = atof(att_str);
+         cp->rotate = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"zoom")) {
-         cp->zoom = atof(att_str);
+         cp->zoom = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"oversample")) {
-         cp->spatial_oversample = atoi(att_str);
+         cp->spatial_oversample = flam3_atoi(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"supersample")) {
-         cp->spatial_oversample = atoi(att_str);
+         cp->spatial_oversample = flam3_atoi(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"filter")) {
-         cp->spatial_filter_radius = atof(att_str);
+         cp->spatial_filter_radius = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"filter_shape")) {
          if (!strcmp("gaussian", att_str))
             cp->spatial_filter_select = flam3_gaussian_kernel;
@@ -3710,39 +3812,50 @@ static void parse_flame_element(xmlNode *flame_node) {
          else if (!strcmp("exp",att_str))
             cp->temporal_filter_type = flam3_temporal_exp;
          else
-            fprintf(stderr, "warning: unrecognized spatial filter %s.  Using box.\n",att_str);
+            fprintf(stderr, "warning: unrecognized temporal filter %s.  Using box.\n",att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"temporal_filter_width")) {
-         cp->temporal_filter_width = atof(att_str);
+         cp->temporal_filter_width = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"temporal_filter_exp")) {
-         cp->temporal_filter_exp = atof(att_str);
+         cp->temporal_filter_exp = flam3_atof(att_str);
+      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"palette_mode")) {
+         if (!strcmp("step", att_str))
+            cp->palette_mode = flam3_palette_mode_step;
+         else if (!strcmp("linear", att_str))
+            cp->palette_mode = flam3_palette_mode_linear;
+         else
+            fprintf(stderr,"warning: unrecognized palette mode %s.  Using step.\n",att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"quality")) {
-         cp->sample_density = atof(att_str);
+         cp->sample_density = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"passes")) {
-         cp->nbatches = atoi(att_str);
+         cp->nbatches = flam3_atoi(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"temporal_samples")) {
-         cp->ntemporal_samples = atoi(att_str);
+         cp->ntemporal_samples = flam3_atoi(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"background")) {
-         sscanf(att_str, "%lf %lf %lf", &cp->background[0], &cp->background[1], &cp->background[2]);
+         if (sscanf(att_str, "%lf %lf %lf%1s", &cp->background[0], &cp->background[1], &cp->background[2], tmps) != 3) {
+            fprintf(stderr,"error: invalid background attribute '%s'\n",att_str);
+            xmlFree(att_str);
+            return(1);
+         }
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"brightness")) {
-         cp->brightness = atof(att_str);
+         cp->brightness = flam3_atof(att_str);
 /*      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"contrast")) {
-         cp->contrast = atof(att_str);*/
+         cp->contrast = flam3_atof(att_str);*/
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"gamma")) {
-         cp->gamma = atof(att_str);
+         cp->gamma = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"vibrancy")) {
-         cp->vibrancy = atof(att_str);
+         cp->vibrancy = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"hue")) {
-         cp->hue_rotation = fmod(atof(att_str), 1.0);
+         cp->hue_rotation = fmod(flam3_atof(att_str), 1.0);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"estimator_radius")) {
-         cp->estimator = atof(att_str);
+         cp->estimator = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"estimator_minimum")) {
-         cp->estimator_minimum = atof(att_str);
+         cp->estimator_minimum = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"estimator_curve")) {
-         cp->estimator_curve = atof(att_str);
+         cp->estimator_curve = flam3_atof(att_str);
       } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"gamma_threshold")) {
-         cp->gam_lin_thresh = atof(att_str);
+         cp->gam_lin_thresh = flam3_atof(att_str);
 //      } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"motion_exponent")) {
-//         cp->motion_exp = atof(att_str);
+//         cp->motion_exp = flam3_atof(att_str);
       }
 
       xmlFree(att_str);
@@ -3762,7 +3875,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
          if (att_ptr==NULL) {
             fprintf(stderr,"Error:  No attributes for color element.\n");
-            exit(1);
+            return(1);
          }
 
          for (cur_att=att_ptr; cur_att; cur_att = cur_att->next) {
@@ -3770,12 +3883,17 @@ static void parse_flame_element(xmlNode *flame_node) {
             att_str = (char *) xmlGetProp(chld_node,cur_att->name);
 
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"index")) {
-               index = atoi(att_str);
+               index = flam3_atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rgb")) {
-               sscanf(att_str, "%lf %lf %lf", &r, &g, &b);
+               if (sscanf(att_str, "%lf %lf %lf%1s", &r, &g, &b, tmps) != 3) {
+                  fprintf(stderr,"error: invalid rgb attribute '%s'\n",att_str);
+                  xmlFree(att_str);
+                  return(1);
+               }
             } else {
                fprintf(stderr,"Error:  Unknown color attribute '%s'\n",cur_att->name);
-               exit(1);
+               xmlFree(att_str);
+               return(1);
             }
 
             xmlFree(att_str);
@@ -3787,7 +3905,7 @@ static void parse_flame_element(xmlNode *flame_node) {
             cp->palette[index][2] = b / 255.0;
          } else {
             fprintf(stderr,"Error:  Color element with bad/missing index attribute (%d)\n",index);
-            exit(1);
+            return(1);
          }
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"colors")) {
 
@@ -3798,7 +3916,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
          if (att_ptr==NULL) {
             fprintf(stderr,"Error: No attributes for colors element.\n");
-            exit(1);
+            return(1);
          }
 
          for (cur_att=att_ptr; cur_att; cur_att = cur_att->next) {
@@ -3806,12 +3924,17 @@ static void parse_flame_element(xmlNode *flame_node) {
             att_str = (char *) xmlGetProp(chld_node,cur_att->name);
 
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"count")) {
-               count = atoi(att_str);
+               count = flam3_atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"data")) {
-               flam3_parse_hexformat_colors(att_str, cp, count, 4);
+               if (flam3_parse_hexformat_colors(att_str, cp, count, 4) > 0) {
+                  fprintf(stderr,"error parsing hexformatted colors\n");
+                  xmlFree(att_str);
+                  return(1);
+               }
             } else {
                fprintf(stderr,"Error:  Unknown color attribute '%s'\n",cur_att->name);
-               exit(1);
+               xmlFree(att_str);
+               return(1);
             }
 
             xmlFree(att_str);
@@ -3837,7 +3960,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
          if (att_ptr==NULL) {
             fprintf(stderr,"Error:  No attributes for palette element.\n");
-            exit(1);
+            return(1);
          }
 
          for (cur_att=att_ptr; cur_att; cur_att = cur_att->next) {
@@ -3846,22 +3969,22 @@ static void parse_flame_element(xmlNode *flame_node) {
 
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"index0")) {
                old_format++;
-               index0 = atoi(att_str);
+               index0 = flam3_atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"index1")) {
                old_format++;
-               index1 = atoi(att_str);
+               index1 = flam3_atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"hue0")) {
                old_format++;
-               hue0 = atof(att_str);
+               hue0 = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"hue1")) {
                old_format++;
-               hue1 = atof(att_str);
+               hue1 = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blend")) {
                old_format++;
-               blend = atof(att_str);
+               blend = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"count")) {
                new_format++;
-               numcolors = atoi(att_str);
+               numcolors = flam3_atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"format")) {
                new_format++;
                if (!strcmp(att_str,"RGB"))
@@ -3870,11 +3993,13 @@ static void parse_flame_element(xmlNode *flame_node) {
                   numbytes=4;
                else {
                   fprintf(stderr,"Error: Unrecognized palette format string (%s)\n",att_str);
-                  exit(1);
+                  xmlFree(att_str);
+                  return(1);
                }
             } else {
                fprintf(stderr,"Error:  Unknown palette attribute '%s'\n",cur_att->name);
-               exit(1);
+               xmlFree(att_str);
+               return(1);
             }
 
             xmlFree(att_str);
@@ -3883,7 +4008,7 @@ static void parse_flame_element(xmlNode *flame_node) {
          /* Old or new format? */
          if (new_format>0 && old_format>0) {
             fprintf(stderr,"Error: mixing of old and new palette tag syntax not allowed.\n");
-            exit(1);
+            return(1);
          }
 
          if (old_format>0)
@@ -3895,8 +4020,13 @@ static void parse_flame_element(xmlNode *flame_node) {
             /* Read formatted string from contents of tag */
 
             pal_str = (char *) xmlNodeGetContent(chld_node);
+            /* !!! check hexform parse for errors */
 
-            flam3_parse_hexformat_colors(pal_str, cp, numcolors, numbytes);
+            if (flam3_parse_hexformat_colors(pal_str, cp, numcolors, numbytes) > 0) {
+               fprintf(stderr,"error reading hexformatted colors\n");
+               xmlFree(pal_str);
+               return(1);
+            }
 
             xmlFree(pal_str);
          }
@@ -3917,10 +4047,11 @@ static void parse_flame_element(xmlNode *flame_node) {
             att_str = (char *) xmlGetProp(chld_node,cur_att->name);
 
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"kind")) {
-               kind = atoi(att_str);
+               kind = flam3_atoi(att_str);
             } else {
                fprintf(stderr,"Error:  Unknown symmetry attribute '%s'\n",cur_att->name);
-               exit(1);
+               xmlFree(att_str);
+               return(1);
             }
 
             xmlFree(att_str);
@@ -3946,7 +4077,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
             if (cp->final_xform_index >=0) {
                fprintf(stderr,"Error:  Cannot specify more than one final xform.\n");
-               exit(1);
+               return(1);
             }
 
             cp->final_xform_index = xf;
@@ -3964,7 +4095,7 @@ static void parse_flame_element(xmlNode *flame_node) {
 
          if (att_ptr==NULL) {
             fprintf(stderr,"Error: No attributes for xform element.\n");
-            exit(1);
+            return(1);
          }
 
          for (cur_att=att_ptr; cur_att; cur_att = cur_att->next) {
@@ -3977,120 +4108,168 @@ static void parse_flame_element(xmlNode *flame_node) {
             if (!xmlStrcmp(cur_att->name, (const xmlChar *)"weight")) {
                if (cp->final_xform_index==xf) {
                   fprintf(stderr,"Error: Final xforms should not have weight specified.\n");
-               	exit(1);
+                  xmlFree(att_str);
+                  return(1);
                }
-               cp->xform[xf].density = atof(att_str);
+               cp->xform[xf].density = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"enabled")) {
-               cp->final_xform_enable = atoi(att_str);
+               cp->final_xform_enable = flam3_atoi(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"symmetry")) {
-               cp->xform[xf].symmetry = atof(att_str);
+               cp->xform[xf].symmetry = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"color")) {
                cp->xform[xf].color[1] = 0.0;
-               sscanf(att_str, "%lf %lf", &cp->xform[xf].color[0], &cp->xform[xf].color[1]);
-               sscanf(att_str, "%lf", &cp->xform[xf].color[0]);
+               /* Try two coords first */
+               if (sscanf(att_str, "%lf %lf%1s", &cp->xform[xf].color[0], &cp->xform[xf].color[1], tmps) != 2) {
+                  /* Try one color */
+                  if (sscanf(att_str, "%lf%1s", &cp->xform[xf].color[0],tmps) != 1) {
+                     fprintf(stderr,"Error: malformed xform color attribute '%s'\n",att_str);
+                     xmlFree(att_str);
+                     return(1);
+                  }
+               }            
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"var1")) {
                for (j=0; j < flam3_nvariations; j++) {
                   cp->xform[xf].var[j] = 0.0;
                }
-               j = atoi(att_str);
+               j = flam3_atoi(att_str);
 
                if (j < 0 || j >= flam3_nvariations) {
                   fprintf(stderr,"Error:  Bad variation (%d)\n",j);
-                  j=0;
+                  xmlFree(att_str);
+                  return(1);
                }
 
                cp->xform[xf].var[j] = 1.0;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"var")) {
                for (j=0; j < flam3_nvariations; j++) {
-                  cp->xform[xf].var[j] = strtod(cpy, &cpy);
+                  char *cpy2;
+                  errno=0;
+                  cp->xform[xf].var[j] = strtod(cpy, &cpy2);
+                  if (errno != 0 || cpy==cpy2) {
+                     fprintf(stderr,"error: bad value in var attribute '%s'\n",att_str);
+                     xmlFree(att_str);
+                     return(1);
+                  }
+                  cpy=cpy2;
+               }
+               if (cpy != att_str+strlen(att_str)) {
+                  fprintf(stderr,"error: extra chars at the end of var attribute '%s'\n",att_str);
+                  xmlFree(att_str);
+                  return(1);
                }
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"coefs")) {
                for (k=0; k<3; k++) {
                   for (j=0; j<2; j++) {
-                     cp->xform[xf].c[k][j] = strtod(cpy, &cpy);
+                     char *cpy2;
+                     errno = 0;
+                     cp->xform[xf].c[k][j] = strtod(cpy, &cpy2);
+                     if (errno != 0 || cpy==cpy2) {
+                        fprintf(stderr,"error: bad value in coefs attribute '%s'\n",att_str);
+                        xmlFree(att_str);
+                        return(1);
+                     }
+                     cpy=cpy2;
                   }
+               }
+               if (cpy != att_str+strlen(att_str)) {
+                  fprintf(stderr,"error: extra chars at the end of coefs attribute '%s'\n",att_str);
+                  xmlFree(att_str);
+                  return(1);
                }
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"post")) {
                for (k = 0; k < 3; k++) {
                   for (j = 0; j < 2; j++) {
-                     cp->xform[xf].post[k][j] = strtod(cpy, &cpy);
+                     char *cpy2;
+                     errno = 0;
+                     cp->xform[xf].post[k][j] = strtod(cpy, &cpy2);
+                     if (errno != 0 || cpy==cpy2) {
+                        fprintf(stderr,"error: bad value in post attribute '%s'\n",att_str);
+                        xmlFree(att_str);
+                        return(1);
+                     }
+                     cpy=cpy2;
                   }
                }
+               if (cpy != att_str+strlen(att_str)) {
+                  fprintf(stderr,"error: extra chars at end of post attribute '%s'\n",att_str);
+                  xmlFree(att_str);
+                  return(1);
+               }
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blob_low")) {
-               cp->xform[xf].blob_low = atof(att_str);
+               cp->xform[xf].blob_low = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blob_high")) {
-               cp->xform[xf].blob_high = atof(att_str);
+               cp->xform[xf].blob_high = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"blob_waves")) {
-               cp->xform[xf].blob_waves = atof(att_str);
+               cp->xform[xf].blob_waves = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pdj_a")) {
-               cp->xform[xf].pdj_a = atof(att_str);
+               cp->xform[xf].pdj_a = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pdj_b")) {
-               cp->xform[xf].pdj_b = atof(att_str);
+               cp->xform[xf].pdj_b = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pdj_c")) {
-               cp->xform[xf].pdj_c = atof(att_str);
+               cp->xform[xf].pdj_c = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pdj_d")) {
-               cp->xform[xf].pdj_d = atof(att_str);
+               cp->xform[xf].pdj_d = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"fan2_x")) {
-               cp->xform[xf].fan2_x = atof(att_str);
+               cp->xform[xf].fan2_x = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"fan2_y")) {
-               cp->xform[xf].fan2_y = atof(att_str);
+               cp->xform[xf].fan2_y = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rings2_val")) {
-               cp->xform[xf].rings2_val = atof(att_str);
+               cp->xform[xf].rings2_val = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"perspective_angle")) {
-               cp->xform[xf].perspective_angle = atof(att_str);
+               cp->xform[xf].perspective_angle = flam3_atof(att_str);
                perspective_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"perspective_dist")) {
-               cp->xform[xf].perspective_dist = atof(att_str);
+               cp->xform[xf].perspective_dist = flam3_atof(att_str);
                perspective_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"julian_power")) {
-               cp->xform[xf].juliaN_power = atof(att_str);
+               cp->xform[xf].juliaN_power = flam3_atof(att_str);
                julian_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"julian_dist")) {
-               cp->xform[xf].juliaN_dist = atof(att_str);
+               cp->xform[xf].juliaN_dist = flam3_atof(att_str);
                julian_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"juliascope_power")) {
-               cp->xform[xf].juliaScope_power = atof(att_str);
+               cp->xform[xf].juliaScope_power = flam3_atof(att_str);
                juliascope_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"juliascope_dist")) {
-               cp->xform[xf].juliaScope_dist = atof(att_str);
+               cp->xform[xf].juliaScope_dist = flam3_atof(att_str);
                juliascope_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"radial_blur_angle")) {
-               cp->xform[xf].radialBlur_angle = atof(att_str);
+               cp->xform[xf].radialBlur_angle = flam3_atof(att_str);
                radialblur_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pie_slices")) {
-               cp->xform[xf].pie_slices = atof(att_str);
+               cp->xform[xf].pie_slices = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pie_rotation")) {
-               cp->xform[xf].pie_rotation = atof(att_str);
+               cp->xform[xf].pie_rotation = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"pie_thickness")) {
-               cp->xform[xf].pie_thickness = atof(att_str);
+               cp->xform[xf].pie_thickness = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_sides")) {
-               cp->xform[xf].ngon_sides = atof(att_str);
+               cp->xform[xf].ngon_sides = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_power")) {
-               cp->xform[xf].ngon_power = atof(att_str);
+               cp->xform[xf].ngon_power = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_circle")) {
-               cp->xform[xf].ngon_circle = atof(att_str);
+               cp->xform[xf].ngon_circle = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"ngon_corners")) {
-               cp->xform[xf].ngon_corners = atof(att_str);
+               cp->xform[xf].ngon_corners = flam3_atof(att_str);
 /*            } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"image_filename")) {
-               cp->xform[xf].image_id = atoi(att_str);*/
+               cp->xform[xf].image_id = flam3_atoi(att_str);*/
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"curl_c1")) {
-               cp->xform[xf].curl_c1 = atof(att_str);
+               cp->xform[xf].curl_c1 = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"curl_c2")) {
-               cp->xform[xf].curl_c2 = atof(att_str);
+               cp->xform[xf].curl_c2 = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rectangles_x")) {
-               cp->xform[xf].rectangles_x = atof(att_str);
+               cp->xform[xf].rectangles_x = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"rectangles_y")) {
-               cp->xform[xf].rectangles_y = atof(att_str);
+               cp->xform[xf].rectangles_y = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"amw_amp")) {
-               cp->xform[xf].amw_amp = atof(att_str);
+               cp->xform[xf].amw_amp = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"disc2_rot")) {
-               cp->xform[xf].disc2_rot = atof(att_str);
+               cp->xform[xf].disc2_rot = flam3_atof(att_str);
                disc2_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"disc2_twist")) {
-               cp->xform[xf].disc2_twist = atof(att_str);
+               cp->xform[xf].disc2_twist = flam3_atof(att_str);
                disc2_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"super_shape_rnd")) {
-               cp->xform[xf].supershape_rnd = atof(att_str);
+               cp->xform[xf].supershape_rnd = flam3_atof(att_str);
                /* Limit to [0,1] */
                if (cp->xform[xf].supershape_rnd<0)
                   cp->xform[xf].supershape_rnd=0;
@@ -4098,36 +4277,36 @@ static void parse_flame_element(xmlNode *flame_node) {
                   cp->xform[xf].supershape_rnd=1;
                supershape_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"super_shape_m")) {
-               cp->xform[xf].supershape_m = atof(att_str);
+               cp->xform[xf].supershape_m = flam3_atof(att_str);
                supershape_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"super_shape_n1")) {
-               cp->xform[xf].supershape_n1 = atof(att_str);
+               cp->xform[xf].supershape_n1 = flam3_atof(att_str);
                supershape_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"super_shape_n2")) {
-               cp->xform[xf].supershape_n2 = atof(att_str);
+               cp->xform[xf].supershape_n2 = flam3_atof(att_str);
                supershape_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"super_shape_n3")) {
-               cp->xform[xf].supershape_n3 = atof(att_str);
+               cp->xform[xf].supershape_n3 = flam3_atof(att_str);
                supershape_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"super_shape_holes")) {
-               cp->xform[xf].supershape_holes = atof(att_str);
+               cp->xform[xf].supershape_holes = flam3_atof(att_str);
                supershape_used = 1;
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"flower_petals")) {
-               cp->xform[xf].flower_petals = atof(att_str);
+               cp->xform[xf].flower_petals = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"flower_holes")) {
-               cp->xform[xf].flower_holes = atof(att_str);
+               cp->xform[xf].flower_holes = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"conic_eccentricity")) {
-               cp->xform[xf].conic_eccen = atof(att_str);
+               cp->xform[xf].conic_eccen = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"conic_holes")) {
-               cp->xform[xf].conic_holes = atof(att_str);
+               cp->xform[xf].conic_holes = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"parabola_height")) {
-               cp->xform[xf].parabola_height = atof(att_str);
+               cp->xform[xf].parabola_height = flam3_atof(att_str);
             } else if (!xmlStrcmp(cur_att->name, (const xmlChar *)"parabola_width")) {
-               cp->xform[xf].parabola_width = atof(att_str);
+               cp->xform[xf].parabola_width = flam3_atof(att_str);
             } else {
                int v = var2n((char *) cur_att->name);
                if (v != flam3_variation_none)
-                  cp->xform[xf].var[v] = atof(att_str);
+                  cp->xform[xf].var[v] = flam3_atof(att_str);
                else
                   fprintf(stderr,"Warning: unrecognized variation %s.  Ignoring.\n",(char *)cur_att->name);
             }
@@ -4135,28 +4314,6 @@ static void parse_flame_element(xmlNode *flame_node) {
 
             xmlFree(att_str);
          }
-
-         /* Precalculate meta-parameters if necessary */
-/*         if (perspective_used>0)
-            perspective_precalc(&(cp->xform[xf]));
-
-         if (julian_used>0)
-            juliaN_precalc(&(cp->xform[xf]));
-
-         if (juliascope_used>0)
-            juliaScope_precalc(&(cp->xform[xf]));
-
-         if (radialblur_used>0)
-            radial_blur_precalc(&(cp->xform[xf]));
-
-         if (disc2_used>0)
-            disc2_precalc(&(cp->xform[xf]));
-
-         if (supershape_used>0)
-            supershape_precalc(&(cp->xform[xf]));
-
-         waves_precalc(&(cp->xform[xf]));
-*/
 
       } else if (!xmlStrcmp(chld_node->name, (const xmlChar *)"edit")) {
 
@@ -4167,6 +4324,15 @@ static void parse_flame_element(xmlNode *flame_node) {
 
       }
    } /* Done parsing flame element. */
+   
+   /* Check for bad parse */
+   if (flam3_conversion_failed) {
+      fprintf(stderr,"error: parsing a double or int attribute's value.\n");
+      return(1);
+   }
+   
+   return(0);
+
 }
 
 int flam3_count_nthreads(void) {
@@ -4223,6 +4389,7 @@ static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int defau
 
    xmlNode *this_node = NULL;
    size_t f3_storage; //,im_storage;
+   int pfe_success;
 
    /* Loop over this level of elements */
    for (this_node=cur_node; this_node; this_node = this_node->next) {
@@ -4233,7 +4400,14 @@ static void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int defau
          /* This is a flame element.  Parse it. */
          clear_cp(&xml_current_cp, default_flag);
 
-         parse_flame_element(this_node);
+         pfe_success = parse_flame_element(this_node);
+         
+         if (pfe_success>0) {
+            fprintf(stderr,"error parsing flame element\n");
+            xml_all_cp = NULL; /* leaks memory but terminates */
+            xml_all_ncps = 0;
+            return;
+         }
 
          /* Copy this cp into the array */
          f3_storage = (1+xml_all_ncps)*sizeof(flam3_genome);
@@ -4357,8 +4531,6 @@ flam3_genome *flam3_parse_xml2(char *xmldata, char *xmlfilename, int default_fla
 #endif
 
    *ncps = xml_all_ncps;
-   /* Free the allocated string */
-   free(xmldata);
    
    /* Check to see if the first control point or the second-to-last */
    /* control point has interpolation="smooth".  This is invalid    */
@@ -4405,6 +4577,7 @@ flam3_genome *flam3_parse_xml2(char *xmldata, char *xmlfilename, int default_fla
 flam3_genome * flam3_parse_from_file(FILE *f, char *fname, int default_flag, int *ncps) {
    int i, c, slen = 5000;
    char *s;
+   flam3_genome *ret;
 
    /* Incrementally read XML file into a string */
    s = malloc(slen);
@@ -4424,10 +4597,14 @@ flam3_genome * flam3_parse_from_file(FILE *f, char *fname, int default_flag, int
    s[i] = 0;
 
    /* Parse the XML string */
-   if (fname) {
-      return flam3_parse_xml2(s, fname, default_flag, ncps);
-   } else
-      return flam3_parse_xml2(s, "stdin", default_flag, ncps);
+   if (fname)
+      ret = flam3_parse_xml2(s, fname, default_flag, ncps);
+   else
+      ret = flam3_parse_xml2(s, "stdin", default_flag, ncps);
+      
+   free(s);
+   
+   return(ret);
 
 }
 
@@ -4613,6 +4790,8 @@ void flam3_apply_template(flam3_genome *cp, flam3_genome *templ) {
    if (templ->spatial_filter_select>0) {
       cp->spatial_filter_select = templ->spatial_filter_select;
    }
+   if (templ->interpolation >= 0)
+      cp->interpolation = templ->interpolation;
    if (templ->interpolation_type >= 0)
       cp->interpolation_type = templ->interpolation_type;
    if (templ->temporal_filter_type >= 0)
@@ -4620,7 +4799,9 @@ void flam3_apply_template(flam3_genome *cp, flam3_genome *templ) {
    if (templ->temporal_filter_width > 0)
       cp->temporal_filter_width = templ->temporal_filter_width;
    if (templ->temporal_filter_exp > -900)
-      cp->temporal_filter_exp = templ->temporal_filter_width;
+      cp->temporal_filter_exp = templ->temporal_filter_exp;
+   if (templ->palette_mode >= 0)
+      cp->palette_mode = templ->palette_mode;
 
 }
 
@@ -4635,7 +4816,9 @@ char *flam3_print_to_string(flam3_genome *cp) {
    stringbytes = ftell(tmpflame);
    fseek(tmpflame,0L, SEEK_SET);
    genome_string = (char *)calloc(stringbytes+1,1);
-   fread(genome_string, 1, stringbytes, tmpflame);
+   if (stringbytes != fread(genome_string, 1, stringbytes, tmpflame)) {
+       perror("FLAM3: reading string from temp file");
+   }
    fclose(tmpflame);
    
    return(genome_string);
@@ -4713,6 +4896,11 @@ void flam3_print(FILE *f, flam3_genome *cp, char *extra_attributes, int print_ed
    fprintf(f, " estimator_radius=\"%g\" estimator_minimum=\"%g\" estimator_curve=\"%g\"",
       cp->estimator, cp->estimator_minimum, cp->estimator_curve);
    fprintf(f, " gamma_threshold=\"%g\"", cp->gam_lin_thresh);
+
+   if (flam3_palette_mode_step == cp->palette_mode)
+      fprintf(f, " palette_mode=\"step\"");
+   else if (flam3_palette_mode_linear == cp->palette_mode)
+      fprintf(f, " palette_mode=\"linear\"");
 
    if (flam3_interpolation_linear != cp->interpolation)
        fprintf(f, " interpolation=\"smooth\"");
@@ -5015,13 +5203,14 @@ int flam3_random_isaac_bit(randctx *ct) {
    return tmp & 1;
 }
 
-void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan) {
+int flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan) {
 
    int c_idx=0;
    int col_count=0;
    int r,g,b;
    int sscanf_ret;
-
+   char tmps[2];
+   
    /* Strip whitespace prior to first color */
    while (isspace( (int)colstr[c_idx]))
       c_idx++;
@@ -5036,7 +5225,7 @@ void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors,
 
       if (sscanf_ret != 3) {
          fprintf(stderr, "Error:  Problem reading hexadecimal color data.\n");
-         exit(1);
+         return(1);
       }
 
       c_idx += 2*chan;
@@ -5051,6 +5240,13 @@ void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors,
       col_count++;
 
    } while (col_count<numcolors);
+   
+   if (sscanf(&(colstr[c_idx]),"%1s",tmps)>0) {
+      fprintf(stderr,"error: extra data at end of hex color data '%s'\n",&(colstr[c_idx]));
+      return(1);
+   }
+   
+   return(0);
 }
 
 /* sum of entries of vector to 1 */

@@ -1,6 +1,6 @@
 /*
     FLAM3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
+    Copyright (C) 1992-2008 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -214,6 +214,7 @@ int main(int argc, char **argv) {
 
    cps = flam3_parse_from_file(in, inf, flam3_defaults_on, &ncps);
    if (NULL == cps) {
+     fprintf(stderr,"error reading genomes from file\n");
      exit(1);
    }
 
@@ -221,6 +222,10 @@ int main(int argc, char **argv) {
       cps[i].sample_density *= qs;
       cps[i].height = (int)(cps[i].height * ss);
       cps[i].width = (int)(cps[i].width * ss);
+      if (cps[i].height<=0 || cps[i].width<=0) {
+         fprintf(stderr,"output image has dimension <=0, aborting.\n");
+         exit(1);
+      }
       cps[i].pixels_per_unit *= ss;
    }
 
@@ -355,7 +360,9 @@ int main(int argc, char **argv) {
          } else {
             fprintf(fp, "P6\n");
             fprintf(fp, "%d %d\n255\n", cps[i].width, real_height);
-            fwrite((unsigned char *)image, 1, this_size, fp);
+            if (this_size != fwrite((unsigned char *)image, 1, this_size, fp)) {
+		perror(fname);
+	    }
          }
          /* Free string */
          free(fpc.genome);

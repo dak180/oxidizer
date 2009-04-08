@@ -31,6 +31,7 @@
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
+
 int printProgress(void *nslPtr, double progress, int stage);
 
 
@@ -340,7 +341,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 
 	if(qt != nil) {
-		[qt saveNSImage:flameImage];		
+		[qt performSelectorOnMainThread:@selector(saveNSImage:) withObject:flameImage waitUntilDone:YES];
+		//[qt saveNSImage:flameImage];		
 	} 
 	
 	
@@ -730,8 +732,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 	if([defaults  boolForKey:@"render_preview_on_change"] || [sender class] == [NSButton class]) {
 
+		NSDate *start = [NSDate date];
 		NSArray *genomes = [NSArray arrayWithObject:[flames getSelectedGenome]];
 		[NSThread detachNewThreadSelector:@selector(previewCurrentFlameInThread:) toTarget:self withObject:genomes]; 
+		NSLog (@"total: %f", [[NSDate date] timeIntervalSinceDate:start]);
 	}
 }
 
@@ -739,6 +743,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
+		
 	NSError *error;
 	
 	[genomes retain];
@@ -770,7 +775,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"ss"];
 	
 
+	NSDate *start = [NSDate date];
 	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
+	NSLog (@"render time: %f", [[NSDate date] timeIntervalSinceDate:start]);
 	
 	if (returnCode == 0) {
 

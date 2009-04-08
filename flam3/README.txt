@@ -85,7 +85,7 @@ transparency    0               make bknd transparent, if format supports it (re
 name_enable     0               use 'name' attr in <flame> to name image output if present (render only)
 nick            ""              nickname to use in <edit> tags / img comments
 url             ""              url to use in <edit> tags / img comments
-id		""		ID  to use in <edit> tags / img comments
+id              ""              ID  to use in <edit> tags / img comments
 comment         ""              comment string for <edit> tags (genome only)
 use_mem         auto            floating point number of bytes of memory to use (render only)
 noedits         unset           omit edit tags from output (genome only)
@@ -254,6 +254,27 @@ todo:  eliminate all static storage.
 ======================================
 
 changelog:
+
+03/17/09 Added fuzz testing with zzuf to the regression tests.  'Strip'
+    mode and genomes with the zoom parameter used now break into pieces
+    properly.  insert_palette fixed (broken a few versions ago.)  fixed
+    twintrian variation when small weights are used.  various rare
+    segfaults and memory leaks fixed.  'palette_mode' attribute added to
+    flame element for smoother palette interpolation in slow animations;
+    possible values are 'step' and 'linear' ('step' mode is default and 
+    matches previous behaviour.)  Release as 2.7.18.
+
+11/11/08 Add error checking on the numbers in the input genome.  Do
+    not exit on read errors, fail gracefully. Changed sin/cos = tan in
+    the tangent variation. Added polar to list of variations that use
+    the inverted linear identity. Bugfix: temporal_filter_exp was not
+    set properly in template. Apply interpolation attribute in
+    templates. Add/publish datarootdir with pkg-config so the palette
+    file is easy to find (for qosmic). Copyright by Spotworks LLC
+    instead of Spot and Erik.  Add fuzz checks to the regression
+    suite.  include LNX/OSX/WIN in the version string.  In
+    flam3-genome animate command, added one to last flame time, so the
+    end time is inclusive.  Release as 2.7.17.
 
 09/06/08 Added 'clone_all' to flam3_genome to allow application of 
     template to all flames in a file at once, and 'animate' to write

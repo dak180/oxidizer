@@ -1,6 +1,6 @@
 /*
    flame - cosmic recursive fractal flames
-   Copyright (C) 1992-2003  Scott Draves <source@flam3.com>
+   Copyright (C) 1992-2008 Spotworks LLC
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -29,56 +29,62 @@ lib_palette *the_palettes = NULL;
 int npalettes;
 
 static void parse_palettes(xmlNode *node) {
-    xmlAttrPtr attr;
-    char *val;
-    lib_palette *pal;
+   xmlAttrPtr attr;
+   char *val;
+   lib_palette *pal;
     
-    while (node) {
-	if (node->type == XML_ELEMENT_NODE && !xmlStrcmp(node->name, (const xmlChar *)"palette")) {
-	    attr = node->properties;
-	    pal = &the_palettes[npalettes];
-	    memset(pal, 0, sizeof(lib_palette));
-	    while (attr) {
-		val = (char *) xmlGetProp(node, attr->name);
-		if (!xmlStrcmp(attr->name, (const xmlChar *)"data")) {
-		    int count = 256;
-		    int c_idx = 0;
-		    int r,g,b;
-		    int col_count = 0;
-		    int sscanf_ret;
-		    c_idx=0;
-		    col_count = 0;
-		    do {
-			sscanf_ret = sscanf((char *)&(val[c_idx]),"00%2x%2x%2x",&r,&g,&b);
-			if (sscanf_ret != 3) {
-			    printf("Error:  Problem reading hexadecimal color data.\n");
-			    exit(1);
-			}
-			c_idx += 8;
-			while (isspace( (int)val[c_idx]))
-			    c_idx++;
+   while (node) {
+      if (node->type == XML_ELEMENT_NODE && !xmlStrcmp(node->name, (const xmlChar *)"palette")) {
+         attr = node->properties;
+	      pal = &the_palettes[npalettes];
+	      memset(pal, 0, sizeof(lib_palette));
 
-			pal->colors[col_count][0] = r;
-			pal->colors[col_count][1] = g;
-			pal->colors[col_count][2] = b;
+         while (attr) {
+            val = (char *) xmlGetProp(node, attr->name);
+            if (!xmlStrcmp(attr->name, (const xmlChar *)"data")) {
+               int count = 256;
+               int c_idx = 0;
+               int r,g,b;
+               int col_count = 0;
+               int sscanf_ret;
+               
+               c_idx=0;
+               col_count = 0;
+               
+               do {
+                  sscanf_ret = sscanf((char *)&(val[c_idx]),"00%2x%2x%2x",&r,&g,&b);
+                  if (sscanf_ret != 3) {
+                     printf("Error:  Problem reading hexadecimal color data.\n");
+                     exit(1);
+                  }
+			         c_idx += 8;
+                  while (isspace( (int)val[c_idx]))
+                     c_idx++;
+
+                  pal->colors[col_count][0] = r;
+                  pal->colors[col_count][1] = g;
+                  pal->colors[col_count][2] = b;
                   
-			col_count++;
-		    } while (col_count<count);
-		} else if (!xmlStrcmp(attr->name, (const xmlChar *)"number")) {
-		    pal->number = atoi(val);
-		} else if (!xmlStrcmp(attr->name, (const xmlChar *)"name")) {
-		    strncpy(pal->name, val, flam3_name_len);
-		    pal->name[flam3_name_len-1] = 0;
-		}
-		attr = attr->next;
-	    }
-	    npalettes++;
-	    the_palettes = realloc(the_palettes, (1 + npalettes) * sizeof(lib_palette));
-	} else {
-	    parse_palettes(node->children);
-	}
-	node = node->next;
-    }
+                  col_count++;
+               } while (col_count<count);
+            } else if (!xmlStrcmp(attr->name, (const xmlChar *)"number")) {
+               pal->number = atoi(val);
+            } else if (!xmlStrcmp(attr->name, (const xmlChar *)"name")) {
+               strncpy(pal->name, val, flam3_name_len);
+               pal->name[flam3_name_len-1] = 0;
+            }
+            
+            xmlFree(val);
+            attr = attr->next;
+         }
+         
+         npalettes++;
+         the_palettes = realloc(the_palettes, (1 + npalettes) * sizeof(lib_palette));
+      } else
+         parse_palettes(node->children);
+         
+	   node = node->next;
+   }
 }
 
 static int init_palettes(char *filename) {

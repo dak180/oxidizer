@@ -3,6 +3,8 @@ AUTOMAKE_OPTIONS = foreign no-dependencies
 SVN_DEF = -D'SVN_REV="$(shell svnversion -n .)"'
 AM_CFLAGS = -g -O3 -ffast-math -DPACKAGE_DATA_DIR=\"$(pkgdatadir)\" $(SVN_DEF)
 
+ACLOCAL_AMFLAGS = -I m4
+
 man1_MANS = flam3-animate.man flam3-genome.man flam3-render.man flam3-convert.man
 bin_PROGRAMS = flam3-animate flam3-genome flam3-render flam3-convert
 lib_LTLIBRARIES = libflam3.la

@@ -1,6 +1,6 @@
 /*
     FLAM3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
+    Copyright (C) 1992-2008 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -789,6 +789,7 @@ main(argc, argv)
             "ignoring all but first.\n");
       } else if (0 == ncp) {
          fprintf(stderr, "no control points in template.\n");
+         exit(1);
       }
    }
 
@@ -842,17 +843,16 @@ main(argc, argv)
             cps[i].time, cps[i-1].time, i);
             exit(1);
          }
+      }
 
-         if (!getenv("time") && !getenv("frame")) {
-            if (!getenv("begin"))
-               first_frame = (int) cps[0].time;
+      if (!getenv("time") && !getenv("frame")) {
+	  if (!getenv("begin"))
+	      first_frame = (int) cps[0].time;
                
-            if (!getenv("end")) {
-               last_frame = (int) cps[ncp-1].time - 1;
-               if (last_frame < first_frame) last_frame = first_frame;
-            }
-      
-         }
+	  if (!getenv("end")) {
+	      last_frame = (int) cps[ncp-1].time;
+	      if (last_frame < first_frame) last_frame = first_frame;
+	  }
       }
 
       printf("<animate version=\"FLAM3-%s\">\n", flam3_version());
@@ -1018,7 +1018,7 @@ main(argc, argv)
    cp[i].height /= nframes;
    cp[i].center[1] = cp[i].center[1] - ((nframes - 1) * cp[i].height) /
      (2 * cp[i].pixels_per_unit * pow(2.0, cp[i].zoom));
-   cp[i].center[1] += cp[i].height * frame / cp[i].pixels_per_unit;
+   cp[i].center[1] += cp[i].height * frame / ( cp[i].pixels_per_unit * pow(2.0,cp[i].zoom) );
    rotate_by(cp[i].center, old_center, cp[i].rotate);
 
    if (templ) flam3_apply_template(&cp[i], templ);

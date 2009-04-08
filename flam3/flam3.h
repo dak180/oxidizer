@@ -1,6 +1,6 @@
 /*
     FLAM3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
+    Copyright (C) 1992-2008 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -65,6 +65,9 @@ extern char *flam3_variation_names[];
 #define flam3_palette_interpolation_sweep 1
 
 #define flam3_max_action_length 10000
+
+#define flam3_palette_mode_step   0
+#define flam3_palette_mode_linear 1
 
 #define VAR_LINEAR   0
 #define VAR_SINUSOIDAL  1
@@ -377,6 +380,7 @@ typedef struct {
    int temporal_filter_type; /* Temporal filters */
    double temporal_filter_width, temporal_filter_exp;
 
+   int palette_mode;
 
 } flam3_genome;
 
@@ -416,12 +420,11 @@ char *flam3_print_to_string(flam3_genome *cp);
 void flam3_random(flam3_genome *g, int *ivars, int ivars_n, int sym, int spec_xforms);
 
 /* return NULL in case of error */
-flam3_genome *flam3_parse(char *s, int *ncps);
 flam3_genome *flam3_parse_xml2(char *s, char *fn, int default_flag, int *ncps);
 flam3_genome *flam3_parse_from_file(FILE *f, char *fn, int default_flag, int *ncps);
 
 void flam3_add_symmetry(flam3_genome *g, int sym);
-void flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan);
+int flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan);
 
 void flam3_estimate_bounding_box(flam3_genome *g, double eps, int nsamples,
              double *bmin, double *bmax, randctx *rc);

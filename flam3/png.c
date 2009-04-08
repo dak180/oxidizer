@@ -1,6 +1,6 @@
 /*
     flame - cosmic recursive fractal flames
-    Copyright (C) 2002-2003  Scott Draves <source@flam3.com>
+    Copyright (C) 2002-2008 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

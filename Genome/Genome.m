@@ -117,6 +117,8 @@ NSString *variationName[1+flam3_nvariations] = {
 
 + (NSXMLNode *)createXMLFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc forThumbnail:(BOOL)thumbnail {
 	
+	NSDate *start = [NSDate date];
+	
 	NSXMLElement *genome = [NSXMLElement elementWithName:@"flame"];
 	
 	NSArray *cmaps;
@@ -312,6 +314,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	}
 	
 	
+	NSLog (@"genome time: %ld", [start timeIntervalSinceNow]);
 	
 	return genome;
 	

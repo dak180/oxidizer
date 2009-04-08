@@ -1,6 +1,6 @@
 /*
    FLAM3 - cosmic recursive fractal flames
-   Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
+   Copyright (C) 1992-2008 Spotworks LLC
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -164,7 +164,9 @@ static void iter_thread(void *fth) {
       /* Put them in the bucket accumulator */
       for (j = 0; j < sub_batch_size*4; j+=4) {
          double p0, p1, p00, p11;
-         int k, color_index0, color_index1;
+         double dbl_index0,dbl_frac;
+         double interpcolor[4];
+         int k, color_index0, color_index1, ci;
          double *p = &(fthp->iter_storage[j]);
          bucket *b;
 
@@ -210,20 +212,45 @@ static void iter_thread(void *fth) {
 
 //               bucket *cmap = (bucket *)(ficp->cmap);
                bucket *buckets = (bucket *)(ficp->buckets);
+               dbl_index0 = p[2] * CMAP_SIZE;
+               color_index0 = (int)dbl_index0;
 
-               color_index0 = (int) (p[2] * CMAP_SIZE);
-               if (color_index0 < 0)
-                  color_index0 = 0;
-               else if (color_index0 > CMAP_SIZE_M1)
-                  color_index0 = CMAP_SIZE_M1;
-
+               if (flam3_palette_mode_linear == fthp->cp.palette_mode) {
+                  if (color_index0 < 0) {
+                     color_index0 = 0;
+                     dbl_frac = 0;
+                  } else if (color_index0 >= CMAP_SIZE_M1) {
+                     color_index0 = CMAP_SIZE_M1-1;
+                     dbl_frac = 1.0;
+                  } else {
+                     /* interpolate between color_index0 and color_index0+1 */
+                     dbl_frac = dbl_index0 - (double)color_index0;
+                  }
+                        
+                  for (ci=0;ci<4;ci++) {
+                     interpcolor[ci] = cmap_scaled[color_index0][ci] * (1.0-dbl_frac) + 
+                                       cmap_scaled[color_index0+1][ci] * dbl_frac;               
+                  }
+                  
+               } else { /* Palette mode step */
+            
+                  if (color_index0 < 0) {
+                     color_index0 = 0;
+                  } else if (color_index0 >= CMAP_SIZE_M1) {
+                     color_index0 = CMAP_SIZE_M1;
+                  }
+                           
+                  for (ci=0;ci<4;ci++)
+                     interpcolor[ci] = cmap_scaled[color_index0][ci];               
+               }
+               
                b = buckets + (int)(ficp->ws0 * p0 - ficp->wb0s0) +
                    ficp->width * (int)(ficp->hs1 * p1 - ficp->hb1s1);
 
-               bump_no_overflow(b[0][0], cmap_scaled[color_index0][0]);
-               bump_no_overflow(b[0][1], cmap_scaled[color_index0][1]);
-               bump_no_overflow(b[0][2], cmap_scaled[color_index0][2]);
-               bump_no_overflow(b[0][3], cmap_scaled[color_index0][3]);
+               bump_no_overflow(b[0][0], interpcolor[0]);
+               bump_no_overflow(b[0][1], interpcolor[1]);
+               bump_no_overflow(b[0][2], interpcolor[2]);
+               bump_no_overflow(b[0][3], interpcolor[3]);
 
             }
          }
@@ -249,7 +276,7 @@ static void render_rectangle(flam3_frame *spec, void *out,
    bucket  *buckets;
    abucket *accumulate;
    double *points;
-   double *filter, *temporal_filter, *temporal_deltas, *motion_filter;
+   double *filter, *temporal_filter, *temporal_deltas, *batch_filter;
    double ppux=0, ppuy=0;
    int image_width, image_height;    /* size of the image to produce */
    int filter_width;
@@ -308,11 +335,10 @@ static void render_rectangle(flam3_frame *spec, void *out,
    }
 
    /* Initialize the thread helper structures */
-   fth = (flam3_thread_helper *)malloc(spec->nthreads * sizeof(flam3_thread_helper));
+   fth = (flam3_thread_helper *)calloc(spec->nthreads,sizeof(flam3_thread_helper));
    for (i=0;i<spec->nthreads;i++) {
-      fth[i].cp.num_xforms=0;
+      fth[i].cp.final_xform_index=-1;
    }
-
    image_width = spec->genomes[0].width;
    if (field) {
       image_height = spec->genomes[0].height / 2;
@@ -385,6 +411,10 @@ static void render_rectangle(flam3_frame *spec, void *out,
 
    temporal_filter = (double *) malloc(sizeof(double) * nbatches * ntemporal_samples);
    temporal_deltas = (double *) malloc(sizeof(double) * nbatches * ntemporal_samples);
+   batch_filter = (double *) malloc(sizeof(double) * nbatches);
+   
+   for (i=0;i<nbatches;i++)
+      batch_filter[i] = 1.0/(double)nbatches;
 
    if (nbatches*ntemporal_samples > 1) {
 
@@ -485,7 +515,7 @@ static void render_rectangle(flam3_frame *spec, void *out,
              4 * sizeof(double) * (size_t)SUB_BATCH_SIZE * spec->nthreads);
      last_block = (char *) malloc(memory_rqd);
      if (NULL == last_block) {
-       fprintf(stderr, "render_rectangle: cannot malloc %ld bytes.\n", memory_rqd);
+	 fprintf(stderr, "render_rectangle: cannot malloc %g bytes.\n", (double)memory_rqd);
        fprintf(stderr, "render_rectangle: h=%d w=%d nb=%ld.\n", fic.width, fic.height, nbuckets);
        exit(1);
      }
@@ -530,7 +560,7 @@ static void render_rectangle(flam3_frame *spec, void *out,
       double de_time;
       double sample_density=0.0;
       int de_row_size, de_kernel_index=0, de_half_size;
-      int de_cutoff_val=0;
+      int de_cutoff_val=0,de_count_limit;
       double *de_filter_coefs=NULL,*de_filter_widths=NULL;
       double num_de_filters_d;
       int num_de_filters=0,filtloop,de_max_ind;
@@ -587,10 +617,14 @@ static void render_rectangle(flam3_frame *spec, void *out,
          num_de_filters = ceil(num_de_filters_d);
          
          /* Condense the smaller kernels to save space */
-         if (num_de_filters>keep_thresh) 
-	   de_max_ind = ceil(keep_thresh + pow(num_de_filters-keep_thresh,cp.estimator_curve))+1;
-         else
+         if (num_de_filters>keep_thresh) { 
+            de_max_ind = ceil(keep_thresh + pow(num_de_filters-keep_thresh,cp.estimator_curve))+1;
+            de_count_limit = pow( (double)(de_max_ind-100), 1.0/cp.estimator_curve) + 100;
+         } else {
             de_max_ind = num_de_filters;
+            de_count_limit = de_max_ind;
+         }
+
 
          /* Allocate the memory for these filters */
          /* and the hit/width lookup vector       */
@@ -857,16 +891,12 @@ if (1) {
          #if defined(USE_LOCKS)
          pthread_mutex_destroy(&bucket_mutex);
          #endif
+         
+         free(myThreads);
 #else
          for (thi=0; thi < spec->nthreads; thi++)
             iter_thread( (void *)(&(fth[thi])) );
 #endif
-
-    /* We have to free the xform data allocated in the flam3_copy call above */
-         for (thi=0; thi < spec->nthreads; thi++) {
-            free(fth[thi].cp.xform);
-            fth[thi].cp.num_xforms=0;
-         }
              
 	 if (fic.aborted) {
 	   if (verbose) fprintf(stderr, "\naborted!\n");
@@ -883,7 +913,7 @@ if (1) {
       }
 
       k1 =(cp.contrast * cp.brightness *
-      PREFILTER_WHITE * 268.0 ) / 256;
+      PREFILTER_WHITE * 268.0 * batch_filter[batch_num]) / 256;
       area = image_width * image_height / (ppux * ppuy);
       k2 = (oversample * oversample * nbatches) /
    (cp.contrast * area * WHITE_LEVEL * sample_density * sumfilt);
@@ -960,11 +990,14 @@ if (1) {
                if (scf)
                   f_select *= scfact;
                   
-               if (f_select<=keep_thresh)
+
+               if (f_select > de_count_limit)
+                  f_select_int = de_cutoff_val;                  
+               else if (f_select<=keep_thresh)
                   f_select_int = (int)ceil(f_select)-1;
                else
-		 f_select_int = (int)keep_thresh +
-		   (int)floor(pow(f_select-keep_thresh,cp.estimator_curve));
+                  f_select_int = (int)keep_thresh +
+                     (int)floor(pow(f_select-keep_thresh,cp.estimator_curve));
 
                /* If the filter selected below the min specified clamp it to the min */
                if (f_select_int >= de_cutoff_val)
@@ -1241,18 +1274,17 @@ if (1) {
 
    free(temporal_filter);
    free(temporal_deltas);
-//   free(motion_filter);
-#ifdef HAVE_LIBPTHREAD
-   free(myThreads);
-#endif
+   free(batch_filter);
    free(filter);
    free(buckets);
 //   free(accumulate);
 //   free(points);
+   /* We have to clear the cps in fth first */
+   for (thi = 0; thi < spec->nthreads; thi++) {
+      clear_cp(&(fth[thi].cp),0);
+   }   
    free(fth);
-   /* Free the xform in cp */
-   free(cp.xform);
-   cp.num_xforms=0;
+   clear_cp(&cp,0);
    if (fname) free(cmap2);
 
    if (getenv("insert_palette")) {
@@ -1262,9 +1294,9 @@ if (1) {
      for (j = 0; j < ph; j++) {
        for (i = 0; i < image_width; i++) {
 	 unsigned char *p = out + nchan * (i + j * out_width);
-	 p[0] = (unsigned char)cmap[i * 256 / image_width][0];
-	 p[1] = (unsigned char)cmap[i * 256 / image_width][1];
-	 p[2] = (unsigned char)cmap[i * 256 / image_width][2];
+	 p[0] = (unsigned char)dmap[i * 256 / image_width][0];
+	 p[1] = (unsigned char)dmap[i * 256 / image_width][1];
+	 p[2] = (unsigned char)dmap[i * 256 / image_width][2];
        }
      }
    }

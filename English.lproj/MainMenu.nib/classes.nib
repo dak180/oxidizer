@@ -40,19 +40,19 @@
 		</dict>
 		<dict>
 			<key>CLASS</key>
-			<string>DragDropAndSaveImageView</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSImageView</string>
-		</dict>
-		<dict>
-			<key>CLASS</key>
 			<string>NSSegmentedControl</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSControl</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>DragDropAndSaveImageView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSImageView</string>
 		</dict>
 		<dict>
 			<key>ACTIONS</key>
@@ -146,60 +146,6 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
-				<key>changeColourMap</key>
-				<string>id</string>
-				<key>changeColourMapAndHideWindow</key>
-				<string>id</string>
-				<key>changePaletteAndHidePaletteWindow</key>
-				<string>id</string>
-				<key>showPaletteList</key>
-				<string>id</string>
-				<key>showXFormWindow</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FlameController</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_qvc</key>
-				<string>id</string>
-				<key>cmapController</key>
-				<string>NSArrayController</string>
-				<key>cmapWindow</key>
-				<string>NSWindow</string>
-				<key>colourWell</key>
-				<string>NSColorWell</string>
-				<key>colourWithHue</key>
-				<string>NSImageView</string>
-				<key>flameValues</key>
-				<string>NSTableView</string>
-				<key>flameWindow</key>
-				<string>NSWindow</string>
-				<key>flames</key>
-				<string>NSTableView</string>
-				<key>genomeController</key>
-				<string>NSArrayController</string>
-				<key>gnc</key>
-				<string>GradientNibController</string>
-				<key>paletteController</key>
-				<string>PaletteController</string>
-				<key>paletteWindow</key>
-				<string>NSWindow</string>
-				<key>paletteWithHue</key>
-				<string>NSImageView</string>
-				<key>xformController</key>
-				<string>NSArrayController</string>
-				<key>xformWindow</key>
-				<string>NSWindow</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
 				<key>customizeToolbar</key>
 				<string>id</string>
 				<key>luaLibraryAction</key>
@@ -248,6 +194,60 @@
 				<key>ffm</key>
 				<string>FractalFlameModel</string>
 				<key>oxidizerWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>changeColourMap</key>
+				<string>id</string>
+				<key>changeColourMapAndHideWindow</key>
+				<string>id</string>
+				<key>changePaletteAndHidePaletteWindow</key>
+				<string>id</string>
+				<key>showPaletteList</key>
+				<string>id</string>
+				<key>showXFormWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FlameController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_qvc</key>
+				<string>id</string>
+				<key>cmapController</key>
+				<string>NSArrayController</string>
+				<key>cmapWindow</key>
+				<string>NSWindow</string>
+				<key>colourWell</key>
+				<string>NSColorWell</string>
+				<key>colourWithHue</key>
+				<string>NSImageView</string>
+				<key>flameValues</key>
+				<string>NSTableView</string>
+				<key>flameWindow</key>
+				<string>NSWindow</string>
+				<key>flames</key>
+				<string>NSTableView</string>
+				<key>genomeController</key>
+				<string>NSArrayController</string>
+				<key>gnc</key>
+				<string>GradientNibController</string>
+				<key>paletteController</key>
+				<string>PaletteController</string>
+				<key>paletteWindow</key>
+				<string>NSWindow</string>
+				<key>paletteWithHue</key>
+				<string>NSImageView</string>
+				<key>xformController</key>
+				<string>NSArrayController</string>
+				<key>xformWindow</key>
 				<string>NSWindow</string>
 			</dict>
 			<key>SUPERCLASS</key>
@@ -552,6 +552,8 @@
 				<string>id</string>
 				<key>gradientSegmentedControl</key>
 				<string>id</string>
+				<key>loadGradientFromFile</key>
+				<string>id</string>
 				<key>newGradient</key>
 				<string>id</string>
 				<key>qvRotateBlue</key>
@@ -561,6 +563,8 @@
 				<key>qvRotateIndex</key>
 				<string>id</string>
 				<key>qvRotateRed</key>
+				<string>id</string>
+				<key>saveGradientToFile</key>
 				<string>id</string>
 				<key>showWindow</key>
 				<string>id</string>

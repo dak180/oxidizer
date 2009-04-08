@@ -1,6 +1,6 @@
 /*
     FLAM3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2006  Scott Draves <source@flam3.com>
+    Copyright (C) 1992-2008 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -141,6 +141,7 @@ int main(int argc, char **argv) {
 
   cps = flam3_parse_from_file(in, inf, flam3_defaults_on, &ncps);
   if (NULL == cps) {
+    fprintf(stderr," error reading genomes.\n");
     exit(1);
   }
   if (0 == ncps) {
@@ -152,6 +153,10 @@ int main(int argc, char **argv) {
     cps[i].height = (int)(cps[i].height * ss);
     cps[i].width = (int)(cps[i].width * ss);
     cps[i].pixels_per_unit *= ss;
+    if (cps[i].height<=0 || cps[i].width<=0) {
+       fprintf(stderr,"output image has dimension <=0, aborting.\n");
+       exit(1);
+    }
     if (i > 0 && cps[i].time <= cps[i-1].time) {
    fprintf(stderr, "error: control points must be sorted by time, but %g <= %g, index %d.\n",
       cps[i].time, cps[i-1].time, i);
@@ -284,9 +289,12 @@ int main(int argc, char **argv) {
        write_jpeg(fp, image, cps[0].width, cps[0].height, &fpc);
 
     } else {
+	int size = 3 * cps[0].width * cps[0].height;
        fprintf(fp, "P6\n");
        fprintf(fp, "%d %d\n255\n", cps[0].width, cps[0].height);
-       fwrite(image, 1, 3 * cps[0].width * cps[0].height, fp);
+       if (size != fwrite(image, 1, size, fp)) {
+	   perror(fname);
+       }
     }
 
     /* Free string */

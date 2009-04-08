@@ -319,6 +319,10 @@
 			unsigned char *namePStr = (unsigned char *)*name;
 			NSString *nameStr = [[NSString alloc] initWithBytes:&namePStr[1] length:namePStr[0] encoding:NSMacOSRomanStringEncoding];
 			
+//			if([nameStr compare:@"SGI"] == 0) {
+//				continue;
+//			}
+			
 			NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 				nameStr, @"name",
 				[NSData dataWithBytes:&c length:sizeof(c)], @"component",
@@ -530,6 +534,7 @@
 	
 }
 
+/*
 -(void) saveNSImage:(NSImage *)image {
 
 	Component c;
@@ -561,11 +566,8 @@
 	
 	memcpy(&c, [[[imageComponents objectAtIndex:componentIndex] objectForKey:@"component"] bytes], sizeof(c));
 
-/*
-	Handle theText;
-	cErr = GraphicsExportGetSettingsAsText (geExporter, &theText );
-*/
-	
+
+
 	if(geExporter == NULL) {
 		int index = [imageExportController selectionIndex];
 		memcpy(&gec, [[[imageComponents objectAtIndex:index] objectForKey:@"component"] bytes], sizeof(c));
@@ -609,13 +611,11 @@
 	
 	[tiff release];
 
-//	CloseComponent(geExporter);
-//	geExporter = NULL;
 	CloseComponent(tiffImportComponent);
 	
 
 }
-
+*/
 
 - (void) addNSBitmapImageRepToMovie:(NSBitmapImageRep *)imageRepresentation {
 
@@ -719,5 +719,91 @@
  	CFRelease(url);
  	return spec;
  }
+
+
+- (void) saveNSImage:(NSImage *)image {
+    Handle  dataRef = NULL;
+    OSType  dataRefType;
+	
+	Component gec;
+	ComponentResult cErr;
+	
+	unsigned long actualSizeWritten;
+	
+	NSData *tiff;
+	MovieImportComponent tiffImportComponent;
+	
+    // create the data reference
+    cErr = QTNewDataReferenceFromFullPathCFString((CFStringRef)filename, kQTNativeDefaultPathStyle,
+                                                    0, &dataRef, &dataRefType);
+	
+    if (NULL == dataRef || cErr != noErr) {
+		NSLog(@"QTNewDataReferenceFromFullPathCFString failed with error %ld", cErr);
+        DisposeHandle(dataRef);
+		return;
+	}	
+        // get the  exporter
+
+	int index = [imageExportController selectionIndex];
+	
+	if(lastSelectionType != IMAGE || lastSelectionIndex != index) {
+		CloseComponent(geExporter);
+		geExporter = NULL;
+	}
+	
+	/* geExport is NULL if set above or no exporter options have been set */
+	if(geExporter == NULL) {
+		index = [imageExportController selectionIndex];
+		memcpy(&gec, [[[imageComponents objectAtIndex:index] objectForKey:@"component"] bytes], sizeof(gec));
+		geExporter = OpenComponent(gec);
+	}
+		
+		
+	if (geExporter) {
+		// tell the exporter where to find its source image
+		tiff = [[image TIFFRepresentation] retain];
+		tiffImportComponent = OpenDefaultComponent( GraphicsImporterComponentType, kQTFileTypeTIFF );
+		
+		PointerDataRef dataReference = (PointerDataRef)NewHandle( sizeof(PointerDataRefRecord) );
+		
+		(**dataReference).data = (void *) [tiff bytes];
+		(**dataReference).dataLength = [tiff length];
+		
+		cErr = GraphicsImportSetDataReference( tiffImportComponent, (Handle)dataReference, PointerDataHandlerSubType );
+		if(cErr != noErr) {	
+			NSLog(@"GraphicsImportSetDataReference failed with error %ld", cErr);
+			[tiff release];
+			DisposeHandle(dataRef);
+			return;
+		}
+			
+		cErr = GraphicsExportSetInputGraphicsImporter (geExporter, tiffImportComponent);
+		if(cErr != noErr) {	
+			NSLog(@"GraphicsExportSetInputGraphicsImporter failed with error %ld", cErr);
+			
+			[tiff release];
+			CloseComponent(tiffImportComponent);
+			DisposeHandle(dataRef);
+			return;
+		}
+		
+		// tell the exporter where to save the exporter image
+		cErr = GraphicsExportSetOutputDataReference(geExporter, dataRef,
+														  dataRefType);
+			
+		cErr = GraphicsExportDoExport (geExporter, &actualSizeWritten );
+		NSLog(@"After GraphicsExportDoExport", cErr);
+		if(cErr != noErr) {	
+			NSLog(@"GraphicsExportDoExport failed with error %ld", cErr);
+		}		
+		
+	}
+		
+	CloseComponent(tiffImportComponent);
+	[tiff release];
+	DisposeHandle(dataRef);
+	
+    return;
+}
 
 @end
