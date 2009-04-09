@@ -150,6 +150,8 @@
 				<string>id</string>
 				<key>luaLibraryAction</key>
 				<string>id</string>
+				<key>makeLoop</key>
+				<string>id</string>
 				<key>newFlame</key>
 				<string>id</string>
 				<key>openFile</key>
@@ -284,6 +286,19 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
 				<key>randomSeed</key>
 				<string>id</string>
 			</dict>
@@ -296,19 +311,6 @@
 				<key>seedTextField</key>
 				<string>NSTextField</string>
 			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key></key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FirstResponder</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>
@@ -430,42 +432,6 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
-				<key>hidePaletteWindow</key>
-				<string>id</string>
-				<key>setEnabled</key>
-				<string>id</string>
-				<key>setNumber</key>
-				<string>id</string>
-				<key>showPaletteList</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>PaletteController</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>colourTable</key>
-				<string>NSTableView</string>
-				<key>palatteTable</key>
-				<string>NSTableView</string>
-				<key>palatteWindow</key>
-				<string>NSWindow</string>
-				<key>paletteList</key>
-				<string>NSArrayController</string>
-				<key>pickPalette</key>
-				<string>NSButton</string>
-				<key>textField</key>
-				<string>NSTextField</string>
-				<key>usePalette</key>
-				<string>NSButton</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
 				<key>buttonPressed</key>
 				<string>id</string>
 				<key>renderRange</key>
@@ -539,6 +505,42 @@
 				<string>NSTextField</string>
 				<key>_qvw</key>
 				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>hidePaletteWindow</key>
+				<string>id</string>
+				<key>setEnabled</key>
+				<string>id</string>
+				<key>setNumber</key>
+				<string>id</string>
+				<key>showPaletteList</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>PaletteController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>colourTable</key>
+				<string>NSTableView</string>
+				<key>palatteTable</key>
+				<string>NSTableView</string>
+				<key>palatteWindow</key>
+				<string>NSWindow</string>
+				<key>paletteList</key>
+				<string>NSArrayController</string>
+				<key>pickPalette</key>
+				<string>NSButton</string>
+				<key>textField</key>
+				<string>NSTextField</string>
+				<key>usePalette</key>
+				<string>NSButton</string>
 			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>

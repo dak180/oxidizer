@@ -1070,7 +1070,10 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		
 	
 	if(_saveThumbnail) {
-		NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+		NSMutableDictionary *taskEnvironment = [self environmentDictionary];
+		[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"qs"];
+		[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"ss"];
+
 		[taskEnvironment retain];
 		[taskEnvironment setObject:[filename stringByAppendingString:@"_"] forKey:@"prefix"];
 			
@@ -1286,6 +1289,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
 	[taskEnvironment retain];
 
+	[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"qs"];
+	[taskEnvironment setObject:[NSNumber numberWithInt:1]  forKey:@"ss"];
+
 	
 	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"preview.png", nil]];
 	[taskEnvironment setObject:pngFileName forKey:@"out"];
@@ -1458,6 +1464,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[env setObject:[NSNumber numberWithInt:environment->seed] forKey:@"seed"];
 	[env setObject:[NSNumber numberWithInt:environment->seed] forKey:@"isaac_seed"];
 	[env setObject:[NSNumber numberWithDouble:[environment doubleAspect]] forKey:@"pixel_aspect"];
+	[env setObject:[NSNumber numberWithInt:environment->nframes] forKey:@"nframes"];
 	
 	if(environment->useAlpha == YES) {
 		[env setObject:[NSNumber numberWithInt:1] forKey:@"transparency"];
@@ -1628,6 +1635,43 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		[self previewCurrentFlame:self];		
 	
 }
+
+- (void) makeLoopfromCurrentFlame {
+
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];	
+
+	NSData *original = [Genome createXMLFromEntities:[NSArray arrayWithObject:[flames getSelectedGenome]]  fromContext:moc forThumbnail:YES];
+	[original retain];
+	
+	NSString *genomePath = [Flam3Task createTemporaryPathWithFileName:@"original_genome.flam3"];
+	[genomePath  retain];
+	
+	[original writeToFile:genomePath atomically:YES];
+
+//	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[taskEnvironment setObject:[defaults stringForKey:@"nick"] forKey:@"nick"];	
+	[taskEnvironment setObject:[defaults stringForKey:@"url"] forKey:@"url"];	
+	[taskEnvironment setObject:genomePath forKey:@"sequence"];
+	
+//	NSDate *start = [NSDate date];
+	NSData *newGenomes = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:taskEnvironment];
+	
+	
+	if (newGenomes == nil || [newGenomes length] == 0) {
+		NSBeep();
+		return;
+	}
+	
+	[newGenomes retain];
+	[self deleteOldGenomes];
+	NSArray *newEntities = [Genome createGenomeEntitiesFromXML:newGenomes inContext:moc];
+	[self generateAllThumbnailsForGenomesInThread:newEntities];	
+//	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
+	[moc processPendingChanges];
+	
+}
+
 
 
 @end

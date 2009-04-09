@@ -50,9 +50,9 @@
 	useAlpha = [defaults boolForKey:@"use_alpha"];	
 	[self didChangeValueForKey:@"useAlpha"];
 
-	[self willChangeValueForKey:@"colourShift"];
-	colourShift = 0.0;	
-	[self didChangeValueForKey:@"colourShift"];
+	[self willChangeValueForKey:@"nframes"];
+	nframes = 10;	
+	[self didChangeValueForKey:@"nframes"];
 	
 	srandom(seed) ;
 	

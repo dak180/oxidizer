@@ -328,6 +328,13 @@ void print_stack(lua_State* interpreter){
 	[ffm saveAsFlam3WithThumbnail]; 
 }
 
+- (IBAction)makeLoop:(id)sender {
+	
+	[ffm makeLoopfromCurrentFlame]; 
+}
+
+
+
 - (IBAction)showBreedingWindow:(id)sender {
 	
 	[bc showBreedingWindow:sender]; 

@@ -35,7 +35,7 @@
 	int seed;
 	NSString *bits;
 	bool useAlpha;
-	double colourShift;
+	int nframes;
 
 
 }
