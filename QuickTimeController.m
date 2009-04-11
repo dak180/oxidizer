@@ -762,6 +762,7 @@
 	if (geExporter) {
 		// tell the exporter where to find its source image
 		tiff = [[image TIFFRepresentation] retain];
+//		[tiff writeToFile:@"/tmp/tiffrep.tiff" atomically:YES];
 		tiffImportComponent = OpenDefaultComponent( GraphicsImporterComponentType, kQTFileTypeTIFF );
 		
 		PointerDataRef dataReference = (PointerDataRef)NewHandle( sizeof(PointerDataRefRecord) );

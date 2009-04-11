@@ -61,6 +61,7 @@
 	NSArray *_stillsFormatArray;
 	NSArray *_interpolationTypes;
 	NSArray *_temporalFilters;
+	NSArray *_paletteModes;
 	
 	NSMutableArray *_progressInd;
 	

@@ -61,6 +61,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 		_temporalFilters = [NSArray arrayWithObjects:@"Box", @"Gaussian", @"Exponent", nil];
 		[_temporalFilters retain];
 
+		_paletteModes =  [NSArray arrayWithObjects:@"Step", @"Linear", nil];
+		[_paletteModes retain];
+		
 		unsigned int cpuCount ;
 		size_t len = sizeof(cpuCount);
 		static int mib[2] = { CTL_HW, HW_NCPU };

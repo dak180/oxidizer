@@ -296,6 +296,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"palette" stringValue:[[[genomeEntity valueForKey:@"images"]  valueForKey:@"palette"] stringValue]]];
 	}
 	
+	[genome addAttribute:[NSXMLNode attributeWithName:@"palette_mode" stringValue:[[genomeEntity valueForKey:@"palette_mode"] lowercaseString]]];
 		
 	/* xforms */
 
@@ -1010,6 +1011,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	if(newColours != nil) {
 		[newColours release];
 	}
+
+	tempAttribute = [genome attributeForName:@"palette_mode"];
+	if(tempAttribute != nil) {
+	    [newGenomeEntity setValue:[[tempAttribute stringValue] capitalizedString] forKey:@"palette_mode"];
+	}
 	
 	[newTransforms release];
 	[newGenomeEntity release];
@@ -1707,6 +1713,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		[genome setObject:[[genomeEntity valueForKey:@"spatial_filter_func"] lowercaseString] forKey:@"filter_shape"];
 	}
 
+	[genome setObject:[[genomeEntity valueForKey:@"palette_mode"] lowercaseString] forKey:@"palette_mode"];
 
 	[genome setObject:[Genome createDictionaryForEditUsingEntity:genomeEntity] forKey:@"edit"];
 	
@@ -2291,6 +2298,11 @@ NSString *variationName[1+flam3_nvariations] = {
 	    [newGenomeEntity setValue:tempObject forKey:@"hue"];
 	}	
 	
+	tempObject = [genome objectForKey:@"palette_mode"];
+	if(tempObject != nil) {
+	    [newGenomeEntity setValue:[(NSString *)tempObject capitalizedString] forKey:@"palette_mode"];
+	}	
+
 	/* deal the flame children */	
 
 	NSArray *xforms = [genome objectForKey:@"xforms"];	
@@ -2983,6 +2995,12 @@ NSString *variationName[1+flam3_nvariations] = {
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"use_palette"];
 	} else {
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"use_palette"];		
+	}
+	
+	
+	tempAttribute = [genome objectForKey:@"palette_mode"];
+	if(tempAttribute != nil) {
+		[newGenomeEntity setValue:[tempAttribute capitalizedString] forKey:@"palette_mode"];
 	}
 	
 	[newGenomeEntity autorelease];
