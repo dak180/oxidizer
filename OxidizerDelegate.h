@@ -59,6 +59,7 @@
 - (IBAction)renderStillToWindow:(id)sender;	
 - (IBAction)renderStills:(id)sender;
 - (IBAction)makeLoop:(id)sender;
+- (IBAction)makeLoopFromAll:(id)sender;
 
 - (IBAction)runLuaScript:(id)sender;
 - (IBAction)runLastLuaScript:(id) sender;

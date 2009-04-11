@@ -1639,7 +1639,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 }
 
-- (void) makeLoopfromCurrentFlame {
+- (void) makeLoopfromCurrentGenome {
 
 	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
 	[taskEnvironment retain];	
@@ -1673,6 +1673,61 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 //	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
 	[moc processPendingChanges];
 	
+	[newGenomes release];
+	[original release];
+
+}
+
+- (void) makeLoopFromAllGenomes {
+	
+	NSArray *genomes;
+	
+	NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
+	
+	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
+	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[fetch setSortDescriptors: sortDescriptors];
+	
+	genomes = [moc executeFetchRequest:fetch error:nil];
+	[fetch release];	  
+	
+	
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	[taskEnvironment retain];	
+	
+	NSData *original = [Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO];
+	[original retain];
+		
+	NSString *genomePath = [Flam3Task createTemporaryPathWithFileName:@"original_genome.flam3"];
+	[genomePath  retain];
+	
+	[original writeToFile:genomePath atomically:YES];
+	
+	//	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[taskEnvironment setObject:[defaults stringForKey:@"nick"] forKey:@"nick"];	
+	[taskEnvironment setObject:[defaults stringForKey:@"url"] forKey:@"url"];	
+	[taskEnvironment setObject:genomePath forKey:@"sequence"];
+	
+	//	NSDate *start = [NSDate date];
+	NSData *newGenomes = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:taskEnvironment];
+	
+	
+	if (newGenomes == nil || [newGenomes length] == 0) {
+		NSBeep();
+		return;
+	}
+	
+	[newGenomes retain];
+	[self deleteOldGenomes];
+	NSArray *newEntities = [Genome createGenomeEntitiesFromXML:newGenomes inContext:moc];
+	[self generateAllThumbnailsForGenomesInThread:newEntities];	
+	//	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
+	[moc processPendingChanges];
+	
+	[newGenomes release];
+	[original release];
+
 }
 
 

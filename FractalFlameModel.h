@@ -149,7 +149,8 @@
 
 - (void)createGenomesFromXMLFile:(NSString *)xmlFileName inContext:(NSManagedObjectContext *)thisMoc;
 - (void)appendGenomesFromXMLFile:(NSString *)xmlFileName fromTime:(int)time inContext:(NSManagedObjectContext *)thisMoc;
-- (void)makeLoopfromCurrentFlame;
+- (void)makeLoopfromCurrentGenome;
+- (void)makeLoopFromAllGenomes;
 
 - (NSMutableDictionary *)environmentDictionary;
 - (NSArray *)fetchGenomes;

@@ -330,7 +330,12 @@ void print_stack(lua_State* interpreter){
 
 - (IBAction)makeLoop:(id)sender {
 	
-	[ffm makeLoopfromCurrentFlame]; 
+	[ffm makeLoopfromCurrentGenome]; 
+}
+
+- (IBAction)makeLoopFromAll:(id)sender {
+	
+	[ffm makeLoopFromAllGenomes]; 
 }
 
 
