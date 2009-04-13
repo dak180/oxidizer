@@ -60,6 +60,8 @@
 + (NSMutableSet *)createDefaultVariationsEntitySetInContext:(NSManagedObjectContext *)moc;
 + (NSMutableSet *)createDefaultXFormEntitySetInContext:(NSManagedObjectContext *)moc;
 
++ (NSManagedObject *)createEmptyGnomeInContext:(NSManagedObjectContext *)moc;
+
 /* lua interface */
 + (NSArray *)createArrayFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc;
 + (NSMutableDictionary *)createDictionaryFromGenomeEntity:(NSManagedObject *)genomeEntity fromContext:(NSManagedObjectContext *)moc;

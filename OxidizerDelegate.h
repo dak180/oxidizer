@@ -68,5 +68,6 @@
 - (void) setLastLuaScript: (NSString *)lls;
 - (int) renderFromLua:(NSArray *) genomes;
 - (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename;
+- (IBAction)appendNewEmptyGenome:(id)sender;
 
 @end

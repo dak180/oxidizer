@@ -1550,6 +1550,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	[paletteImage addRepresentation:paletteWithHueRep];
 	
 	[genomeImageEntity setValue:paletteImage forKey: @"palette_image"];
+	[genomeImageEntity setValue:paletteImage forKey: @"palette_image"];
 	
 	[paletteWithHueRep release];
 	[paletteImage release];
@@ -1614,7 +1615,15 @@ NSString *variationName[1+flam3_nvariations] = {
 	return variations;
 } 
 
++ (NSManagedObject *)createEmptyGnomeInContext:(NSManagedObjectContext *)moc {
 
+	NSManagedObject *genomeEntity = [Genome createDefaultGenomeEntityInContext:moc];
+	[genomeEntity setValue:[Genome createDefaultXFormEntitySetInContext:moc] forKey: @"xforms"];
+	[genomeEntity setValue:[Genome createDefaultGenomeImageEntityInContext:moc] forKey:@"images"];
+
+	return genomeEntity;
+	
+}
 + (NSArray *)createArrayFromEntities:(NSArray *)entities fromContext:(NSManagedObjectContext *)moc {
 	
 	NSMutableArray *dictionaryArray = [NSMutableArray arrayWithCapacity:[entities count]];

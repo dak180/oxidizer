@@ -997,8 +997,52 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	return [genomeEntity objectAtIndex:0];
 
-
 }
+
+- (void)AddEmptyGenomeToFlames {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[moc lock];
+	
+	NSManagedObject *genome = [self createEmptyGenomeInContext:moc];
+	[genome retain];
+	
+	[flames performSelectorOnMainThread:@selector(addNewFlame:) withObject:genome waitUntilDone:YES];
+	
+	[moc performSelectorOnMainThread:@selector(processPendingChanges)  withObject:nil waitUntilDone:YES];
+	
+	[moc unlock];
+	
+	[genome release];
+	
+	[pool release];
+	
+}
+
+
+- (NSManagedObject *) createEmptyGenomeInContext:(NSManagedObjectContext *)context {
+	
+	[taskProgressWindow setTitle:@"Generating Empty Genome"];
+	[taskProgressWindow makeKeyAndOrderFront:self];
+	
+	srandom(time(NULL));
+	/* generate random XML */
+	NSData *newGenome = [NSData dataWithBytes:"<flame />" length:9];
+	
+	NSArray *genomeEntity = [NSArray arrayWithObject:[Genome createEmptyGnomeInContext:context]];	
+	
+	/* fix up a few values before rendering the flame */
+	
+	[[genomeEntity objectAtIndex:0] setValue:[NSNumber numberWithInt:50] forKey:@"quality"];
+	
+	[self generateAllThumbnailsForGenomesInThread:genomeEntity];	
+	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
+	
+	return [genomeEntity objectAtIndex:0];
+	
+}
+
 
 - (NSManagedObjectContext *)getNSManagedObjectContext {
 	return moc;
@@ -1118,6 +1162,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 - (void) newFlame {
 	
 	[self deleteOldGenomes];
+	[self AddEmptyGenomeToFlames];
 	if(![oxidizerWindow isVisible]) {
 		
 		[oxidizerWindow makeKeyAndOrderFront:self];

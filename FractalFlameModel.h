@@ -123,6 +123,9 @@
 //- (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) previewCurrentFlameInThread:(NSArray *)genomes;
 - (void) AddRandomGenomeToFlamesUsingContext:(NSManagedObjectContext *)context;
+- (void) AddEmptyGenomeToFlames;
+- (NSManagedObject *) createEmptyGenomeInContext:(NSManagedObjectContext *)context;
+
 - (void) saveFlam3WithThumbnail;
 - (void) saveAsFlam3WithThumbnail;
 

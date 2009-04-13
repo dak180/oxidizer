@@ -645,11 +645,16 @@ void print_stack(lua_State* interpreter){
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
-	
 	[NSBundle loadNibNamed:@"QuickView" owner:_qvc];
-
 	
 }
+
+- (IBAction)appendNewEmptyGenome:(id)sender {
+	
+	[ffm AddEmptyGenomeToFlames]; 
+}
+
+
 @end
 
 
