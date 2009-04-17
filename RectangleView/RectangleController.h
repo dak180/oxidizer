@@ -81,6 +81,7 @@
 
 //- (IBAction) rotationQuickView:(id )sender;
 
+- (void) setTreeSelection;
 /* delegete messages */
 
 - (void)controlTextDidChange:(NSNotification *)aNotification;

@@ -11,9 +11,10 @@
 
 @implementation RectangleNibController
 
-- (IBAction)showRectangleWindow:(id)sender
-{
+- (IBAction)showRectangleWindow:(id)sender {
+	
 	[rectangleController showWindow:sender];
+
 }
 
 - (void)setMOC:(NSManagedObjectContext *)moc {
@@ -42,5 +43,12 @@
 	[rectangleController setQuickViewController:qvc];
 	
 }
+
+- (void) setTreeSelection {
+
+	[rectangleController setTreeSelection];
+
+}
+
 
 @end

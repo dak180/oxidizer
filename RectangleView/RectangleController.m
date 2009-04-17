@@ -30,7 +30,9 @@
 
 - (IBAction)showWindow:(id)sender
 {
+	
 	[rectangleWindow makeKeyAndOrderFront:sender];
+	
 	
 }
 
@@ -360,10 +362,14 @@
 	if([[[[item observedObject] entity] name] isEqualToString:@"Genome"]) {
 		return NO;
 	}
+
 	
 	_currentTransform = [item observedObject];
 	
+	[_ffm->flameController setSelectedObjects:[NSArray arrayWithObject:[_currentTransform valueForKey:@"parent_genome"]]]; 
+	[_ffm->flames->xformController setSelectedObjects:[NSArray arrayWithObject:_currentTransform]];
 	return YES;
+	
 }
 
 - (void)setFractalFlameModel:(FractalFlameModel *)ffm {
@@ -374,6 +380,8 @@
 	[_ffm release];
 	
 	_ffm = ffm;
+	
+
 	
 }
 
@@ -623,5 +631,60 @@
 
 }
 
+
+
+- (NSArray *)flattenedNodes {
+	
+
+    NSMutableArray *nodeArray = [NSMutableArray array];
+	NSArray *treeNodes = [[treeController arrangedObjects] childNodes];
+	
+	NSEnumerator *treeEtor = [treeNodes objectEnumerator];
+	
+	NSTreeNode *node;
+	
+	while (node = [treeEtor nextObject]) {
+		[nodeArray addObject:node];
+		if (![node isLeaf]) {			
+			[nodeArray addObjectsFromArray:[node childNodes]];
+		}
+
+	}
+	
+	return nodeArray;    
+}
+
+- (NSIndexPath *)indexPathToObject:(id)object {    
+	NSTreeNode *treeNode;
+	NSEnumerator *treeEtor = [[self flattenedNodes] objectEnumerator];
+	while (treeNode = [treeEtor nextObject]) {
+		if ([treeNode representedObject] == object) {
+			treeNode = treeNode;
+			break;
+		}
+	}
+	return [treeNode indexPath];
+}
+
+- (void) setTreeSelection {
+
+	if ([[treeController arrangedObjects] respondsToSelector:@selector(childNodes)] == NO) {
+		return;
+	}
+	
+	NSArray *selection = [_ffm->flames->xformController selectedObjects];
+	
+	if(selection == nil || [selection count] ==0) {
+		return;
+	}
+				
+	NSIndexPath *nip = [self indexPathToObject:[selection objectAtIndex:0]];
+	BOOL selected = [treeController setSelectionIndexPath:nip];
+	
+	if(selected) {
+		NSLog(@"worked?");
+	}
+	
+}
 
 @end

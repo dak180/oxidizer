@@ -23,5 +23,7 @@
 - (void)setMOC:(NSManagedObjectContext *)moc;
 - (void)setFFM:(FractalFlameModel *)ffm;
 - (void)setQVC:(QuickViewController *)qvc;
+- (void) setTreeSelection;
+
 
 @end
