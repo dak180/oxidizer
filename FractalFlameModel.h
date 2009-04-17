@@ -29,10 +29,8 @@
 @interface FractalFlameModel : NSObjectController
 {
     IBOutlet EnvironmentController *environment;
-    IBOutlet FlameController *flames;
     IBOutlet PaletteController *palette;
     IBOutlet NSTableView *progessTable;
-    IBOutlet NSTableView *flameTable;
     IBOutlet NSWindow *preferencesWindow;
     IBOutlet NSWindow *oxidizerWindow;
     IBOutlet NSWindow *previewWindow;
@@ -100,7 +98,8 @@
 	int flameProgress;
 	NSSavePanel *savePanel;
 	IBOutlet NSArrayController *flameController;
-	
+	IBOutlet FlameController *flames;
+
 	
 }
 

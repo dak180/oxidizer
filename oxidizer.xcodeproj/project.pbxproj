@@ -43,6 +43,7 @@
 		A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */ = {isa = PBXBuildFile; fileRef = A4421BE409CF3CE900E9D39F /* oxidizer.icns */; };
 		A48873360E9924DB0038CE19 /* ImageFormatIsPNG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48873350E9924DB0038CE19 /* ImageFormatIsPNG.m */; };
 		A48874330E992E410038CE19 /* ImageFormatIsJPEG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */; };
+		A4920D9B0F9901CE00A4169E /* TransformTableDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4920D990F9901CE00A4169E /* TransformTableDelegate.m */; };
 		A49E2A5B0D86F1D1008198BE /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49E2A5A0D86F1D1008198BE /* GradientView.m */; };
 		A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49F64680EF5516F00ACB40A /* QuickViewImageView.m */; };
 		A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
@@ -160,6 +161,8 @@
 		A48873350E9924DB0038CE19 /* ImageFormatIsPNG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFormatIsPNG.m; sourceTree = "<group>"; };
 		A48874310E992E410038CE19 /* ImageFormatIsJPEG.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageFormatIsJPEG.h; sourceTree = "<group>"; };
 		A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageFormatIsJPEG.m; sourceTree = "<group>"; };
+		A4920D990F9901CE00A4169E /* TransformTableDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TransformTableDelegate.m; path = RectangleView/TransformTableDelegate.m; sourceTree = "<group>"; };
+		A4920D9A0F9901CE00A4169E /* TransformTableDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TransformTableDelegate.h; path = RectangleView/TransformTableDelegate.h; sourceTree = "<group>"; };
 		A49E2A590D86F1D1008198BE /* GradientView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientView.h; path = GradientEditor/GradientView.h; sourceTree = SOURCE_ROOT; };
 		A49E2A5A0D86F1D1008198BE /* GradientView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientView.m; path = GradientEditor/GradientView.m; sourceTree = SOURCE_ROOT; };
 		A49E2A670D86FDC9008198BE /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = GradientEditor/English.lproj/GradientWindow.nib; sourceTree = "<group>"; };
@@ -372,6 +375,8 @@
 		A404B3340D14357100FE81AC /* RectangleWindow */ = {
 			isa = PBXGroup;
 			children = (
+				A4920D990F9901CE00A4169E /* TransformTableDelegate.m */,
+				A4920D9A0F9901CE00A4169E /* TransformTableDelegate.h */,
 				A404B3300D14355600FE81AC /* RectangleView.h */,
 				A404B3310D14355600FE81AC /* RectangleView.m */,
 				A404B37C0D143FF600FE81AC /* RectangleController.h */,
@@ -632,6 +637,7 @@
 				A4D056FF0EDF3BBC005F122C /* QuickViewController.m in Sources */,
 				A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */,
 				A4B6039A0F7D99EF001A76B3 /* GradientSlider.m in Sources */,
+				A4920D9B0F9901CE00A4169E /* TransformTableDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

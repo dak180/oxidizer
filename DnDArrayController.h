@@ -19,12 +19,14 @@
 
 #import <Cocoa/Cocoa.h>
 #import "FractalFlameModel.h"
+#import "OxidizerDelegate.h"
 
 @interface DnDArrayController : NSArrayController
 {
 	
 IBOutlet NSTableView *tableView;
 IBOutlet FractalFlameModel *_ffm;
+IBOutlet OxidizerDelegate *_od;
 
 }
 

@@ -358,17 +358,20 @@ void print_stack(lua_State* interpreter){
 }
 
 - (IBAction)showRectangleWindow:(id)sender {
-	
+
+/*
 	if(rnc == nil) {
 		rnc = [[RectangleNibController alloc] init];
 		[NSBundle loadNibNamed:@"RectangleWindow" owner:rnc];
+		[rnc setMOC:[ffm getNSManagedObjectContext]];
+		[rnc setFFM:ffm];
+		[rnc setQVC:_qvc];
 	}
-	
-	[rnc setMOC:[ffm getNSManagedObjectContext]];
-	[rnc setFFM:ffm];
-	[rnc setQVC:_qvc];
+*/	
+	[rnc setTreeSelection];
 	[rnc showRectangleWindow:sender]; 
 }
+
 
 /*
 - (IBAction)showGradientWindow:(id)sender {
@@ -646,6 +649,13 @@ void print_stack(lua_State* interpreter){
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	
 	[NSBundle loadNibNamed:@"QuickView" owner:_qvc];
+	if(rnc == nil) {
+		rnc = [[RectangleNibController alloc] init];
+		[NSBundle loadNibNamed:@"RectangleWindow" owner:rnc];
+		[rnc setMOC:[ffm getNSManagedObjectContext]];
+		[rnc setFFM:ffm];
+		[rnc setQVC:_qvc];
+	}
 	
 }
 
@@ -654,6 +664,12 @@ void print_stack(lua_State* interpreter){
 	[ffm AddEmptyGenomeToFlames]; 
 }
 
+
+- (void)callSetTreeSelection {
+
+	[rnc setTreeSelection];
+
+}
 
 @end
 

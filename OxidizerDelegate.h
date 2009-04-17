@@ -60,6 +60,7 @@
 - (IBAction)renderStills:(id)sender;
 - (IBAction)makeLoop:(id)sender;
 - (IBAction)makeLoopFromAll:(id)sender;
+- (IBAction)appendNewEmptyGenome:(id)sender;
 
 - (IBAction)runLuaScript:(id)sender;
 - (IBAction)runLastLuaScript:(id) sender;
@@ -68,6 +69,6 @@
 - (void) setLastLuaScript: (NSString *)lls;
 - (int) renderFromLua:(NSArray *) genomes;
 - (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename;
-- (IBAction)appendNewEmptyGenome:(id)sender;
+- (void)callSetTreeSelection;
 
 @end

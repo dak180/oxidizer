@@ -125,6 +125,12 @@ NSString *mocPasteboardType = @"GenomeMoc";
 
 }
 
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification {
+	
+	[_od callSetTreeSelection];
+	
+}
+
 - (NSArray *)arrangeObjects:(NSArray *)objects {
 	
 	NSManagedObject *nmo;
