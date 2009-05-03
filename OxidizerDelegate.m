@@ -492,6 +492,9 @@ void print_stack(lua_State* interpreter){
 	lua_getglobal(interpreter, "oxidizer_genomes");
 	NSObject *returnObject = lua_objc_topropertylist(interpreter, 2);
 
+	
+	print_stack(interpreter);
+	
 	if ([returnThing isKindOfClass:[NSString class]] && (![(NSString *)returnThing isEqualToString:@""]) ) {
 		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
 												 defaultButton:@"Close"

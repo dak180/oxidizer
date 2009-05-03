@@ -660,7 +660,7 @@
 	BOOL selected = [treeController setSelectionIndexPath:nip];
 	
 	if(selected) {
-			_currentTransform = [selection objectAtIndex:0];
+		_currentTransform = [selection objectAtIndex:0];
 	}
 	
 }
