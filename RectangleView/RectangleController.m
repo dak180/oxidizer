@@ -134,30 +134,7 @@
 		[self doRotation:[rotate floatValue]];
 	}
 
-/*	
-	if([cellButton selectedSegment] == 0) {
-		rotation = radians(-[rotate floatValue]);
-	} else {
-		rotation = radians([rotate floatValue]);		
-	}
-
-    float cosRotation = cos(rotation);
-	float sinRotation = sin(rotation);
-	
-	CGFloat tmpA  = a;
-	
-	a = (a * cosRotation) - (d * sinRotation);
-	d = (tmpA * sinRotation) + (d * cosRotation);
-
-	CGFloat tmpB  = b;
-
-	b = (b * cosRotation) - (e * sinRotation);
-	e = (tmpB * sinRotation) + (e * cosRotation);
-
-	[self setCoeffsA:a b:b c:c d:d e:e f:f];
-	[rectangleView setCoeffsA:a b:b c:c d:d e:e f:f];
-
-*/ 
+ 
     [self updatePreview:self];
 
 	[self addUndoEntry];
@@ -237,6 +214,7 @@
 	
 	
 }
+
 - (void)controlTextDidChange:(NSNotification *)aNotification {
 
 	
@@ -682,7 +660,7 @@
 	BOOL selected = [treeController setSelectionIndexPath:nip];
 	
 	if(selected) {
-		NSLog(@"worked?");
+			_currentTransform = [selection objectAtIndex:0];
 	}
 	
 }
