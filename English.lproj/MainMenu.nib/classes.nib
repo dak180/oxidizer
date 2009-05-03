@@ -146,60 +146,6 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
-				<key>changeColourMap</key>
-				<string>id</string>
-				<key>changeColourMapAndHideWindow</key>
-				<string>id</string>
-				<key>changePaletteAndHidePaletteWindow</key>
-				<string>id</string>
-				<key>showPaletteList</key>
-				<string>id</string>
-				<key>showXFormWindow</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FlameController</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_qvc</key>
-				<string>id</string>
-				<key>cmapController</key>
-				<string>NSArrayController</string>
-				<key>cmapWindow</key>
-				<string>NSWindow</string>
-				<key>colourWell</key>
-				<string>NSColorWell</string>
-				<key>colourWithHue</key>
-				<string>NSImageView</string>
-				<key>flameValues</key>
-				<string>NSTableView</string>
-				<key>flameWindow</key>
-				<string>NSWindow</string>
-				<key>flames</key>
-				<string>NSTableView</string>
-				<key>genomeController</key>
-				<string>NSArrayController</string>
-				<key>gnc</key>
-				<string>GradientNibController</string>
-				<key>paletteController</key>
-				<string>PaletteController</string>
-				<key>paletteWindow</key>
-				<string>NSWindow</string>
-				<key>paletteWithHue</key>
-				<string>NSImageView</string>
-				<key>xformController</key>
-				<string>NSArrayController</string>
-				<key>xformWindow</key>
-				<string>NSWindow</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
 				<key>appendNewEmptyGenome</key>
 				<string>id</string>
 				<key>customizeToolbar</key>
@@ -260,6 +206,60 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>changeColourMap</key>
+				<string>id</string>
+				<key>changeColourMapAndHideWindow</key>
+				<string>id</string>
+				<key>changePaletteAndHidePaletteWindow</key>
+				<string>id</string>
+				<key>showPaletteList</key>
+				<string>id</string>
+				<key>showXFormWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FlameController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_qvc</key>
+				<string>id</string>
+				<key>cmapController</key>
+				<string>NSArrayController</string>
+				<key>cmapWindow</key>
+				<string>NSWindow</string>
+				<key>colourWell</key>
+				<string>NSColorWell</string>
+				<key>colourWithHue</key>
+				<string>NSImageView</string>
+				<key>flameValues</key>
+				<string>NSTableView</string>
+				<key>flameWindow</key>
+				<string>NSWindow</string>
+				<key>flames</key>
+				<string>NSTableView</string>
+				<key>genomeController</key>
+				<string>NSArrayController</string>
+				<key>gnc</key>
+				<string>GradientNibController</string>
+				<key>paletteController</key>
+				<string>PaletteController</string>
+				<key>paletteWindow</key>
+				<string>NSWindow</string>
+				<key>paletteWithHue</key>
+				<string>NSImageView</string>
+				<key>xformController</key>
+				<string>NSArrayController</string>
+				<key>xformWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
 			<key>CLASS</key>
 			<string>DnDArrayController</string>
 			<key>LANGUAGE</key>
@@ -290,19 +290,6 @@
 			<string>NSSlider</string>
 		</dict>
 		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key></key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FirstResponder</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
 			<key>CLASS</key>
 			<string>TransformTableDelegate</string>
 			<key>LANGUAGE</key>
@@ -312,6 +299,19 @@
 				<key>_oxidizerDelegate</key>
 				<string>OxidizerDelegate</string>
 			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>

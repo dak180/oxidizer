@@ -181,6 +181,8 @@ NSString *variationName[1+flam3_nvariations] = {
 			}
 			
 			[genome addAttribute:[NSXMLNode attributeWithName:@"quality" stringValue:[NSString stringWithFormat:@"%0.7f",quality]]];
+		} else {
+			[genome addAttribute:[NSXMLNode attributeWithName:@"quality" stringValue:[[genomeEntity valueForKey:@"quality"] stringValue]]];
 		}
 		
 		
