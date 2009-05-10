@@ -695,12 +695,12 @@ int print(lua_State *L)
 			printf("\t");
 		}
 		if (lua_isstring(L,i)) {
-			printf("Oxi: %s",lua_tostring(L,i));
+			printf("%s",lua_tostring(L,i));
 			[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s", lua_tostring(L,i)]];
 		}
 		else {
 			[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i)]];
-			printf("Oxi: %s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i));
+			printf("%s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i));
 		}
 	}
 	[_staticLuaConsole insertText:[NSString stringWithFormat:@"\n"]];
