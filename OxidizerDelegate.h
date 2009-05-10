@@ -10,6 +10,8 @@
 #import "QuickViewController.h"
 #include "LuaObjCBridge/LuaObjCBridge.h"
 
+NSTextView *_staticLuaConsole;
+
 @interface OxidizerDelegate : NSObject {
 	
 	IBOutlet NSWindow *oxidizerWindow;
@@ -17,6 +19,8 @@
 	IBOutlet BreedingController *bc;
     IBOutlet QuickViewController *_qvc;
     IBOutlet NSArrayController *_luaLibraryController;
+    IBOutlet NSTextView *_luaConsole;
+	IBOutlet NSWindow *_luaConsoleWindow;
 	
 	
 @private

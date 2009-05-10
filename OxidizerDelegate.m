@@ -8,6 +8,8 @@
 // nicely, so you can just pass a value of 0 if you're calling this directly.
 //
 
+int print(lua_State *L);
+
 void print_value(lua_State* interpreter,int stack_index,int indent){
 	
 	//
@@ -459,6 +461,8 @@ void print_stack(lua_State* interpreter){
 - (IBAction) runLastLuaScript:(id) sender {
 
 
+	[_luaConsoleWindow makeKeyAndOrderFront:self];
+	
 	NSString *lastScript = [NSString stringWithContentsOfFile:_lastLuaScript];
 	int luaScriptLength = [lastScript lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	
@@ -482,6 +486,7 @@ void print_stack(lua_State* interpreter){
 	lua_objc_pushpropertylist(interpreter,returnDictionary);
 	lua_setglobal(interpreter, "oxidizer_status");
 
+	lua_register(interpreter,"print",print);
 	
 	luaL_loadbuffer(interpreter,[lastScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
 	lua_pcall(interpreter,0,0,0);
@@ -659,7 +664,9 @@ void print_stack(lua_State* interpreter){
 		[rnc setFFM:ffm];
 		[rnc setQVC:_qvc];
 	}
-	
+
+	[NSBundle loadNibNamed:@"LuaConsole" owner:self];
+	_staticLuaConsole = _luaConsole;
 }
 
 - (IBAction)appendNewEmptyGenome:(id)sender {
@@ -677,6 +684,29 @@ void print_stack(lua_State* interpreter){
 @end
 
 
-
+int print(lua_State *L)
+{
+	int n=lua_gettop(L);
+	int i;
+	for (i=1; i<=n; i++)
+	{
+		if (i>1) {
+			[_staticLuaConsole insertText:[NSString stringWithFormat:@"\t"]];
+			printf("\t");
+		}
+		if (lua_isstring(L,i)) {
+			printf("Oxi: %s",lua_tostring(L,i));
+			[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s", lua_tostring(L,i)]];
+		}
+		else {
+			[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i)]];
+			printf("Oxi: %s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i));
+		}
+	}
+	[_staticLuaConsole insertText:[NSString stringWithFormat:@"\n"]];
+	printf("\n");
+	[_staticLuaConsole displayIfNeeded];
+	return 0;
+}
 
 

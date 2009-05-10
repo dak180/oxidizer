@@ -135,7 +135,7 @@
 		objects = [xformController arrangedObjects];
 		if([objects count] != 0) {
 			enumerator = [objects objectEnumerator];
-			index = 0;
+			index = 1;
 			while (xformEntity = [enumerator nextObject]) {
 				[xformEntity setValue:[NSNumber numberWithInt:index] forKey:@"order"];
 				index++;

@@ -63,6 +63,7 @@
 		A4C6CDE60DC3708600E2EEFB /* ProgressIndicatorWithCancel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */; };
 		A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4D056FB0EDF3BBC005F122C /* QuickView.xib */; };
 		A4D056FF0EDF3BBC005F122C /* QuickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D056FD0EDF3BBC005F122C /* QuickViewController.m */; };
+		A4D24B770FB70F9100740533 /* LuaConsole.xib in Resources */ = {isa = PBXBuildFile; fileRef = A4D24B760FB70F9100740533 /* LuaConsole.xib */; };
 		A4D3633E09AB9CE20078025F /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
 		A4D604AB09658A6C0001CD1D /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
 		A4D69FE00E77004D00A1F11B /* AutoPreviewSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D69FDF0E77004D00A1F11B /* AutoPreviewSlider.m */; };
@@ -196,6 +197,7 @@
 		A4D056FB0EDF3BBC005F122C /* QuickView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = QuickView.xib; path = QuickView/QuickView.xib; sourceTree = "<group>"; };
 		A4D056FC0EDF3BBC005F122C /* QuickViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewController.h; path = QuickView/QuickViewController.h; sourceTree = "<group>"; };
 		A4D056FD0EDF3BBC005F122C /* QuickViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewController.m; path = QuickView/QuickViewController.m; sourceTree = "<group>"; };
+		A4D24B760FB70F9100740533 /* LuaConsole.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LuaConsole.xib; sourceTree = "<group>"; };
 		A4D3633D09AB9CE20078025F /* genome.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = genome.xcdatamodel; sourceTree = "<group>"; };
 		A4D604A909658A6C0001CD1D /* PaletteController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = PaletteController.h; sourceTree = "<group>"; };
 		A4D604AA09658A6C0001CD1D /* PaletteController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = PaletteController.m; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				A4D24B760FB70F9100740533 /* LuaConsole.xib */,
 				A4AD8DD10DE857F200201C58 /* transform-scale.png */,
 				A410568C0C5F760A0075334E /* stills.png */,
 				A410568D0C5F760A0075334E /* text-x-script.png */,
@@ -573,6 +576,7 @@
 				A4B1662C0F06738D001530F3 /* TaskProgress.nib in Resources */,
 				A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */,
 				A431DB010F07C88A00E826A2 /* FileViews.nib in Resources */,
+				A4D24B770FB70F9100740533 /* LuaConsole.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
