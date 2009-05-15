@@ -8,30 +8,29 @@
 #import "RectangleNibController.h"
 #import "GradientNibController.h"
 #import "QuickViewController.h"
-#include "LuaObjCBridge/LuaObjCBridge.h"
+#import "LuaConsoleDelegate.h"
 
-NSTextView *_staticLuaConsole;
 
 @interface OxidizerDelegate : NSObject {
 	
 	IBOutlet NSWindow *oxidizerWindow;
-	IBOutlet FractalFlameModel *ffm;
+//	IBOutlet FractalFlameModel *ffm;
 	IBOutlet BreedingController *bc;
     IBOutlet QuickViewController *_qvc;
     IBOutlet NSArrayController *_luaLibraryController;
     IBOutlet NSTextView *_luaConsole;
 	IBOutlet NSWindow *_luaConsoleWindow;
+	IBOutlet LuaConsoleDelegate *_luaConsoleDelegate;
 	
+@public
+	IBOutlet FractalFlameModel *ffm;
 	
 @private
 	
 	GenePoolController *gpc;
 	GenePoolNibController *gpnc;
 	RectangleNibController *rnc;
-	
-
-	lua_State* interpreter;
-	
+		
 	NSString *_lastLuaScript;
 	
 }
