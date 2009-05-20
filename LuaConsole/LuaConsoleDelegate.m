@@ -32,6 +32,7 @@ static void dotty (lua_State *L);
 	_staticLuaConsole = _luaTextView;
 	_staticLuaConsoleDelegate = self;
 	
+	[_luaTextView setFont:[NSFont fontWithName:@"Monaco" size:10.0]];
 	_command = @"";
 
 	
@@ -149,7 +150,10 @@ static void dotty (lua_State *L);
 	lua_register(interpreter,"print",print);
 	
 	luaL_loadbuffer(interpreter,[lastScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
+
+	[_luaTextView setEditable:YES];
 	lua_pcall(interpreter,0,0,0);
+	[_luaTextView setEditable:NO];
 	
 	lua_getglobal(interpreter, "oxidizer_status");
 	NSObject *returnThing = (NSString *)lua_objc_topropertylist(interpreter, 1);
@@ -158,7 +162,7 @@ static void dotty (lua_State *L);
 	NSObject *returnObject = lua_objc_topropertylist(interpreter, 2);
 	
 	
-	print_stack(interpreter);
+//	print_stack(interpreter);
 	
 	if ([returnThing isKindOfClass:[NSString class]] && (![(NSString *)returnThing isEqualToString:@""]) ) {
 		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
@@ -439,7 +443,7 @@ int print(lua_State *L)
 // The code below is mostly copied from the lua interepter  
 
 /*
- ** $Id: LuaConsoleDelegate.m,v 1.2 2009/05/20 19:09:06 vargol Exp $
+ ** $Id: LuaConsoleDelegate.m,v 1.3 2009/05/20 20:45:41 vargol Exp $
  ** Lua stand-alone interpreter
  ** See Copyright Notice in lua.h
  */
@@ -644,7 +648,8 @@ static int pushline (lua_State *L, int firstline) {
 	memcpy(b, [command UTF8String], l+1);
 	
 	[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s", get_prompt(L, firstline)]];
-	
+	[_staticLuaConsole displayIfNeeded];
+
 	if (l == 0)
 		return 0;  /* no input */
 	if (l > 0 && b[l-1] == '\n')  /* line ends with newline? */
@@ -696,7 +701,7 @@ static void dotty (lua_State *L) {
 				l_message(progname, lua_pushfstring(L,
 													"error calling " LUA_QL("print") " (%s)",
 													lua_tostring(L, -1)));
-		}
+		} 
 	}
 	lua_settop(L, 0);  /* clear stack */
 
