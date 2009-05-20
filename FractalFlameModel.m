@@ -1543,7 +1543,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 }
 
 
-- (void)createGenomesFromLua:(NSArray *)genomeArray {
+
+
+- (void)appendGenomesFromLua:(NSArray *)genomeArray {
 	
 
 	NSArray *newGenomes = [Genome createGenomeEntitiesFromArray:genomeArray inContext:moc];
@@ -1555,6 +1557,14 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 //	NSLog(@"%@", newGenome);
 	
 }
+
+
+- (void)replaceWithGenomesFromLua:(NSArray *)genomeArray {
+
+	[self deleteGenomes:self];
+	[self appendGenomesFromLua:genomeArray];
+}
+
 
 - (BOOL)renderGenomeToPng:(NSString *)pngFileName {
 	

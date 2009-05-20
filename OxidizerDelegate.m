@@ -402,7 +402,7 @@
 - (int) renderFromLua:(NSArray *) genomes {
 	
 		[ffm deleteOldGenomes];
-		[ffm createGenomesFromLua:genomes]; 
+		[ffm appendGenomesFromLua:genomes]; 
 		[ffm renderStill];
 
 	return 0;
@@ -412,7 +412,7 @@
 - (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename {
 	
 	[ffm deleteOldGenomes];
-	[ffm createGenomesFromLua:genomes]; 
+	[ffm appendGenomesFromLua:genomes]; 
 	return [ffm renderGenomeToPng:filename] ? 0 : 1;
 }
 

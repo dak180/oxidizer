@@ -165,7 +165,8 @@
 
 /* lua interface */
 - (NSArray *)passGenomesToLua;
-- (void)createGenomesFromLua:(NSArray *)genomeArray;
+- (void)appendGenomesFromLua:(NSArray *)genomeArray;
+- (void)replaceWithGenomesFromLua:(NSArray *)genomeArray;
 - (BOOL)renderGenomeToPng:(NSString *)pngFileName;
 
 + (BOOL)useProgressBar;

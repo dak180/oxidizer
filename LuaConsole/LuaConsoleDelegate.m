@@ -37,13 +37,13 @@ static void dotty (lua_State *L);
 	
 	_interactive=lua_objc_init();
 	
-	FractalFlameModel *ffm = ((OxidizerDelegate *)self->delegate)->ffm;
+	_ffm = ((OxidizerDelegate *)self->delegate)->ffm;
 	
-	lua_objc_pushid(_interactive,ffm);
+	lua_objc_pushid(_interactive,_ffm);
 	lua_setglobal(_interactive, "oxidizer");
 		
 	lua_objc_pushid(_interactive,self);
-	lua_setglobal(_interactive, "oxidizer_delegate");
+	lua_setglobal(_interactive, "oxidizer_api");
 	
 	NSMutableDictionary *returnDictionary = [[NSMutableDictionary alloc] init];
 	
@@ -67,16 +67,20 @@ static void dotty (lua_State *L);
 }
 	
 
+- (IBAction) runCommand:(id)sender {
+	
+	[self setCommand:[_luaTextField stringValue]];
+	[_luaTextView setEditable:YES];
+	[_luaTextView insertText:_command];
+	[_luaTextView insertText:@"\n"];
+	[_luaTextField setStringValue:@""];
+	dotty (_interactive);
+	[_luaTextView setEditable:NO];
+
+}
 
 - (void)controlTextDidEndEditing:(NSNotification *)aNotification {
 			
-	if(_ignoreDidBeginNotifiactions == NO) {
-		[self setCommand:[_luaTextField stringValue]];
-		[_luaTextView insertText:_command];
-		[_luaTextView insertText:@"\n"];
-		[_luaTextField setStringValue:@""];
-		dotty (_interactive);
-	}
 
 }
 				
@@ -181,7 +185,7 @@ static void dotty (lua_State *L);
 		if ([returnObject isKindOfClass:[NSArray class]]) {
 			if([(NSArray *)returnObject count] > 0) {
 				[ffm deleteOldGenomes];
-				[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+				[ffm appendGenomesFromLua:(NSArray *)returnObject]; 			
 			}
 		} else if ([returnObject isKindOfClass:[NSString class]] && (![(NSString *)returnObject isEqualToString:@""]) ) {
 			NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Lua Script failed!" 
@@ -199,7 +203,7 @@ static void dotty (lua_State *L);
 		if ([returnObject isKindOfClass:[NSArray class]]) {
 			if([(NSArray *)returnObject count] > 0) {
 				[ffm deleteOldGenomes];
-				[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+				[ffm appendGenomesFromLua:(NSArray *)returnObject]; 			
 			}
 		}		
 	} else if ([[returnValues valueForKey:@"action"] isEqualToString:@"append"]) {
@@ -208,7 +212,7 @@ static void dotty (lua_State *L);
 		
 		if ([returnObject isKindOfClass:[NSArray class]]) {
 			if([(NSArray *)returnObject count] > 0) {
-				[ffm createGenomesFromLua:(NSArray *)returnObject]; 			
+				[ffm appendGenomesFromLua:(NSArray *)returnObject]; 			
 			}
 		}
 	} else if ([[returnValues valueForKey:@"action"] isEqualToString:@"warning"]) {
@@ -251,6 +255,40 @@ static void dotty (lua_State *L);
 	return;
 	
 }
+
+
+- (NSArray *)passGenomesToLua {
+	
+	
+	return [(FractalFlameModel *)_ffm passGenomesToLua];
+	
+}
+
+- (void)appendGenomesFromLua:(NSString *)globalName {
+	
+	
+	lua_getglobal(_interactive, [globalName cStringUsingEncoding:NSUTF8StringEncoding]);
+	
+	int globaIndex = lua_gettop(_interactive);
+	
+	NSArray *newGenomes = lua_objc_topropertylist(_interactive, globaIndex);
+	
+	[newGenomes retain];
+	
+	[(FractalFlameModel *)_ffm appendGenomesFromLua:newGenomes];
+	
+	[newGenomes release];
+		
+	//	NSLog(@"%@", newGenome);
+	
+}
+
+- (void)replaceWithGenomesFromLua:(NSString *)globalName {
+	
+	[(FractalFlameModel *)_ffm deleteOldGenomes];
+	[self appendGenomesFromLua:globalName];
+}
+
 
 @end
 
@@ -401,7 +439,7 @@ int print(lua_State *L)
 // The code below is mostly copied from the lua interepter  
 
 /*
- ** $Id: LuaConsoleDelegate.m,v 1.1 2009/05/15 19:22:29 vargol Exp $
+ ** $Id: LuaConsoleDelegate.m,v 1.2 2009/05/20 19:09:06 vargol Exp $
  ** Lua stand-alone interpreter
  ** See Copyright Notice in lua.h
  */
@@ -642,6 +680,9 @@ static int loadline (lua_State *L) {
 
 
 static void dotty (lua_State *L) {
+	
+	print_stack(L);
+	
 	int status;
 	const char *oldprogname = progname;
 	progname = NULL;

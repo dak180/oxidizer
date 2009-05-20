@@ -248,9 +248,9 @@
 		4B277B340A7E9EF00051C47A /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B4FE4C408278751007685F3 /* LuaObjCBridge-Prefix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "LuaObjCBridge-Prefix.h"; sourceTree = "<group>"; };
 		4B4FE50408278751007685F3 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		4B4FE50508278751007685F3 /* LuaObjcBridge-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = "LuaObjcBridge-Info.plist"; sourceTree = "<group>"; };
+		4B4FE50508278751007685F3 /* LuaObjcBridge-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "LuaObjcBridge-Info.plist"; sourceTree = "<group>"; };
 		4B4FE50608278751007685F3 /* Release Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "Release Notes.rtf"; path = "Resources/Release Notes.rtf"; sourceTree = "<group>"; };
-		4B4FE50708278751007685F3 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; path = version.plist; sourceTree = "<group>"; };
+		4B4FE50708278751007685F3 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = version.plist; sourceTree = "<group>"; };
 		4B4FE50F08278784007685F3 /* LuaObjCBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LuaObjCBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B4FE517082787AB007685F3 /* lua */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lua; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B897658090BE6D1006A3DF7 /* liblua.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = liblua.dylib; sourceTree = BUILT_PRODUCTS_DIR; };

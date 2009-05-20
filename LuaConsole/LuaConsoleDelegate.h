@@ -39,4 +39,11 @@
 - (NSString *)command;
 - (void) setCommand:(NSString *)command;
 
+- (IBAction) runCommand:(id)sender;
+
+/* interactive scripting option */
+
+- (NSArray *)passGenomesToLua;
+- (void)appendGenomesFromLua:(NSString *)globalName;
+- (void)replaceWithGenomesFromLua:(NSString *)globalName;
 @end
