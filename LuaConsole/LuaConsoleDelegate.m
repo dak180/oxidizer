@@ -15,7 +15,7 @@
 #define LUA_PROMPT2		">> "
 
 
-NSTextView *_staticLuaConsole;
+ConsoleView *_staticLuaConsole;
 LuaConsoleDelegate *_staticLuaConsoleDelegate;
 
 int print(lua_State *L);
@@ -32,7 +32,7 @@ static void dotty (lua_State *L);
 	_staticLuaConsole = _luaTextView;
 	_staticLuaConsoleDelegate = self;
 	
-	[_luaTextView setFont:[NSFont fontWithName:@"Monaco" size:10.0]];
+//	[_luaTextView setFont:[NSFont fontWithName:@"Monaco" size:10.0]];
 	_command = @"";
 
 	
@@ -59,31 +59,17 @@ static void dotty (lua_State *L);
 	lua_register(_interactive,"print",print);
 	
 }
-
-
-- (void)controlTextDidBeginEditing:(NSNotification *)aNotification {
-	
-		NSRange range = { [[_luaTextView string] length], 0 };
-		[_luaTextView setSelectedRange: range];
-}
 	
 
 - (IBAction) runCommand:(id)sender {
 	
 	[self setCommand:[_luaTextField stringValue]];
-	[_luaTextView setEditable:YES];
-	[_luaTextView insertText:_command];
-	[_luaTextView insertText:@"\n"];
+	[_luaTextView appendLine:_command];
 	[_luaTextField setStringValue:@""];
 	dotty (_interactive);
-	[_luaTextView setEditable:NO];
-
+	[_luaTextView forceDisplay];
 }
 
-- (void)controlTextDidEndEditing:(NSNotification *)aNotification {
-			
-
-}
 				
 - (NSString *)command {
 	
@@ -103,18 +89,6 @@ static void dotty (lua_State *L);
 	_command = command;
 	
 	
-}
-- (void) startOutput {
-	
-	_ignoreDidBeginNotifiactions = YES;
-}
-
-- (void) stopOutput {
-
-	_ignoreDidBeginNotifiactions = NO;
-	_commandStartIndex = [[_luaTextView string] length];
-
-
 }
 
 
@@ -151,9 +125,9 @@ static void dotty (lua_State *L);
 	
 	luaL_loadbuffer(interpreter,[lastScript cStringUsingEncoding:NSUTF8StringEncoding],luaScriptLength,"Main script");
 
-	[_luaTextView setEditable:YES];
+//	[_luaTextView setEditable:YES];
 	lua_pcall(interpreter,0,0,0);
-	[_luaTextView setEditable:NO];
+//	[_luaTextView setEditable:NO];
 	
 	lua_getglobal(interpreter, "oxidizer_status");
 	NSObject *returnThing = (NSString *)lua_objc_topropertylist(interpreter, 1);
@@ -251,7 +225,8 @@ static void dotty (lua_State *L);
 		
 	}
 	
-	
+	[_staticLuaConsole forceDisplay];
+
 	lua_close(interpreter);
 	
 	interpreter = nil;
@@ -292,6 +267,18 @@ static void dotty (lua_State *L);
 	[(FractalFlameModel *)_ffm deleteOldGenomes];
 	[self appendGenomesFromLua:globalName];
 }
+
+- (IBAction) copy:(id)sender {
+		
+	[[NSPasteboard generalPasteboard] declareTypes: [NSArray arrayWithObject: NSStringPboardType] owner:nil];
+	[[NSPasteboard generalPasteboard] setString: [_luaTextView copy] forType: NSStringPboardType];	
+
+}
+- (IBAction) paste:(id)sender {
+	
+	
+}
+
 
 
 @end
@@ -414,28 +401,24 @@ void print_stack(lua_State* interpreter){
 int print(lua_State *L)
 {
 	
-	[_staticLuaConsoleDelegate startOutput];
+	
 	int n=lua_gettop(L);
 	int i;
 	for (i=1; i<=n; i++)
 	{
 		if (i>1) {
-			[_staticLuaConsole insertText:[NSString stringWithFormat:@"\t"]];
-			printf("\t");
+			[_staticLuaConsole buildString:@"\t"];
 		}
 		if (lua_isstring(L,i)) {
-			printf("%s",lua_tostring(L,i));
-			[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s", lua_tostring(L,i)]];
+			[_staticLuaConsole buildString:[NSString stringWithCString:lua_tostring(L,i)]];
 		}
 		else {
-			[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i)]];
-			printf("%s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i));
+			[_staticLuaConsole buildString:[NSString stringWithFormat:@"%s:%p",lua_typename(L,lua_type(L,i)),lua_topointer(L,i)]];
 		}
 	}
-	[_staticLuaConsole insertText:[NSString stringWithFormat:@"\n"]];
-	printf("\n");
+
+	[_staticLuaConsole appendBuiltString];
 	[_staticLuaConsole displayIfNeeded];
-	[_staticLuaConsoleDelegate stopOutput];
 	return 0;
 }
 
@@ -443,7 +426,7 @@ int print(lua_State *L)
 // The code below is mostly copied from the lua interepter  
 
 /*
- ** $Id: LuaConsoleDelegate.m,v 1.3 2009/05/20 20:45:41 vargol Exp $
+ ** $Id: LuaConsoleDelegate.m,v 1.4 2009/05/31 11:00:43 vargol Exp $
  ** Lua stand-alone interpreter
  ** See Copyright Notice in lua.h
  */
@@ -646,9 +629,9 @@ static int pushline (lua_State *L, int firstline) {
 	size_t l = [command lengthOfBytesUsingEncoding:NSUTF8StringEncoding];
 	char *b = (char *)malloc(l+1);
 	memcpy(b, [command UTF8String], l+1);
-	
-	[_staticLuaConsole insertText:[NSString stringWithFormat:@"%s", get_prompt(L, firstline)]];
-	[_staticLuaConsole displayIfNeeded];
+
+	const char *prompt = get_prompt(L, firstline);
+	[_staticLuaConsole buildString:[NSString stringWithCString:prompt]];
 
 	if (l == 0)
 		return 0;  /* no input */
@@ -659,7 +642,9 @@ static int pushline (lua_State *L, int firstline) {
 	else
 		lua_pushstring(L, b);
 	lua_freeline(L, b);
+
 	[_staticLuaConsoleDelegate setCommand:@""];
+
 	return 1;
 }
 
@@ -705,10 +690,8 @@ static void dotty (lua_State *L) {
 	}
 	lua_settop(L, 0);  /* clear stack */
 
-	[_staticLuaConsole insertText:[NSString stringWithFormat:@"\n"]];
+//	[_staticLuaConsole insertText:@"\n"];
 
-	fputs("\n", stdout);
-	fflush(stdout);
 	progname = oldprogname;
 }
 

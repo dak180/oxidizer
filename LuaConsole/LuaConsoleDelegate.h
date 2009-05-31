@@ -7,17 +7,21 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "ConsoleView.h"
+
 #include "LuaObjCBridge/LuaObjCBridge.h"
 
 
 @interface LuaConsoleDelegate : NSObject {
 
-	IBOutlet NSTextView *_luaTextView;
+	IBOutlet ConsoleView *_luaTextView;
 	IBOutlet NSTextField *_luaTextField;
 	IBOutlet id delegate;
 	
 	BOOL _ignoreDidBeginNotifiactions;
 	NSString *_command;
+	
+	NSMutableString *_selectedString;
 	 
 	lua_State* interpreter;
 	lua_State* _interactive;
@@ -28,11 +32,6 @@
 
 }
 
-//- (void)textDidBeginEditing:(NSNotification *)aNotification;
-//- (void)textDidEndEditing:(NSNotification *)aNotification;
-
-- (void) startOutput;
-- (void) stopOutput;
 
 - (void) runLuaScript:(NSString *)script;
 
@@ -40,6 +39,8 @@
 - (void) setCommand:(NSString *)command;
 
 - (IBAction) runCommand:(id)sender;
+- (IBAction) copy:(id)sender;
+- (IBAction) paste:(id)sender;
 
 /* interactive scripting option */
 

@@ -70,6 +70,7 @@
 		A4DA858E0966DD2A00FFCF4D /* EnvironmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */; };
 		A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
 		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
+		A4E69E620FC835310001E3BD /* ConsoleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E69E610FC835310001E3BD /* ConsoleView.m */; };
 		A4F21B460CEA112400F0195A /* libpng.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2DB0C340B44001582CC /* libpng.dylib */; };
 		A4F21B470CEA112C00F0195A /* libjpeg.62.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */; };
 		A4F3EF1E0AB5DE3100A282F2 /* image-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */; };
@@ -209,6 +210,8 @@
 		A4DA871B096712CA00FFCF4D /* FlameController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FlameController.h; sourceTree = "<group>"; };
 		A4DA871C096712CA00FFCF4D /* FlameController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FlameController.m; sourceTree = "<group>"; };
 		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "flam3/flam3-palettes.xml"; sourceTree = SOURCE_ROOT; };
+		A4E69E600FC835310001E3BD /* ConsoleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConsoleView.h; path = LuaConsole/ConsoleView.h; sourceTree = "<group>"; };
+		A4E69E610FC835310001E3BD /* ConsoleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConsoleView.m; path = LuaConsole/ConsoleView.m; sourceTree = "<group>"; };
 		A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "image-x-generic.png"; path = "icons/Tango/image-x-generic.png"; sourceTree = "<group>"; };
 		A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "video-x-generic.png"; path = "icons/Tango/video-x-generic.png"; sourceTree = "<group>"; };
 		A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OxidizerDelegate.m; sourceTree = "<group>"; };
@@ -482,6 +485,8 @@
 		A4C26D650FB9F5AC00A47F9A /* Lua Console */ = {
 			isa = PBXGroup;
 			children = (
+				A4E69E600FC835310001E3BD /* ConsoleView.h */,
+				A4E69E610FC835310001E3BD /* ConsoleView.m */,
 				A4A71D1D0FBC8F5B008ED5D4 /* LuaConsole.xib */,
 				A4C26D7A0FB9F61E00A47F9A /* LuaConsoleDelegate.h */,
 				A4C26D7B0FB9F61E00A47F9A /* LuaConsoleDelegate.m */,
@@ -652,6 +657,7 @@
 				A4B6039A0F7D99EF001A76B3 /* GradientSlider.m in Sources */,
 				A4920D9B0F9901CE00A4169E /* TransformTableDelegate.m in Sources */,
 				A4C26D7C0FB9F61E00A47F9A /* LuaConsoleDelegate.m in Sources */,
+				A4E69E620FC835310001E3BD /* ConsoleView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

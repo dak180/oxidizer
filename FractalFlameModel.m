@@ -1349,7 +1349,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskAllFramesIndicator setMaxValue:[genomes count]];
 	
 	[taskProgressWindow setTitle:@"Rendering Image"];
-	[taskProgressWindow makeKeyAndOrderFront:self];
+	[taskProgressWindow performSelectorOnMainThread:@selector(makeKeyAndOrderFront:) withObject:self waitUntilDone:YES];
 
 	
 	int i;
