@@ -150,6 +150,78 @@
 }
 
 
+- (IBAction)moveXForm:(id)sender {
+	
+	NSManagedObject *xformEntity;
+	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
+	NSEnumerator *enumerator;
+	NSArray *objects;
+	int index;
+	// NSManagedObject *selectedGenome;
+	
+	switch([segments selectedSegment]) {
+		case 0:
+			/* move xform up */
+			
+			index = [xformController selectionIndex];
+			if(index == NSNotFound || index < 1) {
+				NSBeep();
+				return;
+			} else {
+				
+				index++; // order is 1 based
+				int indexToJump = index - 1;
+				
+				objects = [xformController arrangedObjects];
+				enumerator = [objects objectEnumerator];
+
+				while (xformEntity = [enumerator nextObject]) {
+					int currentIndex = [[xformEntity valueForKey:@"order"] intValue];
+					if(currentIndex == index) {						
+						[xformEntity setValue:[NSNumber numberWithInt:currentIndex-1] forKey:@"order"];
+					} else if(currentIndex == indexToJump) {
+						[xformEntity setValue:[NSNumber numberWithInt:currentIndex+1] forKey:@"order"];
+					}
+					/* else leave it alone */
+				}
+			} 
+			break;
+		case 1:
+			/* move xform down */
+			
+			index = [xformController selectionIndex];
+			if(index == NSNotFound || index + 1 >= [[xformController arrangedObjects] count]) {
+				NSBeep();
+				return;
+			} else {
+
+				index++; // order is 1 based
+				
+				int indexToJump = index + 1;
+				
+				objects = [xformController arrangedObjects];
+				enumerator = [objects objectEnumerator];
+				
+				while (xformEntity = [enumerator nextObject]) {
+					int currentIndex = [[xformEntity valueForKey:@"order"] intValue];
+					if(currentIndex == index) {						
+						[xformEntity setValue:[NSNumber numberWithInt:currentIndex+1] forKey:@"order"];
+					} else if(currentIndex == indexToJump) {
+						[xformEntity setValue:[NSNumber numberWithInt:currentIndex-1] forKey:@"order"];
+					}
+					/* else leave it alone */
+				}
+			} 
+			
+			break;
+		default:
+			break;
+	}	
+	
+	[xformController rearrangeObjects];
+	
+}
+
 
 
 - (void)awakeFromNib

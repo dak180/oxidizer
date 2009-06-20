@@ -58,6 +58,8 @@
 - (IBAction)showPaletteList:(id)sender;
 - (IBAction)changeColourMap:(id)sender;
 - (IBAction)changeColourMapAndHideWindow:(id)sender;
+- (IBAction)moveXForm:(id)sender;
+
 
 - (void)setValue:(id)value forKey:(NSString *)key;
 - (void)setValue:(id)value forKeyPath:(NSString *)keyPath;

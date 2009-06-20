@@ -948,7 +948,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		} else if ([[child name] isEqualToString:@"xform"] || [[child name] isEqualToString:@"finalxform"]) {
 
 			NSManagedObject *newXformEntity = [Genome createTransformEntitiesFromElement:child inContext:moc]; 
-			[newXformEntity setValue:[NSNumber numberWithInt:[newTransforms count]] forKey:@"order"];
+			[newXformEntity setValue:[NSNumber numberWithInt:[newTransforms count]+1] forKey:@"order"];
 			[newTransforms addObject:newXformEntity];
 			[newXformEntity release];
 		} else if([[child name] isEqualToString:@"edit"]) {
@@ -2366,7 +2366,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		
 		xFormEntity = [NSEntityDescription insertNewObjectForEntityForName:@"XForm" inManagedObjectContext:moc];
 
-		[xFormEntity setValue:[NSNumber numberWithInt:i] forKey:@"order"];
+		[xFormEntity setValue:[NSNumber numberWithInt:i+1] forKey:@"order"];
 		
 		tempObject = [xform objectForKey:@"weight"];
 		if (tempObject != nil) {

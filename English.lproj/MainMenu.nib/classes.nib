@@ -146,6 +146,62 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>changeColourMap</key>
+				<string>id</string>
+				<key>changeColourMapAndHideWindow</key>
+				<string>id</string>
+				<key>changePaletteAndHidePaletteWindow</key>
+				<string>id</string>
+				<key>moveXForm</key>
+				<string>id</string>
+				<key>showPaletteList</key>
+				<string>id</string>
+				<key>showXFormWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FlameController</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_qvc</key>
+				<string>id</string>
+				<key>cmapController</key>
+				<string>NSArrayController</string>
+				<key>cmapWindow</key>
+				<string>NSWindow</string>
+				<key>colourWell</key>
+				<string>NSColorWell</string>
+				<key>colourWithHue</key>
+				<string>NSImageView</string>
+				<key>flameValues</key>
+				<string>NSTableView</string>
+				<key>flameWindow</key>
+				<string>NSWindow</string>
+				<key>flames</key>
+				<string>NSTableView</string>
+				<key>genomeController</key>
+				<string>NSArrayController</string>
+				<key>gnc</key>
+				<string>GradientNibController</string>
+				<key>paletteController</key>
+				<string>PaletteController</string>
+				<key>paletteWindow</key>
+				<string>NSWindow</string>
+				<key>paletteWithHue</key>
+				<string>NSImageView</string>
+				<key>xformController</key>
+				<string>NSArrayController</string>
+				<key>xformWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
 				<key>appendNewEmptyGenome</key>
 				<string>id</string>
 				<key>customizeToolbar</key>
@@ -191,6 +247,12 @@
 			<string>ObjC</string>
 			<key>OUTLETS</key>
 			<dict>
+				<key>_luaConsole</key>
+				<string>NSTextView</string>
+				<key>_luaConsoleDelegate</key>
+				<string>LuaConsoleDelegate</string>
+				<key>_luaConsoleWindow</key>
+				<string>NSWindow</string>
 				<key>_luaLibraryController</key>
 				<string>NSArrayController</string>
 				<key>_qvc</key>
@@ -200,60 +262,6 @@
 				<key>ffm</key>
 				<string>FractalFlameModel</string>
 				<key>oxidizerWindow</key>
-				<string>NSWindow</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
-				<key>changeColourMap</key>
-				<string>id</string>
-				<key>changeColourMapAndHideWindow</key>
-				<string>id</string>
-				<key>changePaletteAndHidePaletteWindow</key>
-				<string>id</string>
-				<key>showPaletteList</key>
-				<string>id</string>
-				<key>showXFormWindow</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FlameController</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_qvc</key>
-				<string>id</string>
-				<key>cmapController</key>
-				<string>NSArrayController</string>
-				<key>cmapWindow</key>
-				<string>NSWindow</string>
-				<key>colourWell</key>
-				<string>NSColorWell</string>
-				<key>colourWithHue</key>
-				<string>NSImageView</string>
-				<key>flameValues</key>
-				<string>NSTableView</string>
-				<key>flameWindow</key>
-				<string>NSWindow</string>
-				<key>flames</key>
-				<string>NSTableView</string>
-				<key>genomeController</key>
-				<string>NSArrayController</string>
-				<key>gnc</key>
-				<string>GradientNibController</string>
-				<key>paletteController</key>
-				<string>PaletteController</string>
-				<key>paletteWindow</key>
-				<string>NSWindow</string>
-				<key>paletteWithHue</key>
-				<string>NSImageView</string>
-				<key>xformController</key>
-				<string>NSArrayController</string>
-				<key>xformWindow</key>
 				<string>NSWindow</string>
 			</dict>
 			<key>SUPERCLASS</key>
@@ -305,19 +313,6 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
-				<key></key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>FirstResponder</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
 				<key>randomSeed</key>
 				<string>id</string>
 			</dict>
@@ -330,6 +325,19 @@
 				<key>seedTextField</key>
 				<string>NSTextField</string>
 			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key></key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>FirstResponder</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>
@@ -567,6 +575,32 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
+				<key>copy</key>
+				<string>id</string>
+				<key>paste</key>
+				<string>id</string>
+				<key>runCommand</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>LuaConsoleDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_luaTextField</key>
+				<string>NSTextField</string>
+				<key>_luaTextView</key>
+				<string>ConsoleView</string>
+				<key>delegate</key>
+				<string>id</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>ACTIONS</key>
+			<dict>
 				<key>applyNewPalette</key>
 				<string>id</string>
 				<key>editPalette</key>
@@ -619,6 +653,19 @@
 			<string>ObjC</string>
 			<key>SUPERCLASS</key>
 			<string>NSProgressIndicator</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>ConsoleView</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_contextMenu</key>
+				<string>NSMenu</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSView</string>
 		</dict>
 		<dict>
 			<key>CLASS</key>
