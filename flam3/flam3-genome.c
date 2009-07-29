@@ -131,7 +131,7 @@ xmlDocPtr create_new_editdoc(char *action, flam3_genome *parent0, flam3_genome *
    mytime = time(NULL);
    localt = localtime(&mytime);
    /* XXX use standard time format including timezone */
-   strftime(timestring, 100, "%a %b %e %H:%M:%S %Z %Y", localt);
+   strftime(timestring, 100, "%a %b %e %H:%M:%S %z %Y", localt);
    xmlNewProp(root_node, (const xmlChar *)"date", (const xmlChar *)timestring);
 
    /* nick */
@@ -1402,6 +1402,12 @@ main(argc, argv)
             }
             strcat(trystr,ministr);
              }
+
+            if (used_parent==0 && parent0[i0].final_xform_enable)
+               got0 = 1;
+            else if (used_parent==1 && parent1[i1].final_xform_enable)
+               got1 = 1;
+
          } while ((i > 1) && !(got0 && got1));
 
          add_to_action(action,trystr);

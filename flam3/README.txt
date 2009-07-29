@@ -255,6 +255,10 @@ todo:  eliminate all static storage.
 
 changelog:
 
+07/03/09 Changed time zone stored in edit tags to the 'short' version,
+    with no special characters.  Set the numeric locale to C before
+    doing xml read/writes (thanks bitsed).  Release as 2.7.19.
+
 03/17/09 Added fuzz testing with zzuf to the regression tests.  'Strip'
     mode and genomes with the zoom parameter used now break into pieces
     properly.  insert_palette fixed (broken a few versions ago.)  fixed
