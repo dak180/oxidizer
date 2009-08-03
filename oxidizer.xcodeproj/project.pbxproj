@@ -79,6 +79,7 @@
 		A4F49CEC0AAB1D3C00FA4BE8 /* document-open.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */; };
 		A4F49CEE0AAB1D4B00FA4BE8 /* document-save.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */; };
 		A4F49CF00AAB1D5400FA4BE8 /* oxidizer_dna.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */; };
+		A4F9101F10275CA700FA69E8 /* utilities-terminal.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F9101E10275CA700FA69E8 /* utilities-terminal.png */; };
 		A4FADCE80A55A131004FC917 /* GreaterThanThreeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */; };
 		A4FDAB2A0A4EBA9400910299 /* DnDArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FDAB290A4EBA9400910299 /* DnDArrayController.m */; };
 /* End PBXBuildFile section */
@@ -219,6 +220,7 @@
 		A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "document-open.png"; path = "icons/Tango/document-open.png"; sourceTree = "<group>"; };
 		A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "document-save.png"; path = "icons/Tango/document-save.png"; sourceTree = "<group>"; };
 		A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = oxidizer_dna.png; path = icons/oxidizer_dna.png; sourceTree = "<group>"; };
+		A4F9101E10275CA700FA69E8 /* utilities-terminal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "utilities-terminal.png"; path = "icons/Tango/utilities-terminal.png"; sourceTree = "<group>"; };
 		A4FADCE60A55A131004FC917 /* GreaterThanThreeTransformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GreaterThanThreeTransformer.h; sourceTree = "<group>"; };
 		A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GreaterThanThreeTransformer.m; sourceTree = "<group>"; };
 		A4FDAB280A4EBA9400910299 /* DnDArrayController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DnDArrayController.h; sourceTree = "<group>"; };
@@ -361,6 +363,7 @@
 				A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */,
 				A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */,
 				A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */,
+				A4F9101E10275CA700FA69E8 /* utilities-terminal.png */,
 				A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */,
 				A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */,
 				A44201ED0B21E551000B94D9 /* genepool.png */,
@@ -591,6 +594,7 @@
 				A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */,
 				A431DB010F07C88A00E826A2 /* FileViews.nib in Resources */,
 				A4A71D1E0FBC8F5B008ED5D4 /* LuaConsole.xib in Resources */,
+				A4F9101F10275CA700FA69E8 /* utilities-terminal.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -68,6 +68,7 @@
 - (IBAction)runLuaScript:(id)sender;
 - (IBAction)runLastLuaScript:(id) sender;
 - (IBAction)luaLibraryAction:(id) sender;
+- (IBAction) showLuaConsole:(id) sender;
 
 - (void) setLastLuaScript: (NSString *)lls;
 - (int) renderFromLua:(NSArray *) genomes;

@@ -100,6 +100,12 @@
 		[item setImage:[NSImage imageNamed:@"transform-scale"]];
 		[item setTarget:self];
 		[item setAction:@selector(showRectangleWindow:)];
+	} else if ( [itemIdentifier isEqualToString:@"lua_console"] ) {
+		[item setLabel:@"Lua Console"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"utilities-terminal"]];
+		[item setTarget:self];
+		[item setAction:@selector(showLuaConsole:)];
 	}
 	
 	return [item autorelease];
@@ -120,6 +126,7 @@
 									 @"gene_pool", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"lua_script", 
+									 @"lua_console", 
 									 nil
 		];
 	
@@ -139,6 +146,7 @@
 									 @"gene_pool", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"lua_script", 
+									 @"lua_console", 
 									 nil
 		];
 	
@@ -398,6 +406,13 @@
 	}
 	
 }
+
+- (IBAction) showLuaConsole:(id) sender {
+	
+	[_luaConsoleWindow makeKeyAndOrderFront:self];
+	
+}
+
 
 - (int) renderFromLua:(NSArray *) genomes {
 	
