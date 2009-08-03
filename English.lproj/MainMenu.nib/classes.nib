@@ -146,74 +146,6 @@
 		<dict>
 			<key>ACTIONS</key>
 			<dict>
-				<key>appendNewEmptyGenome</key>
-				<string>id</string>
-				<key>customizeToolbar</key>
-				<string>id</string>
-				<key>luaLibraryAction</key>
-				<string>id</string>
-				<key>makeLoop</key>
-				<string>id</string>
-				<key>makeLoopFromAll</key>
-				<string>id</string>
-				<key>newFlame</key>
-				<string>id</string>
-				<key>openFile</key>
-				<string>id</string>
-				<key>renderMovie</key>
-				<string>id</string>
-				<key>renderStill</key>
-				<string>id</string>
-				<key>renderStillToWindow</key>
-				<string>id</string>
-				<key>renderStills</key>
-				<string>id</string>
-				<key>runLastLuaScript</key>
-				<string>id</string>
-				<key>runLuaScript</key>
-				<string>id</string>
-				<key>saveAsFlam3</key>
-				<string>id</string>
-				<key>saveFlam3</key>
-				<string>id</string>
-				<key>showBreedingWindow</key>
-				<string>id</string>
-				<key>showGenePoolWindow</key>
-				<string>id</string>
-				<key>showGradientWindow</key>
-				<string>id</string>
-				<key>showRectangleWindow</key>
-				<string>id</string>
-			</dict>
-			<key>CLASS</key>
-			<string>OxidizerDelegate</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_luaConsole</key>
-				<string>NSTextView</string>
-				<key>_luaConsoleDelegate</key>
-				<string>LuaConsoleDelegate</string>
-				<key>_luaConsoleWindow</key>
-				<string>NSWindow</string>
-				<key>_luaLibraryController</key>
-				<string>NSArrayController</string>
-				<key>_qvc</key>
-				<string>QuickViewController</string>
-				<key>bc</key>
-				<string>BreedingController</string>
-				<key>ffm</key>
-				<string>FractalFlameModel</string>
-				<key>oxidizerWindow</key>
-				<string>NSWindow</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
-			<key>ACTIONS</key>
-			<dict>
 				<key>changeColourMap</key>
 				<string>id</string>
 				<key>changeColourMapAndHideWindow</key>
@@ -268,6 +200,76 @@
 			<string>NSObject</string>
 		</dict>
 		<dict>
+			<key>ACTIONS</key>
+			<dict>
+				<key>appendNewEmptyGenome</key>
+				<string>id</string>
+				<key>customizeToolbar</key>
+				<string>id</string>
+				<key>luaLibraryAction</key>
+				<string>id</string>
+				<key>makeLoop</key>
+				<string>id</string>
+				<key>makeLoopFromAll</key>
+				<string>id</string>
+				<key>newFlame</key>
+				<string>id</string>
+				<key>openFile</key>
+				<string>id</string>
+				<key>renderMovie</key>
+				<string>id</string>
+				<key>renderStill</key>
+				<string>id</string>
+				<key>renderStillToWindow</key>
+				<string>id</string>
+				<key>renderStills</key>
+				<string>id</string>
+				<key>runLastLuaScript</key>
+				<string>id</string>
+				<key>runLuaScript</key>
+				<string>id</string>
+				<key>saveAsFlam3</key>
+				<string>id</string>
+				<key>saveFlam3</key>
+				<string>id</string>
+				<key>showBreedingWindow</key>
+				<string>id</string>
+				<key>showGenePoolWindow</key>
+				<string>id</string>
+				<key>showGradientWindow</key>
+				<string>id</string>
+				<key>showLuaConsole</key>
+				<string>id</string>
+				<key>showRectangleWindow</key>
+				<string>id</string>
+			</dict>
+			<key>CLASS</key>
+			<string>OxidizerDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_luaConsole</key>
+				<string>NSTextView</string>
+				<key>_luaConsoleDelegate</key>
+				<string>LuaConsoleDelegate</string>
+				<key>_luaConsoleWindow</key>
+				<string>NSWindow</string>
+				<key>_luaLibraryController</key>
+				<string>NSArrayController</string>
+				<key>_qvc</key>
+				<string>QuickViewController</string>
+				<key>bc</key>
+				<string>BreedingController</string>
+				<key>ffm</key>
+				<string>FractalFlameModel</string>
+				<key>oxidizerWindow</key>
+				<string>NSWindow</string>
+			</dict>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
 			<key>CLASS</key>
 			<string>DnDArrayController</string>
 			<key>LANGUAGE</key>
@@ -298,19 +300,6 @@
 			<string>NSSlider</string>
 		</dict>
 		<dict>
-			<key>CLASS</key>
-			<string>TransformTableDelegate</string>
-			<key>LANGUAGE</key>
-			<string>ObjC</string>
-			<key>OUTLETS</key>
-			<dict>
-				<key>_oxidizerDelegate</key>
-				<string>OxidizerDelegate</string>
-			</dict>
-			<key>SUPERCLASS</key>
-			<string>NSObject</string>
-		</dict>
-		<dict>
 			<key>ACTIONS</key>
 			<dict>
 				<key>randomSeed</key>
@@ -338,6 +327,19 @@
 			<string>FirstResponder</string>
 			<key>LANGUAGE</key>
 			<string>ObjC</string>
+			<key>SUPERCLASS</key>
+			<string>NSObject</string>
+		</dict>
+		<dict>
+			<key>CLASS</key>
+			<string>TransformTableDelegate</string>
+			<key>LANGUAGE</key>
+			<string>ObjC</string>
+			<key>OUTLETS</key>
+			<dict>
+				<key>_oxidizerDelegate</key>
+				<string>OxidizerDelegate</string>
+			</dict>
 			<key>SUPERCLASS</key>
 			<string>NSObject</string>
 		</dict>
