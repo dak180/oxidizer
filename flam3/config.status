@@ -571,14 +571,14 @@ s,@AMDEPBACKSLASH@,|#_!!_#|,g
 s,@CCDEPMODE@,|#_!!_#|depmode=none,g
 s,@am__fastdepCC_TRUE@,|#_!!_#|#,g
 s,@am__fastdepCC_FALSE@,|#_!!_#|,g
-s,@build@,|#_!!_#|i386-apple-darwin9.7.0,g
+s,@build@,|#_!!_#|i386-apple-darwin9.8.0,g
 s,@build_cpu@,|#_!!_#|i386,g
 s,@build_vendor@,|#_!!_#|apple,g
-s,@build_os@,|#_!!_#|darwin9.7.0,g
-s,@host@,|#_!!_#|i386-apple-darwin9.7.0,g
+s,@build_os@,|#_!!_#|darwin9.8.0,g
+s,@host@,|#_!!_#|i386-apple-darwin9.8.0,g
 s,@host_cpu@,|#_!!_#|i386,g
 s,@host_vendor@,|#_!!_#|apple,g
-s,@host_os@,|#_!!_#|darwin9.7.0,g
+s,@host_os@,|#_!!_#|darwin9.8.0,g
 s,@GREP@,|#_!!_#|/usr/bin/grep,g
 s,@EGREP@,|#_!!_#|/usr/bin/grep -E,g
 s,@LN_S@,|#_!!_#|ln -s,g
