@@ -61,6 +61,7 @@
 - (IBAction)renderMovie:(id)sender;
 - (IBAction)renderStillToWindow:(id)sender;	
 - (IBAction)renderStills:(id)sender;
+- (IBAction)renderToPNG:(id)sender;
 - (IBAction)makeLoop:(id)sender;
 - (IBAction)makeLoopFromAll:(id)sender;
 - (IBAction)appendNewEmptyGenome:(id)sender;

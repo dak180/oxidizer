@@ -258,6 +258,86 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 }
 
+- (void)renderToPNG:(int)pngBits {
+	
+	BOOL doRender = [self okayToRender];
+	
+	if(doRender == NO) {
+		return;
+	}
+
+	[savePanel setRequiredFileType:@"png"];
+	int runResult = [savePanel runModalForDirectory:nil file:nil];
+
+	
+	if(runResult == NSCancelButton || [savePanel filename] == nil) {
+		return;
+	}
+	
+	
+	NSMutableDictionary *taskEnvironment = [self environmentDictionary];	
+	
+	[taskEnvironment setObject:[savePanel filename] forKey:@"out"];
+	[taskEnvironment setObject:[NSNumber numberWithInt:pngBits] forKey:@"bpc"];
+	
+
+	[NSThread detachNewThreadSelector:@selector(renderToPNGInNewThread:) toTarget:self withObject:taskEnvironment];
+	
+	
+}
+
+
+- (void)renderToPNGInNewThread:(NSDictionary *)taskEnvironment {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];	
+
+	[taskEnvironment retain];
+		
+	[moc lock];
+	
+	NSArray *genome = [NSArray arrayWithObject:[flames getSelectedGenome]];
+	
+	
+	NSDate *start = [NSDate date];
+	
+	
+	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:NO] withEnvironment:taskEnvironment];
+	
+	[moc unlock];
+
+	
+	
+	if (returnCode == 0) {
+	
+		if (_showRender) {
+
+			NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:[taskEnvironment objectForKey:@"out"]]];
+			[previewView setImage:flameImage];
+			[previewView setToolTip:@"Preview: This is the image you have just rendered. You can save a copy by dragging the image to the finder/desktop."];
+			
+			[self  performSelectorOnMainThread:@selector(showPreviewWindow) withObject:nil waitUntilDone:YES];
+			[flameImage release];
+			
+		}
+		
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render finished!" 
+												 defaultButton:@"Close"
+											   alternateButton:nil 
+												   otherButton:nil 
+									 informativeTextWithFormat:@"Time for render: %.2f seconds", -[start timeIntervalSinceNow]];
+		[finishedPanel runModal];
+		
+		NSBeep();
+	} 
+	
+		
+
+	[taskEnvironment release];
+	[pool release];
+	
+	return;
+	
+}
 
 - (void)renderStill {
 
@@ -592,7 +672,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	
 	[taskEnvironment setObject:[parameters objectForKey:@"prefix"] forKey:@"prefix"];
-	if([[parameters objectForKey:@"image_format"] compare:@"PNG"] == 0) {
+	if([(NSString *)[parameters objectForKey:@"image_format"] compare:@"PNG"] == 0) {
 		[taskEnvironment setObject:@"png" forKey:@"format"];
 		if([[parameters objectForKey:@"png_is_16bit"] boolValue]) {
 			[taskEnvironment setObject:@"bpc" forKey:@"16"];			

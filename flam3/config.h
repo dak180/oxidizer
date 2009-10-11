@@ -8,7 +8,7 @@
 /* #undef HAVE_GCC_64BIT_ATOMIC_OPS */
 
 /* Have 32-bit __sync_bool_compare_and_swap() and friends. */
-/* #undef HAVE_GCC_ATOMIC_OPS */
+#define HAVE_GCC_ATOMIC_OPS 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #define HAVE_INTTYPES_H 1

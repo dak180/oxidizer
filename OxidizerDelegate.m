@@ -308,6 +308,20 @@
 }
 
 
+- (IBAction)renderToPNG:(id)sender {
+	
+	if([[(NSMenuItem *)sender title] compare:@"16 bit"] == 0) {
+		
+		[ffm renderToPNG:16];
+		
+	} else {
+
+		[ffm renderToPNG:8];
+
+	}
+	
+}
+
 
 - (IBAction)runLuaScript:(id)sender {
 	

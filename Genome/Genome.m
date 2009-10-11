@@ -2443,7 +2443,7 @@ NSString *variationName[1+flam3_nvariations] = {
 				
 		
 		NSArray *variations = [xform objectForKey:@"variations"];
-		if (tempObject != nil) {
+		if (variations != nil) {
 			[xFormEntity setValue:[Genome createVariationEntitiesFromArray:variations inContext:moc]  forKey:@"variations"];
 		}	
 
