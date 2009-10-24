@@ -542,7 +542,7 @@
 		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
 		nil]];
 	
-	NSLog(previewFolder);	
+	NSLog("%@", previewFolder);	
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	

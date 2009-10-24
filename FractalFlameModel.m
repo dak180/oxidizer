@@ -495,7 +495,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
 		nil]];
 	
-	NSLog(previewFolder);	
+	NSLog(@"%@", previewFolder);	
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
@@ -841,7 +841,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
 		nil]];
 	
-	NSLog(previewFolder);	
+	NSLog(@"%@", previewFolder);	
 
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
@@ -1408,7 +1408,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
 		nil]];
 	
-	NSLog(previewFolder);	
+	NSLog(@"%@", previewFolder);	
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	

@@ -138,6 +138,7 @@
 - (void) renderAnimationStills; 
 - (void) renderStillToWindow;
 - (NSImage *) renderThumbnail;
+- (void)renderToPNG:(int)pngBits;
 
 - (BOOL) okayToRender;
 
