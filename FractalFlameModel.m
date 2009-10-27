@@ -1075,6 +1075,8 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[self generateAllThumbnailsForGenomesInThread:genomeEntity];	
 	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
 	
+	[taskProgressWindow setIsVisible:NO];
+	
 	return [genomeEntity objectAtIndex:0];
 
 }
@@ -1118,6 +1120,8 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	
 	[self generateAllThumbnailsForGenomesInThread:genomeEntity];	
 	[context performSelectorOnMainThread:@selector(processPendingChanges) withObject:nil waitUntilDone:YES];
+	
+	[taskProgressWindow setIsVisible:NO];
 	
 	return [genomeEntity objectAtIndex:0];
 	
