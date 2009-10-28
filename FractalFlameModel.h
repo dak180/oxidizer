@@ -25,6 +25,7 @@
 #import "QTKit/QTKit.h"
 #import "QuickTimeController.h"
 #import "ProgressIndicatorWithCancel.h"
+#import "MultiUseWindow.h"
 
 @interface FractalFlameModel : NSObjectController
 {
@@ -40,7 +41,7 @@
 	IBOutlet NSView *saveThumbnailsView;
     IBOutlet NSImageView *previewView;
 
-    IBOutlet NSWindow *taskProgressWindow;
+    IBOutlet MultiUseWindow *taskProgressWindow;
     IBOutlet ProgressIndicatorWithCancel *taskAllFramesIndicator;
     IBOutlet ProgressIndicatorWithCancel *taskFrameIndicator;
     IBOutlet NSTextField *etaTextField;

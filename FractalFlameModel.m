@@ -549,7 +549,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[taskAllFramesIndicator setDoubleValue:progressValue];
 	
 	[taskProgressWindow setTitle:@"Rendering Movie..."];	
-	[taskProgressWindow makeKeyAndOrderFront:self];
+	[taskProgressWindow makeKeyOrderFrontAndCount:self];
 
 	
 	NSDate *start = [NSDate date];
@@ -715,7 +715,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[taskAllFramesIndicator setDoubleValue:progressValue];
 	
 	[taskProgressWindow setTitle:@"Rendering Movie..."];	
-	[taskProgressWindow makeKeyAndOrderFront:self];
+	[taskProgressWindow makeKeyOrderFrontAndCount:self];
 	
 	
 	NSDate *start = [NSDate date];
@@ -1060,7 +1060,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 - (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context {
 
 	[taskProgressWindow setTitle:@"Generating Random Genome"];
-	[taskProgressWindow makeKeyAndOrderFront:self];
+	[taskProgressWindow makeKeyOrderFrontAndCount:self];
 	
 	srandom(time(NULL));
 	/* generate random XML */
@@ -1106,7 +1106,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 - (NSManagedObject *) createEmptyGenomeInContext:(NSManagedObjectContext *)context {
 	
 	[taskProgressWindow setTitle:@"Generating Empty Genome"];
-	[taskProgressWindow makeKeyAndOrderFront:self];
+	[taskProgressWindow makeKeyOrderFrontAndCount:self];
 	
 	srandom(time(NULL));
 	/* generate random XML */
@@ -1433,7 +1433,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskAllFramesIndicator setMaxValue:[genomes count]];
 	
 	[taskProgressWindow setTitle:@"Rendering Image"];
-	[taskProgressWindow performSelectorOnMainThread:@selector(makeKeyAndOrderFront:) withObject:self waitUntilDone:YES];
+	[taskProgressWindow performSelectorOnMainThread:@selector(makeKeyOrderFrontAndCount:) withObject:self waitUntilDone:YES];
 
 	
 	int i;
@@ -1496,7 +1496,7 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[taskAllFramesIndicator setDoubleValue:1.0];
 
 	[taskProgressWindow setTitle:@"Rendering Image"];
-	[taskProgressWindow makeKeyAndOrderFront:self];
+	[taskProgressWindow makeKeyOrderFrontAndCount:self];
 	
 	int returnValue =  [Flam3Task runFlam3RenderAsTask:xml withEnvironment:environmentDictionary usingTaskFrameIndicator:taskFrameIndicator usingETALabel:etaTextField];
 	

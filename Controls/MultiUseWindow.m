@@ -19,23 +19,22 @@
 	return self;
 }
 
-- (void)makeKeyAndOrderFront:(id)sender {
+- (void)makeKeyOrderFrontAndCount:(id)sender  {
 	
 	
 	_showingCount++;
-	[super makeKeyAndOrderFront:sender];
+	[self makeKeyAndOrderFront:sender];
 	
 }
 
 
 - (void)setIsVisible:(BOOL)flag {
-	if (flag) {
-		_showingCount++;
-	} else {
+
+	if (flag == NO) {
 		_showingCount--;	
 	}
 	
-	if (flag == NO && _showingCount == 0) {
+	if (flag == NO && _showingCount < 1) {
 		[super setIsVisible:NO];
 	} else if (flag == YES) {
 		[super setIsVisible:YES];
