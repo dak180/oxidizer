@@ -57,6 +57,10 @@
 		
 		lastSelectionType = -1;
 		lastSelectionIndex = -1;
+		
+		_savePanel = [NSSavePanel savePanel];
+		[_savePanel retain];
+
 
 	}
 	return self;
@@ -76,13 +80,14 @@
 
 	useDefaultSettings = YES;
 
-	NSSavePanel *savePanel = [NSSavePanel savePanel];
-	[savePanel setPrompt:@"Render"];
-	[savePanel setAccessoryView:movieExportPanel];
-	runResult = [savePanel runModal];
+	[_savePanel setPrompt:@"Render"];
+	[_savePanel setAccessoryView:movieExportPanel];
+	[self changeMovieFileType:self];
+
+	runResult = [_savePanel runModal];
 	
-	if(runResult == NSOKButton && [savePanel filename] != nil) {
-		filename = [savePanel filename];
+	if(runResult == NSOKButton && [_savePanel filename] != nil) {
+		filename = [_savePanel filename];
 		[filename retain];
 		
 	}  else {
@@ -204,14 +209,16 @@
 	int runResult;
 
 	useDefaultSettings = YES;
-
-	NSSavePanel *savePanel = [NSSavePanel savePanel];
-	[savePanel setPrompt:@"Render"];
-	[savePanel setAccessoryView:imageExportPanel];
-	runResult = [savePanel runModal];
+//	NS_savePanel *savePanel = [NSSavePanel savePanel];
+	[_savePanel setTitle:@"Render file name..."];
+	[_savePanel setPrompt:@"Render"];
+	[_savePanel setCanSelectHiddenExtension:YES];
+	[_savePanel setAccessoryView:imageExportPanel];
+	[self changeImageFileType:self];
+	runResult = [_savePanel runModal];
 	
-	if(runResult == NSOKButton && [savePanel filename] != nil) {
-		filename = [savePanel filename];
+	if(runResult == NSOKButton && [_savePanel filename] != nil) {
+		filename = [_savePanel filename];
 		[filename retain];
 	} else {
 		filename = nil;
@@ -227,13 +234,14 @@
 	
 	useDefaultSettings = YES;
 	
-	NSSavePanel *savePanel = [NSSavePanel savePanel];
-	[savePanel setPrompt:@"Render"];
-	[savePanel setAccessoryView:stillsExportPanel];
-	runResult = [savePanel runModal];
+//	NSSavePanel *savePanel = [NSSavePanel savePanel];
 	
-	if(runResult == NSOKButton && [savePanel filename] != nil) {
-		filename = [savePanel filename];
+	[_savePanel setPrompt:@"Render"];
+	[_savePanel setAccessoryView:stillsExportPanel];
+	runResult = [_savePanel runModal];
+	
+	if(runResult == NSOKButton && [_savePanel filename] != nil) {
+		filename = [_savePanel filename];
 		[filename retain];
 	} else {
 		filename = nil;
@@ -278,8 +286,16 @@
 						unsigned char *namePStr = (unsigned char *)*name;
 						NSString *nameStr = [[NSString alloc] initWithBytes:&namePStr[1] length:namePStr[0] encoding:NSMacOSRomanStringEncoding];
 						
+						int extension;
+						MovieExportGetFileNameExtension((MovieExportComponent) c, (OSType *) & extension);
+						extension = EndianU32_NtoB(extension);
+						NSString *extensionStr = [[NSString alloc] initWithBytes:&extension length:sizeof(int) encoding:NSMacOSRomanStringEncoding];
+						
+						
+						
 						NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 							nameStr, @"name",
+							[[extensionStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString], @"extension",
 							[NSData dataWithBytes:&c length:sizeof(c)], @"component",
 							[NSNumber numberWithLong:exportCD.componentType], @"type",
 							[NSNumber numberWithLong:exportCD.componentSubType], @"subtype",
@@ -304,7 +320,7 @@
 	cd.componentType = GraphicsExporterComponentType;
 	cd.componentSubType = 0;
 	cd.componentManufacturer = 0;
-	cd.componentFlags = 0;
+	cd.componentFlags =  0;
 	cd.componentFlagsMask = graphicsExporterIsBaseExporter;
 	
 	[imageComponents removeAllObjects];
@@ -312,19 +328,25 @@
 	while((c = FindNextComponent(c, &cd)))
 	{
 		Handle name = NewHandle(4);
+		Handle string = NewHandle(256);
 		ComponentDescription exportCD;
 		
-		if (GetComponentInfo(c, &exportCD, name, nil, nil) == noErr)
+		if (GetComponentInfo(c, &exportCD, name, string, nil) == noErr)
 		{
+			
+			
+			int extension;
+            GraphicsExportGetDefaultFileNameExtension((GraphicsExportComponent) c, (OSType *) & extension);
+			extension = EndianU32_NtoB(extension);
+			NSString *extensionStr = [[NSString alloc] initWithBytes:&extension length:sizeof(int) encoding:NSMacOSRomanStringEncoding];
+
 			unsigned char *namePStr = (unsigned char *)*name;
 			NSString *nameStr = [[NSString alloc] initWithBytes:&namePStr[1] length:namePStr[0] encoding:NSMacOSRomanStringEncoding];
-			
-//			if([nameStr compare:@"SGI"] == 0) {
-//				continue;
-//			}
+						
 			
 			NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:
 				nameStr, @"name",
+				[[extensionStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] lowercaseString], @"extension",
 				[NSData dataWithBytes:&c length:sizeof(c)], @"component",
 				[NSNumber numberWithLong:exportCD.componentType], @"type",
 				[NSNumber numberWithLong:exportCD.componentSubType], @"subtype",
@@ -807,4 +829,21 @@
     return;
 }
 
+
+- (IBAction) changeImageFileType:(id )sender {
+	
+
+	int index = [imageExportController selectionIndex];
+//	[_savePanel setAllowedFileTypes:[NSArray arrayWithObject:[[imageComponents objectAtIndex:index] objectForKey:@"extension"]]];
+	[_savePanel setRequiredFileType:[[imageComponents objectAtIndex:index] objectForKey:@"extension"]];
+	
+}
+
+- (IBAction) changeMovieFileType:(id )sender {
+	
+	
+	int index = [movieExportController selectionIndex];
+	[_savePanel setRequiredFileType:[[movieComponents objectAtIndex:index] objectForKey:@"extension"]];
+	
+}
 @end

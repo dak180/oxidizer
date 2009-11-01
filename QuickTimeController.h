@@ -61,6 +61,8 @@
 
     short resRefNum;
     short resId;
+	
+	NSSavePanel *_savePanel;
 
 
 @public
@@ -90,6 +92,8 @@
 
 - (IBAction) getMovieExportSettings:(id )sender;
 - (IBAction) getImageExportSettings:(id )sender;
+- (IBAction) changeImageFileType:(id )sender;
+- (IBAction) changeMovieFileType:(id )sender;
 
 - (void) setMovieHeight:(int)height width:(int)width;
 
