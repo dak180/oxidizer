@@ -39,6 +39,8 @@
 	_lastLuaScript = nil;
 
 	[self setupToolbar];
+	
+
 
 }
 
@@ -257,31 +259,16 @@
 
 - (IBAction)showRectangleWindow:(id)sender {
 
-/*
-	if(rnc == nil) {
-		rnc = [[RectangleNibController alloc] init];
-		[NSBundle loadNibNamed:@"RectangleWindow" owner:rnc];
-		[rnc setMOC:[ffm getNSManagedObjectContext]];
-		[rnc setFFM:ffm];
-		[rnc setQVC:_qvc];
-	}
-*/	
+
 	[rnc setTreeSelection];
 	[rnc showRectangleWindow:sender]; 
 }
 
 
-/*
-- (IBAction)showGradientWindow:(id)sender {
+- (IBAction)showClipboard:(id)sender {
 	
-	if(gnc == nil) {
-		gnc = [[GradientNibController alloc] init];
-		[NSBundle loadNibNamed:@"GradientWindow" owner:gnc];
-	}
-	
-	[gnc showGradientWindow:sender]; 
+	[_clipboardWindow makeKeyAndOrderFront:self];
 }
-*/
 
 - (IBAction)newFlame:(id)sender {
 	[ffm newFlame];
@@ -457,6 +444,8 @@
 	}
 
 	[NSBundle loadNibNamed:@"LuaConsole" owner:self];
+	[NSBundle loadNibNamed:@"Clipboard" owner:self];
+
 }
 
 - (IBAction)appendNewEmptyGenome:(id)sender {

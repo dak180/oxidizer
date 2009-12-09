@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 58 tasks, 270 threads, 2 processors
-Load average: 0.88, Mach factor: 1.20
+Default processor set: 60 tasks, 268 threads, 2 processors
+Load average: 0.52, Mach factor: 1.57
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -69,7 +69,7 @@ configure:2518: found /Developer/usr/bin/gcc
 configure:2529: result: gcc
 configure:2767: checking for C compiler version
 configure:2774: gcc --version >&5
-i686-apple-darwin10-gcc-4.2.1 (GCC) 4.2.1 (Apple Inc. build 5646)
+i686-apple-darwin10-gcc-4.2.1 (GCC) 4.2.1 (Apple Inc. build 5646) (dot 1)
 Copyright (C) 2007 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -78,9 +78,9 @@ configure:2777: $? = 0
 configure:2784: gcc -v >&5
 Using built-in specs.
 Target: i686-apple-darwin10
-Configured with: /var/tmp/gcc/gcc-5646~6/src/configure --disable-checking --enable-werror --prefix=/usr --mandir=/usr/share/man --enable-languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/$/-4.2/ --with-slibdir=/usr/lib --build=i686-apple-darwin10 --with-gxx-include-dir=/usr/include/c++/4.2.1 --host=i686-apple-darwin10 --target=i686-apple-darwin10
+Configured with: /var/tmp/gcc/gcc-5646.1~2/src/configure --disable-checking --enable-werror --prefix=/usr --mandir=/usr/share/man --enable-languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/$/-4.2/ --with-slibdir=/usr/lib --build=i686-apple-darwin10 --with-gxx-include-dir=/usr/include/c++/4.2.1 --host=i686-apple-darwin10 --target=i686-apple-darwin10
 Thread model: posix
-gcc version 4.2.1 (Apple Inc. build 5646)
+gcc version 4.2.1 (Apple Inc. build 5646) (dot 1)
 configure:2787: $? = 0
 configure:2794: gcc -V >&5
 gcc-4.2: argument to `-V' is missing
@@ -240,7 +240,7 @@ configure:5421: found /Developer/usr/bin/g++
 configure:5432: result: g++
 configure:5463: checking for C++ compiler version
 configure:5470: g++ --version >&5
-i686-apple-darwin10-g++-4.2.1 (GCC) 4.2.1 (Apple Inc. build 5646)
+i686-apple-darwin10-g++-4.2.1 (GCC) 4.2.1 (Apple Inc. build 5646) (dot 1)
 Copyright (C) 2007 Free Software Foundation, Inc.
 This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -249,9 +249,9 @@ configure:5473: $? = 0
 configure:5480: g++ -v >&5
 Using built-in specs.
 Target: i686-apple-darwin10
-Configured with: /var/tmp/gcc/gcc-5646~6/src/configure --disable-checking --enable-werror --prefix=/usr --mandir=/usr/share/man --enable-languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/$/-4.2/ --with-slibdir=/usr/lib --build=i686-apple-darwin10 --with-gxx-include-dir=/usr/include/c++/4.2.1 --host=i686-apple-darwin10 --target=i686-apple-darwin10
+Configured with: /var/tmp/gcc/gcc-5646.1~2/src/configure --disable-checking --enable-werror --prefix=/usr --mandir=/usr/share/man --enable-languages=c,objc,c++,obj-c++ --program-transform-name=/^[cg][^.-]*$/s/$/-4.2/ --with-slibdir=/usr/lib --build=i686-apple-darwin10 --with-gxx-include-dir=/usr/include/c++/4.2.1 --host=i686-apple-darwin10 --target=i686-apple-darwin10
 Thread model: posix
-gcc version 4.2.1 (Apple Inc. build 5646)
+gcc version 4.2.1 (Apple Inc. build 5646) (dot 1)
 configure:5483: $? = 0
 configure:5490: g++ -V >&5
 g++-4.2: argument to `-V' is missing
@@ -502,7 +502,7 @@ configure:19601: checking malloc.h usability
 configure:19618: gcc -c -O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc  conftest.c >&5
 conftest.c:55:20: error: malloc.h: No such file or directory
 conftest.c:55:20: error: malloc.h: No such file or directory
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccz6yIwQ.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccAIVJGh.out
 configure:19624: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */
@@ -653,7 +653,7 @@ pnggccrd.c:376: error: assignment of read-only variable '_mask48_3'
 pnggccrd.c:377: error: assignment of read-only variable '_mask48_2'
 pnggccrd.c:378: error: assignment of read-only variable '_mask48_1'
 pnggccrd.c:379: error: assignment of read-only variable '_mask48_0'
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccrp0xS1.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccwUdl6a.out
 configure:20582: $? = 1
 configure: failed program was:
 | /* confdefs.h.  */

@@ -14,7 +14,7 @@
 @interface OxidizerDelegate : NSObject {
 	
 	IBOutlet NSWindow *oxidizerWindow;
-//	IBOutlet FractalFlameModel *ffm;
+	IBOutlet NSWindow *_clipboardWindow;
 	IBOutlet BreedingController *bc;
     IBOutlet QuickViewController *_qvc;
     IBOutlet NSArrayController *_luaLibraryController;
@@ -55,6 +55,7 @@
 - (IBAction)showBreedingWindow:(id)sender;
 - (IBAction)showGenePoolWindow:(id)sender;
 - (IBAction)showRectangleWindow:(id)sender;
+- (IBAction)showClipboard:(id)sender;
 //- (IBAction)showGradientWindow:(id)sender;
 - (IBAction)newFlame:(id)sender;
 - (IBAction)renderStill:(id)sender;

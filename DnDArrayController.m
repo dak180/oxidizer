@@ -115,7 +115,8 @@ NSString *mocPasteboardType = @"GenomeMoc";
 		NSEnumerator *enumerator = [filenames objectEnumerator];
 		NSString *filename;
 		while (filename = [enumerator nextObject]) {		
-			[_ffm appendFromFile:filename inContext:destinationMoc];
+//			[_ffm appendFromFile:filename inContext:destinationMoc];
+			[_od->ffm appendFromFile:filename inContext:destinationMoc];
 		}
 	}
 	

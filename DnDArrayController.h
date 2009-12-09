@@ -25,7 +25,6 @@
 {
 	
 IBOutlet NSTableView *tableView;
-IBOutlet FractalFlameModel *_ffm;
 IBOutlet OxidizerDelegate *_od;
 
 }
