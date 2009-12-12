@@ -59,9 +59,14 @@
 	[_moc save:NULL];
 }
 
-- (void) createManagedContext {
-	
+- (IBAction) clearAllGenomes:(id) sender {
 
+	[_genomes removeObjects:[_genomes arrangedObjects]];
+	
+}
+- (IBAction) deleteSelectedGenome:(id) sender {
+	
+	[_genomes remove:self];
 	
 }
 

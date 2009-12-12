@@ -18,6 +18,7 @@
 	
 }
 
-- (void) createManagedContext;
- 
+- (IBAction) clearAllGenomes:(id) sender;
+- (IBAction) deleteSelectedGenome:(id) sender;
+
 @end

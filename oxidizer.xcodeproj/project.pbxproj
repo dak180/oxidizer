@@ -73,6 +73,7 @@
 		A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
 		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
 		A4E69E620FC835310001E3BD /* ConsoleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E69E610FC835310001E3BD /* ConsoleView.m */; };
+		A4EED68810D3ED6B002C2E68 /* edit-paste.png in Resources */ = {isa = PBXBuildFile; fileRef = A4EED68710D3ED6B002C2E68 /* edit-paste.png */; };
 		A4F21B460CEA112400F0195A /* libpng.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2DB0C340B44001582CC /* libpng.dylib */; };
 		A4F21B470CEA112C00F0195A /* libjpeg.62.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */; };
 		A4F3EF1E0AB5DE3100A282F2 /* image-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */; };
@@ -219,6 +220,7 @@
 		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "flam3/flam3-palettes.xml"; sourceTree = SOURCE_ROOT; };
 		A4E69E600FC835310001E3BD /* ConsoleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConsoleView.h; path = LuaConsole/ConsoleView.h; sourceTree = "<group>"; };
 		A4E69E610FC835310001E3BD /* ConsoleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConsoleView.m; path = LuaConsole/ConsoleView.m; sourceTree = "<group>"; };
+		A4EED68710D3ED6B002C2E68 /* edit-paste.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit-paste.png"; path = "icons/Tango/edit-paste.png"; sourceTree = "<group>"; };
 		A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "image-x-generic.png"; path = "icons/Tango/image-x-generic.png"; sourceTree = "<group>"; };
 		A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "video-x-generic.png"; path = "icons/Tango/video-x-generic.png"; sourceTree = "<group>"; };
 		A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = OxidizerDelegate.m; sourceTree = "<group>"; };
@@ -371,6 +373,7 @@
 				A4B1662B0F06738D001530F3 /* TaskProgress.nib */,
 				A4F49CEB0AAB1D3C00FA4BE8 /* document-open.png */,
 				A4F49CED0AAB1D4B00FA4BE8 /* document-save.png */,
+				A4EED68710D3ED6B002C2E68 /* edit-paste.png */,
 				A4F49CEF0AAB1D5400FA4BE8 /* oxidizer_dna.png */,
 				A4F9101E10275CA700FA69E8 /* utilities-terminal.png */,
 				A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */,
@@ -598,6 +601,7 @@
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
 				A4421BE509CF3CE900E9D39F /* oxidizer.icns in Resources */,
 				A410568E0C5F760A0075334E /* stills.png in Resources */,
+				A4EED68810D3ED6B002C2E68 /* edit-paste.png in Resources */,
 				A410568F0C5F760A0075334E /* text-x-script.png in Resources */,
 				A4F49CEC0AAB1D3C00FA4BE8 /* document-open.png in Resources */,
 				A4F49CEE0AAB1D4B00FA4BE8 /* document-save.png in Resources */,
@@ -606,6 +610,7 @@
 				A4F3EF200AB5DE3B00A282F2 /* video-x-generic.png in Resources */,
 				A44201EE0B21E551000B94D9 /* genepool.png in Resources */,
 				A4AD8DD20DE857F200201C58 /* transform-scale.png in Resources */,
+				A4F9101F10275CA700FA69E8 /* utilities-terminal.png in Resources */,
 				A42963140C5685B100D56561 /* Credits.html in Resources */,
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				A4B166260F06738D001530F3 /* GenePool.nib in Resources */,
@@ -615,7 +620,6 @@
 				A4D056FE0EDF3BBC005F122C /* QuickView.xib in Resources */,
 				A431DB010F07C88A00E826A2 /* FileViews.nib in Resources */,
 				A4A71D1E0FBC8F5B008ED5D4 /* LuaConsole.xib in Resources */,
-				A4F9101F10275CA700FA69E8 /* utilities-terminal.png in Resources */,
 				A4467BF210D0278B00252273 /* Clipboard.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

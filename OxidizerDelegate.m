@@ -108,6 +108,12 @@
 		[item setImage:[NSImage imageNamed:@"utilities-terminal"]];
 		[item setTarget:self];
 		[item setAction:@selector(showLuaConsole:)];
+	} else if ( [itemIdentifier isEqualToString:@"flame_clipboard"] ) {
+		[item setLabel:@"Clipboard"];
+		[item setPaletteLabel:[item label]];
+		[item setImage:[NSImage imageNamed:@"edit-paste"]];
+		[item setTarget:self];
+		[item setAction:@selector(showClipboard:)];
 	}
 	
 	return [item autorelease];
@@ -128,7 +134,8 @@
 									 @"gene_pool", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"lua_script", 
-									 @"lua_console", 
+									 @"lua_console",
+									 @"flame_clipboard",
 									 nil
 		];
 	
@@ -148,7 +155,8 @@
 									 @"gene_pool", 
 									 NSToolbarSeparatorItemIdentifier,
 									 @"lua_script", 
-									 @"lua_console", 
+									 @"lua_console",
+									 @"flame_clipboard", 
 									 nil
 		];
 	
