@@ -50,9 +50,16 @@ int calc_nstrips(flam3_frame *spec) {
   mem_available =
       (double)sysconf(_SC_PHYS_PAGES) * sysconf(_SC_PAGESIZE);
 #elif defined __APPLE__
-  unsigned int physmem;
+ #ifdef __LP64__ 	
+  long physmem;
   size_t len = sizeof(physmem);
-  static int mib[2] = { CTL_HW, HW_PHYSMEM };
+  static int mib[2] = { CTL_HW, HW_MEMSIZE };
+#else
+	unsigned int physmem;
+	size_t len = sizeof(physmem);
+	static int mib[2] = { CTL_HW, HW_PHYSMEM };	
+#endif	
+	
   if (sysctl(mib, 2,  &physmem, &len, NULL, 0) == 0 && len ==  sizeof(physmem)) {
       mem_available = (double )physmem;
   } else {
@@ -63,10 +70,10 @@ int calc_nstrips(flam3_frame *spec) {
   fprintf(stderr, "warning: unable to determine physical memory.\n");
   mem_available = 2e9;
 #endif
-#if 0
+//#if 0
   fprintf(stderr,"available phyical memory is %lu\n",
 	  (unsigned long)mem_available);
-#endif
+//#endif
   mem_available *= 0.8;
   if (getenv("use_mem")) {
       mem_available = atof(getenv("use_mem"));
