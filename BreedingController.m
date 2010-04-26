@@ -335,6 +335,11 @@
 	[environmentDictionary setValue:[NSNumber numberWithInt:symmetry] forKey:@"symmetry"];
 	
 	NSData *newGenome = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:environmentDictionary];
+	
+	if (newGenome == nil) {
+		NSLog(@"runFlam3GenomeAsTask returned nil");
+	}
+	
 	[newGenome retain];
 
 	[templateData release];

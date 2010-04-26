@@ -13,6 +13,8 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		A404B3330D14355600FE81AC /* RectangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B3310D14355600FE81AC /* RectangleView.m */; };
 		A404B37F0D143FF600FE81AC /* RectangleController.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B37D0D143FF600FE81AC /* RectangleController.m */; };
+		A407481E11555BAD007A7EE3 /* libpng.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A407481C11555BA6007A7EE3 /* libpng.dylib */; };
+		A407481F11555BAD007A7EE3 /* libpng14.14.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A407480F11555AA5007A7EE3 /* libpng14.14.dylib */; };
 		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; settings = {COMPILER_FLAGS = "-fobjc-exceptions"; }; };
 		A40B00DB0D392E7A009F782F /* RectangleNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40B00DA0D392E7A009F782F /* RectangleNibController.m */; };
 		A40CA2690CF0B58D000C28FB /* flam3-render in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2D80C340AFE001582CC /* flam3-render */; };
@@ -73,9 +75,8 @@
 		A4DA871D096712CA00FFCF4D /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
 		A4E52E160A014F9500382558 /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = A4E52D560A0141A400382558 /* flam3-palettes.xml */; };
 		A4E69E620FC835310001E3BD /* ConsoleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E69E610FC835310001E3BD /* ConsoleView.m */; };
+		A4EE12631151958600922C94 /* libjpeg.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A4EE12611151957E00922C94 /* libjpeg.dylib */; };
 		A4EED68810D3ED6B002C2E68 /* edit-paste.png in Resources */ = {isa = PBXBuildFile; fileRef = A4EED68710D3ED6B002C2E68 /* edit-paste.png */; };
-		A4F21B460CEA112400F0195A /* libpng.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF2DB0C340B44001582CC /* libpng.dylib */; };
-		A4F21B470CEA112C00F0195A /* libjpeg.62.dylib in Resources */ = {isa = PBXBuildFile; fileRef = A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */; };
 		A4F3EF1E0AB5DE3100A282F2 /* image-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */; };
 		A4F3EF200AB5DE3B00A282F2 /* video-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */; };
 		A4F49C1B0AAB05C800FA4BE8 /* OxidizerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */; };
@@ -118,6 +119,8 @@
 		A404B3310D14355600FE81AC /* RectangleView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = RectangleView.m; path = RectangleView/RectangleView.m; sourceTree = "<group>"; };
 		A404B37C0D143FF600FE81AC /* RectangleController.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RectangleController.h; path = RectangleView/RectangleController.h; sourceTree = "<group>"; };
 		A404B37D0D143FF600FE81AC /* RectangleController.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = RectangleController.m; path = RectangleView/RectangleController.m; sourceTree = "<group>"; };
+		A407480F11555AA5007A7EE3 /* libpng14.14.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng14.14.dylib; path = build_folder_for_flam3/lib/libpng14.14.dylib; sourceTree = "<group>"; };
+		A407481C11555BA6007A7EE3 /* libpng.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpng.dylib; path = build_folder_for_flam3/lib/libpng.dylib; sourceTree = "<group>"; };
 		A40B00D90D392E7A009F782F /* RectangleNibController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RectangleNibController.h; path = RectangleView/RectangleNibController.h; sourceTree = "<group>"; };
 		A40B00DA0D392E7A009F782F /* RectangleNibController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RectangleNibController.m; path = RectangleView/RectangleNibController.m; sourceTree = "<group>"; };
 		A40CB51F0AB8864300613AD6 /* DragDropAndSaveImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DragDropAndSaveImageView.h; sourceTree = "<group>"; };
@@ -132,12 +135,9 @@
 		A410568D0C5F760A0075334E /* text-x-script.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "text-x-script.png"; path = "icons/Tango/text-x-script.png"; sourceTree = SOURCE_ROOT; };
 		A41086630EDB356500529FF8 /* QuickViewButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuickViewButton.h; path = Controls/QuickViewButton.h; sourceTree = "<group>"; };
 		A41086640EDB356500529FF8 /* QuickViewButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = QuickViewButton.m; path = Controls/QuickViewButton.m; sourceTree = "<group>"; };
-		A415EF2D0F0175A000AC96D0 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/MainMenu.nib; sourceTree = "<group>"; };
 		A41A053309758FA10063196F /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = /System/Library/Frameworks/QuickTime.framework; sourceTree = "<absolute>"; };
 		A41A06CA0975BE5E0063196F /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		A41CF2D80C340AFE001582CC /* flam3-render */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-render"; path = "build_folder_for_flam3/bin/flam3-render"; sourceTree = SOURCE_ROOT; };
-		A41CF2DB0C340B44001582CC /* libpng.dylib */ = {isa = PBXFileReference; explicitFileType = file; name = libpng.dylib; path = build_folder_for_flam3/lib/libpng.dylib; sourceTree = SOURCE_ROOT; };
-		A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */ = {isa = PBXFileReference; explicitFileType = file; name = libjpeg.62.dylib; path = build_folder_for_flam3/lib/libjpeg.62.dylib; sourceTree = SOURCE_ROOT; };
 		A41E6CBE0B0F429900713916 /* DnDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DnDButton.h; sourceTree = "<group>"; };
 		A41E6CBF0B0F429900713916 /* DnDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DnDButton.m; sourceTree = "<group>"; };
 		A422B9A00B162E7800019559 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = GenePool/English.lproj/GenePool.nib; sourceTree = "<group>"; };
@@ -152,7 +152,6 @@
 		A42608820C41109600DDB92E /* flam3-animate */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.executable"; name = "flam3-animate"; path = "build_folder_for_flam3/bin/flam3-animate"; sourceTree = SOURCE_ROOT; };
 		A42963130C5685B100D56561 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.html; path = Credits.html; sourceTree = SOURCE_ROOT; };
 		A431DB000F07C88A00E826A2 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = FileViews/English.lproj/FileViews.nib; sourceTree = "<group>"; };
-		A431DB080F07C91F00E826A2 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/FileViews.nib; sourceTree = "<group>"; };
 		A4327AB10C4E58B600B1D18D /* LuaObjCBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = LuaObjCBridge.framework; path = LuaObjCBridge/build/Release/LuaObjCBridge.framework; sourceTree = "<group>"; };
 		A43E448B0DE5F58F0001BB6A /* GenomeImages.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenomeImages.h; sourceTree = "<group>"; };
 		A43E448C0DE5F58F0001BB6A /* GenomeImages.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GenomeImages.m; sourceTree = "<group>"; };
@@ -181,10 +180,6 @@
 		A4A3810D0A4F236700E7364C /* DnDImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DnDImageView.m; sourceTree = "<group>"; };
 		A4A71D1D0FBC8F5B008ED5D4 /* LuaConsole.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = LuaConsole.xib; path = LuaConsole/LuaConsole.xib; sourceTree = "<group>"; };
 		A4AD8DD10DE857F200201C58 /* transform-scale.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "transform-scale.png"; path = "icons/Tango/transform-scale.png"; sourceTree = "<group>"; };
-		A4B1662D0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/GenePool.nib; sourceTree = "<group>"; };
-		A4B1662E0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/GradientWindow.nib; sourceTree = "<group>"; };
-		A4B1662F0F067398001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/RectangleWindow.nib; sourceTree = "<group>"; };
-		A4B166450F0674C3001530F3 /* French */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = French; path = French.lproj/TaskProgress.nib; sourceTree = "<group>"; };
 		A4B603980F7D99EF001A76B3 /* GradientSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientSlider.h; path = Controls/GradientSlider.h; sourceTree = "<group>"; };
 		A4B603990F7D99EF001A76B3 /* GradientSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientSlider.m; path = Controls/GradientSlider.m; sourceTree = "<group>"; };
 		A4B9F1C60E9D119F0004246F /* AutoPreviewStepper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoPreviewStepper.h; path = Controls/AutoPreviewStepper.h; sourceTree = "<group>"; };
@@ -220,6 +215,7 @@
 		A4E52D560A0141A400382558 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "flam3/flam3-palettes.xml"; sourceTree = SOURCE_ROOT; };
 		A4E69E600FC835310001E3BD /* ConsoleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ConsoleView.h; path = LuaConsole/ConsoleView.h; sourceTree = "<group>"; };
 		A4E69E610FC835310001E3BD /* ConsoleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ConsoleView.m; path = LuaConsole/ConsoleView.m; sourceTree = "<group>"; };
+		A4EE12611151957E00922C94 /* libjpeg.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libjpeg.dylib; path = build_folder_for_flam3/lib/libjpeg.dylib; sourceTree = "<group>"; };
 		A4EED68710D3ED6B002C2E68 /* edit-paste.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "edit-paste.png"; path = "icons/Tango/edit-paste.png"; sourceTree = "<group>"; };
 		A4F3EF1D0AB5DE3100A282F2 /* image-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "image-x-generic.png"; path = "icons/Tango/image-x-generic.png"; sourceTree = "<group>"; };
 		A4F3EF1F0AB5DE3B00A282F2 /* video-x-generic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "video-x-generic.png"; path = "icons/Tango/video-x-generic.png"; sourceTree = "<group>"; };
@@ -359,9 +355,10 @@
 				A42608820C41109600DDB92E /* flam3-animate */,
 				A41CF2D80C340AFE001582CC /* flam3-render */,
 				A4C5BDC60DA91D46002BE1C2 /* libflam3.0.dylib */,
-				A41CF33D0C343FB1001582CC /* libjpeg.62.dylib */,
-				A41CF2DB0C340B44001582CC /* libpng.dylib */,
+				A4EE12611151957E00922C94 /* libjpeg.dylib */,
 				A4C47C6C0997BDE100BCE5E8 /* libxml2.dylib */,
+				A407480F11555AA5007A7EE3 /* libpng14.14.dylib */,
+				A407481C11555BA6007A7EE3 /* libpng.dylib */,
 				A4E52D560A0141A400382558 /* flam3-palettes.xml */,
 				A4421BE409CF3CE900E9D39F /* oxidizer.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
@@ -592,8 +589,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				A4C5BDCB0DA91D6D002BE1C2 /* libflam3.0.dylib in Resources */,
-				A4F21B460CEA112400F0195A /* libpng.dylib in Resources */,
-				A4F21B470CEA112C00F0195A /* libjpeg.62.dylib in Resources */,
+				A407481E11555BAD007A7EE3 /* libpng.dylib in Resources */,
+				A407481F11555BAD007A7EE3 /* libpng14.14.dylib in Resources */,
+				A4EE12631151958600922C94 /* libjpeg.dylib in Resources */,
 				A40CA26A0CF0B598000C28FB /* flam3-animate in Resources */,
 				A40CA26B0CF0B59D000C28FB /* flam3-genome in Resources */,
 				A40CA2690CF0B58D000C28FB /* flam3-render in Resources */,
@@ -638,7 +636,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "BUILD_EXTRA_CODE=\"NO\"\n\nif [[ $BUILD_EXTRA_CODE = \"YES\" ]] ; then\n\nmkdir `pwd`/build_folder_for_flam3\n\nexport FLAM3_BUILD_PATH=`pwd`/build_folder_for_flam3 \n\necho $FLAM3_BUILD_PATH\n\ncd LuaObjCBridge\n\nxcodebuild -configuration Release\n\n\ncd ../libpng\necho \"Building libpng\"\nexport CFLAGS=\"-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc\" \nexport LDFLAGS=\"-arch i386 -arch ppc\"  \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-6b\nmkdir `pwd`/../build_folder_for_flam3/lib\nmkdir `pwd`/../build_folder_for_flam3/bin\nmkdir `pwd`/../build_folder_for_flam3/include\nmkdir `pwd`/../build_folder_for_flam3/man\nmkdir `pwd`/../build_folder_for_flam3/man/man1\n\nenv CC=\"gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386\" CFLAGS=\"-O3\" LDFLAGS=\"-arch i386 -arch ppc\"  ./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nln -s /usr/bin/glibtool ./libtool\nmake install\n\necho \"Building flam3\"\ncd ../flam3\nln -s /usr/bin/glibtool ./libtool\nexport CFLAGS=\"-isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386 -I$FLAM3_BUILD_PATH/include\" \nexport LDFLAGS=\"-arch i386 -arch ppc -L${FLAM3_BUILD_PATH}/lib\" \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nmake install\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-animate\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.62.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-genome\n\nfi\n";
+			shellScript = "BUILD_EXTRA_CODE=\"YES\"\n\nif [[ $BUILD_EXTRA_CODE = \"YES\" ]] ; then\n\nmkdir `pwd`/build_folder_for_flam3\n\nexport FLAM3_BUILD_PATH=`pwd`/build_folder_for_flam3 \n\necho $FLAM3_BUILD_PATH\n\ncd LuaObjCBridge\n\nxcodebuild -configuration Release\n\nARCH_FLAGS=\"-arch i386 -arch ppc -arch x86_64\"\n\ncd ../libpng\necho \"Building libpng\"\nexport CFLAGS=\"-O -isysroot $SDK_DIR $ARCH_FLAGS\"\nexport LDFLAGS=$ARCH_FLAGS  \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH\nmake install\n\necho \"Building jpeg\"\ncd ../jpeg-8a\nmkdir `pwd`/../build_folder_for_flam3/lib\nmkdir `pwd`/../build_folder_for_flam3/bin\nmkdir `pwd`/../build_folder_for_flam3/include\nmkdir `pwd`/../build_folder_for_flam3/man\nmkdir `pwd`/../build_folder_for_flam3/man/man1\n\nenv CPP=cpp CC=\"gcc -isysroot $SDK_DIR $ARCH_FLAGS\" CFLAGS=\"-O3\" ./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared \nln -s /usr/bin/glibtool ./libtool\nenv CC=\"gcc -isysroot $SDK_DIR $ARCH_FLAGS\" CFLAGS=\"-O3\" make install\n\necho \"Building flam3\"\ncd ../flam3\nln -s /usr/bin/glibtool ./libtool\nexport CFLAGS=\"-isysroot $SDK_DIR $ARCH_FLAGS -I$FLAM3_BUILD_PATH/include\" \nexport LDFLAGS=\"$ARCH_FLAGS -L${FLAM3_BUILD_PATH}/lib\" \n./configure --disable-dependency-tracking --prefix=$FLAM3_BUILD_PATH --enable-shared\nmake install\n\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-render | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-render\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/lib/libflam3.0.dylib | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.dylib  $FLAM3_BUILD_PATH/lib/libflam3.0.dylib\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.dylib $FLAM3_BUILD_PATH/bin/flam3-animate\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-animate | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-animate\n\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libpng/ {print $1}'`  @executable_path/libpng.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libjpeg/ {print $1}'`  @executable_path/libjpeg.dylib $FLAM3_BUILD_PATH/bin/flam3-genome\ninstall_name_tool -change `otool -L $FLAM3_BUILD_PATH/bin/flam3-genome | awk '/libflam3.0.dylib/ {print $1}'`  @executable_path/libflam3.0.dylib  $FLAM3_BUILD_PATH/bin/flam3-genome\n\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -708,7 +706,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				29B97319FDCFA39411CA2CEA /* English */,
-				A415EF2D0F0175A000AC96D0 /* French */,
 			);
 			name = MainMenu.nib;
 			sourceTree = "<group>";
@@ -717,7 +714,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A431DB000F07C88A00E826A2 /* English */,
-				A431DB080F07C91F00E826A2 /* French */,
 			);
 			name = FileViews.nib;
 			sourceTree = "<group>";
@@ -726,7 +722,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A422B9A00B162E7800019559 /* English */,
-				A4B1662D0F067398001530F3 /* French */,
 			);
 			name = GenePool.nib;
 			sourceTree = "<group>";
@@ -735,7 +730,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A404B32E0D14345E00FE81AC /* English */,
-				A4B1662F0F067398001530F3 /* French */,
 			);
 			name = RectangleWindow.nib;
 			sourceTree = "<group>";
@@ -744,7 +738,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A49E2A670D86FDC9008198BE /* English */,
-				A4B1662E0F067398001530F3 /* French */,
 			);
 			name = GradientWindow.nib;
 			sourceTree = "<group>";
@@ -753,7 +746,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				A4C6CE290DC3728000E2EEFB /* English */,
-				A4B166450F0674C3001530F3 /* French */,
 			);
 			name = TaskProgress.nib;
 			sourceTree = "<group>";
@@ -764,8 +756,8 @@
 		A40F1259108A0C1A00B245D7 /* Release Snow Leopard */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
 				FRAMEWORK_SEARCH_PATHS = LuaObjCBridge/build/Release;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DEBUGGING_SYMBOLS = default;
@@ -805,7 +797,15 @@
 					"$(LIBRARY_SEARCH_PATHS)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
 				PRODUCT_NAME = Oxidizer;
 				WRAPPER_EXTENSION = app;
 			};
@@ -832,9 +832,17 @@
 					"$(LIBRARY_SEARCH_PATHS)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6)",
 				);
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../Releases/oxidizer/build_folder_for_flam3/lib\"";
 				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_5 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_6 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
 				PRODUCT_NAME = Oxidizer;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
@@ -858,7 +866,15 @@
 					"$(LIBRARY_SEARCH_PATHS)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_1)",
 					"$(LIBRARY_SEARCH_PATHS_QUOTED_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3)",
+					"$(LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4)",
 				);
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_2 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_3 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
+				LIBRARY_SEARCH_PATHS_QUOTED_FOR_TARGET_4 = "\"$(SRCROOT)/build_folder_for_flam3/lib\"";
 				PRODUCT_NAME = Oxidizer;
 				WRAPPER_EXTENSION = app;
 			};

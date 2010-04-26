@@ -44,12 +44,33 @@
 	[pboard addTypes:[NSArray arrayWithObject:@"tiff_data"] owner:self];
 
 	NSImage *image = [self image];
-	NSImage *thumbImage = [[NSImage alloc] initWithData:[image TIFFRepresentation]];
+	
+	/*
+	   
+	 NSImage *thumbImage = [[NSImage alloc] initWithData:[image TIFFRepresentation]];
+	 
+	 NSAffineTransform *at = [NSAffineTransform transform];
+	 
+	 [thumbImage setScalesWhenResized:YES];
+	 
+	 double scale;
+	 
+	 double heightFactor = 128.0/[image size].height;
+	 double widthFactor = 128.0/[image size].width;
+	 if(heightFactor > widthFactor){
+	 scale = widthFactor;
+	 } else {
+	 scale = heightFactor;
+	 }
+	 
+	 [at scaleBy:scale];
+	 
+	 
+	 [thumbImage setSize:[at transformSize:[image size]]];
+	 */ 
 	
 	NSAffineTransform *at = [NSAffineTransform transform];
-	
-	[thumbImage setScalesWhenResized:YES];
-	
+
 	double scale;
 	
 	double heightFactor = 128.0/[image size].height;
@@ -63,7 +84,18 @@
 	[at scaleBy:scale];
 	
 	
-	[thumbImage setSize:[at transformSize:[image size]]];
+	NSImage *thumbImage = [[NSImage alloc] initWithSize:[at transformSize:[image size]]];
+	
+	[thumbImage setScalesWhenResized:YES];
+	
+	[thumbImage lockFocus];
+	
+	[image drawInRect:NSMakeRect(0.0, 0.0, [thumbImage size].width, [thumbImage size].width)
+			 fromRect:NSMakeRect(0.0, 0.0, [image size].width, [image size].width)
+			operation:NSCompositeCopy
+			 fraction:1.0];
+
+	[thumbImage unlockFocus];
 	
 	if (thumbImage) {
 		size = [thumbImage size];

@@ -114,6 +114,7 @@
 
 - (bool) fill {
 
+
 	int i, fillCount;
 
 	fillCount = 0;
@@ -136,30 +137,112 @@
 		[genePoolProgressWindow center];	
 	}	[genePoolProgressWindow makeKeyAndOrderFront:self];
 
-	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
-	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 	
+	NSMutableArray *threads = [[NSMutableArray alloc] init];
+	
+	int threadCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"threads"] integerValue];
 	
 	for(i=0; i<genomeCount; i++) {
 
-		[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
-		[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];				
+		
 
 		if (buttonState[i] == NSOnState) {
-			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Creating new Genome %d", i]];
-			[genePoolProgressText displayIfNeeded];
-			NSData *newGenome = [BreedingController createRandomGenomeXMLwithEnvironment:env];
-			[genomes replaceObjectAtIndex:i withObject:newGenome];
-			[genePoolProgress incrementBy:1.0];
-			[genePoolProgress displayIfNeeded];
-			hasGenome[i] = YES; 
+
+			NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
+			[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
+			
+			[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
+			[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];		
+			[env setObject:[NSNumber numberWithInt:i] forKey:@"genome_index"];		
+			
+			if([threads count] < threadCount) {
+				NSThread *newThread = [[NSThread alloc] initWithTarget:self selector:@selector(createRandomGenomeXMLInThreadwithEnvironment:) object:env];
+				[threads addObject:newThread];
+				[newThread start];
+			} else {
+				bool threadsFull = YES;
+				while (threadsFull == YES) {
+					int j;
+					for(j=0; j<threadCount; j++) {
+						NSThread *thisThread = [threads objectAtIndex:j]; 
+						if ([thisThread isFinished]) {
+							NSThread *replacementThread = [[NSThread alloc] initWithTarget:self 
+																				 selector:@selector(createRandomGenomeXMLInThreadwithEnvironment:) 
+																				   object:env];
+							[threads replaceObjectAtIndex:j 
+											   withObject:replacementThread];
+							
+							[replacementThread start];
+							
+							[thisThread release];
+							
+							threadsFull = NO;
+							break;
+						}
+					}
+					usleep(50000);
+				}
+			}
+			[env autorelease];
+
 		}
+		
 	}
+
+	
+	bool threadsFinished = NO;
+	while (threadsFinished == NO) {
+		int j;
+		threadsFinished = YES;
+		for(j=0; j<[threads count]; j++) {
+			NSThread *thisThread = [threads objectAtIndex:j]; 
+			if (![thisThread isFinished]) {
+				threadsFinished = NO;
+			}
+		}
+		usleep(50000);
+	}
+	
+	int j;
+	threadsFinished = YES;
+	for(j=0; j<[threads count]; j++) {
+		NSThread *thisThread = [threads objectAtIndex:j]; 
+		[thisThread release];
+	}
+	
 	
 	[genePoolProgressWindow setIsVisible:NO];
 	return YES;
 	
 }
+
+- (void)  createRandomGenomeXMLInThreadwithEnvironment:(NSMutableDictionary *)env {
+
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[env retain];
+	
+	int i = [[env objectForKey:@"genome_index"] integerValue];
+	
+	
+	[env removeObjectForKey:@"genome_index"];
+	
+	[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Creating new Genome %d", i]];
+	[genePoolProgressText displayIfNeeded];
+	NSData *newGenome = [BreedingController createRandomGenomeXMLwithEnvironment:env];
+	[genomes replaceObjectAtIndex:i withObject:newGenome];
+	[genePoolProgress incrementBy:1.0];
+	[genePoolProgress displayIfNeeded];
+	hasGenome[i] = YES; 
+	
+	[env release];
+	[pool release];
+	
+	
+}
+
+
+
 
 - (bool) breed {
 	
@@ -210,6 +293,11 @@
 		
 	}
 
+
+	NSMutableArray *threads = [[NSMutableArray alloc] init];
+	
+	int threadCount = [[[NSUserDefaults standardUserDefaults] objectForKey:@"threads"] integerValue];
+	
 	
 	switch (breedingCount) {
 		case 0:
@@ -220,11 +308,49 @@
 		case 1:
 			[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Mutating Genome %d", breedingOrder[0]]];
 			[genePoolProgressText displayIfNeeded];
+			
+			
 			while(newGenomeCount < genomeCount) {
-				[newGenomes addObject:[BreedingController mutateGenome:[genomes objectAtIndex:breedingOrder[0]]]]; 
+				
+				
+				NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:3];
+				[dict setObject:newGenomes forKey:@"genome_array"];
+				[dict setObject:[genomes objectAtIndex:breedingOrder[0]] forKey:@"old_genome"];
+				[dict setObject:[NSNumber numberWithInt:newGenomeCount] forKey:@"genome_index"];
+				
+				
+				if([threads count] < threadCount) {
+					NSThread *newThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadMutateGenome:) object:dict];
+					[threads addObject:newThread];
+					[newThread start];
+				} else {
+					bool threadsFull = YES;
+					while (threadsFull == YES) {
+						int j;
+						for(j=0; j<threadCount; j++) {
+							NSThread *thisThread = [threads objectAtIndex:j]; 
+							if ([thisThread isFinished]) {
+								NSThread *replacementThread = [[NSThread alloc] initWithTarget:self 
+																					  selector:@selector(threadMutateGenome:) 
+																						object:dict];
+								[threads replaceObjectAtIndex:j 
+												   withObject:replacementThread];
+								
+								[replacementThread start];
+								
+								[thisThread release];
+								
+								threadsFull = NO;
+								break;
+							}
+						}
+						usleep(50000);
+					}
+				}
+				 
 				newGenomeCount++;
-				[genePoolProgress setDoubleValue:newGenomeCount];
-				[genePoolProgress displayIfNeeded];
+				[dict autorelease];
+				 
 			}
 			break;
 		default:		
@@ -240,10 +366,16 @@
 				}	
 				
 				for(i=0; i+1<breedingCount && newGenomeCount < genomeCount; i+=2) {
-					index = abs(random() % 3);
-					[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Breeding Genome %d with Genome %d", breedingOrder[order[i]], breedingOrder[order[i+1]]]];
-					[genePoolProgressText displayIfNeeded];
+
+					NSMutableDictionary *dict = [[NSMutableDictionary alloc] initWithCapacity:3];
+					[dict setObject:newGenomes forKey:@"genome_array"];
+					[dict setObject:[genomes objectAtIndex:breedingOrder[order[i]]] forKey:@"old_genome_1"];
+					[dict setObject:[genomes objectAtIndex:breedingOrder[order[i+1]]] forKey:@"old_genome_2"];
+					[dict setObject:[NSNumber numberWithInt:breedingOrder[order[i]]] forKey:@"genome_index_1"];
+					[dict setObject:[NSNumber numberWithInt:breedingOrder[order[i+1]]] forKey:@"genome_index_2"];				
 					
+					index = abs(random() % 3);
+
 					/*
 						If the genomes are big avoid union as the genome lengths get added together and before you 
 					    know it they are taking Gigabytes to breed
@@ -252,26 +384,73 @@
 						[[genomes objectAtIndex:breedingOrder[order[i+1]]] length] > 100 * 1204) {
 						index = (random() & 1) + 1;
 					} 
-					switch(index) {
-						case 1:
-							/* interpolate */
-							[newGenomes addObject:[BreedingController interpolateGenome:[genomes objectAtIndex:breedingOrder[order[i]]] 
-																			 withGenome:[genomes objectAtIndex:breedingOrder[order[i+1]]]]]; 
-							break;
-						case 2:
-							/* alternate */
-							[newGenomes addObject:[BreedingController alternateGenome:[genomes objectAtIndex:breedingOrder[order[i]]] 
-																			 withGenome:[genomes objectAtIndex:breedingOrder[order[i+1]]]]]; 
-							break;
-						default:
-							/* union */
-							[newGenomes addObject:[BreedingController unionGenome:[genomes objectAtIndex:breedingOrder[order[i]]] 
-																			 withGenome:[genomes objectAtIndex:breedingOrder[order[i+1]]]]]; 
-							
+					
+					
+					if([threads count] < threadCount) {
+						
+						NSThread *newThread;
+						
+						switch(index) {
+							case 1:
+								/* interpolate */
+								newThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadInterpolateGenome:) object:dict];
+								break;
+							case 2:
+								/* alternate */
+								newThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadAlternateGenome:) object:dict];
+								break;
+							default:
+								/* union */
+								newThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadUnionGenome:) object:dict];
+								
+						}
+						
+						[threads addObject:newThread];
+						[newThread start];
+						
+					} else {
+						bool threadsFull = YES;
+						while (threadsFull == YES) {
+							int j;
+							for(j=0; j<threadCount; j++) {
+								NSThread *thisThread = [threads objectAtIndex:j]; 
+								if ([thisThread isFinished]) {
+									
+														
+									NSThread *replacementThread;
+									
+									switch(index) {
+										case 1:
+											/* interpolate */
+											replacementThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadInterpolateGenome:) object:dict];
+											break;
+										case 2:
+											/* alternate */
+											replacementThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadAlternateGenome:) object:dict];
+											break;
+										default:
+											/* union */
+											replacementThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadUnionGenome:) object:dict];
+											
+									}									
+									
+									
+									[threads replaceObjectAtIndex:j 
+													   withObject:replacementThread];
+									
+									[replacementThread start];
+									
+									[thisThread release];
+									
+									threadsFull = NO;
+									break;
+								}
+							}
+							usleep(50000);
+						}
 					}
+					
 					newGenomeCount++;
-					[genePoolProgress setDoubleValue:newGenomeCount];
-					[genePoolProgress displayIfNeeded];
 
 				}	
 				
@@ -279,7 +458,29 @@
 			}
 	}
 	
-
+	bool threadsFinished = NO;
+	while (threadsFinished == NO) {
+		int j;
+		threadsFinished = YES;
+		for(j=0; j<[threads count]; j++) {
+			NSThread *thisThread = [threads objectAtIndex:j]; 
+			if (![thisThread isFinished]) {
+				threadsFinished = NO;
+			}
+		}
+		usleep(50000);
+	}
+	
+	int j;
+	threadsFinished = YES;
+	for(j=0; j<[threads count]; j++) {
+		NSThread *thisThread = [threads objectAtIndex:j]; 
+		[thisThread release];
+	}
+	
+	[threads release];
+	
+	
 	[genomes removeAllObjects];
 	[genomes addObjectsFromArray:newGenomes];
 	
@@ -297,6 +498,117 @@
 
 	
 	return YES;
+	
+}
+
+
+- (void)threadMutateGenome:(NSDictionary *)dict {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[dict retain];
+	
+	NSMutableArray *newGenomes = [dict objectForKey:@"genome_array"];
+	NSData *oldGenome = [dict objectForKey:@"old_genome"];
+
+	int i = [[dict objectForKey:@"genome_index"] integerValue];
+	
+	[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Mutating Genome %d", i]];
+	[genePoolProgressText displayIfNeeded];
+
+	[newGenomes addObject:[BreedingController mutateGenome:oldGenome]]; 
+	
+	[genePoolProgress incrementBy:1.0];
+	[genePoolProgress displayIfNeeded];
+	
+	[dict release];
+	[pool release];
+	
+}
+
+- (void)threadInterpolateGenome:(NSDictionary *)dict {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[dict retain];
+	
+	NSMutableArray *newGenomes = [dict objectForKey:@"genome_array"];
+	NSData *oldGenome1 = [dict objectForKey:@"old_genome_1"];
+	NSData *oldGenome2 = [dict objectForKey:@"old_genome_2"];
+	
+	int i = [[dict objectForKey:@"genome_index_1"] integerValue];
+	int j = [[dict objectForKey:@"genome_index_2"] integerValue];
+
+	[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Breeding Genome %d with Genome %d", i,j]];
+	[genePoolProgressText displayIfNeeded];
+	
+
+	[newGenomes addObject:[BreedingController interpolateGenome:oldGenome1 
+													 withGenome:oldGenome2]]; 
+
+	[genePoolProgress incrementBy:1.0];
+	[genePoolProgress displayIfNeeded];
+	
+	[dict release];
+	[pool release];	
+	
+}
+
+- (void)threadAlternateGenome:(NSDictionary *)dict {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[dict retain];
+	
+	NSMutableArray *newGenomes = [dict objectForKey:@"genome_array"];
+	
+	NSData *oldGenome1 = [dict objectForKey:@"old_genome_1"];
+	NSData *oldGenome2 = [dict objectForKey:@"old_genome_2"];
+	
+	int i = [[dict objectForKey:@"genome_index_1"] integerValue];
+	int j = [[dict objectForKey:@"genome_index_2"] integerValue];
+	
+	[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Breeding Genome %d with Genome %d", i,j]];
+	[genePoolProgressText displayIfNeeded];
+	
+	
+	[newGenomes addObject:[BreedingController alternateGenome:oldGenome1 
+													 withGenome:oldGenome2]]; 
+	
+	[genePoolProgress incrementBy:1.0];
+	[genePoolProgress displayIfNeeded];
+	
+	[dict release];
+	[pool release];		
+	
+}
+
+- (void)threadUnionGenome:(NSDictionary *)dict {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+	
+	[dict retain];
+	
+
+	NSMutableArray *newGenomes = [dict objectForKey:@"genome_array"];
+	NSData *oldGenome1 = [dict objectForKey:@"old_genome_1"];
+	NSData *oldGenome2 = [dict objectForKey:@"old_genome_2"];
+	
+	int i = [[dict objectForKey:@"genome_index_1"] integerValue];
+	int j = [[dict objectForKey:@"genome_index_2"] integerValue];
+	
+	[genePoolProgressText setStringValue:[NSString stringWithFormat:@"Breeding Genome %d with Genome %d", i,j]];
+	[genePoolProgressText displayIfNeeded];
+	
+	
+	[newGenomes addObject:[BreedingController unionGenome:oldGenome1 
+													 withGenome:oldGenome2]]; 
+	
+	[genePoolProgress incrementBy:1.0];
+	[genePoolProgress displayIfNeeded];
+	
+	[dict release];
+	[pool release];		
 	
 }
 

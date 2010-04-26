@@ -48,5 +48,6 @@
 - (void) setButton:(NSButton *)button withGenome:(NSData *)genome;
 - (void) showGenePoolWindow:(id)sender;
 - (void) setFractalFlameModel:(FractalFlameModel *)ffm;
+- (void)fillPoolInThread:(id)sender;
 
 @end

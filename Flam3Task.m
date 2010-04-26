@@ -67,9 +67,9 @@
 
 + (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
 		
-	NSString *tempPath = [self createTemporaryPath];
-	NSString *stdoutFile = [tempPath  stringByAppendingPathComponent:@"stdoutFile"];
-	NSString *stderrFile = [tempPath  stringByAppendingPathComponent:@"stderrFile"];
+//	NSString *tempPath = ;
+	NSString *stdoutFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stdoutFile"];
+	NSString *stderrFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stderrFile"];
 	[stdoutFile retain];
 	[stderrFile retain];
     [[NSFileManager defaultManager] createFileAtPath:stdoutFile contents:nil attributes:nil];
@@ -113,19 +113,20 @@
 	
 	int taskStatus = [task terminationStatus];
 	
-	if(taskStatus != 0) {
+	NSString *string;
+	NSData *errorData = [NSData dataWithContentsOfFile:stderrFile];
+
+	if(taskStatus != 0 || [errorData length] > 0) {
 		
-		NSString *string;
-		NSData *errorData = [NSData dataWithContentsOfFile:stderrFile];
 		
 		if ([errorData length] != 0) {
 			string = [[NSString alloc] initWithData: errorData encoding: NSUTF8StringEncoding];
-			NSLog(@"got: %@", string);		
+			NSLog(@"flam3-genome failed, got: %ld %@", taskStatus, string);		
 		} else {
 			string = [[NSString alloc] initWithString:@""];
 		}
 
-		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Genome failed!" 
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Genome failed!"
 												 defaultButton:@"Close"
 											   alternateButton:nil 
 												   otherButton:nil 
@@ -144,6 +145,10 @@
 	
 	
 	NSData *genomeXML = [NSData dataWithContentsOfFile:stdoutFile];
+	
+	if(genomeXML == nil) {
+		NSLog(@"genomeXML nil");
+	}
 
 	[Flam3Task deleteTemporaryPathAndFile:stderrFile];
 	[Flam3Task deleteTemporaryPathAndFile:stdoutFile];
@@ -202,7 +207,7 @@
 	if(taskStatus != 0) {
 		
 		NSString *string;
-		NSData *errorData = [flam3Output readDataToEndOfFile];
+		NSData *errorData = [flam3Error readDataToEndOfFile];
 		
 		if ([errorData length] != 0) {
 			string = [[NSString alloc] initWithData: errorData encoding: NSUTF8StringEncoding];
@@ -211,7 +216,7 @@
 			string = [[NSString alloc] initWithString:@""];
 		}
 		
-		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Genome failed!" 
+		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Genome render failed!"
 												 defaultButton:@"Close"
 											   alternateButton:nil 
 												   otherButton:nil 

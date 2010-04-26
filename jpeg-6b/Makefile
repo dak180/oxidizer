@@ -20,17 +20,17 @@ manext = 1
 mandir = $(prefix)/man/man$(manext)
 
 # The name of your C compiler:
-CC= gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch ppc -arch i386
+CC= gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch ppc64 -arch x86_64 -L/Developer/SDKs/MacOSX10.5/usr/lib
 
 # You may need to adjust these cc options:
-CFLAGS= -O3  -I$(srcdir)
+CFLAGS= -O3 -L/Developer/SDKs/MacOSX10.5/usr/lib  -I$(srcdir)
 # Generally, we recommend defining any configuration symbols in jconfig.h,
 # NOT via -D switches here.
 # However, any special defines for ansi2knr.c may be included here:
 ANSI2KNRFLAGS= -DBSD
 
 # Link-time cc options:
-LDFLAGS= -arch i386 -arch ppc
+LDFLAGS= 
 
 # To link any special libraries, add the necessary -l commands here.
 LDLIBS= 

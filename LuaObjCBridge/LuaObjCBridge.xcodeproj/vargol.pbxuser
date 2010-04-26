@@ -2,10 +2,11 @@
 {
 	4B1114C00828E15C007DD523 /* LuaObjCBridge.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1034, 34916}}";
-			sepNavSelRange = "{25462, 0}";
-			sepNavVisRange = "{25253, 298}";
+			sepNavIntBoundsRect = "{{0, 0}, {715, 32136}}";
+			sepNavSelRange = "{35613, 25}";
+			sepNavVisRange = "{35541, 288}";
 			sepNavVisRect = "{{0, 1247}, {582, 182}}";
+			sepNavWindowFrame = "{{305, -97}, {1205, 992}}";
 		};
 	};
 	4B277B330A7E9EF00051C47A /* Test */ = {
@@ -17,6 +18,7 @@
 	4B4FE4BE0827873F007685F3 /* Project object */ = {
 		activeBuildConfigurationName = Release;
 		activeExecutable = A4327A7E0C4E53C400B1D18D /* lua */;
+		activeSDKPreference = macosx10.5;
 		activeTarget = 4B4FE50E08278784007685F3 /* LuaObjCBridge.framework */;
 		codeSenseManager = A4327A870C4E53ED00B1D18D /* Code sense */;
 		executables = (
@@ -43,7 +45,7 @@
 				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
 				PBXFileTableDataSourceColumnWidthsKey = (
 					20,
-					243,
+					537,
 					20,
 					48,
 					43,
@@ -72,11 +74,46 @@
 					PBXFindDataSource_LocationID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 275149569;
-			PBXWorkspaceStateSaveDate = 275149569;
+			PBXConfiguration.PBXTargetDataSource.PBXTargetDataSource = {
+				PBXFileTableDataSourceColumnSortingDirectionKey = "-1";
+				PBXFileTableDataSourceColumnSortingKey = PBXFileDataSource_Filename_ColumnID;
+				PBXFileTableDataSourceColumnWidthsKey = (
+					20,
+					497,
+					60,
+					20,
+					48.16259765625,
+					43,
+					43,
+				);
+				PBXFileTableDataSourceColumnsKey = (
+					PBXFileDataSource_FiletypeID,
+					PBXFileDataSource_Filename_ColumnID,
+					PBXTargetDataSource_PrimaryAttribute,
+					PBXFileDataSource_Built_ColumnID,
+					PBXFileDataSource_ObjectSize_ColumnID,
+					PBXFileDataSource_Errors_ColumnID,
+					PBXFileDataSource_Warnings_ColumnID,
+				);
+			};
+			PBXPerProjectTemplateStateSaveDate = 290542566;
+			PBXWorkspaceStateSaveDate = 290542566;
+		};
+		perUserProjectItems = {
+			A4EE11551151581400922C94 /* XCBuildMessageTextBookmark */ = A4EE11551151581400922C94 /* XCBuildMessageTextBookmark */;
+			A4EE120B11516A2500922C94 /* PBXTextBookmark */ = A4EE120B11516A2500922C94 /* PBXTextBookmark */;
+			A4EE120C11516A2500922C94 /* PBXTextBookmark */ = A4EE120C11516A2500922C94 /* PBXTextBookmark */;
+			A4EE120F11516A2500922C94 /* PBXTextBookmark */ = A4EE120F11516A2500922C94 /* PBXTextBookmark */;
 		};
 		sourceControlManager = A4327A860C4E53ED00B1D18D /* Source Control */;
 		userBuildSettings = {
+		};
+	};
+	4B4FE4C408278751007685F3 /* LuaObjCBridge-Prefix.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {1074, 617}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 264}";
 		};
 	};
 	4B4FE50E08278784007685F3 /* LuaObjCBridge.framework */ = {
@@ -100,6 +137,13 @@
 			sepNavSelRange = "{7961, 13}";
 			sepNavVisRect = "{{0, 3527}, {1073, 646}}";
 			sepNavWindowFrame = "{{134, -53}, {1118, 775}}";
+		};
+	};
+	4BCA7A4B09E39213008E078D /* llex.h */ = {
+		uiCtxt = {
+			sepNavIntBoundsRect = "{{0, 0}, {868, 1131}}";
+			sepNavSelRange = "{0, 0}";
+			sepNavVisRange = "{0, 801}";
 		};
 	};
 	4BDB57490854EA0400798A4F /* Everything */ = {
@@ -173,5 +217,44 @@
 	A4327A870C4E53ED00B1D18D /* Code sense */ = {
 		isa = PBXCodeSenseManager;
 		indexTemplatePath = "";
+	};
+	A4EE11551151581400922C94 /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Compile /Users/vargol/Source/oxidizer/LuaObjCBridge/ObjC/LuaObjCBridge.m";
+		fRef = 4B1114C00828E15C007DD523 /* LuaObjCBridge.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 0;
+		rLoc = 0;
+		rType = 1;
+	};
+	A4EE120B11516A2500922C94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4B1114C00828E15C007DD523 /* LuaObjCBridge.m */;
+		name = "LuaObjCBridge.m: 1252";
+		rLen = 0;
+		rLoc = 35599;
+		rType = 0;
+		vrLen = 288;
+		vrLoc = 35541;
+	};
+	A4EE120C11516A2500922C94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4B1114C00828E15C007DD523 /* LuaObjCBridge.m */;
+		name = "LuaObjCBridge.m: 1252";
+		rLen = 25;
+		rLoc = 35613;
+		rType = 0;
+		vrLen = 288;
+		vrLoc = 35541;
+	};
+	A4EE120F11516A2500922C94 /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 4B1114C00828E15C007DD523 /* LuaObjCBridge.m */;
+		name = "LuaObjCBridge.m: 1";
+		rLen = 0;
+		rLoc = 0;
+		rType = 0;
+		vrLen = 1759;
+		vrLoc = 0;
 	};
 }

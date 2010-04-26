@@ -296,7 +296,26 @@
 
 - (void)mouseUp:(NSEvent *)theEvent { 
 	
+	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+	NSRect frame = [self frame];
+
 	if(draggingSwatch == NO) {
+		if([self isMouseEventInGradientImage:theEvent] == YES) {
+			NSRect gradientRect;
+			
+			frame.origin.x = 0;
+			frame.origin.y = 0;
+			
+			gradientRect.origin.x = (frame.size.width * 0.5) - ((float )GRADIENT_IMAGE_WIDTH);
+			gradientRect.origin.y = (frame.size.height * 0.8);
+			
+			gradientRect.size.width = GRADIENT_IMAGE_WIDTH * 2.0;
+			gradientRect.size.height = GRADIENT_IMAGE_HEIGHT * 2.0;
+			
+			int pointInArray = (mousePoint.x - gradientRect.origin.x) / 2.0;
+			
+			
+		}
 		return;
 	}
 
@@ -311,10 +330,7 @@
 	}	
 	int selectedIndex = [gradientArrayController selectionIndex]; 
 	NSArray *gradientArray = [gradientArrayController arrangedObjects];
-	
-	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
-	NSRect frame = [self frame];
-	
+		
 	CGFloat swatchScale = (frame.size.width - SWATCH_OFFSET - SWATCH_OFFSET) / 255.0;
 	
 	int colourIndex = (mousePoint.x - SWATCH_OFFSET) /  swatchScale;
@@ -351,6 +367,32 @@
 	
 	[(GradientController *)delegate gradientChanged];
 
+}
+
+
+- (void)isMouseEventInGradientImage:(NSEvent *)theEvent {
+	
+	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
+	NSRect frame = [self frame];
+	NSRect gradientRect;
+	
+	frame.origin.x = 0;
+	frame.origin.y = 0;
+	
+	gradientRect.origin.x = (frame.size.width * 0.5) - ((float )GRADIENT_IMAGE_WIDTH);
+	gradientRect.origin.y = (frame.size.height * 0.8);
+	
+	gradientRect.size.width = GRADIENT_IMAGE_WIDTH * 2.0;
+	gradientRect.size.height = GRADIENT_IMAGE_HEIGHT * 2.0;
+	
+	if (mousePoint.x >= gradientRect.origin.x &&  mousePoint.x <= gradientRect.origin.x + gradientRect.size.width &&
+		mousePoint.y >= gradientRect.origin.y &&  mousePoint.y <= gradientRect.origin.y + gradientRect.size.height) {
+		
+		return YES;
+	} 
+	
+	return NO;
+	
 }
 
 @end

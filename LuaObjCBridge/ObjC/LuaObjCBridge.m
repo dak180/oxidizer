@@ -83,11 +83,11 @@
 #if defined(__NEXT_RUNTIME__)
 	#import <objc/objc-runtime.h>
 	#define LUA_OBJC_NEXT_RUNTIME
-	#if defined(__ppc__)||defined(__PPC__)||defined(__powerpc__)
+	#if defined(__ppc__)||defined(__PPC__)||defined(__powerpc__)||defined(__ppc64__)
 		#define LUA_OBJC_METHODCALL_INT_IS_SHORTEST_INTEGRAL_TYPE
 		#define LUA_OBJC_METHODCALL_PASS_FLOATS_IN_MARG_HEADER
 		#define LUA_OBJC_POWER_ALIGNMENT
-	#elif defined(__i386__)
+	#elif defined(__i386__)||defined(__x86_64__)
 		#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
 			#error LuaObjCBridge cannot be compiled for Intel Macs with a MacOSX deployment target of less than 10.4.
 		#elif !defined(AVAILABLE_MAC_OS_X_VERSION_10_3_AND_LATER)

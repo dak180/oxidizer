@@ -37,7 +37,19 @@
 
 
 - (IBAction)breedPool:(id)sender {
+
+	[NSThread detachNewThreadSelector:@selector(breedPoolInThread:) toTarget:self withObject:sender];
+
+}
+
+- (IBAction)breedPoolInThread:(id)sender {
+
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	
+	[sender retain];
+	
+	[(NSControl *)sender setEnabled:NO];
+
 	if([model breed] == NO) {
 		
 		return;
@@ -53,11 +65,30 @@
 		[[genePoolButtons objectAtIndex:i] setState:NSOffState];
 		[model setButton:i toState:NSOffState];
 	}
+
+	[(NSControl *)sender setEnabled:YES];
+	
+	[sender release];
+	[pool release];	
 	
 }
 
 
+
 - (IBAction)fillPool:(id)sender {
+	
+	[NSThread detachNewThreadSelector:@selector(fillPoolInThread:) toTarget:self withObject:sender];
+	
+}	
+
+
+- (void)fillPoolInThread:(id)sender {
+	
+	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+
+	[sender retain];
+
+	[(NSControl *)sender setEnabled:NO];
 	
 	int i;
 	
@@ -79,7 +110,13 @@
 		
 	}	
 	
+	[(NSControl *)sender setEnabled:YES];
+
+	[sender release];
+	[pool release];
+	
 }
+	
 
 
 - (IBAction)moveSelectedToEditor:(id)sender {

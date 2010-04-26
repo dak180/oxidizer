@@ -15,4 +15,6 @@
 
 }
 
+- (void)makeKeyOrderFrontAndCount:(id)sender;
+
 @end
