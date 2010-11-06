@@ -24,7 +24,7 @@
 #import "ImageFormatIsJPEG.h"
 #import "ImageFormatIsPNG.h"
 #import "TemporalFilterIsExponent.h"
-#import "QuickTime/QuickTime.h"
+//#import "QuickTime/QuickTime.h"
 #import "Genome/Genome.h"
 #import "Genome/GenomeImages.h"
 
@@ -224,6 +224,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		[sort  release]; 
 		
 		docController = [NSDocumentController sharedDocumentController];
+		[docController retain];
+
 		
 		_progressInd = [[NSMutableArray alloc] initWithCapacity:2];
 
@@ -235,6 +237,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 			                                           @"B-Spline", @"Mitchell", @"Blackman", @"Catrom", @"Hanning", 
 			                                           @"Hamming", @"Lanczos2", @"Lanczos3", @"Quadratic", nil];	
 	
+		_imageSaveController = [[ImageKitController alloc] init];
+		
+		_qtKitController = [[QTKitController alloc] init];
 		
 		
 	}
@@ -255,6 +260,18 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];
+	
+	
+	[[NSWorkspace sharedWorkspace] launchApplication:[NSString stringWithFormat:@"%@/Oxidizer_QT_Dialog_Server.app", 
+													  [[ NSBundle mainBundle ] resourcePath ]]];
+	
+	
+	NSConnection *theConnection;
+	
+	theConnection = [NSConnection connectionWithRegisteredName:@"OxidizerQTMovieDialog"
+														  host:nil];
+	_movieDialogServer  = [theConnection rootProxy]; 
+	[_movieDialogServer retain];
 	
 }
 
@@ -342,18 +359,25 @@ int printProgress(void *nslPtr, double progress, int stage);
 - (void)renderStill {
 
 	BOOL doRender = [self okayToRender];
-
-	if(doRender == NO) {
-		return;
-	}
 	
-	doRender = [qtController showQuickTimeFileImageDialogue];
-                  
 	if(doRender == NO) {
 		return;
 	}
 
-   [NSThread detachNewThreadSelector:@selector(renderStillInNewThread:) toTarget:self withObject:qtController];
+//	if(doRender == NO) {
+//		return;
+//	}
+	
+//	doRender = [qtController showQuickTimeFileImageDialogue];
+	doRender = [_imageSaveController showFileImageDialogue:oxidizerWindow delegate:self];
+	
+                  
+//	if(doRender == NO) {
+//		return;
+//	}
+
+//   [NSThread detachNewThreadSelector:@selector(renderStillInNewThread:) toTarget:self withObject:qtController];
+//	[NSThread detachNewThreadSelector:@selector(renderStillInNewThread:) toTarget:self withObject:_imageSaveController];
 
 
 }
@@ -380,7 +404,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 }
 
-- (void)renderStillInNewThread:(QuickTimeController *)qt {
+- (void)renderStillInNewThread:(id)qt {
 
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];									
 	
@@ -468,27 +492,47 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (void)renderAnimation {
 
-	BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
+//  BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
+	
+	BOOL doRender  = [_movieDialogServer showQuickTimeFileMovieDialogue];
+	
 	if(doRender == NO) {
 		return;
 	}
-	[NSThread detachNewThreadSelector:@selector(renderAnimationInNewThread) toTarget:self withObject:nil];
+	
+	NSDictionary *movieSettings = [_movieDialogServer getExportDictionary];
 
+    
+	[_qtKitController setExportSettings:movieSettings];
+	[_qtKitController createQTMovie];
+	
+	[[_qtKitController qtMovie] detachFromCurrentThread];
+	
+	[NSThread detachNewThreadSelector:@selector(renderAnimationInNewThread:) toTarget:self withObject:_qtKitController];
+	
+	
+
+	
+	
 }
 
-/*
-- (void) createSheepMoviePreviewGenome {
-	
-	env sequence=input.flam3 nframes=160 flam3-genome > seq.flam3
-//	env dtime=10 flam3-animate < seq.flam3
-	
-}
-*/
 
-- (void)renderAnimationInNewThread {
 
+- (void)renderAnimationInNewThread:(QTKitController *)qtkc  {
+
+	
+	
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 
+	[qtkc retain];
+	
+	QTMovie *movie = [qtkc qtMovie];
+
+	[QTMovie enterQTKitOnThread];
+	
+    [movie attachToCurrentThread];
+
+	QTTime frameDuration = QTMakeTime(1, 30);
 	
 	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
 		NSTemporaryDirectory(),
@@ -528,11 +572,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	genome = [genomes objectAtIndex:0];
 	
-	
+/*	
 	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] * environment->sizeScale 
 						   width:[[genome valueForKey:@"width"] intValue] * environment->sizeScale];
 	BOOL doRender = [qtController CreateMovieGWorld];
-
+*/
 	
 	dtime = 1;
 
@@ -571,13 +615,20 @@ int printProgress(void *nslPtr, double progress, int stage);
 		if (returnCode == 0) {
 			NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:pngFileName]];
 
+			/*
 			repArray = [flameImage representations];
 			for (imgRepresentationIndex = 0; imgRepresentationIndex < [repArray count]; ++imgRepresentationIndex) {
+				
 				if ([[repArray objectAtIndex:imgRepresentationIndex] isKindOfClass:[NSBitmapImageRep class]]) {
-					[qtController addNSBitmapImageRepToMovie:[repArray objectAtIndex:imgRepresentationIndex]];
+//					[qtController addNSBitmapImageRepToMovie:[repArray objectAtIndex:imgRepresentationIndex]];
 					break;
 				}
 			}
+			*/
+			 
+			[movie addImage:flameImage forDuration:frameDuration withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
+																				 @"png ", QTAddImageCodecType,
+																				 nil]];
 			
 		} else {
 			
@@ -592,8 +643,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 	[taskProgressWindow setTitle:@"Writing Movie to Disk..."];
 	
-	[qtController performSelectorOnMainThread:@selector(saveMovie) withObject:nil waitUntilDone:YES];
+//	[qtController performSelectorOnMainThread:@selector(saveMovie) withObject:nil waitUntilDone:YES];
 
+	[qtkc exportQTMovie];
+	
 	[taskProgressWindow setIsVisible:NO];
 	
 	if ([fileManager fileExistsAtPath:pngFileName]) {
@@ -609,6 +662,12 @@ int printProgress(void *nslPtr, double progress, int stage);
 	NSBeep();
 	[finishedPanel runModal];
 	
+	[movie detachFromCurrentThread];
+
+	[QTMovie exitQTKitOnThread];
+
+
+	[qtkc release];
 	
 	[pool release];
 }
@@ -634,15 +693,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[_stillsParameters setObject:[genome valueForKey:@"time"] forKey:@"last_frame"];
 	[self didChangeValueForKey:@"last_frame"];
 
-	BOOL doRender = [qtController showQuickTimeFileStillsDialogue];
+//	BOOL doRender = [qtController showQuickTimeFileStillsDialogue];
 
 	[self didChangeValueForKey:@"prefix"];
-	[_stillsParameters setObject:[qtController fileName] forKey:@"prefix"];
+//	[_stillsParameters setObject:[qtController fileName] forKey:@"prefix"];
 	[self didChangeValueForKey:@"prefix"];
 	
-	if(doRender == NO) {
+//	if(doRender == NO) {
 		return;
-	}
+//	}
 	
 	
 	
@@ -694,11 +753,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 //	double qs = [[NSUserDefaults standardUserDefaults] do]
 	
-	
+/* delete me
 	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] * environment->sizeScale 
 						   width:[[genome valueForKey:@"width"] intValue] * environment->sizeScale];
 	BOOL doRender = [qtController CreateMovieGWorld];
-	
+*/	
 	
 	dtime = 1;
 	
@@ -888,85 +947,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 }
 
--(BOOL) saveToFile:(NSBitmapImageRep *)rep {
-
-	NSData *tiff;
-	
-//	ImageDescriptionHandle imageDescriptionHandle;
-	
-	tiff = [[rep TIFFRepresentation] retain];
-	
-	MovieImportComponent tiffImportComponent = OpenDefaultComponent( GraphicsImporterComponentType, kQTFileTypeTIFF );
-	
-	PointerDataRef dataReference = (PointerDataRef)NewHandle( sizeof(PointerDataRefRecord) );
-	
-	(**dataReference).data = (void *) [tiff bytes];
-	(**dataReference).dataLength = [tiff length];
-	
-	GraphicsImportSetDataReference( tiffImportComponent, (Handle)dataReference, PointerDataHandlerSubType );
-	
-//	GraphicsImportGetImageDescription( tiffImportComponent, &image_description_handle );
-	
-	
-	// do something with the image description and tiff data
-	//
-	GraphicsImportDoExportImageFileDialog(
-            tiffImportComponent, nil, nil, nil, nil, nil, nil);
-
-	CloseComponent( tiffImportComponent);
-//	DisposeHandle( image_description_handle );
-	
-	[tiff release];
-	
-	return TRUE;
-}
-
-
-/*
--(QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr
-{
-  *outErr = -1;
-  
-  Handle  dataRefH    = nil;
-  OSType  dataRefType;
-  
-  // generate a name for our movie file
-  NSString *tempName = [NSString stringWithCString:tmpnam(nil) 
-              encoding:[NSString defaultCStringEncoding]];
-  if (nil == tempName) {
-	return FALSE;
-  };
-   
-
-  // create a file data reference for our movie
-  *outErr = QTNewDataReferenceFromFullPathCFString((CFStringRef)tempName,
-                          kQTNativeDefaultPathStyle,
-                          0,
-                          &dataRefH,
-                          &dataRefType);
-  if (*outErr != noErr) {
-	return FALSE;
-	}
-
-  
-  // create a QuickTime movie from our file data reference
-  Movie  qtMovie  = nil;
-  CreateMovieStorage (dataRefH,
-            dataRefType,
-            'TVOD',
-            smSystemScript,
-            newMovieActive, 
-            outDataHandler,
-            &qtMovie);
-  *outErr = GetMoviesError();
-  if (*outErr != noErr) {
-	return FALSE;
-	}
-	
-return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
-  
-}
-*/
 
 - (void) deleteOldGenomes {
 
@@ -1275,7 +1255,9 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	/* if successful, save file under designated name */
 	if(runResult == NSOKButton && [op filename] != nil) {
 		[self deleteOldGenomes];
-		[docController noteNewRecentDocumentURL:[NSURL URLWithString:[op filename]]];
+		
+		[docController noteNewRecentDocumentURL:[NSURL fileURLWithPath:[op filename]]];
+
 		[self createGenomesFromXMLFile:[op filename] inContext:moc];
 		
 	} 
@@ -1314,7 +1296,10 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 		lastTime = 0;
 	}
 	
-	[docController noteNewRecentDocumentURL:[NSURL URLWithString:filename]];
+
+	[docController noteNewRecentDocumentURL:[NSURL fileURLWithPath:filename]];
+
+	
 	[self appendGenomesFromXMLFile:filename fromTime:lastTime inContext:thisMoc];
 	[moc save:nil];
 	
@@ -1867,6 +1852,25 @@ return [QTMovie movieWithQuickTimeMovie:qtMovie disposeWhenDone:YES error:nil];
 	[newGenomes release];
 	[original release];
 
+}
+
+- (void)savePanelDidEnd: (NSSavePanel *)sheet
+             returnCode: (int)returnCode
+            contextInfo: (void *)contextInfo {
+    if (returnCode == NSOKButton) {
+		
+		[_imageSaveController setFileName:[sheet filename]];
+		[NSThread detachNewThreadSelector:@selector(renderStillInNewThread:) toTarget:self withObject:_imageSaveController];
+    }
+	
+	
+	
+}
+
+- (void) closeMovieServer {
+	
+	[_movieDialogServer closeServer];
+	
 }
 
 

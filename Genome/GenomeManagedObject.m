@@ -54,7 +54,7 @@
 
     NSData *editsData = [self valueForKey:@"editsData"];
     if (editsData != nil) {
-        NSAttributedString *edits = [NSUnarchiver unarchiveObjectWithData:colourData];
+        NSAttributedString *edits = [NSUnarchiver unarchiveObjectWithData:editsData];
         [self setPrimitiveValue:edits forKey:@"edits"];
     }
 		

@@ -268,6 +268,14 @@ static void dotty (lua_State *L);
 	[self appendGenomesFromLua:globalName];
 }
 
+
+- (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename {
+	
+	[(FractalFlameModel *)_ffm deleteOldGenomes];
+	[(FractalFlameModel *)_ffm appendGenomesFromLua:genomes]; 
+	return [(FractalFlameModel *)_ffm renderGenomeToPng:filename] ? 0 : 1;
+}
+
 - (IBAction) copy:(id)sender {
 		
 	[[NSPasteboard generalPasteboard] declareTypes: [NSArray arrayWithObject: NSStringPboardType] owner:nil];
@@ -426,7 +434,7 @@ int print(lua_State *L)
 // The code below is mostly copied from the lua interepter  
 
 /*
- ** $Id: LuaConsoleDelegate.m,v 1.4 2009/05/31 11:00:43 vargol Exp $
+ ** $Id: LuaConsoleDelegate.m,v 1.5 2010/11/06 16:24:48 vargol Exp $
  ** Lua stand-alone interpreter
  ** See Copyright Notice in lua.h
  */

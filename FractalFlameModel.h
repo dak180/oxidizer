@@ -22,10 +22,13 @@
 #import "EnvironmentController.h"
 #import "FlameController.h"
 #import "PaletteController.h"
-#import "QTKit/QTKit.h"
-#import "QuickTimeController.h"
+//#import "QTKit/QTKit.h"
+//#import "QuickTimeController.h"
+#import "ImageKitController.h"
+#import "QTKitController.h"
 #import "ProgressIndicatorWithCancel.h"
 #import "MultiUseWindow.h"
+
 
 @interface FractalFlameModel : NSObjectController
 {
@@ -36,7 +39,8 @@
     IBOutlet NSWindow *oxidizerWindow;
     IBOutlet NSWindow *previewWindow;
     IBOutlet NSLevelIndicator *frameIndicator;
-    IBOutlet QuickTimeController *qtController;
+//    IBOutlet QuickTimeController *qtController;
+    IBOutlet ImageKitController *_imageSaveController;
 	IBOutlet NSArrayController *progressController;
 	IBOutlet NSView *saveThumbnailsView;
     IBOutlet NSImageView *previewView;
@@ -92,6 +96,10 @@
 	
 	id objectBeginEdited;
 
+	id _movieDialogServer;
+	
+	QTKitController *_qtKitController;
+
 @public
 
 	double progress;
@@ -101,7 +109,6 @@
 	IBOutlet NSArrayController *flameController;
 	IBOutlet FlameController *flames;
 
-	
 }
 
 - (IBAction)previewCurrentFlame:(id)sender;
@@ -109,8 +116,7 @@
 - (IBAction)showPreferencesWindow:(id)sender;
 - (IBAction)editGenomes:(id)sender;
 
-- (BOOL)saveToFile:(NSBitmapImageRep *)rep;
-
+//- (BOOL)saveToFile:(NSBitmapImageRep *)rep;
 //- (QTMovie *)QTMovieFromTempFile:(DataHandler *)outDataHandler error:(OSErr *)outErr;
 - (NSManagedObject *) createRandomGenomeInContext:(NSManagedObjectContext *)context;
 - (NSManagedObjectContext *)getNSManagedObjectContext;
@@ -118,7 +124,7 @@
 - (void) deleteOldGenomes;
 
 - (NSMutableArray *)progressIndicators;
-- (void) renderStillInNewThread:(QuickTimeController *)qt;
+- (void) renderStillInNewThread:(id)qt;
 - (void )renderStillToWindowInNewThread;
 //- (void) saveNSBitmapImageRep:(NSBitmapImageRep *)rep;
 - (void) previewCurrentFlameInThread:(NSArray *)genomes;
@@ -143,6 +149,8 @@
 
 - (BOOL) okayToRender;
 
+- (void) closeMovieServer;
+
 /* NSTask based version */
 - (void)generateAllThumbnailsForGenomes:(NSArray *)genome;
 - (void)generateAllThumbnailsForGenomesInThread:(NSArray *)genome;
@@ -164,6 +172,10 @@
 - (IBAction)openFile:(id)sender;
 - (IBAction)appendFile:(id)sender;
 - (void)appendFromFile:(NSString *)filename inContext:(NSManagedObjectContext *)thisMoc;
+
+- (void)savePanelDidEnd: (NSSavePanel *)sheet
+             returnCode: (int)returnCode
+            contextInfo: (void *)contextInfo;
 
 /* lua interface */
 - (NSArray *)passGenomesToLua;

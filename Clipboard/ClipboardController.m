@@ -55,8 +55,15 @@
 
 - (void)windowWillClose:(NSNotification *)aNotification {
 
+	NSError *err = nil;
+
 	[_moc processPendingChanges];
-	[_moc save:NULL];
+	[_moc save:&err];
+	
+	if(err != nil) {
+		NSLog(@"%@", err);		
+	}
+	
 }
 
 - (IBAction) clearAllGenomes:(id) sender {

@@ -47,4 +47,6 @@
 - (NSArray *)passGenomesToLua;
 - (void)appendGenomesFromLua:(NSString *)globalName;
 - (void)replaceWithGenomesFromLua:(NSString *)globalName;
+- (int) renderGenome:(NSArray *)genomes toPng:(NSString *)filename;
+
 @end

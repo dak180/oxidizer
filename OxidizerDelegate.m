@@ -452,8 +452,16 @@
 	}
 
 	[NSBundle loadNibNamed:@"LuaConsole" owner:self];
-	[NSBundle loadNibNamed:@"Clipboard" owner:self];
+	[NSBundle loadNibNamed:@"Clipboard" owner:self];	
 
+}
+
+
+- (void)applicationWillTerminate:(NSNotification *)aNotification {
+	
+	[_clipboardWindow close];
+	[ffm closeMovieServer];
+	
 }
 
 - (IBAction)appendNewEmptyGenome:(id)sender {

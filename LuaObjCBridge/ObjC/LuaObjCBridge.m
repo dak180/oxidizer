@@ -79,13 +79,26 @@
 // the bridge is unable to identify that it is being compiled against the NeXT
 // runtime.
 //
- 
+
+
 #if defined(__NEXT_RUNTIME__)
 	#import <objc/objc-runtime.h>
 	#define LUA_OBJC_NEXT_RUNTIME
 	#if defined(__ppc__)||defined(__PPC__)||defined(__powerpc__)||defined(__ppc64__)
 		#define LUA_OBJC_METHODCALL_INT_IS_SHORTEST_INTEGRAL_TYPE
 		#define LUA_OBJC_METHODCALL_PASS_FLOATS_IN_MARG_HEADER
+// moved these here to get PPC version to build with foundation calls, but with Apple runtime.
+	#define LUA_OBJC_MARG_MAX_FLOATS 13
+	typedef struct lua_objc_sendv_margs{
+		double floatingPointArgs[LUA_OBJC_MARG_MAX_FLOATS];  // Limit imposed by the NeXT runtime.
+		int ignored[14];
+		int arguments[1];									 // Start of data manipulated by standard marg_setValue()
+	} lua_objc_sendv_margs;
+
+	#define lua_objc_marg_setFloatValue(margs,stack_index,value)	(((lua_objc_sendv_margs*)margs)->floatingPointArgs[stack_index])=(double)value
+	#define lua_objc_marg_setDoubleValue(margs,stack_index,value)	(((lua_objc_sendv_margs*)margs)->floatingPointArgs[stack_index])=value
+// end move
+
 		#define LUA_OBJC_POWER_ALIGNMENT
 	#elif defined(__i386__)||defined(__x86_64__)
 		#if MAC_OS_X_VERSION_MIN_REQUIRED < MAC_OS_X_VERSION_10_4
@@ -105,7 +118,9 @@
 	#define LUA_OBJC_GNU_RUNTIME
 	#define LUA_OBJC_USE_FOUNDATION_INSTEAD_OF_RUNTIME
 #endif
-	
+
+#define LUA_OBJC_USE_FOUNDATION_INSTEAD_OF_RUNTIME
+
 //
 // Symbolic Constants
 //
