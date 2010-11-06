@@ -681,6 +681,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	NSArray *genomes = [self fetchGenomes];
 	
 	
+	
 	NSManagedObject *genome = [genomes objectAtIndex:0];
 	
 	[self willChangeValueForKey:@"first_frame"];
@@ -693,20 +694,25 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[_stillsParameters setObject:[genome valueForKey:@"time"] forKey:@"last_frame"];
 	[self didChangeValueForKey:@"last_frame"];
 
-//	BOOL doRender = [qtController showQuickTimeFileStillsDialogue];
 
-	[self didChangeValueForKey:@"prefix"];
-//	[_stillsParameters setObject:[qtController fileName] forKey:@"prefix"];
-	[self didChangeValueForKey:@"prefix"];
+	int runResult;
+			
+	[savePanel setPrompt:@"Render"];
+	[savePanel setAccessoryView:_stillsExportView];
+	runResult = [savePanel runModal];
 	
-//	if(doRender == NO) {
+	if(runResult == NSOKButton && [savePanel filename] != nil) {
+		[self didChangeValueForKey:@"prefix"];
+		[_stillsParameters setObject:[savePanel filename] forKey:@"prefix"];
+		[self didChangeValueForKey:@"prefix"];
+		
+		[NSThread detachNewThreadSelector:@selector(renderAnimationStillsInNewThread:) toTarget:self withObject:_stillsParameters];
+	} else {
 		return;
-//	}
+	}	
 	
 	
 	
-	
-	[NSThread detachNewThreadSelector:@selector(renderAnimationStillsInNewThread:) toTarget:self withObject:_stillsParameters];
 	
 	
 }

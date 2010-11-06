@@ -50,6 +50,8 @@
     IBOutlet ProgressIndicatorWithCancel *taskFrameIndicator;
     IBOutlet NSTextField *etaTextField;
 
+	IBOutlet NSView *_stillsExportView;
+
 	BOOL _saveThumbnail;
 	BOOL _showRender;
 	
@@ -99,6 +101,7 @@
 	id _movieDialogServer;
 	
 	QTKitController *_qtKitController;
+	
 
 @public
 
@@ -106,6 +109,7 @@
 	int flameCount;
 	int flameProgress;
 	NSSavePanel *savePanel;
+	
 	IBOutlet NSArrayController *flameController;
 	IBOutlet FlameController *flames;
 
