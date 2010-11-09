@@ -123,14 +123,16 @@
 									error:&error];
 	
 	
-	if (exportOkay) {
-		[_movie release]; 
-		_movie = nil;
-	} else {
+	if (!exportOkay) {
 		NSLog(@"%@", [error localizedFailureReason]);
 		NSLog(@"%@", [error localizedDescription]);
 	}
-	 
+	
+	[_movie detachFromCurrentThread];
+	[_movie release]; 
+	_movie = nil;
+	
+
 	return exportOkay;
 }
 

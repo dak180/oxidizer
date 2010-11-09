@@ -565,6 +565,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
 	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
 	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	[sort release];
 	[fetch setSortDescriptors: sortDescriptors];
 	
 	genomes = [moc executeFetchRequest:fetch error:nil];
@@ -625,10 +626,17 @@ int printProgress(void *nslPtr, double progress, int stage);
 				}
 			}
 			*/
-			 
+
+			NSAutoreleasePool *looppool = [[NSAutoreleasePool alloc] init];
+
 			[movie addImage:flameImage forDuration:frameDuration withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
 																				 @"png ", QTAddImageCodecType,
 																				 nil]];
+			
+			[looppool release];
+
+			
+			[flameImage release];
 			
 		} else {
 			
@@ -662,10 +670,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 	NSBeep();
 	[finishedPanel runModal];
 	
-	[movie detachFromCurrentThread];
 
 	[QTMovie exitQTKitOnThread];
 
+	[taskEnvironment release];
 
 	[qtkc release];
 	
@@ -754,17 +762,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	NSArray *genomes = [self fetchGenomes];
 	
-	
-	NSManagedObject *genome = [genomes objectAtIndex:0];
-	
-//	double qs = [[NSUserDefaults standardUserDefaults] do]
-	
-/* delete me
-	[qtController setMovieHeight:[[genome valueForKey:@"height"] intValue] * environment->sizeScale 
-						   width:[[genome valueForKey:@"width"] intValue] * environment->sizeScale];
-	BOOL doRender = [qtController CreateMovieGWorld];
-*/	
-	
+
 	dtime = 1;
 	
 	first_frame = (int) [[parameters valueForKey:@"first_frame"] intValue];
@@ -805,6 +803,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 		progressValue += dtime;
 	}
 	
+	[taskEnvironment release];
 	
 	[taskProgressWindow setIsVisible:NO];
 		
@@ -854,7 +853,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 							     usingTaskFrameIndicator:taskFrameIndicator 
 								 usingETALabel:etaTextField];
 	
-//	int returnCode = [self runFlam3StillRenderAsTask:[Genome createXMLFromEntities:genome fromContext:moc forThumbnail:YES] withEnvironment:taskEnvironment];
+
+	[taskEnvironment release];
 	
 	if (returnCode != 0) {
 		
@@ -1096,7 +1096,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 	srandom(time(NULL));
 	/* generate random XML */
-	NSData *newGenome = [NSData dataWithBytes:"<flame />" length:9];
 	
 	NSArray *genomeEntity = [NSArray arrayWithObject:[Genome createEmptyGnomeInContext:context]];	
 	
@@ -1181,6 +1180,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[fetch setSortDescriptors: sortDescriptors];
 	
 	genomes = [moc executeFetchRequest:fetch error:nil];
+	
+	[sort release];	  
 	[fetch release];	  
 	
 	[[Genome createXMLFromEntities:genomes fromContext:moc forThumbnail:NO] writeToFile:filename atomically:YES];
@@ -1679,7 +1680,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[fetch setEntity:[NSEntityDescription entityForName:@"Genome" inManagedObjectContext:moc]];
 	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"time" ascending:YES];
 	NSArray *sortDescriptors = [NSArray arrayWithObject: sort];
+	
 	[fetch setSortDescriptors: sortDescriptors];
+
+	[sort release];
 	
 	genomes = [moc executeFetchRequest:fetch error:nil];
 	
@@ -1781,6 +1785,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[genomePath  retain];
 	
 	[original writeToFile:genomePath atomically:YES];
+	
+	[genomePath release];
 
 //	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[taskEnvironment setObject:[defaults stringForKey:@"nick"] forKey:@"nick"];	
@@ -1790,9 +1796,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 //	NSDate *start = [NSDate date];
 	NSData *newGenomes = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:taskEnvironment];
 	
+	[taskEnvironment release];
 	
 	if (newGenomes == nil || [newGenomes length] == 0) {
 		NSBeep();
+		[original release];
 		return;
 	}
 	
@@ -1820,6 +1828,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[fetch setSortDescriptors: sortDescriptors];
 	
 	genomes = [moc executeFetchRequest:fetch error:nil];
+	  
+	[sort release];	
 	[fetch release];	  
 	
 	
@@ -1833,7 +1843,11 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[genomePath  retain];
 	
 	[original writeToFile:genomePath atomically:YES];
+
+	[original release];
 	
+	[genomePath release];
+
 	//	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[taskEnvironment setObject:[defaults stringForKey:@"nick"] forKey:@"nick"];	
 	[taskEnvironment setObject:[defaults stringForKey:@"url"] forKey:@"url"];	
@@ -1842,6 +1856,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	//	NSDate *start = [NSDate date];
 	NSData *newGenomes = [Flam3Task runFlam3GenomeAsTask:nil withEnvironment:taskEnvironment];
 	
+	[taskEnvironment release];
 	
 	if (newGenomes == nil || [newGenomes length] == 0) {
 		NSBeep();
@@ -1856,7 +1871,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[moc processPendingChanges];
 	
 	[newGenomes release];
-	[original release];
 
 }
 
