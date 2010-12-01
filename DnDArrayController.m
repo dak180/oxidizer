@@ -45,7 +45,7 @@ NSString *mocPasteboardType = @"GenomeMoc";
 	NSData *mocData = [NSData dataWithBytes:&moc length:sizeof(NSManagedObjectContext *)];
 	NSManagedObject *mo;
 
-	unsigned index = [rowIndexes firstIndex];
+	NSUInteger index = [rowIndexes firstIndex];
     while ( index != NSNotFound ) {
 		mo = [[self arrangedObjects] objectAtIndex:index];
         [genomes addObject:[NSData dataWithBytes:&mo length:sizeof(NSManagedObject *)]];            
@@ -55,6 +55,8 @@ NSString *mocPasteboardType = @"GenomeMoc";
 	[pboard declareTypes:types owner:self];
 	[pboard setPropertyList:genomes forType:@"Genomes"];
 	[pboard setPropertyList:[NSArray arrayWithObject:mocData] forType:mocPasteboardType];
+	
+	[genomes release];
 
 	return YES;
 }

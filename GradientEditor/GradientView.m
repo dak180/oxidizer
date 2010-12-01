@@ -312,7 +312,7 @@
 			gradientRect.size.width = GRADIENT_IMAGE_WIDTH * 2.0;
 			gradientRect.size.height = GRADIENT_IMAGE_HEIGHT * 2.0;
 			
-			int pointInArray = (mousePoint.x - gradientRect.origin.x) / 2.0;
+	//		int pointInArray = (mousePoint.x - gradientRect.origin.x) / 2.0;
 			
 			
 		}
@@ -370,7 +370,7 @@
 }
 
 
-- (void)isMouseEventInGradientImage:(NSEvent *)theEvent {
+- (bool)isMouseEventInGradientImage:(NSEvent *)theEvent {
 	
 	NSPoint mousePoint = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	NSRect frame = [self frame];

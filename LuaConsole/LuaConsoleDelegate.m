@@ -57,7 +57,7 @@ static void dotty (lua_State *L);
 	lua_setglobal(_interactive, "oxidizer_status");
 	
 	lua_register(_interactive,"print",print);
-	
+		
 }
 	
 
@@ -277,11 +277,17 @@ static void dotty (lua_State *L);
 }
 
 - (IBAction) copy:(id)sender {
-		
+	
+	NSString *tmpString = [_luaTextView copy];
+	
 	[[NSPasteboard generalPasteboard] declareTypes: [NSArray arrayWithObject: NSStringPboardType] owner:nil];
-	[[NSPasteboard generalPasteboard] setString: [_luaTextView copy] forType: NSStringPboardType];	
+	[[NSPasteboard generalPasteboard] setString:tmpString forType: NSStringPboardType];	
+
+	[tmpString release];
+
 
 }
+
 - (IBAction) paste:(id)sender {
 	
 	
@@ -434,7 +440,7 @@ int print(lua_State *L)
 // The code below is mostly copied from the lua interepter  
 
 /*
- ** $Id: LuaConsoleDelegate.m,v 1.5 2010/11/06 16:24:48 vargol Exp $
+ ** $Id: LuaConsoleDelegate.m,v 1.6 2010/12/01 14:29:30 vargol Exp $
  ** Lua stand-alone interpreter
  ** See Copyright Notice in lua.h
  */

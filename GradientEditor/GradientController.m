@@ -248,7 +248,7 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 - (void) setColourArray:(NSArray *)newArray {
 
-	int selectedIndex = [arrayController selectionIndex];
+	unsigned int selectedIndex = [arrayController selectionIndex];
 	/* this appears to be a safe way yo remove everything */
 	[[arrayController content] removeAllObjects];
 	
@@ -365,7 +365,6 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 			NSBeep();
 			return;
 		} else {
-			nextColour = selectedColour;
 			nextIndex = 256;
 			newIndex = 255;
 		}
@@ -411,6 +410,10 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 		[arrayController addObject:colour];
 		[arrayController rearrangeObjects];
+		
+		[paletteImage release];
+		[paletteRep release];
+
 	} else {
 		NSBeep();
 	}
@@ -497,7 +500,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 	NSColor *colorWellColour = [[NSColor colorFromPasteboard:pasteBoard] colorUsingColorSpaceName:@"NSDeviceRGBColorSpace"];
 
-	float red, green, blue;
+	CGFloat red, green, blue;
 
 	NSMutableDictionary *colourDictionary;
 	
@@ -552,6 +555,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		
 		[arrayController addObject:colourDictionary];
 		
+		[paletteImage release];
+		[paletteRep release];
+		
 	}
 
 	
@@ -566,6 +572,10 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	[self gradientChanged];
 	[gradientView display];
 
+	if (op != NSTableViewDropOn) {
+		[colourDictionary release];
+	}
+	
 	return YES;
 }
 
@@ -659,6 +669,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 	NSXMLNode *gradientNode = [xmlDoc rootElement];
 	
 	if([[gradientNode name] compare:@"gradient"] != 0) {
+		[xmlDoc release];
 		return NO;
 	}
 	
@@ -686,6 +697,8 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		[newCmap addObject:colour];
 	}
 	[self setColourArray:newCmap];
+	
+	[xmlDoc release];
 	
 	return YES;
 }

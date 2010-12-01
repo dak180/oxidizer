@@ -96,9 +96,13 @@
 			CFRelease(dest);
 			
 		}
+		
+		CGImageRelease(image);
 	} else {
 		NSLog(@"*** saveImageToPath - no image");
 	}
+	
+	 CFRelease(source);
 	
 	[_saveOptions release];
 

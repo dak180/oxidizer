@@ -99,15 +99,19 @@
 	[genomes removeAllObjects];
 
 	for(i=0; i<count; i++) {		
-		[genomes addObject:[[NSData alloc] init]];
+//		[genomes addObject:[[NSData alloc] init]];
+		[genomes addObject:[NSData data]];
 	}	
 
 	
 	[genomeImages removeAllObjects];
 	
-	for(i=0; i<count; i++) {		
-		[genomeImages addObject:[[NSImage alloc] init]];
+	for(i=0; i<count; i++) {
+		NSImage *newImage = [[NSImage alloc] init];
+		[genomeImages addObject:newImage];
+		[newImage release];
 	}	
+	
 	genomeCount = count;
 	
 } 
@@ -154,11 +158,12 @@
 			[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
 			[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];		
 			[env setObject:[NSNumber numberWithInt:i] forKey:@"genome_index"];		
-			
+		
 			if([threads count] < threadCount) {
 				NSThread *newThread = [[NSThread alloc] initWithTarget:self selector:@selector(createRandomGenomeXMLInThreadwithEnvironment:) object:env];
 				[threads addObject:newThread];
 				[newThread start];
+				[newThread release];
 			} else {
 				bool threadsFull = YES;
 				while (threadsFull == YES) {
@@ -174,7 +179,7 @@
 							
 							[replacementThread start];
 							
-							[thisThread release];
+							[replacementThread release];
 							
 							threadsFull = NO;
 							break;
@@ -203,14 +208,15 @@
 		usleep(50000);
 	}
 	
+/*	
 	int j;
-	threadsFinished = YES;
-	for(j=0; j<[threads count]; j++) {
+
+	 for(j=0; j<[threads count]; j++) {
 		NSThread *thisThread = [threads objectAtIndex:j]; 
 		[thisThread release];
 	}
-	
-	
+*/	
+	[threads release];
 	[genePoolProgressWindow setIsVisible:NO];
 	return YES;
 	
@@ -323,6 +329,7 @@
 					NSThread *newThread = [[NSThread alloc] initWithTarget:self selector:@selector(threadMutateGenome:) object:dict];
 					[threads addObject:newThread];
 					[newThread start];
+					[newThread release];
 				} else {
 					bool threadsFull = YES;
 					while (threadsFull == YES) {
@@ -338,7 +345,7 @@
 								
 								[replacementThread start];
 								
-								[thisThread release];
+								[replacementThread release];
 								
 								threadsFull = NO;
 								break;
@@ -407,6 +414,7 @@
 						
 						[threads addObject:newThread];
 						[newThread start];
+						[newThread release];
 						
 					} else {
 						bool threadsFull = YES;
@@ -440,7 +448,7 @@
 									
 									[replacementThread start];
 									
-									[thisThread release];
+									[replacementThread release];
 									
 									threadsFull = NO;
 									break;
@@ -450,6 +458,8 @@
 						}
 					}
 					
+					[dict release];
+
 					newGenomeCount++;
 
 				}	
@@ -470,13 +480,16 @@
 		}
 		usleep(50000);
 	}
+
+/*	
 	
 	int j;
-	threadsFinished = YES;
+	
 	for(j=0; j<[threads count]; j++) {
 		NSThread *thisThread = [threads objectAtIndex:j]; 
 		[thisThread release];
 	}
+*/
 	
 	[threads release];
 	

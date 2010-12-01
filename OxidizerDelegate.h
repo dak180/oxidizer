@@ -27,7 +27,7 @@
 	
 @private
 	
-	GenePoolController *gpc;
+//	GenePoolController *gpc;
 	GenePoolNibController *gpnc;
 	RectangleNibController *rnc;
 		

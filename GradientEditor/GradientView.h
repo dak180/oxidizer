@@ -32,8 +32,9 @@
 
 -(NSBitmapImageRep *) getGradientRep;
 //-(void) setGradientArray:(NSArray *)array;
--(void) setGradientArrayController:(NSArrayController *)controller;
--(void) setSelectedSwatch:(NSMutableDictionary *)swatch;
+- (void) setGradientArrayController:(NSArrayController *)controller;
+- (void) setSelectedSwatch:(NSMutableDictionary *)swatch;
+- (bool)isMouseEventInGradientImage:(NSEvent *)theEvent;
 
 - (void) mouseDown:(NSEvent *)theEvent;
 - (void) mouseDragged:(NSEvent *)theEvent;

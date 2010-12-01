@@ -491,8 +491,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 }
 
 - (void)renderAnimation {
-
-//  BOOL doRender = [qtController showQuickTimeFileMovieDialogue];
 	
 	BOOL doRender  = [_movieDialogServer showQuickTimeFileMovieDialogue];
 	

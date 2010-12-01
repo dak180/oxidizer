@@ -162,6 +162,7 @@
 		A4467BF110D0278B00252273 /* Clipboard.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Clipboard.xib; path = Clipboard/Clipboard.xib; sourceTree = "<group>"; };
 		A4467C3E10D030CA00252273 /* ClipboardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ClipboardController.h; path = Clipboard/ClipboardController.h; sourceTree = "<group>"; };
 		A4467C3F10D030CA00252273 /* ClipboardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ClipboardController.m; path = Clipboard/ClipboardController.m; sourceTree = "<group>"; };
+		A45D3B2B128C8311004E5C2F /* SaveDialogProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SaveDialogProtocol.h; path = SaveDialogs/SaveDialogProtocol.h; sourceTree = "<group>"; };
 		A46AB18D1285B46F004EDB36 /* ImageKitController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageKitController.h; path = SaveDialogs/ImageKitController.h; sourceTree = "<group>"; };
 		A46AB18E1285B46F004EDB36 /* ImageKitController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ImageKitController.m; path = SaveDialogs/ImageKitController.m; sourceTree = "<group>"; };
 		A46AB18F1285B46F004EDB36 /* QTKitController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QTKitController.h; path = SaveDialogs/QTKitController.h; sourceTree = "<group>"; };
@@ -540,6 +541,7 @@
 			isa = PBXGroup;
 			children = (
 				A4C37FB10F12813100E25535 /* QuickViewProtocol.h */,
+				A45D3B2B128C8311004E5C2F /* SaveDialogProtocol.h */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";

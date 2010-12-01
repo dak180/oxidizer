@@ -129,8 +129,8 @@ unsigned int _fp_nan = 0x400000;
 	CGContextClosePath(context);
 	CGContextStrokePath(context);
 
-	float squarelineDash [2] = {6,3};
-	float trianglelineDash [2] = {2,3};
+	CGFloat squarelineDash [2] = {6,3};
+	CGFloat trianglelineDash [2] = {2,3};
 	CGContextSetLineDash (context, 0.0, trianglelineDash , 2);
 	
 	CGContextMoveToPoint(context, 0, -scale);

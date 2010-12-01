@@ -14,7 +14,7 @@
 
 + (void)initialize {
 
-	unsigned int cpuCount ;
+/*	unsigned int cpuCount ;
 	size_t len = sizeof(cpuCount);
 	static int mib[2] = { CTL_HW, HW_NCPU };
 	
@@ -25,7 +25,7 @@
 	} else {
 		threads = @"1";
 	}  
-
+*/
 	
 	NSArray *paths = NSSearchPathForDirectoriesInDomains (NSApplicationSupportDirectory, NSUserDomainMask, YES);
 	

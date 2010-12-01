@@ -214,10 +214,15 @@
 	
 	[self deleteOldGenomesInContext:mocResult];
 	newGenome = [Genome createGenomeEntitiesFromXML:newGenomeXML inContext:mocResult];
+	
+	[newGenomeXML release];
+	
 	[mocResult processPendingChanges];
 	[BreedingController makeImageForGenomes:newGenome];
 	[mocResult processPendingChanges];
 	[mocResult save:nil];
+	
+	
 	
 	
 }
@@ -253,23 +258,13 @@
 
 	NSData *newGenomeXML;
 	NSArray *newGenome;
-	NSArrayController *nsac;
-	NSManagedObjectContext *nsmoc;
 	
 		
 	if([genome1 selectionIndex] == NSNotFound && [genome2 selectionIndex] == NSNotFound) {
 		NSBeep();
 		return;
 	}
-	
-	if([genome1 selectionIndex] == NSNotFound) {
-		nsac = genome2;
-		nsmoc = moc2;
-	} else {
-		nsac = genome1;
-		nsmoc = moc1;
-	}
-	
+		
 	newGenomeXML =[BreedingController mutateGenome:[Genome createXMLFromEntities:[genome1 selectedObjects] fromContext:moc1 forThumbnail:YES]];
 	[newGenomeXML retain];
 	
@@ -517,7 +512,7 @@
 	
 	[newGenome retain];
 	
-	NSLog(@"mutate: %@", [[NSString alloc] initWithData:newGenome encoding:NSUTF8StringEncoding] );
+//	NSLog(@"mutate: %@", [[NSString alloc] initWithData:newGenome encoding:NSUTF8StringEncoding] );
 	
 	[Flam3Task deleteTemporaryPathAndFile:file0];
 	
@@ -534,14 +529,7 @@
 
 + (void) makeImageForGenomes:(NSArray *)genomes {
 	
-	srandom(time(NULL));
-	
-	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];  
-	
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
-	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
-	
+
 	NSString *previewFolder = [NSString pathWithComponents:[NSArray arrayWithObjects:
 		NSTemporaryDirectory(),
 		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
@@ -557,9 +545,9 @@
 	
 	NSMutableDictionary *taskEnvironment = [[NSMutableDictionary alloc] init];  
 	
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
-	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
+	[taskEnvironment setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
+	[taskEnvironment setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];				
+	[taskEnvironment setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 	
 	
 	NSString *pngFileName = [NSString pathWithComponents:[NSArray arrayWithObjects:previewFolder, @"bc.png", nil]];

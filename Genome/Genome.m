@@ -128,7 +128,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSSortDescriptor *sort;
 	NSString *tempString;
 	
-	float red, green, blue;
+	CGFloat red, green, blue;
 	int i;
 	
 	tempString = [genomeEntity valueForKey:@"name"];
@@ -292,7 +292,8 @@ NSString *variationName[1+flam3_nvariations] = {
 		[newCmaps retain];
 		[Genome createXMLForCMap:newCmaps forElement:genome];
 		[newCmaps release];
-		
+		[sort release];
+
 	
 	} else {
 		[genome addAttribute:[NSXMLNode attributeWithName:@"palette" stringValue:[[[genomeEntity valueForKey:@"images"]  valueForKey:@"palette"] stringValue]]];
@@ -307,6 +308,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	sortDescriptors = [NSArray arrayWithObject: sort];
 
 	xforms = [[[genomeEntity valueForKey:@"xforms"] allObjects] sortedArrayUsingDescriptors:sortDescriptors];
+	
+	[sort release];
 	
 	int old_num_xforms = [xforms count];
 	
@@ -407,7 +410,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	variations = [[[xformEntity valueForKey:@"variations"] allObjects] sortedArrayUsingDescriptors:sortDescriptors];
 	
-	
+	[sort release];
+
 	unsigned int i;
 	
 	NSManagedObject *variation;
@@ -1120,9 +1124,6 @@ NSString *variationName[1+flam3_nvariations] = {
 
 	[xFormEntity setValue:[Genome createVariationEntitiesFromElement:xform inContext:moc]  forKey:@"variations"];
 	
-	
-	[xFormEntity autorelease];
-	
 	return xFormEntity;	
 	
 }
@@ -1476,7 +1477,6 @@ NSString *variationName[1+flam3_nvariations] = {
 	}
 
 	[xform release];
-	[variation autorelease];
 	
 	return variation;
 }
@@ -1599,7 +1599,6 @@ NSString *variationName[1+flam3_nvariations] = {
 										 ofVariationType:0 andWeight:1.0 inContext:moc];	
 
 	[variations addObject:variation];
-	[variation release];
 		
 	for(j=1; j<flam3_nvariations; j++) {
 		
@@ -1609,7 +1608,7 @@ NSString *variationName[1+flam3_nvariations] = {
 												   inContext:moc];	
 		
 		[variations addObject:variation];
-		[variation release];
+//		[variation release];
 	
 	}		
 			
@@ -1655,7 +1654,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSSortDescriptor *sort;
 	NSString *tempString;
 	
-	float red, green, blue;
+	CGFloat red, green, blue;
 	int i;
 	
 	
@@ -2291,15 +2290,12 @@ NSString *variationName[1+flam3_nvariations] = {
 	    [newGenomeEntity setValue:tempObject forKey:@"symmetry"];
 	}	
 	
-	NSMutableSet *newColours = nil;
-	
 	tempObject = [genome objectForKey:@"palette"];
 	if(tempObject != nil) {
 	    [newGenomeImageEntity setValue:tempObject forKey:@"palette"];
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:YES]  forKey:@"use_palette"];
 	} else {
 	    [newGenomeEntity setValue:[NSNumber numberWithBool:NO]  forKey:@"use_palette"];		
-		newColours = [[NSMutableSet alloc] initWithCapacity:256];
 	}
 
 	[newGenomeEntity setValue:newGenomeImageEntity forKey:@"images"];
@@ -2346,7 +2342,6 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	
 	[newGenomeEntity setValue:newTransforms forKey:@"xforms"];	
-	[newGenomeEntity autorelease];
 	
 	return newGenomeEntity;
 	
@@ -2448,7 +2443,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		}	
 
 		[newTransforms addObject:xFormEntity];
-		[xFormEntity release];
+//		[xFormEntity release];
 		
 	} 
 	
@@ -2461,7 +2456,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	NSMutableSet *variationSet = [[NSMutableSet alloc] initWithCapacity:flam3_nvariations];
 
 	int i, j;
-	NSManagedObject *newVariation;
+	NSManagedObject *newVariation = nil;
 	
 	int totalVariations = [variations count];
 
@@ -2726,7 +2721,7 @@ NSString *variationName[1+flam3_nvariations] = {
 			break;
 	}
 	
-	[variation autorelease];
+//	[variation autorelease];
 	
 	return variation;
 }
@@ -2760,7 +2755,7 @@ NSString *variationName[1+flam3_nvariations] = {
 		[newColour setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
 		
 		[tempColours insertObject:newColour atIndex:[tempColours count]];
-		[newColour release];  
+//		[newColour release];  
 		
 		
 	}
@@ -3032,7 +3027,7 @@ NSString *variationName[1+flam3_nvariations] = {
 	if(tempAttribute != nil) {
 	    [newGenomeImageEntity setValue:[NSNumber numberWithInt:[tempAttribute intValue]]  forKey:@"palette"];
 	}
-	[newGenomeImageEntity autorelease];
+//	[newGenomeImageEntity autorelease];
 	
 	return newGenomeImageEntity;
 	
@@ -3129,7 +3124,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	
 	[xFormEntity setValue:[Genome createVariationEntitiesFromAttributes:xform inContext:moc] forKey:@"variations"];
 
-	return [xFormEntity autorelease];
+	//	return [xFormEntity autorelease];
+	return xFormEntity;
 	
 }
 
@@ -3434,7 +3430,7 @@ NSString *variationName[1+flam3_nvariations] = {
 			break;
 	}
 	
-	[variation autorelease];
+//	[variation autorelease];
 	
 	return variation;
 }
@@ -3466,7 +3462,8 @@ NSString *variationName[1+flam3_nvariations] = {
 	[newColour setValue:[NSNumber numberWithDouble:green] forKey:@"green"];
 	[newColour setValue:[NSNumber numberWithDouble:blue] forKey:@"blue"];
 		
-	return [newColour autorelease];  
+//	return [newColour autorelease];  
+	return newColour;  
 			
 }
 

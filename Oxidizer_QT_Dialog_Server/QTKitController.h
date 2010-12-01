@@ -22,7 +22,7 @@
 
 	QTAtomContainer _settings;
 
-	int _selectedComponentIndex;
+//	int _selectedComponentIndex;
 	BOOL _usePreviousSettings;
 
 	IBOutlet NSMutableArray *movieComponents;

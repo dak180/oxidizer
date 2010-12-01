@@ -28,7 +28,7 @@
 #import "QTKitController.h"
 #import "ProgressIndicatorWithCancel.h"
 #import "MultiUseWindow.h"
-
+#import "SaveDialogProtocol.h"
 
 @interface FractalFlameModel : NSObjectController
 {
@@ -98,7 +98,7 @@
 	
 	id objectBeginEdited;
 
-	id _movieDialogServer;
+	id <SaveDialogProtocol> _movieDialogServer;
 	
 	QTKitController *_qtKitController;
 	

@@ -113,6 +113,8 @@
 													manufacturer, @"manufacturer", nil];
 									
 						[movieComponents addObject:dictionary];
+						
+						[extensionStr release];
 					}
 			}
 		}
@@ -212,7 +214,7 @@
 		{
 			NSLog(@"Got error %d when calling MovieExportGetSettingsAsAtomContainer",err);
 			CloseComponent(exporter);
-			return;
+			return nil;
 		}
 		
 		_subtype = [componentDictionary objectForKey:@"subtype"];

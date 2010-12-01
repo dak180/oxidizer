@@ -94,7 +94,7 @@
 	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
 	NSEnumerator *enumerator;
 	NSArray *objects;
-	int index;
+	NSUInteger index;
 	// NSManagedObject *selectedGenome;
 
 	switch([segments selectedSegment]) {
@@ -156,7 +156,7 @@
 	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
 	NSEnumerator *enumerator;
 	NSArray *objects;
-	int index;
+	NSUInteger index;
 	// NSManagedObject *selectedGenome;
 	
 	switch([segments selectedSegment]) {
@@ -257,12 +257,12 @@
 
 		case 1:
 			[genomeEntity setValue:[NSNumber numberWithInt:0] forKey:@"time"];
-			newIndex = 0;
+//			newIndex = 0;
 			break;
 		case 2:
 			time = [[[arrangedObjects objectAtIndex:selectedIndex] valueForKey:@"time"] intValue];
 			[genomeEntity setValue:[NSNumber numberWithInt:time+50] forKey:@"time"];
-			newIndex = 1;
+//			newIndex = 1;
 			break;
 		default:
 			newIndex = selectedIndex + 1;
@@ -399,8 +399,9 @@
 	NSSegmentedControl *segments = (NSSegmentedControl *)sender;
 	NSArray *arrangedObjects;
 	NSColor *colour;
-	int index, newIndex, order, order2;
-	float red, green, blue;
+	int newIndex, order, order2;
+	NSUInteger index;
+	CGFloat red, green, blue;
 
 	arrangedObjects = [cmapController arrangedObjects];
 

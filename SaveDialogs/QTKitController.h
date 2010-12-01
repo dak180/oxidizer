@@ -27,7 +27,6 @@
 	
 }
 
-- (BOOL) showQuickTimeFileMovieDialogue;
 - (void) setFileName:(NSString *)filename;
 - (bool) createQTMovie;
 - (QTMovie *) qtMovie;

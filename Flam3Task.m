@@ -290,7 +290,6 @@
 	NSMutableString *errorMessage = [NSMutableString stringWithCapacity:1000];
 	
 	double progressFactor = 1.0;
-	double etaFactor = 1.0;
 	
 	double progressValue = 0.0;	
 
@@ -337,7 +336,6 @@
 			currentStrip = [[stripDetails objectAtIndex:0] doubleValue];
 			stripCount = [[stripDetails objectAtIndex:1] doubleValue];
 			progressFactor = 1.0 / stripCount;
-			etaFactor = stripCount / currentStrip;
 			
 			totalPercent = (currentStrip - 1) * 100.0;
 			
@@ -348,6 +346,7 @@
 		if([taskFrameIndicator shouldCancel]) {
 			
 			[task terminate];
+			[string release];
 			break;
 			
 		}
@@ -466,7 +465,7 @@
 		}
 		
 		if([taskFrameIndicator shouldCancel]) {
-			
+			[string release];
 			[task terminate];
 			break;
 			

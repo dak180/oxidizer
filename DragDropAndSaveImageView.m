@@ -22,7 +22,8 @@
 
 @implementation DragDropAndSaveImageView
 
-- (unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal
+//- (unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal
+- (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
 	if (isLocal) return NSDragOperationCopy;
 	return NSDragOperationCopy|NSDragOperationGeneric|NSDragOperationLink;

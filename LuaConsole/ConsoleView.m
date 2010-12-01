@@ -253,6 +253,7 @@
 	int startLine, endLine, i;
 	
 	NSMutableString *selectedString = [NSMutableString stringWithString:@""];
+	[selectedString retain];
 	
 	if(_selectedLinesEnd > _selectedLinesStart) {
 		startLine = _selectedLinesStart;
@@ -319,7 +320,7 @@
 			
 			continue;	
 		}
-		
+
 		
 		/* reverse selection */
 		
@@ -356,7 +357,7 @@
 		
 	}		/* end */
 	
-	return selectedString;
+	return [selectedString autorelease];
 }
 
 @end

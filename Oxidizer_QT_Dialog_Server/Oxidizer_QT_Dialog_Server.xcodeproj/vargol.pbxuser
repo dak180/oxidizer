@@ -11,16 +11,16 @@
 	256AC3D80F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.h */ = {
 		uiCtxt = {
 			sepNavIntBoundsRect = "{{0, 0}, {1295, 839}}";
-			sepNavSelRange = "{600, 0}";
-			sepNavVisRange = "{0, 600}";
-			sepNavWindowFrame = "{{672, 1}, {1354, 967}}";
+			sepNavSelRange = "{666, 0}";
+			sepNavVisRange = "{0, 666}";
+			sepNavWindowFrame = "{{326, 1}, {1354, 967}}";
 		};
 	};
 	256AC3D90F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {815, 793}}";
-			sepNavSelRange = "{1294, 0}";
-			sepNavVisRange = "{291, 1008}";
+			sepNavIntBoundsRect = "{{0, 0}, {1123, 793}}";
+			sepNavSelRange = "{1077, 0}";
+			sepNavVisRange = "{743, 552}";
 			sepNavWindowFrame = "{{289, -115}, {1354, 967}}";
 		};
 	};
@@ -40,7 +40,7 @@
 			8D1107260486CEB800E47090 /* Oxidizer_QT_Dialog_Server */,
 		);
 		breakpoints = (
-			A41BBA6E124019C400E35AD3 /* QTKitController.m:241 */,
+			A41BBA6E124019C400E35AD3 /* QTKitController.m:243 */,
 			A41BBA80124019FD00E35AD3 /* QTKitController.m:19 */,
 		);
 		codeSenseManager = A4F325F1120D905300578C9B /* Code sense */;
@@ -109,21 +109,21 @@
 					PBXFileDataSource_Warnings_ColumnID,
 				);
 			};
-			PBXPerProjectTemplateStateSaveDate = 307125034;
-			PBXWorkspaceStateSaveDate = 307125034;
+			PBXPerProjectTemplateStateSaveDate = 311199409;
+			PBXWorkspaceStateSaveDate = 311199409;
 		};
 		perUserProjectItems = {
 			A413A9631243D80800B7DA42 /* PBXTextBookmark */ = A413A9631243D80800B7DA42 /* PBXTextBookmark */;
-			A42D34DD124E5BC800C15908 /* PBXTextBookmark */ = A42D34DD124E5BC800C15908 /* PBXTextBookmark */;
 			A42D35DE124E601600C15908 /* PBXTextBookmark */ = A42D35DE124E601600C15908 /* PBXTextBookmark */;
-			A42D3601124E636000C15908 /* PBXTextBookmark */ = A42D3601124E636000C15908 /* PBXTextBookmark */;
-			A42D3602124E636000C15908 /* PBXTextBookmark */ = A42D3602124E636000C15908 /* PBXTextBookmark */;
-			A42D3604124E636000C15908 /* PBXTextBookmark */ = A42D3604124E636000C15908 /* PBXTextBookmark */;
-			A42D3623124E672D00C15908 /* PBXTextBookmark */ = A42D3623124E672D00C15908 /* PBXTextBookmark */;
 			A42D3624124E672D00C15908 /* PBXTextBookmark */ = A42D3624124E672D00C15908 /* PBXTextBookmark */;
 			A4362E54123BE1C900DF0832 /* PBXTextBookmark */ = A4362E54123BE1C900DF0832 /* PBXTextBookmark */;
 			A4362E55123BE1C900DF0832 /* PBXTextBookmark */ = A4362E55123BE1C900DF0832 /* PBXTextBookmark */;
 			A4362E56123BE1C900DF0832 /* PBXTextBookmark */ = A4362E56123BE1C900DF0832 /* PBXTextBookmark */;
+			A46EE2D5128C87E300D6171E /* PBXTextBookmark */ = A46EE2D5128C87E300D6171E /* PBXTextBookmark */;
+			A46EE2D6128C87E300D6171E /* PBXTextBookmark */ = A46EE2D6128C87E300D6171E /* PBXTextBookmark */;
+			A46EE2D7128C87E300D6171E /* XCBuildMessageTextBookmark */ = A46EE2D7128C87E300D6171E /* XCBuildMessageTextBookmark */;
+			A46EE2D8128C87E300D6171E /* PBXTextBookmark */ = A46EE2D8128C87E300D6171E /* PBXTextBookmark */;
+			A46EE2DB128C87E300D6171E /* PBXTextBookmark */ = A46EE2DB128C87E300D6171E /* PBXTextBookmark */;
 		};
 		sourceControlManager = A4F325F0120D905300578C9B /* Source Control */;
 		userBuildSettings = {
@@ -158,7 +158,7 @@
 		vrLen = 45;
 		vrLoc = 0;
 	};
-	A41BBA6E124019C400E35AD3 /* QTKitController.m:241 */ = {
+	A41BBA6E124019C400E35AD3 /* QTKitController.m:243 */ = {
 		isa = PBXFileBreakpoint;
 		actions = (
 		);
@@ -170,7 +170,7 @@
 		functionName = "-changeMovieFileType:";
 		hitCount = 0;
 		ignoreCount = 0;
-		lineNumber = 241;
+		lineNumber = 243;
 		modificationTime = 306193446.693971;
 		originalNumberOfMultipleMatches = 1;
 		state = 1;
@@ -200,16 +200,6 @@
 		path = /Developer/SDKs/MacOSX10.5.sdk/System/Library/Frameworks/QTKit.framework/Headers/QTKitDefines.h;
 		sourceTree = "<absolute>";
 	};
-	A42D34DD124E5BC800C15908 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = A4F3263D120D936E00578C9B /* QTKitController.m */;
-		name = "QTKitController.m: 43";
-		rLen = 0;
-		rLoc = 883;
-		rType = 0;
-		vrLen = 1035;
-		vrLoc = 465;
-	};
 	A42D35DE124E601600C15908 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = A4F3263C120D936E00578C9B /* QTKitController.h */;
@@ -220,52 +210,12 @@
 		vrLen = 873;
 		vrLoc = 0;
 	};
-	A42D3601124E636000C15908 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 256AC3D80F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.h */;
-		name = "Oxidizer_QT_Dialog_ServerAppDelegate.h: 27";
-		rLen = 0;
-		rLoc = 528;
-		rType = 0;
-		vrLen = 600;
-		vrLoc = 0;
-	};
-	A42D3602124E636000C15908 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 256AC3D90F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.m */;
-		name = "Oxidizer_QT_Dialog_ServerAppDelegate.m: 51";
-		rLen = 0;
-		rLoc = 1227;
-		rType = 0;
-		vrLen = 1003;
-		vrLoc = 291;
-	};
-	A42D3604124E636000C15908 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 256AC3D80F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.h */;
-		name = "Oxidizer_QT_Dialog_ServerAppDelegate.h: 30";
-		rLen = 0;
-		rLoc = 594;
-		rType = 0;
-		vrLen = 600;
-		vrLoc = 0;
-	};
-	A42D3623124E672D00C15908 /* PBXTextBookmark */ = {
-		isa = PBXTextBookmark;
-		fRef = 256AC3D90F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.m */;
-		name = "Oxidizer_QT_Dialog_ServerAppDelegate.m: 56";
-		rLen = 0;
-		rLoc = 1294;
-		rType = 0;
-		vrLen = 1008;
-		vrLoc = 291;
-	};
 	A42D3624124E672D00C15908 /* PBXTextBookmark */ = {
 		isa = PBXTextBookmark;
 		fRef = 256AC3D80F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.h */;
 		name = "Oxidizer_QT_Dialog_ServerAppDelegate.h: 32";
 		rLen = 0;
-		rLoc = 600;
+		rLoc = 666;
 		rType = 0;
 		vrLen = 600;
 		vrLoc = 0;
@@ -298,6 +248,55 @@
 		rLoc = 0;
 		rType = 0;
 		vrLen = 181;
+		vrLoc = 0;
+	};
+	A46EE2D5128C87E300D6171E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D90F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.m */;
+		name = "Oxidizer_QT_Dialog_ServerAppDelegate.m: 56";
+		rLen = 0;
+		rLoc = 1294;
+		rType = 0;
+		vrLen = 1008;
+		vrLoc = 291;
+	};
+	A46EE2D6128C87E300D6171E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D80F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.h */;
+		name = "Oxidizer_QT_Dialog_ServerAppDelegate.h: 13";
+		rLen = 0;
+		rLoc = 343;
+		rType = 0;
+		vrLen = 666;
+		vrLoc = 0;
+	};
+	A46EE2D7128C87E300D6171E /* XCBuildMessageTextBookmark */ = {
+		isa = PBXTextBookmark;
+		comments = "Potential leak of an object allocated on line 100 and stored into 'extensionStr'";
+		fRef = A4F3263D120D936E00578C9B /* QTKitController.m */;
+		fallbackIsa = XCBuildMessageTextBookmark;
+		rLen = 1;
+		rLoc = 106;
+		rType = 1;
+	};
+	A46EE2D8128C87E300D6171E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = A4F3263D120D936E00578C9B /* QTKitController.m */;
+		name = "QTKitController.m: 107";
+		rLen = 0;
+		rLoc = 2754;
+		rType = 0;
+		vrLen = 1626;
+		vrLoc = 2170;
+	};
+	A46EE2DB128C87E300D6171E /* PBXTextBookmark */ = {
+		isa = PBXTextBookmark;
+		fRef = 256AC3D80F4B6AC300CF3369 /* Oxidizer_QT_Dialog_ServerAppDelegate.h */;
+		name = "Oxidizer_QT_Dialog_ServerAppDelegate.h: 33";
+		rLen = 0;
+		rLoc = 666;
+		rType = 0;
+		vrLen = 666;
 		vrLoc = 0;
 	};
 	A4F325DE120D904300578C9B /* Oxidizer_QT_Dialog_Server */ = {
@@ -352,17 +351,17 @@
 	};
 	A4F3263C120D936E00578C9B /* QTKitController.h */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {1047, 598}}";
-			sepNavSelRange = "{389, 0}";
-			sepNavVisRange = "{0, 614}";
+			sepNavIntBoundsRect = "{{0, 0}, {1123, 611}}";
+			sepNavSelRange = "{420, 0}";
+			sepNavVisRange = "{0, 617}";
 			sepNavWindowFrame = "{{326, 0}, {1354, 967}}";
 		};
 	};
 	A4F3263D120D936E00578C9B /* QTKitController.m */ = {
 		uiCtxt = {
-			sepNavIntBoundsRect = "{{0, 0}, {815, 3497}}";
-			sepNavSelRange = "{883, 0}";
-			sepNavVisRange = "{465, 1035}";
+			sepNavIntBoundsRect = "{{0, 0}, {1279, 3198}}";
+			sepNavSelRange = "{2754, 0}";
+			sepNavVisRange = "{2170, 1626}";
 			sepNavWindowFrame = "{{248, 61}, {1354, 967}}";
 		};
 	};

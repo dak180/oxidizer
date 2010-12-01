@@ -24,9 +24,8 @@
 	NSMutableArray *cmapSortDescriptors;
 	NSMutableArray *colours;
 	NSArrayController *cmap;
-	NSBitmapImageRep *bitmap; 
+//	NSBitmapImageRep *bitmap; 
 	NSImage *_colourPreview;
-	NSImage *_greyScalePreview;
 	NSArray *_cmapStore;
 	
 	id flameController;

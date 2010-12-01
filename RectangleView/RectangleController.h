@@ -53,8 +53,6 @@
 	
 	NSUserDefaults *_defaults;
 	
-	double _rotation;
-	
 	QuickViewController *_qvc;
 	
 	double _qvMin;
