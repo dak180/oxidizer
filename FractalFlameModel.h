@@ -75,6 +75,7 @@
 	NSUserDefaults *defaults;
 	
 	NSPersistentStoreCoordinator *coordinator;
+	NSPersistentStore *_store;
 	
 	NSString *_currentFilename;
 	

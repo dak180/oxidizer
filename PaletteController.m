@@ -819,6 +819,7 @@ double *initialisePalettes(void) {
 		}
 	}
 	
+	[paletteDoc release];
 	return _paletteData; 
 }
 

@@ -14,7 +14,10 @@
 
     IBOutlet NSArrayController *_genomes;
 	IBOutlet NSManagedObjectContext *_moc;
+	
+@private	
 
+	NSPersistentStore *_store;
 	
 }
 

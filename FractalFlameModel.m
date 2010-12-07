@@ -194,13 +194,13 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		NSURL *url = [NSURL fileURLWithPath:psPath];
 		
-		id newStore = [coordinator addPersistentStoreWithType: NSSQLiteStoreType
+		_store = [coordinator addPersistentStoreWithType: NSSQLiteStoreType
 												configuration: nil
 														  URL: url
 													  options: nil	
 														error: &error];        		
 		
-		if (newStore == nil) {
+		if (_store == nil) {
 			NSLog(@"Store Configuration Failure\n%@",
 				  ([error localizedDescription] != nil) ?
 				  [error localizedDescription] : @"Unknown Error");
