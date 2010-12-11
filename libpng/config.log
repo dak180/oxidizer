@@ -30,8 +30,8 @@ Kernel configured for up to 2 processors.
 Processor type: i486 (Intel 80486)
 Processors active: 0 1
 Primary memory available: 2.00 gigabytes
-Default processor set: 74 tasks, 331 threads, 2 processors
-Load average: 3.95, Mach factor: 0.59
+Default processor set: 76 tasks, 349 threads, 2 processors
+Load average: 1.86, Mach factor: 1.08
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -343,7 +343,7 @@ configure:11044: gcc -c -O -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -
 conftest.c:57:20: error: malloc.h: No such file or directory
 conftest.c:57:20: error: malloc.h: No such file or directory
 conftest.c:57:20: error: malloc.h: No such file or directory
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//cc87H27S.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//cc3Dbevo.out
 configure:11044: $? = 1
 configure: failed program was:
 | /* confdefs.h */
@@ -456,7 +456,7 @@ conftest.c: In function 'main':
 conftest.c:63: error: expected expression before ')' token
 conftest.c: In function 'main':
 conftest.c:63: error: expected expression before ')' token
-lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccMJoYZd.out
+lipo: can't figure out the architecture type of: /var/folders/jr/jrWIQ+Ps2RW+t++1YvXpx++++TI/-Tmp-//ccWvLMiT.out
 configure:11137: $? = 1
 configure: failed program was:
 | /* confdefs.h */

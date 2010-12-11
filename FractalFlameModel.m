@@ -746,7 +746,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	if([(NSString *)[parameters objectForKey:@"image_format"] compare:@"PNG"] == 0) {
 		[taskEnvironment setObject:@"png" forKey:@"format"];
 		if([[parameters objectForKey:@"png_is_16bit"] boolValue]) {
-			[taskEnvironment setObject:@"bpc" forKey:@"16"];			
+			[taskEnvironment setObject:@"16" forKey:@"bpc"];			
 		}
 	} else {
 		[taskEnvironment setObject:@"jpg" forKey:@"format"];		
