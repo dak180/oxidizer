@@ -265,12 +265,10 @@ int printProgress(void *nslPtr, double progress, int stage);
 	[[NSWorkspace sharedWorkspace] launchApplication:[NSString stringWithFormat:@"%@/Oxidizer_QT_Dialog_Server.app", 
 													  [[ NSBundle mainBundle ] resourcePath ]]];
 	
-	
-	NSConnection *theConnection;
-	
-	theConnection = [NSConnection connectionWithRegisteredName:@"OxidizerQTMovieDialog"
+		
+	_theConnection = [NSConnection connectionWithRegisteredName:@"OxidizerQTMovieDialog"
 														  host:nil];
-	_movieDialogServer  = [theConnection rootProxy]; 
+	_movieDialogServer  = [_theConnection rootProxy]; 
 	[_movieDialogServer retain];
 	
 }

@@ -100,6 +100,8 @@
 	id objectBeginEdited;
 
 	id <SaveDialogProtocol> _movieDialogServer;
+	NSConnection *_theConnection;
+
 	
 	QTKitController *_qtKitController;
 	

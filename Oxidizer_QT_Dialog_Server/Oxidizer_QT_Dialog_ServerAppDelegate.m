@@ -14,11 +14,10 @@
 
 - (void) awakeFromNib {
 	
-//    _serverConnection = [NSConnection connectionWithReceivePort:[NSPort port] sendPort:[NSPort port]];
 	NSPort *newPort = [NSPort port];
 	
     _serverConnection = [NSConnection connectionWithReceivePort:newPort sendPort:newPort];
-//	_serverConnection = [NSConnection defaultConnection];
+
 	[_serverConnection retain];
     [_serverConnection setRootObject:self];
     [_serverConnection registerName:@"OxidizerQTMovieDialog"];
