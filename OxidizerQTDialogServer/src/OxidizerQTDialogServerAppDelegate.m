@@ -6,7 +6,7 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 
-#import "Oxidizer_QT_Dialog_ServerAppDelegate.h"
+#import "OxidizerQTDialogServerAppDelegate.h"
 
 @implementation Oxidizer_QT_Dialog_ServerAppDelegate
 

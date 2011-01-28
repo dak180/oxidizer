@@ -8,7 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "QTKitController.h"
-#import "../SaveDialogs/SaveDialogProtocol.h"
+#import "SaveDialogs/SaveDialogProtocol.h"
 
 @interface Oxidizer_QT_Dialog_ServerAppDelegate : NSObject <SaveDialogProtocol> {
 
