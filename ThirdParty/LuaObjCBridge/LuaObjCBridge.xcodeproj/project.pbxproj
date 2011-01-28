@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 42;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -25,30 +25,33 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		43B0A38612F327D8009646F0 /* Release Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 4B4FE50608278751007685F3 /* Release Notes.rtf */; };
+		43B0A38712F327E1009646F0 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4B4FE50708278751007685F3 /* version.plist */; };
+		43B0A38A12F32808009646F0 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B0A38812F32808009646F0 /* InfoPlist.strings */; };
 		4B1114C20828E15C007DD523 /* LuaObjCBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = 4B1114C00828E15C007DD523 /* LuaObjCBridge.m */; };
 		4B20F5EC0A09FF3000AE8B7C /* lauxlib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A3509E39213008E078D /* lauxlib.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B20F5ED0A09FF3000AE8B7C /* lua.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A3609E39213008E078D /* lua.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B20F5EE0A09FF3000AE8B7C /* lualib.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A3709E39213008E078D /* lualib.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6360A0A00F700AE8B7C /* lapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A3D09E39213008E078D /* lapi.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6370A0A00F700AE8B7C /* lcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A3F09E39213008E078D /* lcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6380A0A00F700AE8B7C /* ldebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4109E39213008E078D /* ldebug.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6390A0A00F700AE8B7C /* ldo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4309E39213008E078D /* ldo.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F63A0A0A00F700AE8B7C /* lfunc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4609E39213008E078D /* lfunc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F63B0A0A00F700AE8B7C /* lgc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4809E39213008E078D /* lgc.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F63C0A0A00F700AE8B7C /* llex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4B09E39213008E078D /* llex.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F63D0A0A00F700AE8B7C /* llimits.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4C09E39213008E078D /* llimits.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F63E0A0A00F700AE8B7C /* lmem.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4E09E39213008E078D /* lmem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F63F0A0A00F700AE8B7C /* lobject.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5009E39213008E078D /* lobject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6400A0A00F700AE8B7C /* lopcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5209E39213008E078D /* lopcodes.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6410A0A00F700AE8B7C /* lparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5409E39213008E078D /* lparser.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6420A0A00F700AE8B7C /* lstate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5609E39213008E078D /* lstate.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6430A0A00F700AE8B7C /* lstring.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5809E39213008E078D /* lstring.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6440A0A00F700AE8B7C /* ltable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5A09E39213008E078D /* ltable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6450A0A00F700AE8B7C /* ltm.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5C09E39213008E078D /* ltm.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B20F6360A0A00F700AE8B7C /* lapi.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A3D09E39213008E078D /* lapi.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4B20F6370A0A00F700AE8B7C /* lcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A3F09E39213008E078D /* lcode.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6380A0A00F700AE8B7C /* ldebug.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4109E39213008E078D /* ldebug.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6390A0A00F700AE8B7C /* ldo.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4309E39213008E078D /* ldo.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F63A0A0A00F700AE8B7C /* lfunc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4609E39213008E078D /* lfunc.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F63B0A0A00F700AE8B7C /* lgc.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4809E39213008E078D /* lgc.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F63C0A0A00F700AE8B7C /* llex.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4B09E39213008E078D /* llex.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F63D0A0A00F700AE8B7C /* llimits.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4C09E39213008E078D /* llimits.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4B20F63E0A0A00F700AE8B7C /* lmem.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A4E09E39213008E078D /* lmem.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F63F0A0A00F700AE8B7C /* lobject.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5009E39213008E078D /* lobject.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		4B20F6400A0A00F700AE8B7C /* lopcodes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5209E39213008E078D /* lopcodes.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6410A0A00F700AE8B7C /* lparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5409E39213008E078D /* lparser.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6420A0A00F700AE8B7C /* lstate.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5609E39213008E078D /* lstate.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6430A0A00F700AE8B7C /* lstring.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5809E39213008E078D /* lstring.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6440A0A00F700AE8B7C /* ltable.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5A09E39213008E078D /* ltable.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6450A0A00F700AE8B7C /* ltm.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5C09E39213008E078D /* ltm.h */; settings = {ATTRIBUTES = (); }; };
 		4B20F6460A0A00F700AE8B7C /* luaconf.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5D09E39213008E078D /* luaconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6470A0A00F700AE8B7C /* lundump.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5F09E39213008E078D /* lundump.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6480A0A00F700AE8B7C /* lvm.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A6109E39213008E078D /* lvm.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4B20F6490A0A00F700AE8B7C /* lzio.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A6309E39213008E078D /* lzio.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		4B20F6470A0A00F700AE8B7C /* lundump.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A5F09E39213008E078D /* lundump.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6480A0A00F700AE8B7C /* lvm.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A6109E39213008E078D /* lvm.h */; settings = {ATTRIBUTES = (); }; };
+		4B20F6490A0A00F700AE8B7C /* lzio.h in Headers */ = {isa = PBXBuildFile; fileRef = 4BCA7A6309E39213008E078D /* lzio.h */; settings = {ATTRIBUTES = (); }; };
 		4B262AA30B4FC30100A43D62 /* LuaObjCBridge.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B96EBEA0A95E4880000BDD9 /* LuaObjCBridge.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4B277B380A7E9F0A0051C47A /* Test.m in Sources */ = {isa = PBXBuildFile; fileRef = 4BEC4EA50A70ADAA0079961A /* Test.m */; };
 		4B277B3A0A7E9F130051C47A /* LuaObjCBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B4FE50F08278784007685F3 /* LuaObjCBridge.framework */; };
@@ -200,15 +203,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
-		4B262BA40B4FD77700A43D62 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		4B89765F090BE726006A3DF7 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 8;
@@ -244,12 +238,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		43A0A97312F35F0600C6CB91 /* Lua.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Lua.xcconfig; sourceTree = "<group>"; };
+		43A0A97712F3685900C6CB91 /* LuaObjCBridge-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "LuaObjCBridge-All.xcconfig"; path = "Configs/LuaObjCBridge-All.xcconfig"; sourceTree = "<group>"; };
+		43A0A97812F3685900C6CB91 /* LuaObjCBridge-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "LuaObjCBridge-Debug.xcconfig"; path = "Configs/LuaObjCBridge-Debug.xcconfig"; sourceTree = "<group>"; };
+		43A0A97912F3685900C6CB91 /* LuaObjCBridge-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "LuaObjCBridge-Release.xcconfig"; path = "Configs/LuaObjCBridge-Release.xcconfig"; sourceTree = "<group>"; };
+		43B0A38912F32808009646F0 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4B1114C00828E15C007DD523 /* LuaObjCBridge.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = LuaObjCBridge.m; sourceTree = "<group>"; };
 		4B277B340A7E9EF00051C47A /* Test */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Test; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B4FE4C408278751007685F3 /* LuaObjCBridge-Prefix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = "LuaObjCBridge-Prefix.h"; sourceTree = "<group>"; };
-		4B4FE50408278751007685F3 /* English */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4B4FE50508278751007685F3 /* LuaObjcBridge-Info.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = "LuaObjcBridge-Info.plist"; sourceTree = "<group>"; };
-		4B4FE50608278751007685F3 /* Release Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = "Release Notes.rtf"; path = "Resources/Release Notes.rtf"; sourceTree = "<group>"; };
+		4B4FE50608278751007685F3 /* Release Notes.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = "Release Notes.rtf"; sourceTree = "<group>"; };
 		4B4FE50708278751007685F3 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = text.plist.xml; path = version.plist; sourceTree = "<group>"; };
 		4B4FE50F08278784007685F3 /* LuaObjCBridge.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = LuaObjCBridge.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B4FE517082787AB007685F3 /* lua */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = lua; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -356,10 +354,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		43A0A97112F35EE100C6CB91 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				43A0A97712F3685900C6CB91 /* LuaObjCBridge-All.xcconfig */,
+				43A0A97812F3685900C6CB91 /* LuaObjCBridge-Debug.xcconfig */,
+				43A0A97912F3685900C6CB91 /* LuaObjCBridge-Release.xcconfig */,
+				43A0A97212F35F0600C6CB91 /* Configs */,
+			);
+			name = Configs;
+			sourceTree = "<group>";
+		};
+		43A0A97212F35F0600C6CB91 /* Configs */ = {
+			isa = PBXGroup;
+			children = (
+				43A0A97312F35F0600C6CB91 /* Lua.xcconfig */,
+			);
+			path = Configs;
+			sourceTree = "<group>";
+		};
 		4B4FE4BA0827873F007685F3 = {
 			isa = PBXGroup;
 			children = (
-				4B4FE50608278751007685F3 /* Release Notes.rtf */,
+				43A0A97112F35EE100C6CB91 /* Configs */,
 				4B4FE4C308278751007685F3 /* ObjC */,
 				4B4FE4C708278751007685F3 /* Lua */,
 				4B4FE50208278751007685F3 /* Resources */,
@@ -394,7 +411,8 @@
 		4B4FE50208278751007685F3 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4B4FE50308278751007685F3 /* InfoPlist.strings */,
+				43B0A38812F32808009646F0 /* InfoPlist.strings */,
+				4B4FE50608278751007685F3 /* Release Notes.rtf */,
 				4B4FE50508278751007685F3 /* LuaObjcBridge-Info.plist */,
 				4B4FE50708278751007685F3 /* version.plist */,
 			);
@@ -597,9 +615,9 @@
 			buildConfigurationList = 4B4A608D0924CAFC00A2BE53 /* Build configuration list for PBXNativeTarget "LuaObjCBridge.framework" */;
 			buildPhases = (
 				4B4FE50A08278784007685F3 /* Headers */,
+				43B0A38512F327CB009646F0 /* Resources */,
 				4B4FE50C08278784007685F3 /* Sources */,
 				4B4FE50D08278784007685F3 /* Frameworks */,
-				4B262BA40B4FD77700A43D62 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -666,9 +684,19 @@
 /* Begin PBXProject section */
 		4B4FE4BE0827873F007685F3 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+			};
 			buildConfigurationList = 4B4A60A60924CAFC00A2BE53 /* Build configuration list for PBXProject "LuaObjCBridge" */;
-			compatibilityVersion = "Xcode 2.4";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+			);
 			mainGroup = 4B4FE4BA0827873F007685F3;
 			productRefGroup = 4B4FE51008278784007685F3 /* Products */;
 			projectDirPath = "";
@@ -683,6 +711,19 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		43B0A38512F327CB009646F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43B0A38612F327D8009646F0 /* Release Notes.rtf in Resources */,
+				43B0A38712F327E1009646F0 /* version.plist in Resources */,
+				43B0A38A12F32808009646F0 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
 		4BD7DC4E090AF573003F140A /* ShellScript */ = {
@@ -835,10 +876,10 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4B4FE50308278751007685F3 /* InfoPlist.strings */ = {
+		43B0A38812F32808009646F0 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				4B4FE50408278751007685F3 /* English */,
+				43B0A38912F32808009646F0 /* English */,
 			);
 			name = InfoPlist.strings;
 			sourceTree = "<group>";
@@ -888,26 +929,15 @@
 		};
 		4B4A608E0924CAFC00A2BE53 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A0A97812F3685900C6CB91 /* LuaObjCBridge-Debug.xcconfig */;
 			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/ObjC/LuaObjCBridge-Prefix.h";
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/LuaObjCBridge-Info.plist";
-				PRODUCT_NAME = LuaObjCBridge;
 			};
 			name = Debug;
 		};
 		4B4A60900924CAFC00A2BE53 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A0A97912F3685900C6CB91 /* LuaObjCBridge-Release.xcconfig */;
 			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_PREFIX_HEADER = "$(SRCROOT)/ObjC/LuaObjCBridge-Prefix.h";
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/LuaObjCBridge-Info.plist";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				PRODUCT_NAME = LuaObjCBridge;
 			};
 			name = Release;
 		};
@@ -1032,57 +1062,15 @@
 		};
 		4B4A60A70924CAFC00A2BE53 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A0A97312F35F0600C6CB91 /* Lua.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
-				COPY_PHASE_STRIP = NO;
-				DEPLOYMENT_LOCATION = NO;
-				DEPLOYMENT_POSTPROCESSING = NO;
-				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = LUA_USE_DLOPEN;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				INSTALL_MODE_FLAG = "u=rwX,go=rX";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				PREBINDING = NO;
-				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.6.sdk";
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = NO;
-				STRIP_STYLE = debugging;
-				ZERO_LINK = NO;
 			};
 			name = Debug;
 		};
 		4B4A60A90924CAFC00A2BE53 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A0A97312F35F0600C6CB91 /* Lua.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1)";
-				ARCHS_STANDARD_32_64_BIT_PRE_XCODE_3_1 = "x86_64 i386 ppc";
-				COPY_PHASE_STRIP = YES;
-				DEPLOYMENT_LOCATION = NO;
-				DEPLOYMENT_POSTPROCESSING = YES;
-				GCC_DEBUGGING_SYMBOLS = full;
-				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_OPTIMIZATION_LEVEL = s;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREPROCESSOR_DEFINITIONS = LUA_USE_DLOPEN;
-				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
-				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				INSTALL_MODE_FLAG = "u=rwX,go=rX";
-				INSTALL_PATH = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 10.5;
-				PREBINDING = NO;
-				SDKROOT = /Developer/SDKs/MacOSX10.5.sdk;
-				SKIP_INSTALL = YES;
-				STRIP_INSTALLED_PRODUCT = YES;
-				STRIP_STYLE = "non-global";
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -1092,65 +1080,65 @@
 		4B277B400A7E9F430051C47A /* Build configuration list for PBXNativeTarget "Test" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B277B410A7E9F430051C47A /* Debug */,
 				4B277B430A7E9F430051C47A /* Release */,
+				4B277B410A7E9F430051C47A /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		4B4A608D0924CAFC00A2BE53 /* Build configuration list for PBXNativeTarget "LuaObjCBridge.framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B4A608E0924CAFC00A2BE53 /* Debug */,
 				4B4A60900924CAFC00A2BE53 /* Release */,
+				4B4A608E0924CAFC00A2BE53 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		4B4A60920924CAFC00A2BE53 /* Build configuration list for PBXNativeTarget "liblua.dylib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B4A60930924CAFC00A2BE53 /* Debug */,
 				4B4A60950924CAFC00A2BE53 /* Release */,
+				4B4A60930924CAFC00A2BE53 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		4B4A60970924CAFC00A2BE53 /* Build configuration list for PBXNativeTarget "objc.dylib" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B4A60980924CAFC00A2BE53 /* Debug */,
 				4B4A609A0924CAFC00A2BE53 /* Release */,
+				4B4A60980924CAFC00A2BE53 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		4B4A609C0924CAFC00A2BE53 /* Build configuration list for PBXNativeTarget "lua" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B4A609D0924CAFC00A2BE53 /* Debug */,
 				4B4A609F0924CAFC00A2BE53 /* Release */,
+				4B4A609D0924CAFC00A2BE53 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		4B4A60A10924CAFC00A2BE53 /* Build configuration list for PBXAggregateTarget "Everything" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B4A60A20924CAFC00A2BE53 /* Debug */,
 				4B4A60A40924CAFC00A2BE53 /* Release */,
+				4B4A60A20924CAFC00A2BE53 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 		4B4A60A60924CAFC00A2BE53 /* Build configuration list for PBXProject "LuaObjCBridge" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				4B4A60A70924CAFC00A2BE53 /* Debug */,
 				4B4A60A90924CAFC00A2BE53 /* Release */,
+				4B4A60A70924CAFC00A2BE53 /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Debug;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
