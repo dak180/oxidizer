@@ -1,0 +1,13 @@
+// Png settings for all configurations
+
+#include "Base-All.xcconfig"
+
+
+PRODUCT_NAME = Png
+FRAMEWORK_SEARCH_PATHS = $(inherited) $(FRAMEWORK_SEARCH_PATHS_QUOTED_2)
+
+PRODUCT_INFO_VERSION = 1.4.5
+PRODUCT_INFO_COPYRIGHT = Copyright 1995-2011 contributing authors.
+PRODUCT_INFO_SHORTNAME = libpng
+PRODUCT_INFO_PATH = downloads.sourceforge.net/project/libpng/libpng14/1.4.5/
+PRODUCT_INFO_HASH = dd4175393720ae041c67ace87cf6d212
