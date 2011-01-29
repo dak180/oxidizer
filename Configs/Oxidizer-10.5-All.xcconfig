@@ -1,0 +1,9 @@
+// Oxidizer settings for all 10.5 configurations
+
+#include "Oxidizer-All.xcconfig"
+
+
+ARCHS = $(ARCHS_STANDARD_32_BIT)
+SDKROOT = macosx10.5
+MACOSX_DEPLOYMENT_TARGET = 10.4
+PRODUCT_NAME = Oxidizer (10.5)

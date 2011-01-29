@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <png.h>
+#include <Png/png.h>
 #include <setjmp.h>
 
 #include "config.h"

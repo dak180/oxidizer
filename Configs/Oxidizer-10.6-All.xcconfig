@@ -1,0 +1,9 @@
+// Oxidizer settings for all 10.6 configurations
+
+#include "Oxidizer-All.xcconfig"
+
+
+ARCHS = $(ARCHS_STANDARD_32_64_BIT)
+SDKROOT = macosx10.6
+MACOSX_DEPLOYMENT_TARGET = 10.6
+PRODUCT_NAME = Oxidizer (10.6)

@@ -20,7 +20,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <jpeglib.h>
+#include <Jpeg/jpeglib.h>
 #include <string.h>
 
 #include "config.h"

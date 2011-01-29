@@ -1,0 +1,7 @@
+// Oxidizer settings for 10.6 Release configuration
+
+#include "Oxidizer-10.6-Debug.xcconfig"
+
+
+RUN_CLANG_STATIC_ANALYZER = YES
+GCC_OPTIMIZATION_LEVEL = 2
