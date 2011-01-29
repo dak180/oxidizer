@@ -7,7 +7,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import <RectangleController.h>
+#import "RectangleController.h"
 
 
 @interface RectangleNibController : NSObject {

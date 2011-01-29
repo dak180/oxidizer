@@ -86,6 +86,100 @@
 		43C6FB2012F4D1CA008356FC /* flam3-convert.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4212F391F600C6CB91 /* flam3-convert.c */; };
 		43C6FB2112F4D1CD008356FC /* docstring.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4012F391F600C6CB91 /* docstring.c */; };
 		43C6FB2912F4D22D008356FC /* flam3-convert in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FB1812F4D165008356FC /* flam3-convert */; };
+		43C6FB4E12F4D2DA008356FC /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 4300271A12F08DC200C31A83 /* Credits.html */; };
+		43C6FB4F12F4D2DA008356FC /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4300271C12F08DC200C31A83 /* version.plist */; };
+		43C6FB5012F4D2DA008356FC /* flam3-palettes.xml in Resources */ = {isa = PBXBuildFile; fileRef = 4300272112F08E1200C31A83 /* flam3-palettes.xml */; };
+		43C6FB5112F4D2DA008356FC /* Clipboard.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300272712F08FAE00C31A83 /* Clipboard.xib */; };
+		43C6FB5212F4D2DA008356FC /* FileViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300272912F08FAE00C31A83 /* FileViews.xib */; };
+		43C6FB5312F4D2DA008356FC /* GenePool.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300272B12F08FAE00C31A83 /* GenePool.xib */; };
+		43C6FB5412F4D2DA008356FC /* GradientWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300272D12F08FAE00C31A83 /* GradientWindow.xib */; };
+		43C6FB5512F4D2DA008356FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4300272F12F08FAE00C31A83 /* InfoPlist.strings */; };
+		43C6FB5612F4D2DA008356FC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273112F08FAE00C31A83 /* MainMenu.xib */; };
+		43C6FB5712F4D2DA008356FC /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273312F08FAE00C31A83 /* QuickView.xib */; };
+		43C6FB5812F4D2DA008356FC /* RectangleWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273512F08FAE00C31A83 /* RectangleWindow.xib */; };
+		43C6FB5912F4D2DA008356FC /* TaskProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273712F08FAE00C31A83 /* TaskProgress.xib */; };
+		43C6FB5A12F4D2DA008356FC /* FileViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273A12F08FAE00C31A83 /* FileViews.xib */; };
+		43C6FB5B12F4D2DA008356FC /* GenePool.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273C12F08FAE00C31A83 /* GenePool.xib */; };
+		43C6FB5C12F4D2DA008356FC /* GradientWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273E12F08FAE00C31A83 /* GradientWindow.xib */; };
+		43C6FB5D12F4D2DA008356FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4300274012F08FAE00C31A83 /* InfoPlist.strings */; };
+		43C6FB5E12F4D2DA008356FC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274212F08FAE00C31A83 /* MainMenu.xib */; };
+		43C6FB5F12F4D2DA008356FC /* RectangleWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274412F08FAE00C31A83 /* RectangleWindow.xib */; };
+		43C6FB6012F4D2DA008356FC /* TaskProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274612F08FAE00C31A83 /* TaskProgress.xib */; };
+		43C6FB6112F4D2DA008356FC /* LuaConsole.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300277B12F096B700C31A83 /* LuaConsole.xib */; };
+		43C6FB6212F4D2DA008356FC /* document-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278012F0971D00C31A83 /* document-open.png */; };
+		43C6FB6312F4D2DA008356FC /* document-save.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278112F0971D00C31A83 /* document-save.png */; };
+		43C6FB6412F4D2DA008356FC /* edit-paste.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278212F0971D00C31A83 /* edit-paste.png */; };
+		43C6FB6512F4D2DA008356FC /* image-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278312F0971D00C31A83 /* image-x-generic.png */; };
+		43C6FB6612F4D2DA008356FC /* stills.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278412F0971D00C31A83 /* stills.png */; };
+		43C6FB6712F4D2DA008356FC /* text-x-script.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278512F0971D00C31A83 /* text-x-script.png */; };
+		43C6FB6812F4D2DA008356FC /* transform-scale.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278612F0971D00C31A83 /* transform-scale.png */; };
+		43C6FB6912F4D2DA008356FC /* utilities-terminal.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278712F0971D00C31A83 /* utilities-terminal.png */; };
+		43C6FB6A12F4D2DA008356FC /* video-x-generic.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278812F0971D00C31A83 /* video-x-generic.png */; };
+		43C6FB6B12F4D2DA008356FC /* genepool.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300279212F0973700C31A83 /* genepool.png */; };
+		43C6FB6C12F4D2DA008356FC /* oxidizer_dna.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300279312F0973700C31A83 /* oxidizer_dna.png */; };
+		43C6FB6D12F4D2DA008356FC /* oxidizer.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4300279412F0973700C31A83 /* oxidizer.icns */; };
+		43C6FB6E12F4D2DA008356FC /* OxidizerQTDialogServer.app in Resources */ = {isa = PBXBuildFile; fileRef = 43A0AAFB12F3907300C6CB91 /* OxidizerQTDialogServer.app */; };
+		43C6FB7012F4D2DA008356FC /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		43C6FB7112F4D2DA008356FC /* PaletteController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D604AA09658A6C0001CD1D /* PaletteController.m */; };
+		43C6FB7212F4D2DA008356FC /* FractalFlameModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA85870966DB7D00FFCF4D /* FractalFlameModel.m */; };
+		43C6FB7312F4D2DA008356FC /* EnvironmentController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA858D0966DD2A00FFCF4D /* EnvironmentController.m */; };
+		43C6FB7412F4D2DA008356FC /* FlameController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4DA871C096712CA00FFCF4D /* FlameController.m */; };
+		43C6FB7512F4D2DA008356FC /* genome.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = A4D3633D09AB9CE20078025F /* genome.xcdatamodel */; };
+		43C6FB7612F4D2DA008356FC /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
+		43C6FB7712F4D2DA008356FC /* DnDArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FDAB290A4EBA9400910299 /* DnDArrayController.m */; };
+		43C6FB7812F4D2DA008356FC /* DnDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3810D0A4F236700E7364C /* DnDImageView.m */; };
+		43C6FB7912F4D2DA008356FC /* GreaterThanThreeTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = A4FADCE70A55A131004FC917 /* GreaterThanThreeTransformer.m */; };
+		43C6FB7A12F4D2DA008356FC /* OxidizerDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F49C190AAB05C800FA4BE8 /* OxidizerDelegate.m */; };
+		43C6FB7B12F4D2DA008356FC /* DragDropAndSaveImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A40CB5200AB8864300613AD6 /* DragDropAndSaveImageView.m */; };
+		43C6FB7C12F4D2DA008356FC /* DnDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A41E6CBF0B0F429900713916 /* DnDButton.m */; };
+		43C6FB7D12F4D2DA008356FC /* GenePoolNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9A30B16308200019559 /* GenePoolNibController.m */; };
+		43C6FB7E12F4D2DA008356FC /* GenePoolController.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9A70B16316E00019559 /* GenePoolController.m */; };
+		43C6FB7F12F4D2DA008356FC /* GenePoolModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9AA0B1631A000019559 /* GenePoolModel.m */; };
+		43C6FB8012F4D2DA008356FC /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; settings = {COMPILER_FLAGS = "-fobjc-exceptions"; }; };
+		43C6FB8112F4D2DA008356FC /* RectangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B3310D14355600FE81AC /* RectangleView.m */; };
+		43C6FB8212F4D2DA008356FC /* RectangleController.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B37D0D143FF600FE81AC /* RectangleController.m */; };
+		43C6FB8312F4D2DA008356FC /* RectangleNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A40B00DA0D392E7A009F782F /* RectangleNibController.m */; };
+		43C6FB8412F4D2DA008356FC /* GradientView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49E2A5A0D86F1D1008198BE /* GradientView.m */; };
+		43C6FB8512F4D2DA008356FC /* GradientController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79440DA6DD3700160702 /* GradientController.m */; };
+		43C6FB8612F4D2DA008356FC /* GradientNibController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79460DA6DD3700160702 /* GradientNibController.m */; };
+		43C6FB8712F4D2DA008356FC /* ProgressIndicatorWithCancel.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C6CDE50DC3708600E2EEFB /* ProgressIndicatorWithCancel.m */; };
+		43C6FB8812F4D2DA008356FC /* Genome.m in Sources */ = {isa = PBXBuildFile; fileRef = A40EF5280DD71DEA003329A6 /* Genome.m */; };
+		43C6FB8912F4D2DA008356FC /* GenomeManagedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = A40EF52A0DD71DEA003329A6 /* GenomeManagedObject.m */; };
+		43C6FB8A12F4D2DA008356FC /* GenomeXMLParser.m in Sources */ = {isa = PBXBuildFile; fileRef = A40EF52E0DD71E0A003329A6 /* GenomeXMLParser.m */; };
+		43C6FB8B12F4D2DA008356FC /* GenomeImages.m in Sources */ = {isa = PBXBuildFile; fileRef = A43E448C0DE5F58F0001BB6A /* GenomeImages.m */; };
+		43C6FB8C12F4D2DA008356FC /* AutoPreviewSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D69FDF0E77004D00A1F11B /* AutoPreviewSlider.m */; };
+		43C6FB8D12F4D2DA008356FC /* ImageFormatIsPNG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48873350E9924DB0038CE19 /* ImageFormatIsPNG.m */; };
+		43C6FB8E12F4D2DA008356FC /* ImageFormatIsJPEG.m in Sources */ = {isa = PBXBuildFile; fileRef = A48874320E992E410038CE19 /* ImageFormatIsJPEG.m */; };
+		43C6FB8F12F4D2DA008356FC /* AutoPreviewStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */; };
+		43C6FB9012F4D2DA008356FC /* TemporalFilterIsExponent.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C1D4E20ECF2D9D008A717E /* TemporalFilterIsExponent.m */; };
+		43C6FB9112F4D2DA008356FC /* QuickViewButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A41086640EDB356500529FF8 /* QuickViewButton.m */; };
+		43C6FB9212F4D2DA008356FC /* QuickViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D056FD0EDF3BBC005F122C /* QuickViewController.m */; };
+		43C6FB9312F4D2DA008356FC /* QuickViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49F64680EF5516F00ACB40A /* QuickViewImageView.m */; };
+		43C6FB9412F4D2DA008356FC /* GradientSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B603990F7D99EF001A76B3 /* GradientSlider.m */; };
+		43C6FB9512F4D2DA008356FC /* TransformTableDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4920D990F9901CE00A4169E /* TransformTableDelegate.m */; };
+		43C6FB9612F4D2DA008356FC /* LuaConsoleDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A4C26D7B0FB9F61E00A47F9A /* LuaConsoleDelegate.m */; };
+		43C6FB9712F4D2DA008356FC /* ConsoleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4E69E610FC835310001E3BD /* ConsoleView.m */; };
+		43C6FB9812F4D2DA008356FC /* MultiUseWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = A4F8F02C10935B2C00EB9041 /* MultiUseWindow.m */; };
+		43C6FB9912F4D2DA008356FC /* ClipboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4467C3F10D030CA00252273 /* ClipboardController.m */; };
+		43C6FB9A12F4D2DA008356FC /* ImageKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46AB18E1285B46F004EDB36 /* ImageKitController.m */; };
+		43C6FB9B12F4D2DA008356FC /* QTKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46AB1901285B46F004EDB36 /* QTKitController.m */; };
+		43C6FB9D12F4D2DA008356FC /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADAA12F3B01500C6CB91 /* Cocoa.framework */; };
+		43C6FB9E12F4D2DA008356FC /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADAC12F3B01500C6CB91 /* QTKit.framework */; };
+		43C6FB9F12F4D2DA008356FC /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42874DC11B1B48E00EAD7BE /* Quartz.framework */; };
+		43C6FBA012F4D2DA008356FC /* Jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1012F390CA00C6CB91 /* Jpeg.framework */; };
+		43C6FBA112F4D2DA008356FC /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1A12F390CB00C6CB91 /* Png.framework */; };
+		43C6FBA212F4D2DA008356FC /* LuaObjCBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB2812F390CB00C6CB91 /* LuaObjCBridge.framework */; };
+		43C6FBA312F4D2DA008356FC /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
+		43C6FBA512F4D2DA008356FC /* Jpeg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1012F390CA00C6CB91 /* Jpeg.framework */; };
+		43C6FBA612F4D2DA008356FC /* Png.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1A12F390CB00C6CB91 /* Png.framework */; };
+		43C6FBA712F4D2DA008356FC /* Zlib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1D12F390CB00C6CB91 /* Zlib.framework */; };
+		43C6FBA812F4D2DA008356FC /* LuaObjCBridge.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB2812F390CB00C6CB91 /* LuaObjCBridge.framework */; };
+		43C6FBAA12F4D2DA008356FC /* flam3-animate in Copy Executables */ = {isa = PBXBuildFile; fileRef = 435864A112F48F1900C4BFF6 /* flam3-animate */; };
+		43C6FBAB12F4D2DA008356FC /* flam3-genome in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FAC112F4CE6C008356FC /* flam3-genome */; };
+		43C6FBAC12F4D2DA008356FC /* flam3-render in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FAEF12F4D039008356FC /* flam3-render */; };
+		43C6FBAD12F4D2DA008356FC /* flam3-convert in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FB1812F4D165008356FC /* flam3-convert */; };
+		43C6FBCA12F4D64B008356FC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADD812F3C23400C6CB91 /* libxml2.dylib */; };
+		43C6FBCB12F4D651008356FC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADD812F3C23400C6CB91 /* libxml2.dylib */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		A404B3330D14355600FE81AC /* RectangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B3310D14355600FE81AC /* RectangleView.m */; };
 		A404B37F0D143FF600FE81AC /* RectangleController.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B37D0D143FF600FE81AC /* RectangleController.m */; };
@@ -257,14 +351,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43A0AB6112F3951900C6CB91 /* flam3 */;
+			remoteGlobalIDString = 43A0AB6112F3951900C6CB91;
 			remoteInfo = flam3;
 		};
 		43C6FAA412F4BCD4008356FC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 435864A012F48F1900C4BFF6 /* flam3-animate */;
+			remoteGlobalIDString = 435864A012F48F1900C4BFF6;
 			remoteInfo = "flam3-animate";
 		};
 		43C6FAB612F4CE6C008356FC /* PBXContainerItemProxy */ = {
@@ -278,7 +372,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43C6FAB412F4CE6C008356FC /* flam3-genome */;
+			remoteGlobalIDString = 43C6FAB412F4CE6C008356FC;
 			remoteInfo = "flam3-genome";
 		};
 		43C6FAE412F4D039008356FC /* PBXContainerItemProxy */ = {
@@ -292,7 +386,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43C6FAE212F4D039008356FC /* flam3-render */;
+			remoteGlobalIDString = 43C6FAE212F4D039008356FC;
 			remoteInfo = "flam3-render";
 		};
 		43C6FB0D12F4D165008356FC /* PBXContainerItemProxy */ = {
@@ -306,15 +400,85 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 43C6FB0B12F4D165008356FC /* flam3-convert */;
+			remoteGlobalIDString = 43C6FB0B12F4D165008356FC;
 			remoteInfo = "flam3-convert";
 		};
 		43C6FB3012F4D25C008356FC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43A0AB0512F390CA00C6CB91 /* Zlib.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 4300283512F24CFC00C31A83 /* Mac Framework */;
+			remoteGlobalIDString = 4300283512F24CFC00C31A83;
 			remoteInfo = "Mac Framework";
+		};
+		43C6FB3A12F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43A0AAF312F3907300C6CB91 /* OxidizerQTDialogServer.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D1107260486CEB800E47090;
+			remoteInfo = OxidizerQTDialogServer;
+		};
+		43C6FB3C12F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43A0AB0812F390CA00C6CB91 /* LuaObjCBridge.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4B4FE50E08278784007685F3;
+			remoteInfo = LuaObjCBridge.framework;
+		};
+		43C6FB3E12F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43A0AB0512F390CA00C6CB91 /* Zlib.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4300283512F24CFC00C31A83;
+			remoteInfo = "Mac Framework";
+		};
+		43C6FB4012F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43A0AAFF12F390CA00C6CB91 /* Jpeg.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4300283512F24CFC00C31A83;
+			remoteInfo = "Mac Framework";
+		};
+		43C6FB4212F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 43A0AB0212F390CA00C6CB91 /* Png.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 4300283512F24CFC00C31A83;
+			remoteInfo = "Mac Framework";
+		};
+		43C6FB4412F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43A0AB6112F3951900C6CB91;
+			remoteInfo = flam3;
+		};
+		43C6FB4612F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 435864A012F48F1900C4BFF6;
+			remoteInfo = "flam3-animate";
+		};
+		43C6FB4812F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43C6FAB412F4CE6C008356FC;
+			remoteInfo = "flam3-genome";
+		};
+		43C6FB4A12F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43C6FAE212F4D039008356FC;
+			remoteInfo = "flam3-render";
+		};
+		43C6FB4C12F4D2DA008356FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43C6FB0B12F4D165008356FC;
+			remoteInfo = "flam3-convert";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -329,6 +493,34 @@
 				43C6FAD312F4CF51008356FC /* flam3-genome in Copy Executables */,
 				43C6FAFC12F4D0F1008356FC /* flam3-render in Copy Executables */,
 				43C6FB2912F4D22D008356FC /* flam3-convert in Copy Executables */,
+			);
+			name = "Copy Executables";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43C6FBA412F4D2DA008356FC /* Copy Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				43C6FBA512F4D2DA008356FC /* Jpeg.framework in Copy Frameworks */,
+				43C6FBA612F4D2DA008356FC /* Png.framework in Copy Frameworks */,
+				43C6FBA712F4D2DA008356FC /* Zlib.framework in Copy Frameworks */,
+				43C6FBA812F4D2DA008356FC /* LuaObjCBridge.framework in Copy Frameworks */,
+			);
+			name = "Copy Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43C6FBA912F4D2DA008356FC /* Copy Executables */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				43C6FBAA12F4D2DA008356FC /* flam3-animate in Copy Executables */,
+				43C6FBAB12F4D2DA008356FC /* flam3-genome in Copy Executables */,
+				43C6FBAC12F4D2DA008356FC /* flam3-render in Copy Executables */,
+				43C6FBAD12F4D2DA008356FC /* flam3-convert in Copy Executables */,
 			);
 			name = "Copy Executables";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,6 +635,8 @@
 		43C6FB2412F4D1FF008356FC /* flam3-convert-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "flam3-convert-All.xcconfig"; path = "Configs/flam3-convert-All.xcconfig"; sourceTree = "<group>"; };
 		43C6FB2512F4D1FF008356FC /* flam3-convert-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "flam3-convert-Debug.xcconfig"; path = "Configs/flam3-convert-Debug.xcconfig"; sourceTree = "<group>"; };
 		43C6FB2612F4D1FF008356FC /* flam3-convert-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "flam3-convert-Release.xcconfig"; path = "Configs/flam3-convert-Release.xcconfig"; sourceTree = "<group>"; };
+		43C6FBB212F4D2DA008356FC /* Oxidizer (10.5).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oxidizer (10.5).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		43C6FBB612F4D2DA008356FC /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info copy.plist"; path = "Resources/Info copy.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Oxidizer (10.6).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oxidizer (10.6).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A404B3300D14355600FE81AC /* RectangleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RectangleView.h; path = src/RectangleView/RectangleView.h; sourceTree = "<group>"; };
 		A404B3310D14355600FE81AC /* RectangleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RectangleView.m; path = src/RectangleView/RectangleView.m; sourceTree = "<group>"; };
@@ -582,6 +776,21 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		43C6FB9C12F4D2DA008356FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43C6FB9D12F4D2DA008356FC /* Cocoa.framework in Frameworks */,
+				43C6FB9E12F4D2DA008356FC /* QTKit.framework in Frameworks */,
+				43C6FB9F12F4D2DA008356FC /* Quartz.framework in Frameworks */,
+				43C6FBA012F4D2DA008356FC /* Jpeg.framework in Frameworks */,
+				43C6FBA112F4D2DA008356FC /* Png.framework in Frameworks */,
+				43C6FBA212F4D2DA008356FC /* LuaObjCBridge.framework in Frameworks */,
+				43C6FBA312F4D2DA008356FC /* flam3.framework in Frameworks */,
+				43C6FBCB12F4D651008356FC /* libxml2.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D11072E0486CEB800E47090 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -593,6 +802,7 @@
 				43A0AB3212F3911400C6CB91 /* Png.framework in Frameworks */,
 				43A0AB3412F3912D00C6CB91 /* LuaObjCBridge.framework in Frameworks */,
 				4380545412F4734100AC483E /* flam3.framework in Frameworks */,
+				43C6FBCA12F4D64B008356FC /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -645,6 +855,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* Oxidizer (10.6).app */,
+				43C6FBB212F4D2DA008356FC /* Oxidizer (10.5).app */,
 				43A0AB6212F3951900C6CB91 /* flam3.framework */,
 				435864A112F48F1900C4BFF6 /* flam3-animate */,
 				43C6FAC112F4CE6C008356FC /* flam3-genome */,
@@ -684,6 +895,7 @@
 				4300271A12F08DC200C31A83 /* Credits.html */,
 				4300271B12F08DC200C31A83 /* Info.plist */,
 				4300271C12F08DC200C31A83 /* version.plist */,
+				43C6FBB612F4D2DA008356FC /* Info copy.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1181,6 +1393,36 @@
 			productReference = 43C6FB1812F4D165008356FC /* flam3-convert */;
 			productType = "com.apple.product-type.tool";
 		};
+		43C6FB3812F4D2DA008356FC /* Oxidizer (10.5) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43C6FBAE12F4D2DA008356FC /* Build configuration list for PBXNativeTarget "Oxidizer (10.5)" */;
+			buildPhases = (
+				43C6FB4D12F4D2DA008356FC /* Resources */,
+				43C6FB6F12F4D2DA008356FC /* Sources */,
+				43C6FB9C12F4D2DA008356FC /* Frameworks */,
+				43C6FBA412F4D2DA008356FC /* Copy Frameworks */,
+				43C6FBA912F4D2DA008356FC /* Copy Executables */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				43C6FB3912F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB3B12F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB3D12F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB3F12F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB4112F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB4312F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB4512F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB4712F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB4912F4D2DA008356FC /* PBXTargetDependency */,
+				43C6FB4B12F4D2DA008356FC /* PBXTargetDependency */,
+			);
+			name = "Oxidizer (10.5)";
+			productInstallPath = "$(HOME)/Applications";
+			productName = oxidizer;
+			productReference = 43C6FBB212F4D2DA008356FC /* Oxidizer (10.5).app */;
+			productType = "com.apple.product-type.application";
+		};
 		8D1107260486CEB800E47090 /* Oxidizer (10.6) */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Oxidizer (10.6)" */;
@@ -1257,6 +1499,7 @@
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Oxidizer (10.6) */,
+				43C6FB3812F4D2DA008356FC /* Oxidizer (10.5) */,
 				43A0AB6112F3951900C6CB91 /* libflam3 */,
 				435864A012F48F1900C4BFF6 /* flam3-animate */,
 				43C6FAB412F4CE6C008356FC /* flam3-genome */,
@@ -1337,6 +1580,46 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43C6FB4D12F4D2DA008356FC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43C6FB4E12F4D2DA008356FC /* Credits.html in Resources */,
+				43C6FB4F12F4D2DA008356FC /* version.plist in Resources */,
+				43C6FB5012F4D2DA008356FC /* flam3-palettes.xml in Resources */,
+				43C6FB5112F4D2DA008356FC /* Clipboard.xib in Resources */,
+				43C6FB5212F4D2DA008356FC /* FileViews.xib in Resources */,
+				43C6FB5312F4D2DA008356FC /* GenePool.xib in Resources */,
+				43C6FB5412F4D2DA008356FC /* GradientWindow.xib in Resources */,
+				43C6FB5512F4D2DA008356FC /* InfoPlist.strings in Resources */,
+				43C6FB5612F4D2DA008356FC /* MainMenu.xib in Resources */,
+				43C6FB5712F4D2DA008356FC /* QuickView.xib in Resources */,
+				43C6FB5812F4D2DA008356FC /* RectangleWindow.xib in Resources */,
+				43C6FB5912F4D2DA008356FC /* TaskProgress.xib in Resources */,
+				43C6FB5A12F4D2DA008356FC /* FileViews.xib in Resources */,
+				43C6FB5B12F4D2DA008356FC /* GenePool.xib in Resources */,
+				43C6FB5C12F4D2DA008356FC /* GradientWindow.xib in Resources */,
+				43C6FB5D12F4D2DA008356FC /* InfoPlist.strings in Resources */,
+				43C6FB5E12F4D2DA008356FC /* MainMenu.xib in Resources */,
+				43C6FB5F12F4D2DA008356FC /* RectangleWindow.xib in Resources */,
+				43C6FB6012F4D2DA008356FC /* TaskProgress.xib in Resources */,
+				43C6FB6112F4D2DA008356FC /* LuaConsole.xib in Resources */,
+				43C6FB6212F4D2DA008356FC /* document-open.png in Resources */,
+				43C6FB6312F4D2DA008356FC /* document-save.png in Resources */,
+				43C6FB6412F4D2DA008356FC /* edit-paste.png in Resources */,
+				43C6FB6512F4D2DA008356FC /* image-x-generic.png in Resources */,
+				43C6FB6612F4D2DA008356FC /* stills.png in Resources */,
+				43C6FB6712F4D2DA008356FC /* text-x-script.png in Resources */,
+				43C6FB6812F4D2DA008356FC /* transform-scale.png in Resources */,
+				43C6FB6912F4D2DA008356FC /* utilities-terminal.png in Resources */,
+				43C6FB6A12F4D2DA008356FC /* video-x-generic.png in Resources */,
+				43C6FB6B12F4D2DA008356FC /* genepool.png in Resources */,
+				43C6FB6C12F4D2DA008356FC /* oxidizer_dna.png in Resources */,
+				43C6FB6D12F4D2DA008356FC /* oxidizer.icns in Resources */,
+				43C6FB6E12F4D2DA008356FC /* OxidizerQTDialogServer.app in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1428,6 +1711,57 @@
 			files = (
 				43C6FB2012F4D1CA008356FC /* flam3-convert.c in Sources */,
 				43C6FB2112F4D1CD008356FC /* docstring.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		43C6FB6F12F4D2DA008356FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43C6FB7012F4D2DA008356FC /* main.m in Sources */,
+				43C6FB7112F4D2DA008356FC /* PaletteController.m in Sources */,
+				43C6FB7212F4D2DA008356FC /* FractalFlameModel.m in Sources */,
+				43C6FB7312F4D2DA008356FC /* EnvironmentController.m in Sources */,
+				43C6FB7412F4D2DA008356FC /* FlameController.m in Sources */,
+				43C6FB7512F4D2DA008356FC /* genome.xcdatamodel in Sources */,
+				43C6FB7612F4D2DA008356FC /* BreedingController.m in Sources */,
+				43C6FB7712F4D2DA008356FC /* DnDArrayController.m in Sources */,
+				43C6FB7812F4D2DA008356FC /* DnDImageView.m in Sources */,
+				43C6FB7912F4D2DA008356FC /* GreaterThanThreeTransformer.m in Sources */,
+				43C6FB7A12F4D2DA008356FC /* OxidizerDelegate.m in Sources */,
+				43C6FB7B12F4D2DA008356FC /* DragDropAndSaveImageView.m in Sources */,
+				43C6FB7C12F4D2DA008356FC /* DnDButton.m in Sources */,
+				43C6FB7D12F4D2DA008356FC /* GenePoolNibController.m in Sources */,
+				43C6FB7E12F4D2DA008356FC /* GenePoolController.m in Sources */,
+				43C6FB7F12F4D2DA008356FC /* GenePoolModel.m in Sources */,
+				43C6FB8012F4D2DA008356FC /* Flam3Task.m in Sources */,
+				43C6FB8112F4D2DA008356FC /* RectangleView.m in Sources */,
+				43C6FB8212F4D2DA008356FC /* RectangleController.m in Sources */,
+				43C6FB8312F4D2DA008356FC /* RectangleNibController.m in Sources */,
+				43C6FB8412F4D2DA008356FC /* GradientView.m in Sources */,
+				43C6FB8512F4D2DA008356FC /* GradientController.m in Sources */,
+				43C6FB8612F4D2DA008356FC /* GradientNibController.m in Sources */,
+				43C6FB8712F4D2DA008356FC /* ProgressIndicatorWithCancel.m in Sources */,
+				43C6FB8812F4D2DA008356FC /* Genome.m in Sources */,
+				43C6FB8912F4D2DA008356FC /* GenomeManagedObject.m in Sources */,
+				43C6FB8A12F4D2DA008356FC /* GenomeXMLParser.m in Sources */,
+				43C6FB8B12F4D2DA008356FC /* GenomeImages.m in Sources */,
+				43C6FB8C12F4D2DA008356FC /* AutoPreviewSlider.m in Sources */,
+				43C6FB8D12F4D2DA008356FC /* ImageFormatIsPNG.m in Sources */,
+				43C6FB8E12F4D2DA008356FC /* ImageFormatIsJPEG.m in Sources */,
+				43C6FB8F12F4D2DA008356FC /* AutoPreviewStepper.m in Sources */,
+				43C6FB9012F4D2DA008356FC /* TemporalFilterIsExponent.m in Sources */,
+				43C6FB9112F4D2DA008356FC /* QuickViewButton.m in Sources */,
+				43C6FB9212F4D2DA008356FC /* QuickViewController.m in Sources */,
+				43C6FB9312F4D2DA008356FC /* QuickViewImageView.m in Sources */,
+				43C6FB9412F4D2DA008356FC /* GradientSlider.m in Sources */,
+				43C6FB9512F4D2DA008356FC /* TransformTableDelegate.m in Sources */,
+				43C6FB9612F4D2DA008356FC /* LuaConsoleDelegate.m in Sources */,
+				43C6FB9712F4D2DA008356FC /* ConsoleView.m in Sources */,
+				43C6FB9812F4D2DA008356FC /* MultiUseWindow.m in Sources */,
+				43C6FB9912F4D2DA008356FC /* ClipboardController.m in Sources */,
+				43C6FB9A12F4D2DA008356FC /* ImageKitController.m in Sources */,
+				43C6FB9B12F4D2DA008356FC /* QTKitController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1569,6 +1903,56 @@
 			isa = PBXTargetDependency;
 			name = "Mac Framework";
 			targetProxy = 43C6FB3012F4D25C008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB3912F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = OxidizerQTDialogServer;
+			targetProxy = 43C6FB3A12F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB3B12F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = LuaObjCBridge.framework;
+			targetProxy = 43C6FB3C12F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB3D12F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Mac Framework";
+			targetProxy = 43C6FB3E12F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB3F12F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Mac Framework";
+			targetProxy = 43C6FB4012F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB4112F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "Mac Framework";
+			targetProxy = 43C6FB4212F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB4312F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43A0AB6112F3951900C6CB91 /* libflam3 */;
+			targetProxy = 43C6FB4412F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB4512F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 435864A012F48F1900C4BFF6 /* flam3-animate */;
+			targetProxy = 43C6FB4612F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB4712F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43C6FAB412F4CE6C008356FC /* flam3-genome */;
+			targetProxy = 43C6FB4812F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB4912F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43C6FAE212F4D039008356FC /* flam3-render */;
+			targetProxy = 43C6FB4A12F4D2DA008356FC /* PBXContainerItemProxy */;
+		};
+		43C6FB4B12F4D2DA008356FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43C6FB0B12F4D165008356FC /* flam3-convert */;
+			targetProxy = 43C6FB4C12F4D2DA008356FC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1817,6 +2201,27 @@
 			};
 			name = StaticAnalyzer;
 		};
+		43C6FBAF12F4D2DA008356FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4380540312F4620900AC483E /* Oxidizer-10.5-Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		43C6FBB012F4D2DA008356FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4380540212F4620900AC483E /* Oxidizer-10.5-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		43C6FBB112F4D2DA008356FC /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4380540412F4620900AC483E /* Oxidizer-10.5-StaticAnalyzer.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
 		A40F1259108A0C1A00B245D7 /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4380540112F4611100AC483E /* Oxidizer-Base.xcconfig */;
@@ -1908,6 +2313,16 @@
 				43C6FB1512F4D165008356FC /* Release */,
 				43C6FB1612F4D165008356FC /* Debug */,
 				43C6FB1712F4D165008356FC /* StaticAnalyzer */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43C6FBAE12F4D2DA008356FC /* Build configuration list for PBXNativeTarget "Oxidizer (10.5)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43C6FBAF12F4D2DA008356FC /* Release */,
+				43C6FBB012F4D2DA008356FC /* Debug */,
+				43C6FBB112F4D2DA008356FC /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
