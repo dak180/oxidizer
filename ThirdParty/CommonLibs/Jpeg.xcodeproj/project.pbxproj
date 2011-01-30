@@ -446,6 +446,20 @@
 			};
 			name = Debug;
 		};
+		431EE51012F5183400E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		431EE51112F5183400E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 430CA75112F294430070E87A /* Jpeg-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -454,6 +468,7 @@
 			buildConfigurations = (
 				4300281E12F24C1E00C31A83 /* Release */,
 				4300281D12F24C1E00C31A83 /* Debug */,
+				431EE51012F5183400E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -463,6 +478,7 @@
 			buildConfigurations = (
 				4300283912F24CFD00C31A83 /* Release */,
 				4300283A12F24CFD00C31A83 /* Debug */,
+				431EE51112F5183400E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

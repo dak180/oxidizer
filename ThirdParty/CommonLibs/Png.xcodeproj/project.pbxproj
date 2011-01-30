@@ -34,14 +34,14 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 43002D1D12F27BEE00C31A83 /* Zlib.xcodeproj */;
 			proxyType = 2;
-			remoteGlobalIDString = 4300283612F24CFC00C31A83 /* Zlib.framework */;
+			remoteGlobalIDString = 4300283612F24CFC00C31A83;
 			remoteInfo = "Mac Framework";
 		};
 		43002D2812F27C0F00C31A83 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43002D1D12F27BEE00C31A83 /* Zlib.xcodeproj */;
 			proxyType = 1;
-			remoteGlobalIDString = 4300283512F24CFC00C31A83 /* Mac Framework */;
+			remoteGlobalIDString = 4300283512F24CFC00C31A83;
 			remoteInfo = "Mac Framework";
 		};
 /* End PBXContainerItemProxy section */
@@ -339,6 +339,20 @@
 			};
 			name = Debug;
 		};
+		431EE50812F5182100E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		431EE50912F5182100E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43002D2B12F27C2B00C31A83 /* Png-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -347,6 +361,7 @@
 			buildConfigurations = (
 				4300281E12F24C1E00C31A83 /* Release */,
 				4300281D12F24C1E00C31A83 /* Debug */,
+				431EE50812F5182100E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -356,6 +371,7 @@
 			buildConfigurations = (
 				4300283912F24CFD00C31A83 /* Release */,
 				4300283A12F24CFD00C31A83 /* Debug */,
+				431EE50912F5182100E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

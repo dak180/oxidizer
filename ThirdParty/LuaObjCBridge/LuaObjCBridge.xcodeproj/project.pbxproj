@@ -887,6 +887,101 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		431EE4E112F517E300E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A0A97312F35F0600C6CB91 /* Lua.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		431EE4E212F517E300E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 43A0A97812F3685900C6CB91 /* LuaObjCBridge-Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = StaticAnalyzer;
+		};
+		431EE4E312F517E300E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = lib;
+				PRODUCT_NAME = lua;
+			};
+			name = StaticAnalyzer;
+		};
+		431EE4E412F517E300E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				EXECUTABLE_PREFIX = "";
+				GCC_PREFIX_HEADER = "$(SRCROOT)/ObjC/LuaObjCBridge-Prefix.h";
+				PRODUCT_NAME = objc;
+			};
+			name = StaticAnalyzer;
+		};
+		431EE4E512F517E300E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib/,
+					/usr/local/lib/lua,
+				);
+				PRODUCT_NAME = lua;
+			};
+			name = StaticAnalyzer;
+		};
+		431EE4E612F517E300E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = "$(HOME)/bin";
+				PREBINDING = NO;
+				PRODUCT_NAME = Test;
+				SKIP_INSTALL = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				ZERO_LINK = NO;
+			};
+			name = StaticAnalyzer;
+		};
+		431EE4E712F517E300E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEPLOYMENT_LOCATION = NO;
+				DEPLOYMENT_POSTPROCESSING = NO;
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				INSTALL_PATH = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = Everything;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = YES;
+				UNSTRIPPED_PRODUCT = YES;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				ZERO_LINK = NO;
+			};
+			name = StaticAnalyzer;
+		};
 		4B277B410A7E9F430051C47A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1082,6 +1177,7 @@
 			buildConfigurations = (
 				4B277B430A7E9F430051C47A /* Release */,
 				4B277B410A7E9F430051C47A /* Debug */,
+				431EE4E612F517E300E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1091,6 +1187,7 @@
 			buildConfigurations = (
 				4B4A60900924CAFC00A2BE53 /* Release */,
 				4B4A608E0924CAFC00A2BE53 /* Debug */,
+				431EE4E212F517E300E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1100,6 +1197,7 @@
 			buildConfigurations = (
 				4B4A60950924CAFC00A2BE53 /* Release */,
 				4B4A60930924CAFC00A2BE53 /* Debug */,
+				431EE4E312F517E300E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1109,6 +1207,7 @@
 			buildConfigurations = (
 				4B4A609A0924CAFC00A2BE53 /* Release */,
 				4B4A60980924CAFC00A2BE53 /* Debug */,
+				431EE4E412F517E300E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1118,6 +1217,7 @@
 			buildConfigurations = (
 				4B4A609F0924CAFC00A2BE53 /* Release */,
 				4B4A609D0924CAFC00A2BE53 /* Debug */,
+				431EE4E512F517E300E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1127,6 +1227,7 @@
 			buildConfigurations = (
 				4B4A60A40924CAFC00A2BE53 /* Release */,
 				4B4A60A20924CAFC00A2BE53 /* Debug */,
+				431EE4E712F517E300E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1136,6 +1237,7 @@
 			buildConfigurations = (
 				4B4A60A90924CAFC00A2BE53 /* Release */,
 				4B4A60A70924CAFC00A2BE53 /* Debug */,
+				431EE4E112F517E300E96CA2 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
