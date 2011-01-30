@@ -6,6 +6,22 @@
 	objectVersion = 45;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		431EE49A12F50C8000E96CA2 /* Oxidizer */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 431EE4A212F50CCA00E96CA2 /* Build configuration list for PBXAggregateTarget "Oxidizer" */;
+			buildPhases = (
+				431EE49912F50C8000E96CA2 /* Package Release */,
+			);
+			dependencies = (
+				431EE49F12F50CAC00E96CA2 /* PBXTargetDependency */,
+				431EE4A112F50CAC00E96CA2 /* PBXTargetDependency */,
+			);
+			name = Oxidizer;
+			productName = Oxidizer;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		4300271D12F08DC200C31A83 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = 4300271A12F08DC200C31A83 /* Credits.html */; };
 		4300271F12F08DC200C31A83 /* version.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4300271C12F08DC200C31A83 /* version.plist */; };
@@ -228,6 +244,20 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		431EE49E12F50CAC00E96CA2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D1107260486CEB800E47090 /* Oxidizer (10.6) */;
+			remoteInfo = "Oxidizer (10.6)";
+		};
+		431EE4A012F50CAC00E96CA2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43C6FB3812F4D2DA008356FC /* Oxidizer (10.5) */;
+			remoteInfo = "Oxidizer (10.5)";
+		};
 		4380542A12F46BEF00AC483E /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 43A0AB0512F390CA00C6CB91 /* Zlib.xcodeproj */;
@@ -1505,6 +1535,7 @@
 				43C6FAB412F4CE6C008356FC /* flam3-genome */,
 				43C6FAE212F4D039008356FC /* flam3-render */,
 				43C6FB0B12F4D165008356FC /* flam3-convert */,
+				431EE49A12F50C8000E96CA2 /* Oxidizer */,
 			);
 		};
 /* End PBXProject section */
@@ -1665,6 +1696,23 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		431EE49912F50C8000E96CA2 /* Package Release */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Package Release";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here\nexit 0";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		4358649E12F48F1900C4BFF6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -1819,6 +1867,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		431EE49F12F50CAC00E96CA2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8D1107260486CEB800E47090 /* Oxidizer (10.6) */;
+			targetProxy = 431EE49E12F50CAC00E96CA2 /* PBXContainerItemProxy */;
+		};
+		431EE4A112F50CAC00E96CA2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43C6FB3812F4D2DA008356FC /* Oxidizer (10.5) */;
+			targetProxy = 431EE4A012F50CAC00E96CA2 /* PBXContainerItemProxy */;
+		};
 		4380542B12F46BEF00AC483E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Mac Framework";
@@ -2096,6 +2154,27 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		431EE49B12F50C8000E96CA2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Oxidizer;
+			};
+			name = Release;
+		};
+		431EE49C12F50C8000E96CA2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Oxidizer;
+			};
+			name = Debug;
+		};
+		431EE49D12F50C8000E96CA2 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Oxidizer;
+			};
+			name = StaticAnalyzer;
+		};
 		435864A512F48F1900C4BFF6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4380546B12F4787F00AC483E /* flam3-animate-Release.xcconfig */;
@@ -2267,6 +2346,16 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		431EE4A212F50CCA00E96CA2 /* Build configuration list for PBXAggregateTarget "Oxidizer" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				431EE49B12F50C8000E96CA2 /* Release */,
+				431EE49C12F50C8000E96CA2 /* Debug */,
+				431EE49D12F50C8000E96CA2 /* StaticAnalyzer */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		435864A912F48F3100C4BFF6 /* Build configuration list for PBXNativeTarget "flam3-animate" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
