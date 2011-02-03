@@ -79,7 +79,7 @@
 	NSTask *task;
     task = [[NSTask alloc] init];
 
-    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-genome", [[ NSBundle mainBundle ] resourcePath ]]];
+    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-genome", [[[ NSBundle mainBundle ] executablePath ] stringByDeletingLastPathComponent]]];
 	[task setEnvironment:environmentDictionary];
 
 	NSFileHandle *flam3Error = [NSFileHandle fileHandleForWritingAtPath:stderrFile];
@@ -181,7 +181,7 @@
 	NSTask *task;
     task = [[NSTask alloc] init];
 
-    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render", [[ NSBundle mainBundle ] resourcePath ]]];
+    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render",[[[ NSBundle mainBundle ] executablePath ] stringByDeletingLastPathComponent]]];
 	[task setEnvironment:environmentDictionary];
 
 	NSPipe *stdOutPipe = [[NSPipe alloc] init];
@@ -263,7 +263,7 @@
 	NSTask *task;
     task = [[NSTask alloc] init];
 
-    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render", [[ NSBundle mainBundle ] resourcePath ]]];
+    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-render",[[[ NSBundle mainBundle ] executablePath ] stringByDeletingLastPathComponent]]];
 	[task setEnvironment:environmentDictionary];
 
     NSPipe *stdOutPipe = [[NSPipe alloc] init];
@@ -420,7 +420,7 @@
 	NSTask *task;
     task = [[NSTask alloc] init];
 
-    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-animate", [[ NSBundle mainBundle ] resourcePath ]]];
+    [task setLaunchPath: [NSString stringWithFormat:@"%@/flam3-animate",[[[ NSBundle mainBundle ] executablePath ] stringByDeletingLastPathComponent]]];
 	[task setEnvironment:environmentDictionary];
 
     NSPipe *stdOutPipe = [[NSPipe alloc] init];
