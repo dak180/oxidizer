@@ -57,6 +57,8 @@
 		4300279712F0973700C31A83 /* oxidizer.icns in Resources */ = {isa = PBXBuildFile; fileRef = 4300279412F0973700C31A83 /* oxidizer.icns */; };
 		435864AA12F48FA300C4BFF6 /* flam3-animate.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4112F391F600C6CB91 /* flam3-animate.c */; };
 		435864AB12F48FA500C4BFF6 /* docstring.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4012F391F600C6CB91 /* docstring.c */; };
+		436B793A12FB483000F81B42 /* flam3.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
+		436B793B12FB484600F81B42 /* flam3.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
 		4380541512F4679400AC483E /* Jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1012F390CA00C6CB91 /* Jpeg.framework */; };
 		4380541612F4679900AC483E /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1A12F390CB00C6CB91 /* Png.framework */; };
 		4380541712F4679E00AC483E /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1D12F390CB00C6CB91 /* Zlib.framework */; };
@@ -536,6 +538,7 @@
 				43C6FBA512F4D2DA008356FC /* Jpeg.framework in Copy Frameworks */,
 				43C6FBA612F4D2DA008356FC /* Png.framework in Copy Frameworks */,
 				43C6FBA712F4D2DA008356FC /* Zlib.framework in Copy Frameworks */,
+				436B793B12FB484600F81B42 /* flam3.framework in Copy Frameworks */,
 				43C6FBA812F4D2DA008356FC /* LuaObjCBridge.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
@@ -565,6 +568,7 @@
 				43A0AB3612F3914800C6CB91 /* Png.framework in Copy Frameworks */,
 				43A0AB3712F3914800C6CB91 /* Zlib.framework in Copy Frameworks */,
 				43A0AB3812F3914800C6CB91 /* LuaObjCBridge.framework in Copy Frameworks */,
+				436B793A12FB483000F81B42 /* flam3.framework in Copy Frameworks */,
 			);
 			name = "Copy Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
