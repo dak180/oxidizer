@@ -104,7 +104,7 @@
 		[flam3Input closeFile];
 	}	
 			
-	
+	 
 	[task waitUntilExit];
 
 	if(xml != nil) {		
@@ -116,7 +116,9 @@
 	NSString *string;
 	NSData *errorData = [NSData dataWithContentsOfFile:stderrFile];
 
-	if(taskStatus != 0 || [errorData length] > 0) {
+	if(taskStatus != 0)
+//		|| [errorData length] > 0) 
+	{
 		
 		
 		if ([errorData length] != 0) {

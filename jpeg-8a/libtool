@@ -135,7 +135,7 @@ old_postinstall_cmds="chmod 644 \$oldlib~\$RANLIB \$oldlib"
 old_postuninstall_cmds=""
 
 # A C compiler.
-LTCC="gcc -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
+LTCC="gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
 
 # LTCC compiler flags.
 LTCFLAGS="-O3"
@@ -266,7 +266,7 @@ LD="/Developer/usr/bin/ld"
 old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$oldlib"
 
 # A language specific compiler.
-CC="gcc -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
+CC="gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
 
 # Is the compiler the GNU compiler?
 with_gcc=yes

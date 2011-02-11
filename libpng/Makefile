@@ -164,7 +164,7 @@ AUTOMAKE = ${SHELL} /Users/vargol/Source/oxidizer/libpng/missing --run automake-
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=none
-CFLAGS = -O -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64
+CFLAGS = -O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo

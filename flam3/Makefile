@@ -132,7 +132,7 @@ AUTOMAKE = ${SHELL} /Users/vargol/Source/oxidizer/flam3/missing --run automake-1
 AWK = awk
 CC = gcc
 CCDEPMODE = depmode=none
-CFLAGS = -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include
+CFLAGS = -isysroot /Developer/SDKs/MacOSX10.5.sdk -mmacosx-version-min=10.4 -arch i386 -arch ppc -arch x86_64 -I/Users/vargol/Source/oxidizer/build_folder_for_flam3/include
 CPP = gcc -E
 CPPFLAGS = -I/usr/include/libxml2 
 CXX = g++
@@ -156,7 +156,7 @@ INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
 INSTALL_SCRIPT = ${INSTALL}
 INSTALL_STRIP_PROGRAM = $(install_sh) -c -s
-LDFLAGS = -arch i386 -arch ppc -arch x86_64 -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib
+LDFLAGS = -arch i386 -arch ppc -arch x86_64 -mmacosx-version-min=10.4 -L/Users/vargol/Source/oxidizer/build_folder_for_flam3/lib
 LIBOBJS = 
 LIBS = -ljpeg -lpthread -lxml2 -lpng -lz 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool

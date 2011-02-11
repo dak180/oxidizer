@@ -241,6 +241,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		
 		_qtKitController = [[QTKitController alloc] init];
 		
+		_theConnection = nil;
+
 		
 	}
 	
@@ -261,15 +263,22 @@ int printProgress(void *nslPtr, double progress, int stage);
 	savePanel = [NSSavePanel savePanel];
 	[savePanel retain];
 	
+	NSNotificationCenter *  center;
+	center = [[NSWorkspace sharedWorkspace] notificationCenter];
 	
+	
+	[center addObserver:self 
+			   selector:@selector(DialogServerLaunched:) 
+				   name:NSWorkspaceDidLaunchApplicationNotification 
+				 object:nil
+	 ];
+	
+	
+	BOOL result = 
 	[[NSWorkspace sharedWorkspace] launchApplication:[NSString stringWithFormat:@"%@/Oxidizer_QT_Dialog_Server.app", 
 													  [[ NSBundle mainBundle ] resourcePath ]]];
 	
-		
-	_theConnection = [NSConnection connectionWithRegisteredName:@"OxidizerQTMovieDialog"
-														  host:nil];
-	_movieDialogServer  = [_theConnection rootProxy]; 
-	[_movieDialogServer retain];
+
 	
 }
 
@@ -490,6 +499,21 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 - (void)renderAnimation {
 	
+	
+	if (_theConnection == nil) {
+	
+		_theConnection = [NSConnection connectionWithRegisteredName:@"OxidizerQTMovieDialog"
+															   host:nil];
+		if(_theConnection == nil) {
+			NSLog(@"Conection failed");
+		}
+		
+		_movieDialogServer  = (<SaveDialogProtocol>)[_theConnection rootProxy]; 
+		[_theConnection retain];
+		[_movieDialogServer retain];
+
+	}
+	
 	BOOL doRender  = [_movieDialogServer showQuickTimeFileMovieDialogue];
 	
 	if(doRender == NO) {
@@ -610,6 +634,8 @@ int printProgress(void *nslPtr, double progress, int stage);
 		int returnCode = [self runFlam3MovieFrameRenderAsTask:xml withEnvironment:taskEnvironment];
 
 		if (returnCode == 0) {
+			NSAutoreleasePool *looppool = [[NSAutoreleasePool alloc] init];
+
 			NSImage *flameImage = [[NSImage alloc] initWithData:[NSData dataWithContentsOfFile:pngFileName]];
 
 			/*
@@ -623,17 +649,15 @@ int printProgress(void *nslPtr, double progress, int stage);
 			}
 			*/
 
-			NSAutoreleasePool *looppool = [[NSAutoreleasePool alloc] init];
 
 			[movie addImage:flameImage forDuration:frameDuration withAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
 																				 @"png ", QTAddImageCodecType,
 																				 nil]];
 			
+			[flameImage release];
+
 			[looppool release];
 
-			
-			[flameImage release];
-			
 		} else {
 			
 			[taskProgressWindow setIsVisible:NO];
@@ -1889,6 +1913,9 @@ int printProgress(void *nslPtr, double progress, int stage);
 	
 }
 
+- (void) DialogServerLaunched:(NSNotification *)note {
+	NSLog(@"launched %@ (%@)\n", [[note userInfo] objectForKey:@"NSApplicationBundleIdentifier"], [[note userInfo] objectForKey:@"NSApplicationProcessIdentifier"]);
+}
 
 
 @end

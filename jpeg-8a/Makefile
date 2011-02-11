@@ -171,7 +171,7 @@ AUTOCONF = ${SHELL} /Users/vargol/Source/oxidizer/jpeg-8a/missing --run autoconf
 AUTOHEADER = echo autoheader ignored
 AUTOMAKE = ${SHELL} /Users/vargol/Source/oxidizer/jpeg-8a/missing --run automake-1.11
 AWK = awk
-CC = gcc -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99
+CC = gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99
 CCDEPMODE = depmode=none
 CFLAGS = -O3
 CPP = cpp
@@ -232,7 +232,7 @@ abs_builddir = /Users/vargol/Source/oxidizer/jpeg-8a
 abs_srcdir = /Users/vargol/Source/oxidizer/jpeg-8a
 abs_top_builddir = /Users/vargol/Source/oxidizer/jpeg-8a
 abs_top_srcdir = /Users/vargol/Source/oxidizer/jpeg-8a
-ac_ct_CC = gcc -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64
+ac_ct_CC = gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64
 ac_ct_DUMPBIN = 
 am__include = include
 am__leading_dot = .
