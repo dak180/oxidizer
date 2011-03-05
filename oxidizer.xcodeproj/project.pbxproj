@@ -20,6 +20,17 @@
 			name = Oxidizer;
 			productName = Oxidizer;
 		};
+		43FD2D251322F1F7009A9E75 /* Autorevision */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 43FD2D2C1322F21D009A9E75 /* Build configuration list for PBXAggregateTarget "Autorevision" */;
+			buildPhases = (
+				43FD2D241322F1F7009A9E75 /* Run Autorevision */,
+			);
+			dependencies = (
+			);
+			name = Autorevision;
+			productName = Autorevision;
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -511,6 +522,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 43C6FB0B12F4D165008356FC;
 			remoteInfo = "flam3-convert";
+		};
+		43FD2D3F1322F4F0009A9E75 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FD2D251322F1F7009A9E75;
+			remoteInfo = Autorevision;
+		};
+		43FD2D421322F4FC009A9E75 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 43FD2D251322F1F7009A9E75;
+			remoteInfo = Autorevision;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1450,6 +1475,7 @@
 				43C6FB4712F4D2DA008356FC /* PBXTargetDependency */,
 				43C6FB4912F4D2DA008356FC /* PBXTargetDependency */,
 				43C6FB4B12F4D2DA008356FC /* PBXTargetDependency */,
+				43FD2D431322F4FC009A9E75 /* PBXTargetDependency */,
 			);
 			name = "Oxidizer (10.5)";
 			productInstallPath = "$(HOME)/Applications";
@@ -1480,6 +1506,7 @@
 				43C6FAD012F4CF2C008356FC /* PBXTargetDependency */,
 				43C6FB0212F4D0FD008356FC /* PBXTargetDependency */,
 				43C6FB2F12F4D24B008356FC /* PBXTargetDependency */,
+				43FD2D401322F4F0009A9E75 /* PBXTargetDependency */,
 			);
 			name = "Oxidizer (10.6)";
 			productInstallPath = "$(HOME)/Applications";
@@ -1540,6 +1567,7 @@
 				43C6FAE212F4D039008356FC /* flam3-render */,
 				43C6FB0B12F4D165008356FC /* flam3-convert */,
 				431EE49A12F50C8000E96CA2 /* Oxidizer */,
+				43FD2D251322F1F7009A9E75 /* Autorevision */,
 			);
 		};
 /* End PBXProject section */
@@ -1714,6 +1742,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
 			shellScript = "# Config\ndSYMlist=`ls -1R  | sed -n 's:Release:&:p' | sed -n 's:.dSYM\\::&:p' | sed -e 's/://'`\nbuildpth=\"build/Release\"\nsnlpout=\"build/out/Oxidizer/Snow Leopard\"\nlpout=\"build/out/Oxidizer/Leopard\"\nsympth=\"build/out/Oxidizer_dSYM\"\n\n\n# Fail if not release\nif [ ! \"${CONFIGURATION}\" = \"Release\" ]; then\n\techo \"error: This should only be run as Release\" >&2\n\texit 1\nfi\n\n# Setup\nrm -Rf \"build/out\"\nmkdir -p \"${snlpout}\"\nmkdir -p \"${lpout}\"\nmkdir -p \"${sympth}\"\n\n# Gather our dSYM bundles\necho \"${dSYMlist}\" | while read symd; do\n\tcp -a \"${symd}\" \"${sympth}/\"\ndone\n\n# Gather in Oxidizer\ncp -a \"${buildpth}/Oxidizer (10.6).app\" \"${snlpout}/\"\ncp -a \"${buildpth}/Oxidizer (10.5).app\" \"${lpout}/\"\ncp -a ./test_scripts \"build/out/Oxidizer/\"\n\n# Zip them up\ncd \"build/out\"\nzip -qr Oxidizer.zip Oxidizer\nzip -qr Oxidizer_dSYM.zip Oxidizer_dSYM\n\nopen .\n\nexit 0\n";
+		};
+		43FD2D241322F1F7009A9E75 /* Run Autorevision */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Run Autorevision";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=$PATH:/sw/bin:/opt/local/bin\n\n${SRCROOT}/Configs/autorevision.sh \"${OBJROOT}/autorevision.h\"\n\nexit \"${?}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2016,6 +2058,16 @@
 			target = 43C6FB0B12F4D165008356FC /* flam3-convert */;
 			targetProxy = 43C6FB4C12F4D2DA008356FC /* PBXContainerItemProxy */;
 		};
+		43FD2D401322F4F0009A9E75 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43FD2D251322F1F7009A9E75 /* Autorevision */;
+			targetProxy = 43FD2D3F1322F4F0009A9E75 /* PBXContainerItemProxy */;
+		};
+		43FD2D431322F4FC009A9E75 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 43FD2D251322F1F7009A9E75 /* Autorevision */;
+			targetProxy = 43FD2D421322F4FC009A9E75 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
@@ -2305,6 +2357,27 @@
 			};
 			name = StaticAnalyzer;
 		};
+		43FD2D261322F1F7009A9E75 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Autorevision;
+			};
+			name = Release;
+		};
+		43FD2D271322F1F7009A9E75 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Autorevision;
+			};
+			name = Debug;
+		};
+		43FD2D281322F1F7009A9E75 /* StaticAnalyzer */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = Autorevision;
+			};
+			name = StaticAnalyzer;
+		};
 		A40F1259108A0C1A00B245D7 /* StaticAnalyzer */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4380540112F4611100AC483E /* Oxidizer-Base.xcconfig */;
@@ -2416,6 +2489,16 @@
 				43C6FBAF12F4D2DA008356FC /* Release */,
 				43C6FBB012F4D2DA008356FC /* Debug */,
 				43C6FBB112F4D2DA008356FC /* StaticAnalyzer */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		43FD2D2C1322F21D009A9E75 /* Build configuration list for PBXAggregateTarget "Autorevision" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43FD2D261322F1F7009A9E75 /* Release */,
+				43FD2D271322F1F7009A9E75 /* Debug */,
+				43FD2D281322F1F7009A9E75 /* StaticAnalyzer */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
