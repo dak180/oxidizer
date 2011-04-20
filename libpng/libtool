@@ -80,13 +80,13 @@ fast_install=needless
 
 # The host system.
 host_alias=
-host=i386-apple-darwin10.6.0
-host_os=darwin10.6.0
+host=i386-apple-darwin10.7.0
+host_os=darwin10.7.0
 
 # The build system.
 build_alias=
-build=i386-apple-darwin10.6.0
-build_os=darwin10.6.0
+build=i386-apple-darwin10.7.0
+build_os=darwin10.7.0
 
 # A BSD- or MS-compatible name lister.
 NM="/Developer/usr/bin/nm"
@@ -138,7 +138,7 @@ old_postuninstall_cmds=""
 LTCC="gcc"
 
 # LTCC compiler flags.
-LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64"
+LTCFLAGS="-O -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64"
 
 # Take the output of nm and produce a listing of raw symbols and C names.
 global_symbol_pipe="sed -n -e 's/^.*[	 ]\\([BCDEGRST][BCDEGRST]*\\)[	 ][	 ]*_\\([_A-Za-z][_A-Za-z0-9]*\\)\$/\\1 _\\2 \\2/p'"

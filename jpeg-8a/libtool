@@ -65,13 +65,13 @@ fast_install=needless
 
 # The host system.
 host_alias=
-host=i386-apple-darwin10.6.0
-host_os=darwin10.6.0
+host=i386-apple-darwin10.7.0
+host_os=darwin10.7.0
 
 # The build system.
 build_alias=
-build=i386-apple-darwin10.6.0
-build_os=darwin10.6.0
+build=i386-apple-darwin10.7.0
+build_os=darwin10.7.0
 
 # A sed program that does not truncate output.
 SED="/usr/bin/sed"
@@ -135,7 +135,7 @@ old_postinstall_cmds="chmod 644 \$oldlib~\$RANLIB \$oldlib"
 old_postuninstall_cmds=""
 
 # A C compiler.
-LTCC="gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
+LTCC="gcc -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
 
 # LTCC compiler flags.
 LTCFLAGS="-O3"
@@ -266,7 +266,7 @@ LD="/Developer/usr/bin/ld"
 old_archive_cmds="\$AR \$AR_FLAGS \$oldlib\$oldobjs~\$RANLIB \$oldlib"
 
 # A language specific compiler.
-CC="gcc -isysroot /Developer/SDKs/MacOSX10.5.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
+CC="gcc -isysroot /Developer/SDKs/MacOSX10.6.sdk -arch i386 -arch ppc -arch x86_64 -std=gnu99"
 
 # Is the compiler the GNU compiler?
 with_gcc=yes
