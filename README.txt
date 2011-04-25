@@ -1,6 +1,6 @@
 Oxidizer - fractal flames for OSX.
 
-Getting oxidizer from CVS.
+Getting oxidizer from git.
 
 Getting Oxidizer from CVS is easy.
 
@@ -10,17 +10,12 @@ Go to or make a folder where you want to put Oxidizer, say ~/Source
 cd ~/Source
 
 type the following command then press enter 
-cvs -d:pserver:anonymous@oxidizer.cvs.sourceforge.net:/cvsroot/oxidizer login 
-
+git clone git://oxidizer.git.sourceforge.net/gitroot/oxidizer/oxidizer
  
-You'll get a prompt for the CVS password, just press enter again. 
-Then enter the following command 
-
-cvs -z3 -d:pserver:anonymous@oxidizer.cvs.sourceforge.net:/cvsroot/oxidizer co -P oxidizer
-
 and a few seconds later you should get a folder called oxidizer in the Source folder.
+
 If these instructions do not work check Sourceforge's version at 
-http://sourceforge.net/cvs/?group_id=159210
+https://sourceforge.net/apps/trac/sourceforge/wiki/Git
 
 Open the project in XCode 3.x and compile.
 
