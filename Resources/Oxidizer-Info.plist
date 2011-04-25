@@ -49,17 +49,17 @@
 	<key>CFBundleAllowMixedLocalizations</key>
 	<true/>
 	<key>GitRevisionStringShort</key>
-	<string>GIT_SHORT_HASH</string>
+	<string>VCS_SHORT_HASH</string>
 	<key>GitRevisionStringFull</key>
-	<string>GIT_FULL_HASH</string>
+	<string>VCS_FULL_HASH</string>
 	<key>CFBundleVersion</key>
-	<string>GIT_NUM</string>
+	<string>VCS_NUM</string>
 	<key>CFBundleShortVersionString</key>
-	<string>GIT_TAG [GIT_SHORT_HASH]</string>
+	<string>VCS_TAG [VCS_SHORT_HASH]</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright © VargolSoft, 2006 - 2011</string>
 	<key>CFBundleGetInfoString</key>
-	<string>GIT_TAG [GIT_SHORT_HASH], Copyright © VargolSoft, 2006 - 2011</string>
+	<string>VCS_TAG [VCS_SHORT_HASH], Copyright © VargolSoft, 2006 - 2011</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>${MACOSX_DEPLOYMENT_TARGET}.0</string>
 	<key>LSRequiresNativeExecution</key>
