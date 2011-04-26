@@ -1,0 +1,5 @@
+Releases should be built from tagged commits where the tag are created as follows:
+
+	git -a <VersionNumber> <commit>
+
+The <VersionNumber> should be formatted like the following examples: 0.8.0.0 | 0.7.5.4 | 0.6.1.0

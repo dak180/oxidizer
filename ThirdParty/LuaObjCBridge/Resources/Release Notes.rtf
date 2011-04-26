@@ -1,0 +1,318 @@
+{\rtf1\mac\ansicpg10000\cocoartf824\cocoasubrtf410
+{\fonttbl\f0\fswiss\fcharset77 Helvetica-Bold;\f1\fswiss\fcharset77 Helvetica;\f2\fswiss\fcharset77 Helvetica-Oblique;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue255;}
+\deftab720
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\qc
+
+\f0\b\fs24 \cf0 LuaObjCBridge 1.4\
+Release Notes
+\f1\b0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+\cf0 \
+LuaObjCBridge is an Objective-C framework for MacOS X. It provides a simple way to embed the Lua scripting language into Cocoa-based programs.\
+\
+As of Version 1.4.1, this software is in maintenance mode. No new features will be added by the original author. On the other hand, all bug reports will be fixed and it will be tested for compatibility with new versions of the Lua engine. Developers who are committed to adding a particular feature to the official distribution are invited to contact the author to discuss possible arrangements.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 Objective-C Files Copyright :\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 The Objective-C portions of this framework were written by Tom McClean, 2005-2007. They are public domain code (use them as you see fit, with or without attribution), and are offered without any warranty of any kind. Suggestions, bug reports and other feedback are welcome, however, to: {\field{\*\fldinst{HYPERLINK "mailto:bugs@pixelballistics.com?subject=LuaObjCBridge"}}{\fldrslt \cf2 \ul \ulc2 bugs@pixelballistics.com}}.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 ANSI-C Files Copyright :\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 \
+The C portions of this framework make up the Lua engine itself. The following notice is included under the terms of the Lua license. \
+\
+Copyright \'a9 1994-2006 Tecgraf, PUC-Rio. \
+\
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \
+\
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. \
+\
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+\cf0 \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 Revision History:\
+\
+Changes to Version 1.4.2:\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 Updated build settings so that header files for dynamic libraries are copied to
+\f2\i  /usr/local/lib/lua
+\f1\i0  rather than
+\f2\i  /usr/local/lib
+\f1\i0  (this keeps your /usr/local/lib directory cleaner, but you may need to update paths in your source code depending on the Bridge accordingly).\
+\
+Added a conditional compile op\cf0 tion \CocoaLigature0 LUA_OBJC_PASS_NSDATA_AS_STRING (undefined by default), which allows NSData objects to be passed to Lua using
+\f2\i \cf0 \CocoaLigature1 lua_objc_pushpropertylist
+\f1\i0 \cf0 \CocoaLigature0 . NSData objects are passed as strings, and converted back to NSData by \cf0 \CocoaLigature1
+\f2\i lua_objc_topropertylist
+\f1\i0 \cf0 \CocoaLigature0 . \CocoaLigature1 \
+\cf0 \
+Caught a bug in
+\f2\i lua_objc_pushpropertylist
+\f1\i0 , in which arrays would be passed to Lua with zero-based indices (whereas the Lua spec requires the first element in an  array to have index 1).
+\f2\i lua_objc_topropertylist
+\f1\i0  did things the right way already.\
+\
+Caught a bug in
+\f2\i lua_objc_pushpropertylist
+\f1\i0 and
+\f2\i  lua_objc_topropertylist
+\f1\i0   which resulted in Lua strings or NSStrings containing a null character from being improperly truncated while passing across the Bridge.\
+\
+With special thanks to John Davies for the NSData hack and bug fixes.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 \
+Changes to Version 1.4.1:\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 Caught bug which caused a Lua panic when
+\f2\i lua_objc_getid()
+\f1\i0  was called on a string, number or boolean without at least one prior call to
+\f2\i lua_objc_setid()
+\f1\i0 on one of these kinds of values.\
+\
+Added a framework for a test suite (this can be modified by users to test their own code and - heaven forbid! - to find bugs in the Bridge itself).
+\f0\b \
+\
+Changes to Version 1.4:\
+\
+
+\f1\b0 Updated the Lua engine to v1.5.2. Added some symbolic #defines to handle differences between versions of Lua and other housekeeping. Future additions to the Bridge which depend on a specific version of the engine do so by manipulating these #defines.\
+\
+Added code to link Lua's garbage collection to ObjC's retain/release mechanism. Every ObjC instance which is passed to Lua is now automatically retained, and automatically released when its Lua representation is garbage collected. This means that your Lua scripts can safely assume an Objective-C instance will not be dealloc'ed out from under them. This feature can be turned off by commenting out the line which #defines LUA_OBJC_RETAIN_AND_RELEASE_INSTANCES.\
+\
+Rewrote
+\f2\i lua_objc_pushpropertylist()
+\f1\i0 and
+\f2\i lua_objc_topropertylist()
+\f1\i0  to take advantage of new metatable features in the updated Lua engine. If you transfer a property-list object into Lua and back out again, the Bridge will return the same object to you rather than a copy if the value has not changed. This puts an end to the inadvertent mutability-changing behaviour of earlier version of the Bridge, whereby an NSMutableString would come out as an NSString, and an NSDictionary as an NSMutableDictionary. In addition, property list objects now appear in Lua scripts as natural types and Objective-C objects at the same time (ie: you can call ObjC methods using the method-calling syntax
+\f2\i and also
+\f1\i0  treat them as numbers, strings, or whatever in standard Lua expressions).\
+\
+Rewrote
+\f2\i lua_objc_methodcall()
+\f1\i0  so that it's a single function rather than two different functions (which compiled separately for either portability or low-level NeXT-Runtime hackiness).\
+\
+Rewrote
+\f2\i lua_objc_methodcall()
+\f1\i0  so that selectors in Lua scripts are strings rather than light userdata. A Lua-representation of a selector looks the same as the parameter to the corresponding Objective-C @selector() directive.\
+\
+Caught a bug in
+\f2\i lua_objc_methodcall()
+\f1\i0  preventing Class objects from being passed correctly between the two environments.\
+\
+Changed the Lua interpreter target build to link to libLua.dylib instead of building the whole Lua source (so that other dynamic libraries use the same Lua library as the interpreter, avoiding subtle runtime bugs). \
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 \
+Changes to Version 1.3:\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 Rewrote
+\f2\i lua_objc_methodcall()
+\f1\i0  and
+\f2\i lua_objc_methodlookup()
+\f1\i0  to work with the GNU runtime, as well as the Apple/NeXT Objective-C runtime that is used by default on MacOS X. This code uses calls to Foundation Kit objects rather than calling the runtime directly, and is therefore expected to work on any platform which has a Foundation Kit.\
+\
+Rewrote and reformatted the documentation to make the source less "busy". Added "#pragma mark" codes throughout (which are recognised by XCode's drop-down file symbol navigator).\
+\
+Fixed a couple of minor syntax errors which only arose when compiling for Intel Macs, and caught a bug in the code for returning structs from methods to Lua.\
+\
+Reorganised Release Notes.rtf (this file).\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 \
+Changes to Version 1.2.6:\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 Fixed a bug which meant that any integral method parameter smaller than int would be incorrectly passed to ObjC methods\
+\
+Fixed a bug in
+\f2\i lua_objc_pushpropertylist()
+\f1\i0  which effectively coerced all unsigned chars to boolean Lua values. Unfortunately, the only way to do this means that NSNumbers will not be passed to Lua as boolean, even if they were created using numberWithBool or something similar.\
+\
+Converted a whole lot of #ifdefs and symbolic constants to symbolic #defines that make more sense to human beings.\
+\
+Attempted to update the whole Bridge so it works on Intel Macs... but there's no guarantee that it will, because I don't have an Intel Mac to test it on. Bug reports are, as always, very welcome.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 \
+Changes to Version 1.2.5:\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 Fixed build settings so the Embedding target doesn't get scattered all over your hard disk.\
+\
+Fixed
+\f2\i  lua_objc_pushpropertylist()
+\f1\i0  to make sure that spurious values aren't left on the Lua stack if you try to push a non-conforming property list.
+\f0\b \
+\
+Changes to Version 1.2.4:\
+\
+
+\f1\b0 Updated the XCode file to XCode 2.2\
+\
+Fixed
+\f2\i  lua_objc_methodcall()
+\f1\i0  to ensure that nil instances/classes are passed to ObjC as nil values, rather than instances of NSNull (note that this involved a change in when
+\f2\i lua_objc_topropertylist()
+\f1\i0 is invoked - it will still produce instances of NSNull when called).
+\f0\b \
+\
+
+\f1\b0 Corrected a bug in
+\f2\i lua_objc_methodcall()
+\f1\i0  which prevented integral function results from being passed correctly from an Objective-C method to the Lua script.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 \
+Changes to Version 1.2.3:\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 Fixed a bug in
+\f2\i lua_objc_topropertylist()
+\f1\i0 which meant that Lua tables were not property converted to Cocoa dictionaries or arrays. There's a strong chance this bug was introduced as a result of changes made in Version 1.2.1 (see below), which makes this little exercise the electronic equivalent of whack-a-mole... ;-)\
+\
+Gave up on trying to get XCode to export the Lua API in the Lua executable, so created a new target which compiles the Lua engine as a dynamically-linked library (installed as
+\f2\i /usr/local/lib/liblua.dylib
+\f1\i0  if you choose deployment build). The Lua executable and the ObjC standalone dynamic library now link against this new dylib, but the LuaObjCBridge framework stands alone.\
+\
+Fixed the file permissions for deployment products so the whole shebang can be rebuilt multiple times without XCode complaining.
+\f0\b \
+\
+Changes to Version 1.2.2:\
+\
+
+\f1\b0 Fixed a bug in
+\f2\i lua_objc_methodlookup()
+\f1\i0 which prevented it from redirecting Lua to
+\f2\i lua_objc_methodcall()
+\f1\i0  when a method was being called. Also fixed
+\f2\i lua_objc_methodcall()
+\f1\i0  so that float and double values are correctly passed between Lua and Objective-C on the PowerPC platform.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 \
+Changes to Version 1.2.1:\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 Fixed a bug in
+\f2\i lua_objc_topropertylist()
+\f1\i0  and
+\f2\i \CocoaLigature0 lua_objc_id_setvalues()
+\f1\i0  which \CocoaLigature1 could cause crashes when using relative stack indices or operating on nested Lua tables.\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 \
+Changes to Version 1.2:\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 \
+Made some minor changes to LuaObjCBridge.[mh] to ensure the bridge can be compiled either as C (to make a standalone dynamic library - see below) or ObjC (to make the original framework).\
+\
+Also made a whole bunch of bugfixes to
+\f2\i lua_objc_pushpropertylist()
+\f1\i0 and
+\f2\i  lua_objc_topropertylist()
+\f1\i0 , including pushing values and keys in the right order, pushing ObjC nil values correctly, and pushing "n" values for tables correctly.\
+\
+Fixed
+\f2\i lua_objc_methodlookup()
+\f1\i0  so that scripts can now access values assigned to the tables which represent ObjC ids in Lua scripts. Unfortunately, when looking up value keys/method names, keys take precendence over method names (so don't assign a value to the key "init", for example).\
+\
+Added function
+\f2\i lua_objc_lookup_class()
+\f1\i0 , which is designed to be called from within Lua scripts. It takes a string as its parameter, and returns a Lua representation of the Objective-C class this string names.\
+\
+Added function
+\f2\i lua_objc_open()
+\f1\i0 , which creates a global table
+\f2\i objc
+\f1\i0 , whose only member is a function
+\f2\i class
+\f1\i0 , pointing to
+\f2\i lua_objc_lookup_class()
+\f1\i0 .\
+\
+Added a new target called
+\f2\i objc
+\f1\i0 , which produces a dynamic library suitable for loading from within Lua scripts using the
+\f2\i loadlib
+\f1\i0  function (this library's initialisation routine is
+\f2\i lua_objc_open()
+\f1\i0  described above; calling it implictly loads the Cocoa framework). This library will be installed in
+\f2\i /usr/local/lib/lua
+\f1\i0  if you compile it with the
+\f2\i Deployment
+\f1\i0  build style.\
+\
+I figured out how to get XCode to actually install deployment products, so the shell script phases have been removed from the various targets. The standalone interpreter is now installed into
+\f2\i /usr/local/bin
+\f1\i0 , and the Lua-ObjC library into
+\f2\i  /usr/local/lib/lua
+\f1\i0 . You will need to run XCode as root, or otherwise give yourself write access to
+\f2\i  /usr/local
+\f1\i0 , to successfully build these targets with the
+\f2\i Deployment
+\f1\i0  build style.\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 Changes to Version 1.1:\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 \
+The bridge now automatically converts Lua values to and from Cocoa property lists when they appear as method parameters or method results.\
+\
+Added a preprocessor flag to ensure that the
+\f2\i loadlib
+\f1\i0  library works from within Lua scripts.\
+\
+Building the framework with the build style
+\f2\i Deployment
+\f1\i0  automatically installs it in
+\f2\i ~/Library/Frameworks
+\f1\i0 . If you don't want this to occur, delete the
+\f2\i Shell Script File
+\f1\i0  phase from the end of the
+\f2\i LuaObjCBridge
+\f1\i0  target.\
+\
+Added a target called
+\f2\i lua
+\f1\i0 , which compiles a standalone lua interpreter (does not depend on the framework). If you build it with the build style
+\f2\i Deployment
+\f1\i0 , it will install the interpreter in
+\f2\i /usr/bin
+\f1\i0  (once again, if you don't want this, delete the
+\f2\i Shell Script File
+\f1\i0  phase from the end of the
+\f2\i lua
+\f1\i0  target).\
+\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f0\b \cf0 Changes to Version 1.0:\
+\pard\tx565\tx1133\tx1700\tx2266\tx2832\tx3401\tx3967\tx4535\tx5102\tx5669\tx6235\tx6802\pardeftab720\ql\qnatural
+
+\f1\b0 \cf0 \
+First public release, warts and all.}

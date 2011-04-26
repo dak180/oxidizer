@@ -1,0 +1,14 @@
+// Zlib settings for all configurations
+
+#include "Base-All.xcconfig"
+
+
+PRODUCT_NAME = Zlib
+GCC_PREPROCESSOR_DEFINITIONS =  $(inherited) HAVE_UNISTD_H
+WARNING_CFLAGS = -Wno-unused-value // Silence warnings that are not ours
+
+PRODUCT_INFO_VERSION = 1.2.5
+PRODUCT_INFO_COPYRIGHT = Copyright © 1995-2010 Jean-loup Gailly and Mark Adler.
+PRODUCT_INFO_SHORTNAME = zlib
+PRODUCT_INFO_PATH = zlib.net/
+PRODUCT_INFO_HASH = c735eab2d659a96e5a594c9e8541ad63

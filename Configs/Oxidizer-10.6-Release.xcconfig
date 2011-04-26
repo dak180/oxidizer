@@ -1,0 +1,7 @@
+// Oxidizer settings for 10.6 Release configuration
+
+#include "Oxidizer-10.6-All.xcconfig"
+
+
+GCC_OPTIMIZATION_LEVEL = 2
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited)
