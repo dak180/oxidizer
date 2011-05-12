@@ -661,8 +661,6 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 			[flameImage release];
 
-			[flameImage release];
-
 			[looppool release];
 
 		} else {

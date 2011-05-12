@@ -13,37 +13,49 @@
 
 + (NSString *)createTemporaryPathWithFileName:(NSString *)fileName {
 
+	@synchronized(self) {
+		
 	[fileName retain];
+
 
 	NSString *folder = [NSString pathWithComponents:[NSArray arrayWithObjects:
 		NSTemporaryDirectory(),
 		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
 		nil]];
-
-	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	//	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
 
 	[fileManager createDirectoryAtPath:folder attributes:nil];
 
 	NSString *pngFileName = [folder stringByAppendingPathComponent:fileName];
-
+	
+	
 	[fileName release];
 
+	[fileManager release];
+	
 	return pngFileName;
+	}
+
 }
 
 
 
 + (void)deleteTemporaryPathAndFile:(NSString *)fileName {
 
+
 	[fileName retain];
 
-	NSFileManager *fileManager = [NSFileManager defaultManager];
+	//	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
 
 	[fileManager removeFileAtPath:fileName handler:nil];
 	[fileManager removeFileAtPath:[fileName stringByDeletingLastPathComponent] handler:nil];
 
 
 	[fileName release];
+	[fileManager release];
 
 	return;
 }
@@ -51,31 +63,48 @@
 
 + (NSString *)createTemporaryPath {
 
-
+@synchronized(self) {
+	
+	
 	NSString *folder = [NSString pathWithComponents:[NSArray arrayWithObjects:
 		NSTemporaryDirectory(),
 		[[NSString stringWithCString:tmpnam(nil) encoding:[NSString defaultCStringEncoding]] lastPathComponent],
 		nil]];
 
-	NSFileManager *fileManager = [NSFileManager defaultManager];
+//	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
 
 	[fileManager createDirectoryAtPath:folder attributes:nil];
+	[fileManager release];
+
 
 	return folder;
+}
+
 }
 
 
 + (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
 
-//	NSString *tempPath = ;
-	NSString *stdoutFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stdoutFile"];
-	NSString *stderrFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stderrFile"];
+	bool openedOkay, openOutOkay;
+	
+	
+//	NSString *stdoutFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stdoutFile"];
+//	NSString *stderrFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stderrFile"];
+	NSString *stdoutFile = [Flam3Task createTemporaryPathWithFileName:@"stdoutFile"];
+	NSString *stderrFile = [Flam3Task createTemporaryPathWithFileName:@"stderrFile"];
 	[stdoutFile retain];
 	[stderrFile retain];
-    [[NSFileManager defaultManager] createFileAtPath:stdoutFile contents:nil attributes:nil];
-    [[NSFileManager defaultManager] createFileAtPath:stderrFile contents:nil attributes:nil];
+	
+	NSFileManager *fileManager = [[NSFileManager alloc] init];
 
-
+	[fileManager createFileAtPath:stdoutFile contents:nil attributes:nil];
+	[fileManager createFileAtPath:stderrFile contents:nil attributes:nil];
+	
+//	NSLog(@"%@", stdoutFile);
+//	NSLog(@"%@", stderrFile);
+	
+	
 	NSTask *task;
     task = [[NSTask alloc] init];
 
@@ -158,6 +187,7 @@
 	[stderrFile release];
 	[stdoutFile release];
 
+	[fileManager release];
 
 	return genomeXML;
 }

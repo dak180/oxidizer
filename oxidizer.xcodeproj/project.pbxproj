@@ -46,13 +46,6 @@
 		4300274F12F08FAE00C31A83 /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273312F08FAE00C31A83 /* QuickView.xib */; };
 		4300275012F08FAE00C31A83 /* RectangleWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273512F08FAE00C31A83 /* RectangleWindow.xib */; };
 		4300275112F08FAE00C31A83 /* TaskProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273712F08FAE00C31A83 /* TaskProgress.xib */; };
-		4300275212F08FAE00C31A83 /* FileViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273A12F08FAE00C31A83 /* FileViews.xib */; };
-		4300275312F08FAE00C31A83 /* GenePool.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273C12F08FAE00C31A83 /* GenePool.xib */; };
-		4300275412F08FAE00C31A83 /* GradientWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273E12F08FAE00C31A83 /* GradientWindow.xib */; };
-		4300275512F08FAE00C31A83 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4300274012F08FAE00C31A83 /* InfoPlist.strings */; };
-		4300275612F08FAE00C31A83 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274212F08FAE00C31A83 /* MainMenu.xib */; };
-		4300275712F08FAE00C31A83 /* RectangleWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274412F08FAE00C31A83 /* RectangleWindow.xib */; };
-		4300275812F08FAE00C31A83 /* TaskProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274612F08FAE00C31A83 /* TaskProgress.xib */; };
 		4300277D12F096B700C31A83 /* LuaConsole.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300277B12F096B700C31A83 /* LuaConsole.xib */; };
 		4300278912F0971D00C31A83 /* document-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278012F0971D00C31A83 /* document-open.png */; };
 		4300278A12F0971D00C31A83 /* document-save.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278112F0971D00C31A83 /* document-save.png */; };
@@ -73,8 +66,6 @@
 		4380541512F4679400AC483E /* Jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1012F390CA00C6CB91 /* Jpeg.framework */; };
 		4380541612F4679900AC483E /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1A12F390CB00C6CB91 /* Png.framework */; };
 		4380541712F4679E00AC483E /* Zlib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1D12F390CB00C6CB91 /* Zlib.framework */; };
-		4380541A12F467E300AC483E /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADD812F3C23400C6CB91 /* libxml2.dylib */; };
-		4380545412F4734100AC483E /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
 		43A0AAFC12F3908700C6CB91 /* OxidizerQTDialogServer.app in Resources */ = {isa = PBXBuildFile; fileRef = 43A0AAFB12F3907300C6CB91 /* OxidizerQTDialogServer.app */; };
 		43A0AB3112F3910400C6CB91 /* Jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1012F390CA00C6CB91 /* Jpeg.framework */; };
 		43A0AB3212F3911400C6CB91 /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1A12F390CB00C6CB91 /* Png.framework */; };
@@ -97,20 +88,15 @@
 		43A0ADF212F3C50800C6CB91 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4D12F391F600C6CB91 /* png.c */; };
 		43A0ADF712F3C53500C6CB91 /* isaac.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4912F391F600C6CB91 /* isaac.c */; };
 		43C6FA9D12F4BC0B008356FC /* flam3-animate in Copy Executables */ = {isa = PBXBuildFile; fileRef = 435864A112F48F1900C4BFF6 /* flam3-animate */; };
-		43C6FAAC12F4BE94008356FC /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4358647312F4892200C4BFF6 /* libm.dylib */; };
 		43C6FAAF12F4BE9A008356FC /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
 		43C6FABC12F4CE6C008356FC /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
 		43C6FAD312F4CF51008356FC /* flam3-genome in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FAC112F4CE6C008356FC /* flam3-genome */; };
 		43C6FAD412F4CF6C008356FC /* flam3-genome.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4312F391F600C6CB91 /* flam3-genome.c */; };
 		43C6FAD512F4CF6F008356FC /* docstring.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4012F391F600C6CB91 /* docstring.c */; };
-		43C6FAD812F4CFCD008356FC /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4358647312F4892200C4BFF6 /* libm.dylib */; };
-		43C6FAD912F4CFCF008356FC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADD812F3C23400C6CB91 /* libxml2.dylib */; };
-		43C6FAE912F4D039008356FC /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4358647312F4892200C4BFF6 /* libm.dylib */; };
 		43C6FAEA12F4D039008356FC /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
 		43C6FAFC12F4D0F1008356FC /* flam3-render in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FAEF12F4D039008356FC /* flam3-render */; };
 		43C6FB0512F4D120008356FC /* flam3-render.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4512F391F600C6CB91 /* flam3-render.c */; };
 		43C6FB0612F4D122008356FC /* docstring.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4012F391F600C6CB91 /* docstring.c */; };
-		43C6FB1212F4D165008356FC /* libm.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4358647312F4892200C4BFF6 /* libm.dylib */; };
 		43C6FB1312F4D165008356FC /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
 		43C6FB2012F4D1CA008356FC /* flam3-convert.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4212F391F600C6CB91 /* flam3-convert.c */; };
 		43C6FB2112F4D1CD008356FC /* docstring.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4012F391F600C6CB91 /* docstring.c */; };
@@ -127,13 +113,6 @@
 		43C6FB5712F4D2DA008356FC /* QuickView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273312F08FAE00C31A83 /* QuickView.xib */; };
 		43C6FB5812F4D2DA008356FC /* RectangleWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273512F08FAE00C31A83 /* RectangleWindow.xib */; };
 		43C6FB5912F4D2DA008356FC /* TaskProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273712F08FAE00C31A83 /* TaskProgress.xib */; };
-		43C6FB5A12F4D2DA008356FC /* FileViews.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273A12F08FAE00C31A83 /* FileViews.xib */; };
-		43C6FB5B12F4D2DA008356FC /* GenePool.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273C12F08FAE00C31A83 /* GenePool.xib */; };
-		43C6FB5C12F4D2DA008356FC /* GradientWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300273E12F08FAE00C31A83 /* GradientWindow.xib */; };
-		43C6FB5D12F4D2DA008356FC /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4300274012F08FAE00C31A83 /* InfoPlist.strings */; };
-		43C6FB5E12F4D2DA008356FC /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274212F08FAE00C31A83 /* MainMenu.xib */; };
-		43C6FB5F12F4D2DA008356FC /* RectangleWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274412F08FAE00C31A83 /* RectangleWindow.xib */; };
-		43C6FB6012F4D2DA008356FC /* TaskProgress.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300274612F08FAE00C31A83 /* TaskProgress.xib */; };
 		43C6FB6112F4D2DA008356FC /* LuaConsole.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4300277B12F096B700C31A83 /* LuaConsole.xib */; };
 		43C6FB6212F4D2DA008356FC /* document-open.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278012F0971D00C31A83 /* document-open.png */; };
 		43C6FB6312F4D2DA008356FC /* document-save.png in Resources */ = {isa = PBXBuildFile; fileRef = 4300278112F0971D00C31A83 /* document-save.png */; };
@@ -198,7 +177,6 @@
 		43C6FBA012F4D2DA008356FC /* Jpeg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1012F390CA00C6CB91 /* Jpeg.framework */; };
 		43C6FBA112F4D2DA008356FC /* Png.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1A12F390CB00C6CB91 /* Png.framework */; };
 		43C6FBA212F4D2DA008356FC /* LuaObjCBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB2812F390CB00C6CB91 /* LuaObjCBridge.framework */; };
-		43C6FBA312F4D2DA008356FC /* flam3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB6212F3951900C6CB91 /* flam3.framework */; };
 		43C6FBA512F4D2DA008356FC /* Jpeg.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1012F390CA00C6CB91 /* Jpeg.framework */; };
 		43C6FBA612F4D2DA008356FC /* Png.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1A12F390CB00C6CB91 /* Png.framework */; };
 		43C6FBA712F4D2DA008356FC /* Zlib.framework in Copy Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0AB1D12F390CB00C6CB91 /* Zlib.framework */; };
@@ -207,9 +185,9 @@
 		43C6FBAB12F4D2DA008356FC /* flam3-genome in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FAC112F4CE6C008356FC /* flam3-genome */; };
 		43C6FBAC12F4D2DA008356FC /* flam3-render in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FAEF12F4D039008356FC /* flam3-render */; };
 		43C6FBAD12F4D2DA008356FC /* flam3-convert in Copy Executables */ = {isa = PBXBuildFile; fileRef = 43C6FB1812F4D165008356FC /* flam3-convert */; };
-		43C6FBCA12F4D64B008356FC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADD812F3C23400C6CB91 /* libxml2.dylib */; };
-		43C6FBCB12F4D651008356FC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 43A0ADD812F3C23400C6CB91 /* libxml2.dylib */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		A4011F581373364C00BDA7D7 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */; };
+		A4011F5D137336CB00BDA7D7 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */; };
 		A404B3330D14355600FE81AC /* RectangleView.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B3310D14355600FE81AC /* RectangleView.m */; };
 		A404B37F0D143FF600FE81AC /* RectangleController.m in Sources */ = {isa = PBXBuildFile; fileRef = A404B37D0D143FF600FE81AC /* RectangleController.m */; };
 		A409CB850C42B58700452FD7 /* Flam3Task.m in Sources */ = {isa = PBXBuildFile; fileRef = A47AC02C0C429786007F1047 /* Flam3Task.m */; settings = {COMPILER_FLAGS = "-fobjc-exceptions"; }; };
@@ -616,13 +594,6 @@
 		4300273412F08FAE00C31A83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = QuickView.xib; sourceTree = "<group>"; };
 		4300273612F08FAE00C31A83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = RectangleWindow.xib; sourceTree = "<group>"; };
 		4300273812F08FAE00C31A83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = TaskProgress.xib; sourceTree = "<group>"; };
-		4300273B12F08FAE00C31A83 /* French */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = French; path = FileViews.xib; sourceTree = "<group>"; };
-		4300273D12F08FAE00C31A83 /* French */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = French; path = GenePool.xib; sourceTree = "<group>"; };
-		4300273F12F08FAE00C31A83 /* French */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = French; path = GradientWindow.xib; sourceTree = "<group>"; };
-		4300274112F08FAE00C31A83 /* French */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; name = French; path = InfoPlist.strings; sourceTree = "<group>"; };
-		4300274312F08FAE00C31A83 /* French */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = French; path = MainMenu.xib; sourceTree = "<group>"; };
-		4300274512F08FAE00C31A83 /* French */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = French; path = RectangleWindow.xib; sourceTree = "<group>"; };
-		4300274712F08FAE00C31A83 /* French */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = French; path = TaskProgress.xib; sourceTree = "<group>"; };
 		4300277C12F096B700C31A83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = LuaConsole.xib; sourceTree = "<group>"; };
 		4300278012F0971D00C31A83 /* document-open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "document-open.png"; path = "Resources/icons/Tango/document-open.png"; sourceTree = "<group>"; };
 		4300278112F0971D00C31A83 /* document-save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "document-save.png"; path = "Resources/icons/Tango/document-save.png"; sourceTree = "<group>"; };
@@ -636,7 +607,6 @@
 		4300279212F0973700C31A83 /* genepool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = genepool.png; path = Resources/icons/genepool.png; sourceTree = "<group>"; };
 		4300279312F0973700C31A83 /* oxidizer_dna.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = oxidizer_dna.png; path = Resources/icons/oxidizer_dna.png; sourceTree = "<group>"; };
 		4300279412F0973700C31A83 /* oxidizer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = oxidizer.icns; path = Resources/icons/oxidizer.icns; sourceTree = "<group>"; };
-		4358647312F4892200C4BFF6 /* libm.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libm.dylib; path = usr/lib/libm.dylib; sourceTree = SDKROOT; };
 		435864A112F48F1900C4BFF6 /* flam3-animate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "flam3-animate"; sourceTree = BUILT_PRODUCTS_DIR; };
 		438053FB12F4611100AC483E /* Oxidizer-10.5-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Oxidizer-10.5-All.xcconfig"; path = "Configs/Oxidizer-10.5-All.xcconfig"; sourceTree = "<group>"; };
 		438053FC12F4611100AC483E /* Oxidizer-10.6-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Oxidizer-10.6-All.xcconfig"; path = "Configs/Oxidizer-10.6-All.xcconfig"; sourceTree = "<group>"; };
@@ -680,7 +650,6 @@
 		43A0AB6312F3951900C6CB91 /* flam3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "flam3-Info.plist"; path = "Resources/flam3-Info.plist"; sourceTree = "<group>"; };
 		43A0ADAA12F3B01500C6CB91 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		43A0ADAC12F3B01500C6CB91 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = System/Library/Frameworks/QTKit.framework; sourceTree = SDKROOT; };
-		43A0ADD812F3C23400C6CB91 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		43C6FAA912F4BDCB008356FC /* SaveDialogProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SaveDialogProtocol.h; path = src/SaveDialogs/SaveDialogProtocol.h; sourceTree = "<group>"; };
 		43C6FAC112F4CE6C008356FC /* flam3-genome */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "flam3-genome"; sourceTree = BUILT_PRODUCTS_DIR; };
 		43C6FAC812F4CEE6008356FC /* flam3-genome-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "flam3-genome-All.xcconfig"; path = "Configs/flam3-genome-All.xcconfig"; sourceTree = "<group>"; };
@@ -697,6 +666,7 @@
 		43C6FBB212F4D2DA008356FC /* Oxidizer (10.5).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oxidizer (10.5).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		43C6FBB612F4D2DA008356FC /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info copy.plist"; path = "Resources/Info copy.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Oxidizer (10.6).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oxidizer (10.6).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
 		A404B3300D14355600FE81AC /* RectangleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RectangleView.h; path = src/RectangleView/RectangleView.h; sourceTree = "<group>"; };
 		A404B3310D14355600FE81AC /* RectangleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RectangleView.m; path = src/RectangleView/RectangleView.m; sourceTree = "<group>"; };
 		A404B37C0D143FF600FE81AC /* RectangleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RectangleController.h; path = src/RectangleView/RectangleController.h; sourceTree = "<group>"; };
@@ -791,7 +761,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43C6FAAC12F4BE94008356FC /* libm.dylib in Frameworks */,
 				43C6FAAF12F4BE9A008356FC /* flam3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -803,7 +772,7 @@
 				4380541512F4679400AC483E /* Jpeg.framework in Frameworks */,
 				4380541612F4679900AC483E /* Png.framework in Frameworks */,
 				4380541712F4679E00AC483E /* Zlib.framework in Frameworks */,
-				4380541A12F467E300AC483E /* libxml2.dylib in Frameworks */,
+				A4011F581373364C00BDA7D7 /* libxml2.2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -812,8 +781,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				43C6FABC12F4CE6C008356FC /* flam3.framework in Frameworks */,
-				43C6FAD812F4CFCD008356FC /* libm.dylib in Frameworks */,
-				43C6FAD912F4CFCF008356FC /* libxml2.dylib in Frameworks */,
+				A4011F5D137336CB00BDA7D7 /* libxml2.2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -821,7 +789,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43C6FAE912F4D039008356FC /* libm.dylib in Frameworks */,
 				43C6FAEA12F4D039008356FC /* flam3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -830,7 +797,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43C6FB1212F4D165008356FC /* libm.dylib in Frameworks */,
 				43C6FB1312F4D165008356FC /* flam3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -845,8 +811,6 @@
 				43C6FBA012F4D2DA008356FC /* Jpeg.framework in Frameworks */,
 				43C6FBA112F4D2DA008356FC /* Png.framework in Frameworks */,
 				43C6FBA212F4D2DA008356FC /* LuaObjCBridge.framework in Frameworks */,
-				43C6FBA312F4D2DA008356FC /* flam3.framework in Frameworks */,
-				43C6FBCB12F4D651008356FC /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -860,8 +824,6 @@
 				43A0AB3112F3910400C6CB91 /* Jpeg.framework in Frameworks */,
 				43A0AB3212F3911400C6CB91 /* Png.framework in Frameworks */,
 				43A0AB3412F3912D00C6CB91 /* LuaObjCBridge.framework in Frameworks */,
-				4380545412F4734100AC483E /* flam3.framework in Frameworks */,
-				43C6FBCA12F4D64B008356FC /* libxml2.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -965,8 +927,7 @@
 				43A0ADAA12F3B01500C6CB91 /* Cocoa.framework */,
 				43A0ADAC12F3B01500C6CB91 /* QTKit.framework */,
 				A42874DC11B1B48E00EAD7BE /* Quartz.framework */,
-				43A0ADD812F3C23400C6CB91 /* libxml2.dylib */,
-				4358647312F4892200C4BFF6 /* libm.dylib */,
+				A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */,
 			);
 			name = "System Frameworks";
 			sourceTree = "<group>";
@@ -1001,7 +962,6 @@
 			isa = PBXGroup;
 			children = (
 				4300272412F08FAD00C31A83 /* English.lproj */,
-				4300273912F08FAE00C31A83 /* French.lproj */,
 			);
 			name = lproj;
 			sourceTree = "<group>";
@@ -1022,21 +982,6 @@
 			);
 			name = English.lproj;
 			path = Resources/lproj/English.lproj;
-			sourceTree = "<group>";
-		};
-		4300273912F08FAE00C31A83 /* French.lproj */ = {
-			isa = PBXGroup;
-			children = (
-				4300273A12F08FAE00C31A83 /* FileViews.xib */,
-				4300273C12F08FAE00C31A83 /* GenePool.xib */,
-				4300273E12F08FAE00C31A83 /* GradientWindow.xib */,
-				4300274012F08FAE00C31A83 /* InfoPlist.strings */,
-				4300274212F08FAE00C31A83 /* MainMenu.xib */,
-				4300274412F08FAE00C31A83 /* RectangleWindow.xib */,
-				4300274612F08FAE00C31A83 /* TaskProgress.xib */,
-			);
-			name = French.lproj;
-			path = Resources/lproj/French.lproj;
 			sourceTree = "<group>";
 		};
 		4300277E12F096EA00C31A83 /* icons */ = {
@@ -1662,13 +1607,6 @@
 				43C6FB5712F4D2DA008356FC /* QuickView.xib in Resources */,
 				43C6FB5812F4D2DA008356FC /* RectangleWindow.xib in Resources */,
 				43C6FB5912F4D2DA008356FC /* TaskProgress.xib in Resources */,
-				43C6FB5A12F4D2DA008356FC /* FileViews.xib in Resources */,
-				43C6FB5B12F4D2DA008356FC /* GenePool.xib in Resources */,
-				43C6FB5C12F4D2DA008356FC /* GradientWindow.xib in Resources */,
-				43C6FB5D12F4D2DA008356FC /* InfoPlist.strings in Resources */,
-				43C6FB5E12F4D2DA008356FC /* MainMenu.xib in Resources */,
-				43C6FB5F12F4D2DA008356FC /* RectangleWindow.xib in Resources */,
-				43C6FB6012F4D2DA008356FC /* TaskProgress.xib in Resources */,
 				43C6FB6112F4D2DA008356FC /* LuaConsole.xib in Resources */,
 				43C6FB6212F4D2DA008356FC /* document-open.png in Resources */,
 				43C6FB6312F4D2DA008356FC /* document-save.png in Resources */,
@@ -1702,13 +1640,6 @@
 				4300274F12F08FAE00C31A83 /* QuickView.xib in Resources */,
 				4300275012F08FAE00C31A83 /* RectangleWindow.xib in Resources */,
 				4300275112F08FAE00C31A83 /* TaskProgress.xib in Resources */,
-				4300275212F08FAE00C31A83 /* FileViews.xib in Resources */,
-				4300275312F08FAE00C31A83 /* GenePool.xib in Resources */,
-				4300275412F08FAE00C31A83 /* GradientWindow.xib in Resources */,
-				4300275512F08FAE00C31A83 /* InfoPlist.strings in Resources */,
-				4300275612F08FAE00C31A83 /* MainMenu.xib in Resources */,
-				4300275712F08FAE00C31A83 /* RectangleWindow.xib in Resources */,
-				4300275812F08FAE00C31A83 /* TaskProgress.xib in Resources */,
 				4300277D12F096B700C31A83 /* LuaConsole.xib in Resources */,
 				4300278912F0971D00C31A83 /* document-open.png in Resources */,
 				4300278A12F0971D00C31A83 /* document-save.png in Resources */,
@@ -2139,62 +2070,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				4300273812F08FAE00C31A83 /* English */,
-			);
-			name = TaskProgress.xib;
-			sourceTree = "<group>";
-		};
-		4300273A12F08FAE00C31A83 /* FileViews.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4300273B12F08FAE00C31A83 /* French */,
-			);
-			name = FileViews.xib;
-			sourceTree = "<group>";
-		};
-		4300273C12F08FAE00C31A83 /* GenePool.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4300273D12F08FAE00C31A83 /* French */,
-			);
-			name = GenePool.xib;
-			sourceTree = "<group>";
-		};
-		4300273E12F08FAE00C31A83 /* GradientWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4300273F12F08FAE00C31A83 /* French */,
-			);
-			name = GradientWindow.xib;
-			sourceTree = "<group>";
-		};
-		4300274012F08FAE00C31A83 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4300274112F08FAE00C31A83 /* French */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		4300274212F08FAE00C31A83 /* MainMenu.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4300274312F08FAE00C31A83 /* French */,
-			);
-			name = MainMenu.xib;
-			sourceTree = "<group>";
-		};
-		4300274412F08FAE00C31A83 /* RectangleWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4300274512F08FAE00C31A83 /* French */,
-			);
-			name = RectangleWindow.xib;
-			sourceTree = "<group>";
-		};
-		4300274612F08FAE00C31A83 /* TaskProgress.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4300274712F08FAE00C31A83 /* French */,
 			);
 			name = TaskProgress.xib;
 			sourceTree = "<group>";
