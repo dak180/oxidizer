@@ -16,7 +16,7 @@
 
 + (NSString *)createTemporaryPathWithFileName:(NSString *)fileName;
 + (void)deleteTemporaryPathAndFile:(NSString *)fileName;
-+ (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary;
++ (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSMutableDictionary *)environmentDictionary;
 + (int)runFlam3RenderAsQuietTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary;
 + (int)runFlam3RenderAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary
 								  usingTaskFrameIndicator:(ProgressIndicatorWithCancel *)taskFrameIndicator

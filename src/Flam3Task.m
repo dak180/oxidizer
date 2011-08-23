@@ -84,10 +84,13 @@
 }
 
 
-+ (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSDictionary *)environmentDictionary {
++ (NSData *)runFlam3GenomeAsTask:(NSData *)xml withEnvironment:(NSMutableDictionary *)environmentDictionary {
 
-	bool openedOkay, openOutOkay;
+	bool openOutOkay;
 	
+	[environmentDictionary setValue:[NSNumber numberWithInt:1] forKey:@"flam27"];
+
+	NSLog(@"%@", environmentDictionary);
 	
 //	NSString *stdoutFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stdoutFile"];
 //	NSString *stderrFile = [[self createTemporaryPath]  stringByAppendingPathComponent:@"stderrFile"];
