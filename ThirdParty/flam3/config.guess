@@ -475,7 +475,7 @@ EOF
 	else
 	    echo i586-dg-dgux${UNAME_RELEASE}
 	fi
-	exit ;;
+ 	exit ;;
     M88*:DolphinOS:*:*)	# DolphinOS (SVR3)
 	echo m88k-dolphin-sysv3
 	exit ;;
@@ -603,22 +603,22 @@ EOF
                   long cpu  = sysconf (_SC_CPU_VERSION);
 
                   switch (cpu)
-		{
-		case CPU_PA_RISC1_0: puts ("hppa1.0"); break;
-		case CPU_PA_RISC1_1: puts ("hppa1.1"); break;
-		case CPU_PA_RISC2_0:
+              	{
+              	case CPU_PA_RISC1_0: puts ("hppa1.0"); break;
+              	case CPU_PA_RISC1_1: puts ("hppa1.1"); break;
+              	case CPU_PA_RISC2_0:
               #if defined(_SC_KERNEL_BITS)
-		    switch (bits)
-			{
-			case 64: puts ("hppa2.0w"); break;
-			case 32: puts ("hppa2.0n"); break;
-			default: puts ("hppa2.0"); break;
-			} break;
+              	    switch (bits)
+              		{
+              		case 64: puts ("hppa2.0w"); break;
+              		case 32: puts ("hppa2.0n"); break;
+              		default: puts ("hppa2.0"); break;
+              		} break;
               #else  /* !defined(_SC_KERNEL_BITS) */
-		    puts ("hppa2.0"); break;
+              	    puts ("hppa2.0"); break;
               #endif
-		default: puts ("hppa1.0"); break;
-		}
+              	default: puts ("hppa1.0"); break;
+              	}
                   exit (0);
               }
 EOF
@@ -785,14 +785,14 @@ EOF
 	echo ${UNAME_MACHINE}-pc-mingw32
 	exit ;;
     i*:windows32*:*)
-	# uname -m includes "-pc" on this system.
-	echo ${UNAME_MACHINE}-mingw32
+    	# uname -m includes "-pc" on this system.
+    	echo ${UNAME_MACHINE}-mingw32
 	exit ;;
     i*:PW*:*)
 	echo ${UNAME_MACHINE}-pc-pw32
 	exit ;;
     *:Interix*:[3456]*)
-	case ${UNAME_MACHINE} in
+    	case ${UNAME_MACHINE} in
 	    x86)
 		echo i586-pc-interix${UNAME_RELEASE}
 		exit ;;
@@ -845,7 +845,7 @@ EOF
 	echo crisv32-axis-linux-gnu
 	exit ;;
     frv:Linux:*:*)
-	echo frv-unknown-linux-gnu
+    	echo frv-unknown-linux-gnu
 	exit ;;
     ia64:Linux:*:*)
 	echo ${UNAME_MACHINE}-unknown-linux-gnu
@@ -940,7 +940,7 @@ EOF
 	echo ${UNAME_MACHINE}-ibm-linux
 	exit ;;
     sh64*:Linux:*:*)
-	echo ${UNAME_MACHINE}-unknown-linux-gnu
+    	echo ${UNAME_MACHINE}-unknown-linux-gnu
 	exit ;;
     sh*:Linux:*:*)
 	echo ${UNAME_MACHINE}-unknown-linux-gnu
@@ -955,7 +955,7 @@ EOF
 	echo x86_64-unknown-linux-gnu
 	exit ;;
     xtensa:Linux:*:*)
-	echo xtensa-unknown-linux-gnu
+    	echo xtensa-unknown-linux-gnu
 	exit ;;
     i*86:Linux:*:*)
 	# The BFD linker knows what the default object file format is, so
@@ -1063,7 +1063,7 @@ EOF
 	fi
 	exit ;;
     i*86:*:5:[678]*)
-	# UnixWare 7.x, OpenUNIX and OpenServer 6.
+    	# UnixWare 7.x, OpenUNIX and OpenServer 6.
 	case `/bin/uname -X | grep "^Machine"` in
 	    *486*)	     UNAME_MACHINE=i486 ;;
 	    *Pentium)	     UNAME_MACHINE=i586 ;;
@@ -1299,7 +1299,7 @@ EOF
 	echo ${UNAME_MACHINE}-unknown-dragonfly`echo ${UNAME_RELEASE}|sed -e 's/[-(].*//'`
 	exit ;;
     *:*VMS:*:*)
-	UNAME_MACHINE=`(uname -p) 2>/dev/null`
+    	UNAME_MACHINE=`(uname -p) 2>/dev/null`
 	case "${UNAME_MACHINE}" in
 	    A*) echo alpha-dec-vms ; exit ;;
 	    I*) echo ia64-dec-vms ; exit ;;

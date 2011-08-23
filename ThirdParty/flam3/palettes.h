@@ -16,29 +16,22 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef palettes_included
+#define palettes_included
 
-#include <stdio.h>
-#include "flam3.h"
-
-#define FLAM3_PNG_COM 8
-
-#ifdef WIN32
-   #define snprintf _snprintf
-#endif
 
 typedef struct {
-
-   char *genome;
-   char *badvals;
-   char *numiters;
-   char *rtime;
-
-} flam3_img_comments;
+    int number;
+    char name[flam3_name_len];
+    unsigned char colors[256][3];
+} lib_palette;
 
 
-void write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc);
-void write_png(FILE *file, void *image, int width, int height, flam3_img_comments *fpc, int bpc);
+void rgb2hsv(double *rgb, double *hsv);
+void hsv2rgb(double *hsv, double *rgb);
 
-/* returns RGBA pixel array or NULL on failure */
-unsigned char *read_png(FILE *file, int *width, int *height);
-unsigned char *read_jpeg(FILE *file, int *width, int *height);
+double flam3_calc_alpha(double density, double gamma, double linrange);
+void flam3_calc_newrgb(double *cbuf, double ls, double highpow, double *newrgb);
+
+#endif
+

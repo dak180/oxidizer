@@ -35,7 +35,7 @@
 #define HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-#define HAVE_STDLIB_H
+#define HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
@@ -52,6 +52,10 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #define HAVE_UNISTD_H 1
 
+/* Define to the sub-directory in which libtool stores uninstalled libraries.
+   */
+#define LT_OBJDIR ".libs/"
+
 /* Name of package */
 #define PACKAGE "flam3"
 
@@ -67,6 +71,9 @@
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME ""
 
+/* Define to the home page for this package. */
+#define PACKAGE_URL ""
+
 /* Define to the version of this package. */
 #define PACKAGE_VERSION ""
 
@@ -77,7 +84,7 @@
 #define TIME_WITH_SYS_TIME 1
 
 /* Version number of package */
-#define VERSION "2.7.19"
+#define VERSION "3.0"
 
 /* Define to empty if `const' does not conform to ANSI C. */
 /* #undef const */

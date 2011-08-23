@@ -16,29 +16,20 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef parser_included
+#define parser_included
 
-#include <stdio.h>
-#include "flam3.h"
+#include "private.h"
 
-#define FLAM3_PNG_COM 8
+int flam3_atoi(char *nstr);
+double flam3_atof(char *nstr);
+int var2n(const char *s);
+int flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan);
 
-#ifdef WIN32
-   #define snprintf _snprintf
+void scan_for_flame_nodes(xmlNode *cur_node, char *parent_file, int default_flag, flam3_genome **all_cp, int *all_ncps);
+int parse_flame_element(xmlNode *flame_node, flam3_genome *loc_current_cp);
+int parse_xform_xml(xmlNode *chld_node,flam3_xform *this_xform, int *num_xaos, 
+                    flam3_chaos_entry **xaos, int numstd, int motionxf);
+void flam3_edit_print(FILE *f, xmlNodePtr editNode, int tabs, int formatting);
+int flam3_interp_missing_colors(flam3_genome *cp);
 #endif
-
-typedef struct {
-
-   char *genome;
-   char *badvals;
-   char *numiters;
-   char *rtime;
-
-} flam3_img_comments;
-
-
-void write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_comments *fpc);
-void write_png(FILE *file, void *image, int width, int height, flam3_img_comments *fpc, int bpc);
-
-/* returns RGBA pixel array or NULL on failure */
-unsigned char *read_png(FILE *file, int *width, int *height);
-unsigned char *read_jpeg(FILE *file, int *width, int *height);

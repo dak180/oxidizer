@@ -1,10 +1,10 @@
 /*
-    flame - cosmic recursive fractal flames
-    Copyright (C) 1992-2008 Spotworks LLC
+    FLAM3 - cosmic recursive fractal flames
+    Copyright (C) 1992-2009 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -13,8 +13,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
@@ -42,7 +41,7 @@ static char *the_docstring1 =
 "\n"
 "    env dtime=5 prefix=foo. in=test.flame flam3-animate\n"
 "\n"
-"say\n"
+"use the following set of commands:\n"
 "\n"
 "    set dtime=5\n"
 "    set prefix=foo.\n"
@@ -72,7 +71,7 @@ static char *the_docstring1 =
 "isaac_seed      random      character-based seed for iteration loop randomness, defaults to time\n"
 "nthreads        0           number of threads to use for render.  default auto-detects.\n"
 "verbose         0           if non-zero then print progress meter on stderr\n"
-"bits            33          also 16, 32, or 64: sets bit-width of internal buffers (33 means 32-bit floating-point)\n"
+"bits            33          also 32 or 64: sets bit-width of internal buffers (33 means 32-bit floating-point)\n"
 "bpc             8           bits per color channel: png supports 16, all others are 8 only (render/animate)\n"
 "image           filename    replace palette with png, jpg, or ppm image\n"
 "use_vars        -1          comma separated list of variation #'s to use when generating a random flame (genome only)\n"
@@ -104,6 +103,14 @@ static char *the_docstring1 =
 "enable_jpeg_comments   1    enables comments in the jpeg header (render and animate)\n"
 "enable_png_comments    1    enables comments in the png header (render and animate)\n"
 "\n"
+"earlyclip       0               enables the early clipping of rgb values for better antialiasing and resizing\n"
+"                                defaults to 0 for backwards compatibility\n"
+"flam27          0               flam3 2.7 compatibility mode; ensures generated genomes can be used by flam3 2.7.18\n"
+"stagger         0               affects simultaneity of xform interpolation during genome interpolation.\n"
+"                                represents how 'separate' the xforms are interpolated.  set to 1 for each\n"
+"                                xform to be interpolated individually, fractions control interp overlap.\n"
+"apo_palette     0               set this to 1 to use only the first 255 elements of the palette (apophysis compatibility)\n"
+
 "\n"
 "for example:\n"
 "\n"
@@ -167,7 +174,7 @@ static char *the_docstring1 =
 "\n"
 "    env begin=20 end=40 flam3-animate < seq.flam3\n"
 "\n"
-"the other two methods are harder to use becaues they produce file that\n"
+"the other two methods are harder to use becaues they produce files that\n"
 "are only good for one frame of animation.  the output consists of 3\n"
 "control points, one for the time requested, one before and one after.\n"
 "that allows proper motion blur.  for example:\n"

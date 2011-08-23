@@ -83,7 +83,6 @@
 		43A0ADE912F3C4DE00C6CB91 /* private.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A0AB4E12F391F600C6CB91 /* private.h */; };
 		43A0ADEA12F3C4E400C6CB91 /* img.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A0AB4812F391F600C6CB91 /* img.h */; };
 		43A0ADEB12F3C4E800C6CB91 /* config.h in Headers */ = {isa = PBXBuildFile; fileRef = 43A0AB3F12F391F600C6CB91 /* config.h */; };
-		43A0ADEF12F3C4F900C6CB91 /* flam3-palettes.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4412F391F600C6CB91 /* flam3-palettes.c */; };
 		43A0ADF112F3C50700C6CB91 /* jpeg.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4C12F391F600C6CB91 /* jpeg.c */; };
 		43A0ADF212F3C50800C6CB91 /* png.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4D12F391F600C6CB91 /* png.c */; };
 		43A0ADF712F3C53500C6CB91 /* isaac.c in Sources */ = {isa = PBXBuildFile; fileRef = 43A0AB4912F391F600C6CB91 /* isaac.c */; };
@@ -202,6 +201,7 @@
 		A422B9A80B16316E00019559 /* GenePoolController.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9A70B16316E00019559 /* GenePoolController.m */; };
 		A422B9AB0B1631A000019559 /* GenePoolModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A422B9AA0B1631A000019559 /* GenePoolModel.m */; };
 		A42874DD11B1B48E00EAD7BE /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A42874DC11B1B48E00EAD7BE /* Quartz.framework */; };
+		A42F8FB513DB326E00080395 /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */; };
 		A43E448D0DE5F58F0001BB6A /* GenomeImages.m in Sources */ = {isa = PBXBuildFile; fileRef = A43E448C0DE5F58F0001BB6A /* GenomeImages.m */; };
 		A4467C4010D030CA00252273 /* ClipboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4467C3F10D030CA00252273 /* ClipboardController.m */; };
 		A46AB1911285B46F004EDB36 /* ImageKitController.m in Sources */ = {isa = PBXBuildFile; fileRef = A46AB18E1285B46F004EDB36 /* ImageKitController.m */; };
@@ -213,6 +213,12 @@
 		A49F64690EF5516F00ACB40A /* QuickViewImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A49F64680EF5516F00ACB40A /* QuickViewImageView.m */; };
 		A4A3027D0A28995D002828D9 /* BreedingController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3027C0A28995D002828D9 /* BreedingController.m */; };
 		A4A3810E0A4F236700E7364C /* DnDImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = A4A3810D0A4F236700E7364C /* DnDImageView.m */; };
+		A4B136E613DB29FF00AF48FE /* palettes.c in Sources */ = {isa = PBXBuildFile; fileRef = A4B136D413DB279D00AF48FE /* palettes.c */; };
+		A4B136E913DB2A0200AF48FE /* parser.c in Sources */ = {isa = PBXBuildFile; fileRef = A4B136D513DB279D00AF48FE /* parser.c */; };
+		A4B136ED13DB2A0C00AF48FE /* variations.c in Sources */ = {isa = PBXBuildFile; fileRef = A4B136D913DB27B200AF48FE /* variations.c */; };
+		A4B1373813DB304200AF48FE /* filters.c in Sources */ = {isa = PBXBuildFile; fileRef = A4B1373513DB303A00AF48FE /* filters.c */; };
+		A4B1373B13DB304F00AF48FE /* interpolation.c in Sources */ = {isa = PBXBuildFile; fileRef = A4B1371913DB2E2B00AF48FE /* interpolation.c */; };
+		A4B1375D13DB31D200AF48FE /* libxml2.2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */; };
 		A4B6039A0F7D99EF001A76B3 /* GradientSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B603990F7D99EF001A76B3 /* GradientSlider.m */; };
 		A4B9F1C80E9D119F0004246F /* AutoPreviewStepper.m in Sources */ = {isa = PBXBuildFile; fileRef = A4B9F1C70E9D119F0004246F /* AutoPreviewStepper.m */; };
 		A4BE79470DA6DD3700160702 /* GradientController.m in Sources */ = {isa = PBXBuildFile; fileRef = A4BE79440DA6DD3700160702 /* GradientController.m */; };
@@ -634,7 +640,6 @@
 		43A0AB4112F391F600C6CB91 /* flam3-animate.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "flam3-animate.c"; path = "ThirdParty/flam3/flam3-animate.c"; sourceTree = "<group>"; };
 		43A0AB4212F391F600C6CB91 /* flam3-convert.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "flam3-convert.c"; path = "ThirdParty/flam3/flam3-convert.c"; sourceTree = "<group>"; };
 		43A0AB4312F391F600C6CB91 /* flam3-genome.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "flam3-genome.c"; path = "ThirdParty/flam3/flam3-genome.c"; sourceTree = "<group>"; };
-		43A0AB4412F391F600C6CB91 /* flam3-palettes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "flam3-palettes.c"; path = "ThirdParty/flam3/flam3-palettes.c"; sourceTree = "<group>"; };
 		43A0AB4512F391F600C6CB91 /* flam3-render.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = "flam3-render.c"; path = "ThirdParty/flam3/flam3-render.c"; sourceTree = "<group>"; };
 		43A0AB4612F391F600C6CB91 /* flam3.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = flam3.c; path = ThirdParty/flam3/flam3.c; sourceTree = "<group>"; };
 		43A0AB4712F391F600C6CB91 /* flam3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = flam3.h; path = ThirdParty/flam3/flam3.h; sourceTree = "<group>"; };
@@ -645,7 +650,6 @@
 		43A0AB4C12F391F600C6CB91 /* jpeg.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = jpeg.c; path = ThirdParty/flam3/jpeg.c; sourceTree = "<group>"; };
 		43A0AB4D12F391F600C6CB91 /* png.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = png.c; path = ThirdParty/flam3/png.c; sourceTree = "<group>"; };
 		43A0AB4E12F391F600C6CB91 /* private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = private.h; path = ThirdParty/flam3/private.h; sourceTree = "<group>"; };
-		43A0AB4F12F391F600C6CB91 /* rect.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = rect.c; path = ThirdParty/flam3/rect.c; sourceTree = "<group>"; };
 		43A0AB6212F3951900C6CB91 /* flam3.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = flam3.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		43A0AB6312F3951900C6CB91 /* flam3-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "flam3-Info.plist"; path = "Resources/flam3-Info.plist"; sourceTree = "<group>"; };
 		43A0ADAA12F3B01500C6CB91 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -716,6 +720,16 @@
 		A4A3027C0A28995D002828D9 /* BreedingController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BreedingController.m; path = src/BreedingController.m; sourceTree = "<group>"; };
 		A4A3810C0A4F236700E7364C /* DnDImageView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = DnDImageView.h; path = src/DnDImageView.h; sourceTree = "<group>"; };
 		A4A3810D0A4F236700E7364C /* DnDImageView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; name = DnDImageView.m; path = src/DnDImageView.m; sourceTree = "<group>"; };
+		A4B136D413DB279D00AF48FE /* palettes.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = palettes.c; path = ThirdParty/flam3/palettes.c; sourceTree = "<group>"; };
+		A4B136D513DB279D00AF48FE /* parser.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = parser.c; path = ThirdParty/flam3/parser.c; sourceTree = "<group>"; };
+		A4B136D913DB27B200AF48FE /* variations.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = variations.c; path = ThirdParty/flam3/variations.c; sourceTree = "<group>"; };
+		A4B1371813DB2E2B00AF48FE /* filters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = filters.h; path = ThirdParty/flam3/filters.h; sourceTree = "<group>"; };
+		A4B1371913DB2E2B00AF48FE /* interpolation.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = interpolation.c; path = ThirdParty/flam3/interpolation.c; sourceTree = "<group>"; };
+		A4B1371A13DB2E2B00AF48FE /* interpolation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = interpolation.h; path = ThirdParty/flam3/interpolation.h; sourceTree = "<group>"; };
+		A4B1371B13DB2E2B00AF48FE /* palettes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = palettes.h; path = ThirdParty/flam3/palettes.h; sourceTree = "<group>"; };
+		A4B1371C13DB2E2B00AF48FE /* parser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = parser.h; path = ThirdParty/flam3/parser.h; sourceTree = "<group>"; };
+		A4B1371D13DB2E2B00AF48FE /* variations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = variations.h; path = ThirdParty/flam3/variations.h; sourceTree = "<group>"; };
+		A4B1373513DB303A00AF48FE /* filters.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = filters.c; path = ThirdParty/flam3/filters.c; sourceTree = "<group>"; };
 		A4B603980F7D99EF001A76B3 /* GradientSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GradientSlider.h; path = src/Controls/GradientSlider.h; sourceTree = "<group>"; };
 		A4B603990F7D99EF001A76B3 /* GradientSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GradientSlider.m; path = src/Controls/GradientSlider.m; sourceTree = "<group>"; };
 		A4B9F1C60E9D119F0004246F /* AutoPreviewStepper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AutoPreviewStepper.h; path = src/Controls/AutoPreviewStepper.h; sourceTree = "<group>"; };
@@ -761,6 +775,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A42F8FB513DB326E00080395 /* libxml2.2.dylib in Frameworks */,
 				43C6FAAF12F4BE9A008356FC /* flam3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -780,8 +795,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				43C6FABC12F4CE6C008356FC /* flam3.framework in Frameworks */,
 				A4011F5D137336CB00BDA7D7 /* libxml2.2.dylib in Frameworks */,
+				43C6FABC12F4CE6C008356FC /* flam3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -789,6 +804,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4B1375D13DB31D200AF48FE /* libxml2.2.dylib in Frameworks */,
 				43C6FAEA12F4D039008356FC /* flam3.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1111,23 +1127,31 @@
 		43A0AB7F12F3976300C6CB91 /* Code */ = {
 			isa = PBXGroup;
 			children = (
+				A4B1371D13DB2E2B00AF48FE /* variations.h */,
 				43A0AB3F12F391F600C6CB91 /* config.h */,
 				43A0AB4012F391F600C6CB91 /* docstring.c */,
 				43A0AB4112F391F600C6CB91 /* flam3-animate.c */,
 				43A0AB4212F391F600C6CB91 /* flam3-convert.c */,
 				43A0AB4312F391F600C6CB91 /* flam3-genome.c */,
-				43A0AB4412F391F600C6CB91 /* flam3-palettes.c */,
 				43A0AB4512F391F600C6CB91 /* flam3-render.c */,
+				A4B1373513DB303A00AF48FE /* filters.c */,
+				A4B1371813DB2E2B00AF48FE /* filters.h */,
 				43A0AB4612F391F600C6CB91 /* flam3.c */,
 				43A0AB4712F391F600C6CB91 /* flam3.h */,
+				A4B1371913DB2E2B00AF48FE /* interpolation.c */,
+				A4B1371A13DB2E2B00AF48FE /* interpolation.h */,
 				43A0AB4812F391F600C6CB91 /* img.h */,
 				43A0AB4912F391F600C6CB91 /* isaac.c */,
 				43A0AB4A12F391F600C6CB91 /* isaac.h */,
 				43A0AB4B12F391F600C6CB91 /* isaacs.h */,
 				43A0AB4C12F391F600C6CB91 /* jpeg.c */,
+				A4B136D413DB279D00AF48FE /* palettes.c */,
+				A4B1371B13DB2E2B00AF48FE /* palettes.h */,
+				A4B136D513DB279D00AF48FE /* parser.c */,
+				A4B1371C13DB2E2B00AF48FE /* parser.h */,
 				43A0AB4D12F391F600C6CB91 /* png.c */,
 				43A0AB4E12F391F600C6CB91 /* private.h */,
-				43A0AB4F12F391F600C6CB91 /* rect.c */,
+				A4B136D913DB27B200AF48FE /* variations.c */,
 			);
 			name = Code;
 			sourceTree = "<group>";
@@ -1704,11 +1728,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A4B1373813DB304200AF48FE /* filters.c in Sources */,
 				43A0ADE812F3C4D800C6CB91 /* flam3.c in Sources */,
-				43A0ADEF12F3C4F900C6CB91 /* flam3-palettes.c in Sources */,
-				43A0ADF112F3C50700C6CB91 /* jpeg.c in Sources */,
-				43A0ADF212F3C50800C6CB91 /* png.c in Sources */,
+				A4B1373B13DB304F00AF48FE /* interpolation.c in Sources */,
 				43A0ADF712F3C53500C6CB91 /* isaac.c in Sources */,
+				43A0ADF112F3C50700C6CB91 /* jpeg.c in Sources */,
+				A4B136E613DB29FF00AF48FE /* palettes.c in Sources */,
+				A4B136E913DB2A0200AF48FE /* parser.c in Sources */,
+				43A0ADF212F3C50800C6CB91 /* png.c in Sources */,
+				A4B136ED13DB2A0C00AF48FE /* variations.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,10 +1,10 @@
 /*
-    flame - cosmic recursive fractal flames
-    Copyright (C) 2002-2008 Spotworks LLC
+    FLAM3 - cosmic recursive fractal flames
+    Copyright (C) 1992-2009 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -13,8 +13,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
@@ -28,8 +27,10 @@
 #include "flam3.h"
 #include "private.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <winsock.h> /* for htons */
+#else
+#include <arpa/inet.h>
 #endif
 
 void write_png(FILE *file, void *image, int width, int height, flam3_img_comments *fpc, int bpc) {
@@ -56,7 +57,7 @@ void write_png(FILE *file, void *image, int width, int height, flam3_img_comment
   text[2].compression = PNG_TEXT_COMPRESSION_NONE;
   text[2].key = "flam3_url";
   text[2].text = url;
-
+  
   text[3].compression = PNG_TEXT_COMPRESSION_NONE;
   text[3].key = "flam3_id";
   text[3].text = id;
@@ -78,8 +79,8 @@ void write_png(FILE *file, void *image, int width, int height, flam3_img_comment
   text[7].text = fpc->genome;
 
   for (i = 0; i < height; i++)
-    rows[i] = image + i * width * 4 * bpc;
-
+    rows[i] = (unsigned char *)image + i * width * 4 * bpc;
+      
   png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING,
 				    NULL, NULL, NULL);
   info_ptr = png_create_info_struct(png_ptr);
@@ -97,33 +98,21 @@ void write_png(FILE *file, void *image, int width, int height, flam3_img_comment
 	       PNG_INTERLACE_NONE,
 	       PNG_COMPRESSION_TYPE_BASE,
 	       PNG_FILTER_TYPE_BASE);
-
-  /* Swap the bytes if we're doing 16bpc and on little-endian platform */
-  if (2==bpc && testbe != htons(testbe)) {
-    unsigned short *im = (unsigned short *)image;
-    for (i=0; i<height*width*4; i++) {
-       im[i] = htons(im[i]);
-    }
-  }
-
-
-
+	       
   if (pngcom_enable==1)
 	  png_set_text(png_ptr, info_ptr, text, FLAM3_PNG_COM);
 
   png_write_info(png_ptr, info_ptr);
+
+  /* Must set this after the write_info */
+  if (2==bpc && testbe != htons(testbe)) {
+     png_set_swap(png_ptr);
+  }
+
   png_write_image(png_ptr, (png_bytepp) rows);
   png_write_end(png_ptr, info_ptr);
   png_destroy_write_struct(&png_ptr, &info_ptr);
   free(rows);
-
-/* Swap back the bytes in case we're doing strips */
-  if (2==bpc && testbe != htons(testbe)) {
-      unsigned short *im = (unsigned short *)image;
-	  for (i=0; i<height*width*4; i++) {
-	      im[i] = htons(im[i]);
-	  }
-  }
 
 }
 
@@ -231,7 +220,7 @@ unsigned char *read_png(FILE *ifp, int *width, int *height) {
   for (y = 0 ; y < info_ptr->height ; y++)
     free (png_image[y]);
   free (png_image);
-  png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)NULL);
+  png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)NULL);  
 
   return q;
 }

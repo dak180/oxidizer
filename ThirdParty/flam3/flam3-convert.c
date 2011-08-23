@@ -1,10 +1,10 @@
 /*
-    flame - cosmic recursive fractal flames
-    Copyright (C) 2003-2008 Spotworks LLC
+    FLAM3 - cosmic recursive fractal flames
+    Copyright (C) 1992-2009 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -13,8 +13,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "private.h"
@@ -79,13 +78,13 @@ void parse_control_point_old(char **ss, flam3_genome *cp) {
 
    memset(cp, 0, sizeof(flam3_genome));
 
-   flam3_add_xforms(cp, flam3_nxforms, 0);
+   flam3_add_xforms(cp, flam3_nxforms, 0, 0);
 
    for (i = 0; i < flam3_nxforms; i++) {
       cp->xform[i].density = 0.0;
-      cp->xform[i].color[0] = i&1;
-      cp->xform[i].color[1] = (i&2)>>1;
-      cp->xform[i].symmetry = 0;
+      cp->xform[i].color = i&1;
+      cp->xform[i].color_speed = 0.5;
+      cp->xform[i].animate = 1.0;
       cp->xform[i].var[0] = 1.0;
       for (j = 1; j < flam3_nvariations; j++)
 	 cp->xform[i].var[j] = 0.0;
@@ -142,11 +141,11 @@ void parse_control_point_old(char **ss, flam3_genome *cp) {
 	 slot = &cm;
 	 set_cm = 1;
       } else if (streql("palette", argv[i])) {
-	  slot = &cp->palette[0][0];
+	  slot = &cp->palette[0].color[0];
       } else if (streql("density", argv[i]))
 	 slot = &cp->xform[(int)xf].density;
       else if (streql("color", argv[i]))
-	 slot = &cp->xform[(int)xf].color[0];
+	 slot = &cp->xform[(int)xf].color;
       else if (streql("coefs", argv[i])) {
 	 slot = cp->xform[(int)xf].c[0];
 	 cp->xform[(int)xf].density = 1.0;
@@ -190,7 +189,7 @@ main(int argc, char **argv)
   char *s, *ss;
 
 #ifdef WIN32
-
+   
   char *slashloc;
   char palpath[256],exepath[256];
 
@@ -203,8 +202,8 @@ main(int argc, char **argv)
 	}
 	putenv(palpath);
 
-#endif
-
+#endif           
+  
    if (1 != argc) {
      docstring();
      exit(0);

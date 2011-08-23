@@ -13,7 +13,7 @@ instead of a command like
 
     env dtime=5 prefix=foo. in=test.flame flam3-animate
 
-say
+use the following set of commands:
 
     set dtime=5
     set prefix=foo.
@@ -25,6 +25,16 @@ As usual, to configure, build, and install:
     ./configure
     make
     sudo make install
+
+If this has problems, you may need to re-generate some configuration
+files.  Do the following steps:
+
+    libtoolize
+    aclocal
+    automake
+    autoconf
+
+and then try to configure and install as above.
 
 This package depends on development packages for libz, libpng,
 libjpeg, and libxml2.
@@ -64,7 +74,7 @@ isaac_seed      random          string to be used in generating random seed.  de
 seed            random          integer seed for random numbers, defaults to time+pid.  deprecated.
 nthreads        auto            number of threads to use (render and animate)
 verbose         0               if non-zero then print progress meter on stderr
-bits            33              also 16, 32, or 64: sets bit-width of internal buffers (33 means 32-bit floating-point)
+bits            33              also 32 or 64: sets bit-width of internal buffers (33 means 32-bit floating-point)
 bpc             8               bits per channel of color: only png supports 16 (render/animate)
 image           filename        replace palette with png, jpg, or ppm image
 use_vars        -1              comma sep list of variation #'s to use when generating a random flame (genome only)
@@ -95,6 +105,14 @@ intpalette      unset           round palette entries for importing into older A
 insert_palette  unset           insert the palette into the image.
 enable_jpeg_comments  1         enables comments in the jpeg header (render and animate)
 enable_png_comments   1         enables comments in the png header (render and animate)
+
+earlyclip       0               enables the early clipping of rgb values for better antialiasing and resizing
+                                defaults to 0 for backwards compatibility
+flam27          0               flam3 2.7 compatibility mode; ensures generated genomes can be used by flam3 2.7.18
+stagger         0               affects simultaneity of xform interpolation during genome interpolation.
+                                represents how 'separate' the xforms are interpolated.  set to 1 for each
+                                xform to be interpolated individually, fractions control interp overlap.
+apo_palette     0               set this to 1 to use only the first 255 elements of the palette (apophysis compatibility)
 
 for example:
 
@@ -174,15 +192,8 @@ continuous electric sheep genetic crossfades are created like this:
     env inter=test.flam3 frame=10 nframes=20 flam3-genome > inter10.flam3
     env frame=10 flam3-animate < inter10.flam3
 
-A preview of image fractalization is available by setting the image
-envar to the name of a png (alpha supported), jpg, or ppm format file.
-Note this interface will change!  This image is used as a 2D palette
-to paint the flame.  The input image must be 256x256 pixels.  For
-example:
-
-    env image=star.png flam3-render < test.flam3
-
---
+see http://flam3.com/flame.pdf for descriptions & formulas, and
+see http://electricsheep.wikispaces.com/Variations for updates.
 
 The complete list of variations:
 
@@ -240,12 +251,61 @@ The complete list of variations:
   51. flower
   52. conic
   53. parabola
-
+  54. bent2
+  55. bipolar
+  56. boarders
+  57. butterfly
+  58. cell
+  59. cpow
+  60. curve
+  61. edisc
+  62. elliptic
+  63. escher
+  64. foci
+  65. lazysusan
+  66. loonie
+  67. pre_blur
+  68. modulus
+  69. oscilloscope
+  70. polar2
+  71. popcorn2
+  72. scry
+  73. separation
+  74. split
+  75. splits
+  76. stripes
+  77. wedge
+  78. wedge_julia
+  79. wedge_sph
+  80. whorl
+  81. waves2
+  82. exp
+  83. log
+  84. sin
+  85. cos
+  86. tan
+  87. sec
+  88. csc
+  89. cot
+  90. sinh
+  91. cosh
+  92. tanh
+  93. sech
+  94. csch
+  95. coth
+  96. auger
+  97. flux
+  
 see http://flam3.com/flame.pdf for descriptions & formulas for each of
 these.  note that, by default, if a random flame is requested and neither
 'use_vars' or 'dont_use_vars' are specified, the following variations are
-not used: noise, blur, gaussian_blur, radial_blur, ngon, square, rays,
+not used: noise, blur, gaussian_blur, radial_blur, ngon, square, rays, 
 and cross.
+
+note: these variations do not use the variation weight to scale their
+contributions, and so will not be implemented in flam3:
+circlize
+
 
 ======================================
 
@@ -255,9 +315,71 @@ todo:  eliminate all static storage.
 
 changelog:
 
-07/03/09 Changed time zone stored in edit tags to the 'short' version,
-    with no special characters.  Set the numeric locale to C before
-    doing xml read/writes (thanks bitsed).  Release as 2.7.19.
+12/29/10 Added --version option to flam3-genome.  fixed bug in 16 bpc
+   png image writing when using strips.  xform opacity now affects
+   calculated width of density estimation filters.  Release as 3.0.1.
+
+10/05/10 Small tweaks.  Fuse iterations default to 15 but increase to
+   100 when using earlyclip. flux variation added. Release as 3.0.
+
+12/20/09 Highlight power now interpolates smoothly from old behavior
+    (-1) to new behavior.  flam3-genome 'split' mode was broken, fixed
+    (thanks Exper.)  Die gracefully instead of segfault when very small
+    estimator_curve values are specified.  Version attribute added to
+    flame tag.  Number of iterations used to fuse attractor increased to
+    100.  Release as 2.8beta7.
+
+11/24/09 Potential speedup of 5% over prior versions.  Many threading
+    issues identified and resolved when using flam3 shared library as
+    back end for user interfaces.  14 complex plane variations added.
+    auger variation added.  new flam3_make_strip library function to
+    generate stripped genomes for external ui strip renders.  bug fix:
+    when rendering strips, use the same random context for each strip
+    to prevent edge effects where strips butt against each other. flam3 
+    will now linearly interpolate missing colors in the colormap.
+    Release as 2.8beta6.
+
+10/16/09 Non-threadsafe progress tracking code in main iteration thread
+    replaced with per-render progress storage.  Fixed bug where pausing
+    render during density estimation stage terminated render.  Waves2
+    variation fixed (thx Joel F). Release as 2.8beta5.
+
+10/07/09 Fixed bug affecting 'animate' mode with flam3-genome.  Changed
+    estimate_bounding_box to increase discarded iterations if numerous
+    badvals were encountered during iterations.  Exported a few more
+    functions for Windows DLL.  Release as 2.8beta4.
+
+10/03/09 Changed color_speed range from 0 (no color change) to 1
+    (use new xform color).  Animate attribute is now 0 for no motion,
+    1 for motion.  Removed final xform from stagger algorithm.  'oscope'
+    parameters are now called 'oscilloscope' to match the rest of the
+    parametric variations (backwards compatible, so old genomes can be
+    read.) Stagger now affects morphing as well as sheep rotation, but
+    only using flam3-genome (not flam3-animate).  Release as 2.8beta3.
+
+03/18/09 Major upgrade :
+    - 28 variations added, mostly from the sourceforge plugins pack
+    - significant speed optimization of variations
+    - setting earlyclip env var on commandline will enable an alternate
+      calculation of color values, resulting in better antialiasing
+    - 'highlight_power' flame element controls the white highlights in
+      dense areas, eliminating the hue shift bug
+    - Apophysis chaos and solo xform/plotmode features have been
+      implemented.  solo/plotmode are promoted to floating point
+      'opacity'.  opacity and chaos are both interpolatable.
+    - <motion> tag now available for xforms...allows cyclic variation
+      of any regular xform parameter/coef/post.
+    - env var 'stagger' affects the simultaneity of xform interpolation
+      when morphing from one flame to another.  set to 0 for existing
+      behaviour, set to 1 to make each xform interpolate individually
+    - symmetry has been broken out into color_speed and animate tags
+      with the same sense (which is confusing and will be fixed in a
+      future release).
+    - set the flam27 env var to output backwards compatible genomes
+      (when possible.)
+    - passes the consistency test where rendering an image at double
+      size and filtering it down produces the same results as the
+      original (modulo quality).
 
 03/17/09 Added fuzz testing with zzuf to the regression tests.  'Strip'
     mode and genomes with the zoom parameter used now break into pieces
@@ -265,7 +387,7 @@ changelog:
     twintrian variation when small weights are used.  various rare
     segfaults and memory leaks fixed.  'palette_mode' attribute added to
     flame element for smoother palette interpolation in slow animations;
-    possible values are 'step' and 'linear' ('step' mode is default and
+    possible values are 'step' and 'linear' ('step' mode is default and 
     matches previous behaviour.)  Release as 2.7.18.
 
 11/11/08 Add error checking on the numbers in the input genome.  Do
@@ -280,13 +402,13 @@ changelog:
     flam3-genome animate command, added one to last flame time, so the
     end time is inclusive.  Release as 2.7.17.
 
-09/06/08 Added 'clone_all' to flam3_genome to allow application of
+09/06/08 Added 'clone_all' to flam3_genome to allow application of 
     template to all flames in a file at once, and 'animate' to write
-    a full sequence of interpolations out.  'animate' is similar to
-    'sequence' except that no control point rotation is performed.
-    Fixed non-functional 'write_genome' env var for flam3_animate.
+    a full sequence of interpolations out.  'animate' is similar to 
+    'sequence' except that no control point rotation is performed.  
+    Fixed non-functional 'write_genome' env var for flam3_animate.  
     Two bugs associated with interpolating from a log interpolation_type
-    to a non-log interpolation_type fixed (rotate angle reduction and
+    to a non-log interpolation_type fixed (rotate angle reduction and 
     special inverted identity).  when using flam3_rotate in 'spin_inter'
     the interp type of the first genome is now used rather than the
     current genome's interp type.  Enforced upper and lower bounds for
@@ -296,23 +418,23 @@ changelog:
     second-to-last genome is switched to "linear" with a warning.
     spatial filters with non-box-filter window functions fixed.
     Release as 2.7.16.
+    
 
-
-08/25/08 Added new interpolation types 'old' and 'older', for use in
+08/25/08 Added new interpolation types 'old' and 'older', for use in 
     recreating old animations.  'linear' mode now does not rotate padded
     xforms (results in prettier symmetric singularities). switched to
-    using a 'padding' flag instead of a 'just initialized' flag; padding
-    flag used for implementation of 'old' and 'older' types.
-    interpolation_space now deprecated, instead use interpolation_type.
+    using a 'padding' flag instead of a 'just initialized' flag; padding 
+    flag used for implementation of 'old' and 'older' types.  
+    interpolation_space now deprecated, instead use interpolation_type. 
     flam3_align is now idempotent (multiple applications do not change
-    the control points.)  Default number of temporal samples bumped to
+    the control points.)  Default number of temporal samples bumped to 
     1000.  Removed CVS headers from source code (now using SVN).
     Default interpolation mode now log. Removed 'move' and 'split' vars.
-    changes to flam3-genome: sequence mode now returns linear
-    interpolation mode for all control points except first/last of edges
-    - these cps will use the original interpolation mode;  inter and
+    changes to flam3-genome: sequence mode now returns linear 
+    interpolation mode for all control points except first/last of edges 
+    - these cps will use the original interpolation mode;  inter and 
     rotate modes will now return padded genomes for all control points,
-    all with linear interpolation specified.  instead of centering
+    all with linear interpolation specified.  instead of centering 
     sometimes reframe by golden mean plus noise. Release as 2.7.15.
 
 07/21/08 Add configuration option for atomic-ops.  bug fix: do not
@@ -349,16 +471,16 @@ changelog:
 03/15/08 fixed interpolation bug when magnitude of rotation/scaling
     component of affine transform is 0.  replaced secant variation
     with more flame-friendly secant2 (eliminates gap in y direction,
-    scales y-coordinate by weight).  warning message now printed when
-    unrecognized variation is present in an xform.  fixed bad
-    inequality when checking for -pi/pi discontinuity during complex
+    scales y-coordinate by weight).  warning message now printed when 
+    unrecognized variation is present in an xform.  fixed bad 
+    inequality when checking for -pi/pi discontinuity during complex 
     interpolation.  release as 2.7.10.
 
-02/08/08 non-zero weights for final xforms no longer allowed, and now
-    have no effect.  recompiled windows exes with mingw gcc 4.1 to
-    take advantage of scalability improvements in flam3 2.7.8 (was
-    compiling with mingw gcc 3.4 until now). for fedora package
-    compliance, flam3.pc.in patched by ian weller and moved use of
+02/08/08 non-zero weights for final xforms no longer allowed, and now 
+    have no effect.  recompiled windows exes with mingw gcc 4.1 to 
+    take advantage of scalability improvements in flam3 2.7.8 (was 
+    compiling with mingw gcc 3.4 until now). for fedora package 
+    compliance, flam3.pc.in patched by ian weller and moved use of 
     config.h to c files only. release as 2.7.9.
 
 01/26/08 better scalability across multiple CPUs by using compare and
@@ -393,34 +515,34 @@ changelog:
 07/12/07 fixed bug in split variation, now compatible with both
     versions of Apo.  added insert_palette option.  switched density
     estimation kernel from Epanichnikov to Gaussian.  genetic cross
-    now crosses palettes rather than selecting one of the parent
-    palettes.  remove noisy variations from random generation if
+    now crosses palettes rather than selecting one of the parent 
+    palettes.  remove noisy variations from random generation if 
     use_vars or dont_use_vars not specified.  fixed metrics calculated
-    on small test render for genetic operations.  reduced memory
+    on small test render for genetic operations.  reduced memory 
     requirements for density estimation filters.  64-bit linux distros
     now supported.  release 2.7.4.
 
 
 06/21/07 flam3 version, rendered genome, some render statistics and
     optionally nick/url stored in jpeg/png headers.  fixed two bugs
-    in isaac rng code (strongly affected temporal blur).  prevent
-    final xform rotation for sheep animation.  fixed interpolation
-    when only one flame has final xform.  added Supershape, Flower,
-    Conic, Parabola, Move and Split variations.  Shape combined with
-    Supershape via 'rnd' parameter.  flam3-genome now writes 'name'
-    attribute for rotate and sequence modes. oversample attribute
-    deprecated; supersample now preferred. new build process for
-    windows exes using MinGW/MSYS.  added 'intpalette' env var to
-    round floating point palettes to allow older versions of Apophysis
-    to read them. default image type is now PNG, transparency off.
-    density estimation code revised to be more consistent between
-    different supersample levels, which required change to default
-    de params.  limit number of de filters to conserve memory.  fixed
+    in isaac rng code (strongly affected temporal blur).  prevent 
+    final xform rotation for sheep animation.  fixed interpolation 
+    when only one flame has final xform.  added Supershape, Flower, 
+    Conic, Parabola, Move and Split variations.  Shape combined with 
+    Supershape via 'rnd' parameter.  flam3-genome now writes 'name' 
+    attribute for rotate and sequence modes. oversample attribute 
+    deprecated; supersample now preferred. new build process for 
+    windows exes using MinGW/MSYS.  added 'intpalette' env var to 
+    round floating point palettes to allow older versions of Apophysis 
+    to read them. default image type is now PNG, transparency off.  
+    density estimation code revised to be more consistent between 
+    different supersample levels, which required change to default 
+    de params.  limit number of de filters to conserve memory.  fixed 
     julia variation dependency on non-thread-safe random bit function.
     removed random number storage for radial blur variation.
     release 2.7.3.
     07/26/08: Note, incompat. change made to direction of cp->rotate
-    (as of 2.7.3, rotates shortest distance instead of clockwise)
+    (as of 2.7.3, rotates shortest distance instead of clockwise) 
 
 02/09/07 use isaac random number generator to avoid differences
 	 between mac/pc/linux.  use multiple threads to take advantage
@@ -554,7 +676,7 @@ changelog:
 01/25/05 release as v2.3.
 
 01/18/05 support post xforms (idea from eric nguyen).  support camera
-	 rotation.
+	 rotation. 
 
 12/28/04 release as v2.2.
 
@@ -626,14 +748,14 @@ changelog:
 
 03/03/04 add new means of crossover: a random point between the
 	 parents as defined by linear interpolation.  in all kinds of
-	 crossover, reset the color coordinates to make sure they are
+	 crossover, reset the color coordinates to make sure they are 
 	 spread out well.  somehow lost part of the extra_attributes
 	 patch, so put it in again.  add pixel_aspect_ratio envar.
 	 decrease filter cutoff threshold.  the edges of the filter
 	 were almost zeros, so making the filter smaller saves time
 	 with almost no effect on the results.  do not print out the
 	 attributes of control points that have default values.
-	 release as v1.10.
+	 release as v1.10. 
 
 02/26/04 remove prefix argument to print_control_point, and add
 	 extra_attributes.  allow any value for vibrancy parameter.
@@ -682,7 +804,7 @@ changelog:
 	 Cassidy Curtis).  added new variations from Ultra Fractal
 	 version by Mark Townsend.  added symmetry xforms.
 
-06/02/03 add convert-flame which reads the old file format and writes
+06/02/03 add convert-flame which reads the old file format and writes 
 	 the new one. release as v1.5.
 
 03/22/03 fix bug in hqi & anim.  somewhere along the way (prolly jpeg)

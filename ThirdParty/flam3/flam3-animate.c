@@ -1,10 +1,10 @@
 /*
     FLAM3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2008 Spotworks LLC
+    Copyright (C) 1992-2009 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -13,8 +13,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
@@ -38,8 +37,9 @@ int main(int argc, char **argv) {
   int verbose = argi("verbose", 1);
   int transparency = argi("transparency", 0);
   int bits = argi("bits", 33);
+  int sub_batch_size = argi("sub_batch_size", 10000);
   int bpc = argi("bpc",8);
-  int seed = argi("seed", 0);
+  int earlyclip = argi("earlyclip",0);
   int ftime, channels;
   unsigned char *image;
   flam3_genome *cps,center_cp;
@@ -55,12 +55,14 @@ int main(int argc, char **argv) {
   char badval_string[64];
   char numiter_string[64];
   char rtime_string[64];
-
+  
 #ifdef WIN32
-
+   
   char *slashloc;
   char exepath[256];
   char palpath[256];
+  memset(exepath,0,256);
+  memset(palpath,0,256);  
    slashloc = strrchr(argv[0],'\\');
 	if (NULL==slashloc) {
 	   sprintf(palpath,"flam3_palettes=flam3-palettes.xml");
@@ -70,9 +72,9 @@ int main(int argc, char **argv) {
 	}
 	putenv(palpath);
 
-#endif
-
-
+#endif         
+  
+  
   memset(&center_cp,0, sizeof(flam3_genome));
 
   if (1 != argc) {
@@ -122,7 +124,6 @@ int main(int argc, char **argv) {
       exit(1);
   }
 
-  fname = malloc(strlen(prefix) + 20);
 
    if (pixel_aspect <= 0.0) {
      fprintf(stderr, "pixel aspect ratio must be positive, not %g.\n",
@@ -140,6 +141,8 @@ int main(int argc, char **argv) {
   }
 
   cps = flam3_parse_from_file(in, inf, flam3_defaults_on, &ncps);
+  if (inf)
+    fclose(in);
   if (NULL == cps) {
     fprintf(stderr," error reading genomes.\n");
     exit(1);
@@ -192,7 +195,7 @@ int main(int argc, char **argv) {
 	fprintf(stderr,"Unexpected bpc specified (%d)\n",bpc);
 	exit(1);
    }
-
+   
 //  f.temporal_filter_radius = argf("blur", 0.5);
   f.pixel_aspect_ratio = pixel_aspect;
   f.genomes = cps;
@@ -200,17 +203,19 @@ int main(int argc, char **argv) {
   f.verbose = verbose;
   f.bits = bits;
   f.progress = 0;
+  f.earlyclip = earlyclip;
   f.nthreads = num_threads;
+  f.sub_batch_size = sub_batch_size;
 
   if (16==bpc)
      f.bytes_per_channel = 2;
   else
      f.bytes_per_channel = 1;
+         
 
-
-  image = (void *) malloc((size_t)channels *
+  image = (void *) calloc((size_t)channels *
 				   (size_t)cps[0].width *
-				   (size_t)cps[0].height * f.bytes_per_channel);
+				   (size_t)cps[0].height * f.bytes_per_channel, sizeof(char));
 
   if (dtime < 1) {
     fprintf(stderr, "dtime must be positive, not %d.\n", dtime);
@@ -225,40 +230,52 @@ int main(int argc, char **argv) {
     }
 
     if (do_fields) {
-
-   flam3_render(&f, image, cps[0].width, flam3_field_even, channels, transparency,&stats);
+    
+   if (flam3_render(&f, image, flam3_field_even, channels, transparency,&stats)) {
+      fprintf(stderr,"error rendering image: aborting.\n");
+      exit(1);
+   }
    f.time += 0.5;
-   flam3_render(&f, image, cps[0].width, flam3_field_odd, channels, transparency,&stats2);
+   if (flam3_render(&f, image, flam3_field_odd, channels, transparency,&stats2)) {
+      fprintf(stderr,"error rendering image: aborting.\n");
+      exit(1);
+   }
+
    stats.badvals+=stats2.badvals;
    stats.render_seconds+=stats2.render_seconds;
    stats.num_iters+=stats2.num_iters;
     } else {
-   flam3_render(&f, image, cps[0].width, flam3_field_both, channels, transparency,&stats);
+   if (flam3_render(&f, image, flam3_field_both, channels, transparency,&stats)) {
+      fprintf(stderr,"error rendering image: aborting.\n");
+      exit(1);
+   }
     }
 
     if (getenv("out"))
        fname = getenv("out");
-    else
+    else {
+       fname = malloc(strlen(prefix) + 20);
        sprintf(fname, "%s%05d.%s", prefix, ftime, format);
+    }
 
     if (verbose)
        fprintf(stderr, "writing %s...", fname);
 
     if (write_genome) {
        sprintf(flamename,"%s.flam3",fname);
-
+   
        /* get center genome */
-       flam3_interpolate(f.genomes, f.ngenomes, f.time, &center_cp);
-
+       flam3_interpolate(f.genomes, f.ngenomes, f.time, 0, &center_cp);
+       
        /* write it out */
        genfp = fopen(flamename,"w");
        if (NULL == genfp) {
            perror(flamename);
            exit(1);
        }
-
+       
        flam3_print(genfp, &center_cp, NULL, flam3_print_edits);
-
+       
        fclose(genfp);
     }
 
@@ -269,23 +286,23 @@ int main(int argc, char **argv) {
     }
 
     /* Get center cp for embedding in png file */
-    flam3_interpolate(f.genomes, f.ngenomes, f.time, &center_cp);
-
+    flam3_interpolate(f.genomes, f.ngenomes, f.time, 0, &center_cp);
+   
     /* Convert to string */
-    fpc.genome = flam3_print_to_string(&center_cp);
+    fpc.genome = flam3_print_to_string(&center_cp);      
     sprintf(badval_string, "%g",stats.badvals/(double)stats.num_iters);
     fpc.badvals = badval_string;
     sprintf(numiter_string,"%g",(double)stats.num_iters);
     fpc.numiters = numiter_string;
     sprintf(rtime_string,"%d",stats.render_seconds);
     fpc.rtime = rtime_string;
-
+   
     if (!strcmp(format, "png")) {
-
-       write_png(fp, image, cps[0].width, cps[0].height, &fpc, f.bytes_per_channel);
-
+    
+       write_png(fp, image, cps[0].width, cps[0].height, &fpc, f.bytes_per_channel);       
+       
     } else if (!strcmp(format, "jpg")) {
-
+    
        write_jpeg(fp, image, cps[0].width, cps[0].height, &fpc);
 
     } else {
@@ -299,10 +316,24 @@ int main(int argc, char **argv) {
 
     /* Free string */
     free(fpc.genome);
+    
+    clear_cp(&center_cp,0);
 
     fclose(fp);
-  }
 
+    if (!getenv("out"))
+       free(fname);
+
+  }
+  
+  for (i = 0; i < ncps; i++) {
+     xmlFreeDoc(cps[i].edits);
+     clear_cp(&cps[i],0);
+  }
+  free(cps);
+
+  free(image);
+  
   if (verbose)
     fprintf(stderr, "done.\n");
 
