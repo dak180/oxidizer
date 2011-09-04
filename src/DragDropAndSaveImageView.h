@@ -18,8 +18,9 @@
 */
 
 #import <Cocoa/Cocoa.h>
+#import <Quartz/Quartz.h>
 
-@interface DragDropAndSaveImageView : NSImageView
+@interface DragDropAndSaveImageView : IKImageView
 {
 }
 @end

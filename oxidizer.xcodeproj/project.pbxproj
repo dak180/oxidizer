@@ -671,6 +671,7 @@
 		43C6FBB612F4D2DA008356FC /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info copy.plist"; path = "Resources/Info copy.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Oxidizer (10.6).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oxidizer (10.6).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
+		A4026A8D14126C03002CABF7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		A404B3300D14355600FE81AC /* RectangleView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RectangleView.h; path = src/RectangleView/RectangleView.h; sourceTree = "<group>"; };
 		A404B3310D14355600FE81AC /* RectangleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RectangleView.m; path = src/RectangleView/RectangleView.m; sourceTree = "<group>"; };
 		A404B37C0D143FF600FE81AC /* RectangleController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RectangleController.h; path = src/RectangleView/RectangleController.h; sourceTree = "<group>"; };
@@ -944,6 +945,7 @@
 				43A0ADAC12F3B01500C6CB91 /* QTKit.framework */,
 				A42874DC11B1B48E00EAD7BE /* Quartz.framework */,
 				A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */,
+				A4026A8D14126C03002CABF7 /* QuartzCore.framework */,
 			);
 			name = "System Frameworks";
 			sourceTree = "<group>";

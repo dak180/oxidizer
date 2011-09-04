@@ -22,6 +22,15 @@
 
 @implementation DragDropAndSaveImageView
 
+- (void)awakeFromNib {
+	
+	
+	[self setDoubleClickOpensImageEditPanel: YES];
+	self.autoresizes = YES;
+	
+}
+
+
 //- (unsigned int)draggingSourceOperationMaskForLocal:(BOOL)isLocal
 - (NSDragOperation)draggingSourceOperationMaskForLocal:(BOOL)isLocal
 {
@@ -34,7 +43,7 @@
 // But we only do this if we have an image and we successfully write our data
 // to the pasteboard in copyDataTo: method
 
-- (void)mouseDown:(NSEvent *)event
+- (void)mouseDragged:(NSEvent *)event
 {
 
 	NSPoint location;
@@ -43,32 +52,16 @@
 
 	[pboard declareTypes:[NSArray arrayWithObject:NSFilesPromisePboardType] owner:self];
 	[pboard addTypes:[NSArray arrayWithObject:@"tiff_data"] owner:self];
+	
+	
 
-	NSImage *image = [self image];
+	
+	NSBitmapImageRep *bitmapRep = [[NSBitmapImageRep alloc] initWithCGImage:[self image]];
+	// Create an NSImage and add the bitmap rep to it...
 
-	/*
-
-	 NSImage *thumbImage = [[NSImage alloc] initWithData:[image TIFFRepresentation]];
-
-	 NSAffineTransform *at = [NSAffineTransform transform];
-
-	 [thumbImage setScalesWhenResized:YES];
-
-	 double scale;
-
-	 double heightFactor = 128.0/[image size].height;
-	 double widthFactor = 128.0/[image size].width;
-	 if(heightFactor > widthFactor){
-	 scale = widthFactor;
-	 } else {
-	 scale = heightFactor;
-	 }
-
-	 [at scaleBy:scale];
-
-
-	 [thumbImage setSize:[at transformSize:[image size]]];
-	 */
+	NSImage *image = [[NSImage alloc] init];
+	[image addRepresentation:bitmapRep];
+	[bitmapRep release];
 
 	NSAffineTransform *at = [NSAffineTransform transform];
 
@@ -107,6 +100,7 @@
 	}
 
 	[thumbImage autorelease];
+	[image release];
 }
 
 - (void)pasteboard:(NSPasteboard *)sender provideDataForType:(NSString *)type {
@@ -142,7 +136,10 @@
 		path = [[basePath stringByAppendingFormat:@"-%i", i++] stringByAppendingPathExtension:@"png"];
 	}
 
-	NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithData:[[self image] TIFFRepresentation]];
+
+//	NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithData:[[self image] TIFFRepresentation]];
+	
+	NSBitmapImageRep *bitmap = [[NSBitmapImageRep alloc] initWithCGImage:[self image]];
 	[[bitmap representationUsingType:NSPNGFileType properties:nil]
 						 writeToFile:path
 						atomically:YES];
@@ -152,5 +149,6 @@
 	return [NSArray arrayWithObject:[path lastPathComponent]];
 
 }
+
 
 @end
