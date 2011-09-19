@@ -422,6 +422,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
+				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -429,6 +430,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
+				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = Release;
 		};
@@ -450,6 +452,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
+				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = StaticAnalyzer;
 		};

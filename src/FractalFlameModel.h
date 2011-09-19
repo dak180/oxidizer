@@ -43,7 +43,7 @@
     IBOutlet ImageKitController *_imageSaveController;
 	IBOutlet NSArrayController *progressController;
 	IBOutlet NSView *saveThumbnailsView;
-    IBOutlet NSImageView *previewView;
+    IBOutlet IKImageView *previewView;
 
     IBOutlet MultiUseWindow *taskProgressWindow;
     IBOutlet ProgressIndicatorWithCancel *taskAllFramesIndicator;

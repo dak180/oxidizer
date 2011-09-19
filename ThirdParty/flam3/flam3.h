@@ -1,10 +1,10 @@
 /*
     FLAM3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2008 Spotworks LLC
+    Copyright (C) 1992-2009 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -13,8 +13,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
@@ -25,8 +24,14 @@
 #include <libxml/parser.h>
 #include "isaac.h"
 
+#if defined(_MSC_VER) /* VC++ */
+#include <windows.h>
+#define EXPORT __declspec (dllexport)
+#else
+#define EXPORT
+#endif
 
-char *flam3_version();
+EXPORT char *flam3_version();
 
 #define flam3_palette_random       (-1)
 #define flam3_palette_interpolated (-2)
@@ -39,7 +44,13 @@ char *flam3_version();
 #define flam3_print_edits  (1)
 #define flam3_dont_print_edits  (0)
 
-typedef double flam3_palette[256][3];
+//typedef double flam3_palette[256][3];
+typedef struct {
+	double index;
+	double color[4];
+} flam3_palette_entry;
+
+typedef flam3_palette_entry flam3_palette[256];
 
 int flam3_get_palette(int palette_index, flam3_palette p, double hue_rotation);
 
@@ -48,7 +59,7 @@ int flam3_get_palette(int palette_index, flam3_palette p, double hue_rotation);
 
 extern char *flam3_variation_names[];
 
-#define flam3_nvariations 54
+#define flam3_nvariations 99
 #define flam3_nxforms     12
 
 #define flam3_parent_fn_len     30
@@ -123,25 +134,58 @@ extern char *flam3_variation_names[];
 #define VAR_FLOWER 51
 #define VAR_CONIC 52
 #define VAR_PARABOLA 53
-
-typedef void (*flam3_iterator)(void *, double);
-
-
-typedef struct {
-
-   char *genome;
-   char *badvals;
-   char *numiters;
-   char *rtime;
-
-} flam3_img_comments;
+#define VAR_BENT2 54
+#define VAR_BIPOLAR 55
+#define VAR_BOARDERS 56
+#define VAR_BUTTERFLY 57
+#define VAR_CELL 58
+#define VAR_CPOW 59
+#define VAR_CURVE 60
+#define VAR_EDISC 61
+#define VAR_ELLIPTIC 62
+#define VAR_ESCHER 63
+#define VAR_FOCI 64
+#define VAR_LAZYSUSAN 65
+#define VAR_LOONIE 66
+#define VAR_PRE_BLUR 67
+#define VAR_MODULUS 68
+#define VAR_OSCILLOSCOPE 69
+#define VAR_POLAR2 70
+#define VAR_POPCORN2 71
+#define VAR_SCRY 72
+#define VAR_SEPARATION 73
+#define VAR_SPLIT 74
+#define VAR_SPLITS 75
+#define VAR_STRIPES 76
+#define VAR_WEDGE 77
+#define VAR_WEDGE_JULIA 78
+#define VAR_WEDGE_SPH 79
+#define VAR_WHORL 80
+#define VAR_WAVES2 81
+#define VAR_EXP 82
+#define VAR_LOG 83
+#define VAR_SIN 84
+#define VAR_COS 85
+#define VAR_TAN 86
+#define VAR_SEC 87
+#define VAR_CSC 88
+#define VAR_COT 89
+#define VAR_SINH 90
+#define VAR_COSH 91
+#define VAR_TANH 92
+#define VAR_SECH 93
+#define VAR_CSCH 94
+#define VAR_COTH 95
+#define VAR_AUGER 96
+#define VAR_FLUX 97
+#define VAR_MOBIUS 98
 
 typedef struct {
 
    double badvals;
    long int num_iters;
    int render_seconds;
-
+   
 } stat_struct;
 
 typedef struct {
@@ -164,21 +208,25 @@ typedef struct {
 } flam3_image_store;
 
 
-typedef struct {
+typedef struct xform {
    double var[flam3_nvariations];   /* interp coefs between variations */
    double c[3][2];      /* the coefs to the affine part of the function */
    double post[3][2];   /* the post transform */
    double density;      /* probability that this function is chosen. 0 - 1 */
-   double color[2];     /* color coords for this function. 0 - 1 */
-   double symmetry;     /* 1=this is a symmetry xform, 0=not */
-
+   double color;     /* color coords for this function. 0 - 1 */
+   double color_speed;  /* scaling factor on color added to current iteration */
+   double animate;      /* whether or not this xform rotates (in sheep) >0 means stationary */
+   double opacity;   /* 0=invisible, 1=totally visible */
+   double vis_adjusted; /* adjusted visibility for better transitions */
+   
    int padding;/* Set to 1 for padding xforms */
    double wind[2]; /* winding numbers */
 
-   int precalc_sqrt_flag;
    int precalc_angles_flag;
    int precalc_atan_xy_flag;
    int precalc_atan_yx_flag;
+   double has_preblur;
+   int has_post;
 
    /* Params for new parameterized variations */
    /* Blob */
@@ -204,15 +252,15 @@ typedef struct {
    double perspective_dist;
 
    /* Julia_N */
-   double juliaN_power;
-   double juliaN_dist;
+   double julian_power;
+   double julian_dist;
 
    /* Julia_Scope */
-   double juliaScope_power;
-   double juliaScope_dist;
+   double juliascope_power;
+   double juliascope_dist;
 
    /* Radial_Blur */
-   double radialBlur_angle;
+   double radial_blur_angle;
 
    /* Pie */
    double pie_slices;
@@ -224,12 +272,6 @@ typedef struct {
    double ngon_power;
    double ngon_circle;
    double ngon_corners;
-
-   /* Image */
-   /*
-   int image_id;
-   flam3_image_store *image_storage;
-   */
 
    /* Curl */
    double curl_c1;
@@ -247,46 +289,131 @@ typedef struct {
    double disc2_twist;
 
    /* Supershape */
-   double supershape_rnd;
-   double supershape_m;
-   double supershape_n1;
-   double supershape_n2;
-   double supershape_n3;
-   double supershape_holes;
-
+   double super_shape_rnd;
+   double super_shape_m;
+   double super_shape_n1;
+   double super_shape_n2;
+   double super_shape_n3;
+   double super_shape_holes;
+   
    /* Flower */
    double flower_petals;
    double flower_holes;
-
+   
    /* Conic */
-   double conic_eccen;
+   double conic_eccentricity;
    double conic_holes;
-
+   
    /* Parabola */
    double parabola_height;
    double parabola_width;
-
+   
+   /* Bent2 */
+   double bent2_x;
+   double bent2_y;
+   
+   /* Bipolar */
+   double bipolar_shift;
+   
+   /* Cell */
+   double cell_size;
+   
+   /* Cpow */
+   double cpow_r;
+   double cpow_i;
+   double cpow_power; /* int in apo */
+   
+   /* Curve */
+   double curve_xamp,curve_yamp;
+   double curve_xlength,curve_ylength;
+   
+   /* Escher */
+   double escher_beta;
+   
+   /* Lazysusan */
+   double lazysusan_spin;
+   double lazysusan_space;
+   double lazysusan_twist;
+   double lazysusan_x, lazysusan_y;
+   
+   /* Modulus */
+   double modulus_x, modulus_y;
+   
+   /* Oscope */
+   double oscope_separation;
+   double oscope_frequency;
+   double oscope_amplitude;
+   double oscope_damping;
+   
+   /* Popcorn2 */
+   double popcorn2_x, popcorn2_y, popcorn2_c;
+   
+   /* Separation */
+   double separation_x, separation_xinside;
+   double separation_y, separation_yinside;
+   
    /* Split */
-//   double split_xsize;
-//   double split_ysize;
-//   double split_shift;
+   double split_xsize;
+   double split_ysize;
+   
+   /* Splits */
+   double splits_x,splits_y;
+   
+   /* Stripes */
+   double stripes_space;
+   double stripes_warp;
+   
+   /* Wedge */
+   double wedge_angle, wedge_hole;
+   double wedge_count, wedge_swirl;
+   
+   /* Wedge_Julia */
+   double wedge_julia_angle;
+   double wedge_julia_count;
+   double wedge_julia_power;
+   double wedge_julia_dist;
+   
+   /* Wedge_Sph */
+   double wedge_sph_angle, wedge_sph_count;
+   double wedge_sph_hole, wedge_sph_swirl;
+   
+   /* Whorl */
+   double whorl_inside, whorl_outside;
+   
+   /* Waves2 */
+   double waves2_freqx, waves2_scalex;
+   double waves2_freqy, waves2_scaley;
+   
+   /* Auger */
+   double auger_sym, auger_weight;
+   double auger_freq, auger_scale;
 
-   /* Move */
-//   double move_x;
-//   double move_y;
+   /* Flux */
+   double flux_spread;
 
+   /* Mobius */
+   double mobius_re_a, mobius_im_a;
+   double mobius_re_b, mobius_im_b;
+   double mobius_re_c, mobius_im_c;
+   double mobius_re_d, mobius_im_d;
+      
    /* If perspective is used, precalculate these values */
    /* from the _angle and _dist                         */
    double persp_vsin;
    double persp_vfcos;
 
    /* If Julia_N is used, precalculate these values */
-   double juliaN_rN;
-   double juliaN_cn;
+   double julian_rN;
+   double julian_cn;
 
    /* If Julia_Scope is used, precalculate these values */
-   double juliaScope_rN;
-   double juliaScope_cn;
+   double juliascope_rN;
+   double juliascope_cn;
+   
+   /* if Wedge_Julia, precalculate */
+   double wedgeJulia_rN;
+   double wedgeJulia_cn;
+   double wedgeJulia_cf;
 
    /* If Radial_Blur is used, precalculate these values */
    double radialBlur_spinvar;
@@ -302,14 +429,19 @@ typedef struct {
    double disc2_timespi;
 
    /* If supershape is used, precalculate these values */
-   double supershape_pm_4;
-   double supershape_pneg1_n1;
+   double super_shape_pm_4;
+   double super_shape_pneg1_n1;
 
-   /* function pointers for faster iterations */
    int num_active_vars;
    double active_var_weights[flam3_nvariations];
-   //flam3_iterator varFunc[flam3_nvariations];
    int varFunc[flam3_nvariations];
+   
+   int motion_freq;
+   int motion_func;
+   
+   struct xform *motion;
+   int num_motion;
+   
 
 } flam3_xform;
 
@@ -323,6 +455,11 @@ typedef struct {
    int final_xform_index;
    int final_xform_enable;
    flam3_xform *xform;
+   
+   /* Xaos implementation */
+   double **chaos;
+   int chaos_enable;
+   
    int genome_index;                   /* index into source file */
    char parent_fname[flam3_parent_fn_len];   /* base filename where parent was located */
    int symmetry;                /* 0 means none */
@@ -332,6 +469,7 @@ typedef struct {
    double brightness;           /* 1.0 = normal */
    double contrast;             /* 1.0 = normal */
    double gamma;
+   double highlight_power;
    int  width, height;          /* of the final image */
    int  spatial_oversample;
    double center[2];             /* of camera */
@@ -375,69 +513,85 @@ typedef struct {
    double hue_rotation1;
    double palette_blend;
 
-//   double motion_exp; /* Motion blur parameter that controls how the colors are scaled */
-
    int temporal_filter_type; /* Temporal filters */
    double temporal_filter_width, temporal_filter_exp;
-
+   
    int palette_mode;
+
 
 } flam3_genome;
 
+typedef struct {
+	int from;
+	int to;
+	double scalar;
+} flam3_chaos_entry;
 
 /* xform manipulation */
-void flam3_add_xforms(flam3_genome *cp, int num_to_add, int interp_padding);
+
+void flam3_add_motion_element(flam3_xform *xf);
+void flam3_add_xforms(flam3_genome *cp, int num_to_add, int interp_padding, int final_flag);
 void flam3_delete_xform(flam3_genome *thiscp, int idx_to_delete);
+void flam3_copy_xform(flam3_xform *dest, flam3_xform *src);
 void flam3_copy(flam3_genome *dest, flam3_genome *src);
 void flam3_copyx(flam3_genome *dest, flam3_genome *src, int num_std, int num_final);
 void flam3_copy_params(flam3_xform *dest, flam3_xform *src, int varn);
+void flam3_delete_motion_elements(flam3_xform *xf);
 
-void flam3_create_xform_distrib(flam3_genome *cp, unsigned short *xform_distrib);
+EXPORT int flam3_xform_preview(flam3_genome *cp, int xi, double range, int numvals, int depth, double *result, randctx *rc);
+EXPORT unsigned short* flam3_create_xform_distrib(flam3_genome *cp);
+int flam3_create_chaos_distrib(flam3_genome *cp, int xi, unsigned short *xform_distrib);
+int flam3_check_unity_chaos(flam3_genome *cp);
+void clear_cp(flam3_genome *cp, int def_flag);
 
 /* samples is array nsamples*4 long of x,y,color triples.
    using (samples[0], samples[1]) as starting XY point and
    (samples[2], samples[3]) as starting color coordinate,
    perform fuse iterations and throw them away, then perform
    nsamples iterations and save them in the samples array */
-int flam3_iterate(flam3_genome *g, int nsamples, int fuse, double *samples,
+EXPORT int flam3_iterate(flam3_genome *g, int nsamples, int fuse, double *samples,
                      unsigned short *xform_distrib, randctx *rc);
+
+void apply_motion_parameters(flam3_xform *xf, flam3_xform *addto, double blend);
 
 /* genomes is array ngenomes long, with times set and in ascending order.
    interpolate to the requested time and return in result */
-void flam3_interpolate(flam3_genome *genomes, int ngenomes, double time, flam3_genome *result);
-
-/* barycentric coordinates in c */
-void flam3_interpolate_n(flam3_genome *result, int ncp, flam3_genome *cpi, double *c);
+EXPORT void flam3_interpolate(flam3_genome *genomes, int ngenomes, double time, double stagger, flam3_genome *result);
 
 /* print genome to given file with extra_attributes if not NULL */
-void flam3_print(FILE *f, flam3_genome *g, char *extra_attributes, int print_edits);
-char *flam3_print_to_string(flam3_genome *cp);
+EXPORT void flam3_print(FILE *f, flam3_genome *g, char *extra_attributes, int print_edits);
+void flam3_print_xform(FILE *f, flam3_xform *x, int final_flag, int numstd, double *chaos_row, int motion_flag);
+EXPORT char *flam3_print_to_string(flam3_genome *cp);
 
 /* ivars is a list of variations to use, or flam3_variation_random     */
 /* ivars_n is the number of values in ivars to select from.            */
 /* sym is either a symmetry group or 0 meaning random or no symmetry   */
 /* spec_xforms specifies the number of xforms to use, setting to 0 makes the number random. */
-void flam3_random(flam3_genome *g, int *ivars, int ivars_n, int sym, int spec_xforms);
+EXPORT void flam3_random(flam3_genome *g, int *ivars, int ivars_n, int sym, int spec_xforms);
+
+void add_to_action(char *action, char *addtoaction);
+
+EXPORT void flam3_mutate(flam3_genome *cp, int mutate_mode, int *ivars, int ivars_n, int sym, double speed, randctx *rc, char *action);
+EXPORT void flam3_cross(flam3_genome *cp0, flam3_genome *cp1, flam3_genome *out, int cross_mode, randctx *rc, char *action);
 
 /* return NULL in case of error */
-flam3_genome *flam3_parse_xml2(char *s, char *fn, int default_flag, int *ncps);
+EXPORT flam3_genome *flam3_parse_xml2(char *s, char *fn, int default_flag, int *ncps);
 flam3_genome *flam3_parse_from_file(FILE *f, char *fn, int default_flag, int *ncps);
 
 void flam3_add_symmetry(flam3_genome *g, int sym);
-int flam3_parse_hexformat_colors(char *colstr, flam3_genome *cp, int numcolors, int chan);
 
-void flam3_estimate_bounding_box(flam3_genome *g, double eps, int nsamples,
+void flam3_improve_colors(flam3_genome *g, int ntries, int change_palette, int color_resolution);
+EXPORT int flam3_colorhist(flam3_genome *cp, int num_batches, randctx *rc, double *hist);
+EXPORT int flam3_estimate_bounding_box(flam3_genome *g, double eps, int nsamples,
              double *bmin, double *bmax, randctx *rc);
 void flam3_rotate(flam3_genome *g, double angle, int interp_type); /* angle in degrees */
-void flam3_align(flam3_genome *dst, flam3_genome *src, int nsrc);
-void establish_asymmetric_refangles(flam3_genome *cp, int ncps);
 
 double flam3_dimension(flam3_genome *g, int ntries, int clip_to_camera);
 double flam3_lyapunov(flam3_genome *g, int ntries);
 
 void flam3_apply_template(flam3_genome *cp, flam3_genome *templ);
 
-int flam3_count_nthreads(void);
+EXPORT int flam3_count_nthreads(void);
 
 typedef struct {
 //   double         temporal_filter_radius;
@@ -447,11 +601,13 @@ typedef struct {
    int            verbose;
    int            bits;
    int            bytes_per_channel;
+   int            earlyclip;
    double         time;
    int            (*progress)(void *, double, int, double);
    void          *progress_parameter;
    randctx       rc;
    int           nthreads;
+   int           sub_batch_size;
 } flam3_frame;
 
 
@@ -459,11 +615,13 @@ typedef struct {
 #define flam3_field_even  1
 #define flam3_field_odd   2
 
-/* out is pixel array with stride of out_width.
+/* out is pixel array.
    pixels are rgb or rgba if nchan is 3 or 4. */
-void flam3_render(flam3_frame *f, void *out, int out_width, int field, int nchan, int transp, stat_struct *stats);
+EXPORT int flam3_render(flam3_frame *f, void *out, int field, int nchan, int transp, stat_struct *stats);
 
-double flam3_render_memory_required(flam3_frame *f);
+EXPORT double flam3_render_memory_required(flam3_frame *f);
+EXPORT int flam3_make_strip(flam3_genome *cp, int nstrips, int stripnum);
+void rotate_by(double *p, double *center, double by);
 
 
 double flam3_random01();
@@ -475,38 +633,36 @@ double flam3_random_isaac_01(randctx *);
 double flam3_random_isaac_11(randctx *);
 int flam3_random_isaac_bit(randctx *);
 
-void flam3_init_frame(flam3_frame *f);
+EXPORT void flam3_init_frame(flam3_frame *f);
 
 /* External memory helpers */
-void *flam3_malloc(size_t size);
-void flam3_free(void *ptr);
-
-/* AE Plugin helper functions */
-size_t flam3_size_flattened_genome(flam3_genome *cp);
-void flam3_flatten_genome(flam3_genome *cp, void *buf);
-void flam3_unflatten_genome(void *buf, flam3_genome *cp);
+EXPORT void *flam3_malloc(size_t size);
+EXPORT void flam3_free(void *ptr);
 
 void flam3_srandom();
 
-/* Spatial filter kernels */
-#define flam3_gaussian_kernel 0
-#define flam3_hermite_kernel 1
-#define flam3_box_kernel 2
-#define flam3_triangle_kernel 3
-#define flam3_bell_kernel 4
-#define flam3_b_spline_kernel 5
-#define flam3_lanczos3_kernel 6
-#define flam3_lanczos2_kernel 7
-#define flam3_mitchell_kernel 8
-#define flam3_blackman_kernel 9
-#define flam3_catrom_kernel 10
-#define flam3_hamming_kernel 11
-#define flam3_hanning_kernel 12
-#define flam3_quadratic_kernel 13
+flam3_genome *sheep_loop(flam3_genome *cp, double blend);
+flam3_genome *sheep_edge(flam3_genome *cp, double blend, int seqflag, double stagger);
 
-/* Temporal filters */
-#define flam3_temporal_box 0
-#define flam3_temporal_gaussian 1
-#define flam3_temporal_exp 2
+/* Motion function indices */
+#define MOTION_SIN 1
+#define MOTION_TRIANGLE 2
+#define MOTION_HILL 3
+
+/* Mutation modes */
+#define MUTATE_NOT_SPECIFIED   -1
+#define MUTATE_ALL_VARIATIONS  0
+#define MUTATE_ONE_XFORM_COEFS 1
+#define MUTATE_ADD_SYMMETRY    2
+#define MUTATE_POST_XFORMS     3
+#define MUTATE_COLOR_PALETTE   4
+#define MUTATE_DELETE_XFORM    5
+#define MUTATE_ALL_COEFS       6
+
+/* Cross modes */
+#define CROSS_NOT_SPECIFIED   -1
+#define CROSS_UNION           0
+#define CROSS_INTERPOLATE     1  
+#define CROSS_ALTERNATE       2
 
 #endif

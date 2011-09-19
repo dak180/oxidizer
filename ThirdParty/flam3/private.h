@@ -1,10 +1,10 @@
 /*
-    flam3 - cosmic recursive fractal flames
-    Copyright (C) 1992-2008 Spotworks LLC
+    FLAM3 - cosmic recursive fractal flames
+    Copyright (C) 1992-2009 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -13,28 +13,37 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef private_included
+#define private_included
 
 #include "flam3.h"
-
+#include "config.h"
 #include <stdlib.h>
 
-#include <math.h>
 #include <ctype.h>
 #include <time.h>
 #include <string.h>
 #include <libxml/parser.h>
 
-#ifndef WIN32
+#ifdef _WIN32
+#define basename(x) strdup(x)
+#define snprintf _snprintf
+#define _USE_MATH_DEFINES
+#else
 #include <unistd.h>
 #include <libgen.h>
-#else
-#define basename(x) strdup(x)
 #endif
 
+#include <math.h>
+
+#ifdef HAVE_LIBPTHREAD
+#include <pthread.h>
+#endif
+
+#define PREFILTER_WHITE 255
 #define EPS (1e-10)
 #define CMAP_SIZE 256
 #define CMAP_SIZE_M1 255
@@ -43,14 +52,14 @@
 #define max_specified_vars     (100)
 #define vlen(x) (sizeof(x)/sizeof(*x))
 
-extern void rgb2hsv(double *rgb, double *hsv);
-extern void hsv2rgb(double *hsv, double *rgb);
 
+#ifdef _WIN32
 
-#ifdef WIN32
-#define M_PI   3.1415926536
-#define M_1_PI 0.3183098862
-#define M_PI_4 0.7853981634
+#ifndef M_PI
+   #define M_PI   3.1415926536
+   #define M_1_PI 0.3183098862
+   #define M_PI_4 0.7853981634
+#endif
 #define random()  (rand() ^ (rand()<<15))
 #define srandom(x)  (srand(x))
 extern int getpid();
@@ -72,16 +81,42 @@ typedef struct {
    double size[2];
    int width, height; /* buffer width/height */
    double ws0, wb0s0, hs1, hb1s1; /* shortcuts for indexing */
-   int fname_specified; /* Set to 1 if there was a filename specified for colormap */
-   void *cmap; /* Points to bucket-based cmap if standard, uchar if fname specified */
-   void *dmap; /* Points to bucket_double-based cmap */
+   flam3_palette_entry *dmap; /* palette */
    double color_scalar; /* <1.0 if non-uniform motion blur is set */
    void *buckets; /* Points to the first accumulator */
    double badvals; /* accumulates all badvalue resets */
    double batch_size;
    int temporal_sample_num,ntemporal_samples;
-   int batch_num, nbatches, aborted;
+   int batch_num, nbatches, aborted, cmap_size;
+   time_t *progress_timer;
+   time_t *progress_timer_history;
+   double *progress_history;
+   int *progress_history_mark;
+#ifdef HAVE_LIBPTHREAD
+   /* mutex for bucket accumulator */
+   pthread_mutex_t bucket_mutex;
+#endif
+   
 } flam3_iter_constants;
+
+typedef struct {
+
+   double tx,ty; /* Starting coordinates */
+
+   double precalc_atan, precalc_sina;  /* Precalculated, if needed */
+   double precalc_cosa, precalc_sqrt;
+   double precalc_sumsq,precalc_atanyx;
+
+   flam3_xform *xform; /* For the important values */
+
+   /* Output Coords */
+
+   double p0, p1;
+
+   /* Pointer to the isaac RNG state */
+   randctx *rc;
+
+} flam3_iter_helper;
 
 typedef struct {
    double *iter_storage; /* Storage for iteration coordinates */
@@ -114,3 +149,6 @@ double flam3_spatial_filter(int knum, double x);
 
 #define  flam3_mitchell_b   (1.0 / 3.0)
 #define  flam3_mitchell_c   (1.0 / 3.0)
+
+
+#endif

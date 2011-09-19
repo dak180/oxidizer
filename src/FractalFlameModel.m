@@ -285,6 +285,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 	_movieDialogServer  = [_theConnection rootProxy];
 	[_movieDialogServer retain];
 
+
 }
 
 - (void)renderToPNG:(int)pngBits {
@@ -469,6 +470,7 @@ int printProgress(void *nslPtr, double progress, int stage);
 
 		[previewView setImage:flameImage];
 		[previewView setToolTip:@"Preview: This is the image you have just rendered. You can save a copy by dragging the image to the finder/desktop."];
+//		[previewView zoomImageToFit:self];
 
 		[self showPreviewWindow];
 

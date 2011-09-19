@@ -1,10 +1,10 @@
 /*
-    flame - cosmic recursive fractal flames
-    Copyright (C) 2002-2008 Spotworks LLC
+    FLAM3 - cosmic recursive fractal flames
+    Copyright (C) 1992-2009 Spotworks LLC
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 2 of the License, or
+    the Free Software Foundation; either version 3 of the License, or
     (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
@@ -13,8 +13,7 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
@@ -42,7 +41,7 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
    char nick_string[64], url_string[128], id_string[128];
    char bv_string[64],ni_string[64],rt_string[64];
    char genome_string[65536], ver_string[64];
-
+   
    /* Create the mandatory comment strings */
    snprintf(genome_string,65536,"flam3_genome: %s",fpc->genome);
    snprintf(bv_string,64,"flam3_error_rate: %s",fpc->badvals);
@@ -63,9 +62,9 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
       int quality = atoi(getenv("jpeg"));
 	   jpeg_set_quality(&info, quality, TRUE);
    }
-
+   
    jpeg_start_compress(&info, TRUE);
-
+    
    /* Write comments to jpeg */
    if (jpegcom_enable==1) {
         jpeg_write_marker(&info, JPEG_COM, (unsigned char *)ver_string, (int)strlen(ver_string));
@@ -79,7 +78,7 @@ write_jpeg(FILE *file, unsigned char *image, int width, int height, flam3_img_co
             snprintf(url_string,128,"flam3_url: %s",url);
             jpeg_write_marker(&info, JPEG_COM, (unsigned char *)url_string, (int)strlen(url_string));
         }
-
+        
         if (0 != id) {
             snprintf(id_string,128,"flam3_id: %s",id);
             jpeg_write_marker(&info, JPEG_COM, (unsigned char *)id_string, (int)strlen(id_string));
