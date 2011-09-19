@@ -280,11 +280,22 @@
 									   usingTaskFrameIndicator:(ProgressIndicatorWithCancel *)taskFrameIndicator
 									   usingETALabel:(NSTextField *)etaLabel {
 
-
+	NSString *genomeFile = nil;
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 
 	if([defaults boolForKey:@"auto_save_on_render"]) {
 		NSLog(@"env: %@\n", environmentDictionary);
+		
+		genomeFile = [[defaults stringForKey:@"xml_folder"] stringByAppendingPathComponent:[[NSDate date]
+																							descriptionWithCalendarFormat:@"%Y%m%d%H%M%S%F.xml"
+																							timeZone:nil
+																							locale:nil]];
+		
+		[genomeFile retain];
+		
+		[xml writeToFile:genomeFile atomically:YES];
+		
+		
 
 		[xml writeToFile:[[defaults stringForKey:@"xml_folder"] stringByAppendingPathComponent:[[NSDate date]
 																 descriptionWithCalendarFormat:@"%Y%m%d%H%M%S%F.xml"
@@ -405,13 +416,18 @@
 
 		NSLog(@"flam3 Error message: %@", errorMessage);
 
-
+		if([defaults boolForKey:@"auto_save_on_render"]) {
+			
+			NSLog(@"ERROR:  Genome that failed is %@", genomeFile);
+		}
+		
 		NSAlert *finishedPanel = [NSAlert alertWithMessageText:@"Render failed!"
 												 defaultButton:@"Close"
 											   alternateButton:nil
 												   otherButton:nil
 									 informativeTextWithFormat:errorMessage];
 		[finishedPanel runModal];
+		
 
 	}
 
@@ -428,6 +444,10 @@
 
 	[task release];
 
+	if([defaults boolForKey:@"auto_save_on_render"]) {
+		[genomeFile release];
+	}
+	
 	return taskStatus;
 }
 
