@@ -160,15 +160,15 @@ int sortUsingIndex(id colour1, id colour2, void *context);
 
 	srandom(time(NULL));
 
-	int colourCount = (random() & 7) + 3 ;
+	int colourCount = (arc4random() & 7) + 3 ;
 	int i;
 
 	for(i=0; i<=colourCount; i++) {
 
 		NSMutableDictionary *colour = [NSMutableDictionary dictionaryWithCapacity:6];
-		[colour setObject:[NSNumber numberWithDouble:((random() & 255) / 255.0)] forKey:@"red"];
-		[colour setObject:[NSNumber numberWithDouble:((random() & 255) / 255.0)] forKey:@"green"];
-		[colour setObject:[NSNumber numberWithDouble:((random() & 255) / 255.0)] forKey:@"blue"];
+		[colour setObject:[NSNumber numberWithDouble:((arc4random() & 255) / 255.0)] forKey:@"red"];
+		[colour setObject:[NSNumber numberWithDouble:((arc4random() & 255) / 255.0)] forKey:@"green"];
+		[colour setObject:[NSNumber numberWithDouble:((arc4random() & 255) / 255.0)] forKey:@"blue"];
 		[colour setObject:[NSNumber numberWithInt:i*(255.0 / colourCount)] forKey:@"index"];
 
 		[self addColourSquare:colour];
@@ -1094,7 +1094,7 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 
 		[cmap removeObjects:[NSArray arrayWithArray:[cmap arrangedObjects]]];
 
-		int colourCount = (random() & 7) + 3 ;
+		int colourCount = (arc4random() & 7) + 3 ;
 		int i;
 
 		double red, green, blue;
@@ -1106,9 +1106,9 @@ int sortUsingIndex(id colour1, id colour2, void *context) {
 		for(i=0; i<=colourCount; i++) {
 
 
-			red = ((random() & 255) / 255.0);
-			green = ((random() & 255) / 255.0);
-			blue = ((random() & 255) / 255.0);
+			red = ((arc4random() & 255) / 255.0);
+			green = ((arc4random() & 255) / 255.0);
+			blue = ((arc4random() & 255) / 255.0);
 
 			index = i*(255.0 / colourCount);
 

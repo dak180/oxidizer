@@ -61,7 +61,7 @@
 - (IBAction) randomSeed:(id)sender {
 
 	[self willChangeValueForKey:@"seed"];
-	seed = random();
+	seed = arc4random();
 	[self didChangeValueForKey:@"seed"];
 
 	[seedTextField setIntValue:seed];

@@ -35,8 +35,8 @@
 	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
 
 	[env setObject:[NSNumber numberWithInt:64] forKey:@"bits"];
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
-	[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"isaac_seed"];
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 
 	NSString *pngFileName = [Flam3Task createTemporaryPathWithFileName:@"gpm.png"];
@@ -155,8 +155,8 @@
 			NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
 			[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 
-			[env setObject:[NSNumber numberWithLong:random()] forKey:@"isaac_seed"];
-			[env setObject:[NSNumber numberWithLong:random()] forKey:@"seed"];
+			[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"isaac_seed"];
+			[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"seed"];
 			[env setObject:[NSNumber numberWithInt:i] forKey:@"genome_index"];
 
 			if([threads count] < threadCount) {
@@ -367,7 +367,7 @@
 				/* quick monte carlo */
 				for(i=0; i<breedingCount; i++) {
 					tmp = order[i];
-					index = abs(random() % breedingCount);
+					index = abs(arc4random() % breedingCount);
 					order[i] = order[index];
 					order[index] = tmp;
 				}
@@ -381,7 +381,7 @@
 					[dict setObject:[NSNumber numberWithInt:breedingOrder[order[i]]] forKey:@"genome_index_1"];
 					[dict setObject:[NSNumber numberWithInt:breedingOrder[order[i+1]]] forKey:@"genome_index_2"];
 
-					index = abs(random() % 3);
+					index = abs(arc4random() % 3);
 
 					/*
 						If the genomes are big avoid union as the genome lengths get added together and before you
@@ -389,7 +389,7 @@
 					*/
 					if ([[genomes objectAtIndex:breedingOrder[order[i]]] length] > 100 * 1024 &&
 						[[genomes objectAtIndex:breedingOrder[order[i+1]]] length] > 100 * 1204) {
-						index = (random() & 1) + 1;
+						index = (arc4random() & 1) + 1;
 					}
 
 
