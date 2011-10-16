@@ -1502,9 +1502,12 @@ NSString *variationName[1+flam3_nvariations] = {
 
 		return 0;
 	}
+	
 
 	scanner = [NSScanner scannerWithString:value];
 	if([scanner scanInt:&tmpValue]) {
+
+		NSLog(@"String %@ converted too %d", value, tmpValue);
 
 		return tmpValue;
 
@@ -1527,7 +1530,9 @@ NSString *variationName[1+flam3_nvariations] = {
 			return @"Random";
 			break;
 		default:
-			return [NSString stringWithFormat:@"%ld", value];
+			NSLog(@"int %d converted too %@", value, [NSString stringWithFormat:@"%d", value]);
+
+			return [NSString stringWithFormat:@"%d", value];
 			break;
 	}
 }

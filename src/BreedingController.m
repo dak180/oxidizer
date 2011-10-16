@@ -302,8 +302,8 @@
 
 //	srandom(time(NULL));
 
-	[environmentDictionary setValue:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"seed"];
-	[environmentDictionary setObject:[NSNumber numberWithUnsignedInt:random()] forKey:@"isaac_seed"];
+	[environmentDictionary setValue:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"seed"];
+	[environmentDictionary setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"isaac_seed"];
 
 
 	/* fiddle symmetry to be a value between -8 and -1 and 1 and 8 */
@@ -421,8 +421,8 @@
 
 	[env setObject:[NSNumber numberWithInt:33] forKey:@"bits"];
 	[env setObject:[NSNumber numberWithInt:3] forKey:@"print_edit_depth"];
-	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"seed"];
-	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"isaac_seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"isaac_seed"];
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -485,8 +485,8 @@
 
 	srandom(time(NULL));
 
-	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"seed"];
-	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"isaac_seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"isaac_seed"];
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
@@ -545,8 +545,8 @@
 
 	NSMutableDictionary *taskEnvironment = [[NSMutableDictionary alloc] init];
 
-	[taskEnvironment setObject:[NSNumber hnumberWithUnsignedInt:arc4random()] forKey:@"seed"];
-	[taskEnvironment setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"isaac_seed"];
+	[taskEnvironment setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"seed"];
+	[taskEnvironment setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"isaac_seed"];
 	[taskEnvironment setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 
 

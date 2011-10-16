@@ -153,7 +153,7 @@
 		if ([[genePoolButtons objectAtIndex:i] state] == NSOffState) {
 			NSData *genomeXML = [model getGenomeForIndex:i];
 			[genomeXML retain];
-//			NSLog(@"%@", [[NSString alloc] initWithData:genomeXML encoding:NSUTF8StringEncoding]);
+			NSLog(@"%@", [[NSString alloc] initWithData:genomeXML encoding:NSUTF8StringEncoding]);
 			NSArray *tmpGenomeArray = [Genome createGenomeEntitiesFromXML:genomeXML inContext:moc];
 			[(NSManagedObject *)[tmpGenomeArray objectAtIndex:0] setValue:[NSNumber numberWithInt:time] forKey:@"time"];
 			time += 15;

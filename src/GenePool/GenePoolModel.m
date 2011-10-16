@@ -35,8 +35,8 @@
 	NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
 
 	[env setObject:[NSNumber numberWithInt:64] forKey:@"bits"];
-	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"seed"];
-	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"isaac_seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX ] forKey:@"seed"];
+	[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"isaac_seed"];
 	[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 
 	NSString *pngFileName = [Flam3Task createTemporaryPathWithFileName:@"gpm.png"];
@@ -155,8 +155,8 @@
 			NSMutableDictionary *env = [[NSMutableDictionary alloc] init];
 			[env setObject:[NSString stringWithFormat:@"%@/flam3-palettes.xml", [[ NSBundle mainBundle ] resourcePath ]] forKey:@"flam3_palettes"];
 
-			[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"isaac_seed"];
-			[env setObject:[NSNumber numberWithUnsignedInt:arc4random()] forKey:@"seed"];
+			[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"isaac_seed"];
+			[env setObject:[NSNumber numberWithUnsignedInt:arc4random()%RAND_MAX] forKey:@"seed"];
 			[env setObject:[NSNumber numberWithInt:i] forKey:@"genome_index"];
 
 			if([threads count] < threadCount) {
