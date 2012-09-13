@@ -15,7 +15,7 @@
 		43002D4912F27D5600C31A83 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3612F27D5600C31A83 /* pngget.c */; };
 		43002D4A12F27D5600C31A83 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3712F27D5600C31A83 /* pngmem.c */; };
 		43002D4B12F27D5600C31A83 /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3812F27D5600C31A83 /* pngpread.c */; };
-		43002D4C12F27D5600C31A83 /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 43002D3912F27D5600C31A83 /* pngpriv.h */; settings = {ATTRIBUTES = (); }; };
+		43002D4C12F27D5600C31A83 /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 43002D3912F27D5600C31A83 /* pngpriv.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43002D4D12F27D5600C31A83 /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3A12F27D5600C31A83 /* pngread.c */; };
 		43002D4E12F27D5600C31A83 /* pngrio.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3B12F27D5600C31A83 /* pngrio.c */; };
 		43002D4F12F27D5600C31A83 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3C12F27D5600C31A83 /* pngrtran.c */; };
@@ -27,6 +27,7 @@
 		43002D5512F27D5600C31A83 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D4212F27D5600C31A83 /* pngwrite.c */; };
 		43002D5612F27D5600C31A83 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D4312F27D5600C31A83 /* pngwtran.c */; };
 		43002D5712F27D5600C31A83 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D4412F27D5600C31A83 /* pngwutil.c */; };
+		A47BFF3D16027AD00097D4D9 /* pnglibconf.h in Headers */ = {isa = PBXBuildFile; fileRef = A47BFEE4160275070097D4D9 /* pnglibconf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		43002D4212F27D5600C31A83 /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwrite.c; path = external/libpng/pngwrite.c; sourceTree = "<group>"; };
 		43002D4312F27D5600C31A83 /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwtran.c; path = external/libpng/pngwtran.c; sourceTree = "<group>"; };
 		43002D4412F27D5600C31A83 /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = pngwutil.c; path = external/libpng/pngwutil.c; sourceTree = "<group>"; };
+		A47BFEE4160275070097D4D9 /* pnglibconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = pnglibconf.h; path = external/libpng/pnglibconf.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				43002D3412F27D5600C31A83 /* pngconf.h */,
 				43002D3512F27D5600C31A83 /* pngerror.c */,
 				43002D3612F27D5600C31A83 /* pngget.c */,
+				A47BFEE4160275070097D4D9 /* pnglibconf.h */,
 				43002D3712F27D5600C31A83 /* pngmem.c */,
 				43002D3812F27D5600C31A83 /* pngpread.c */,
 				43002D3912F27D5600C31A83 /* pngpriv.h */,
@@ -177,6 +180,7 @@
 				43002D4612F27D5600C31A83 /* png.h in Headers */,
 				43002D4712F27D5600C31A83 /* pngconf.h in Headers */,
 				43002D4C12F27D5600C31A83 /* pngpriv.h in Headers */,
+				A47BFF3D16027AD00097D4D9 /* pnglibconf.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -331,6 +335,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002D2C12F27C2B00C31A83 /* Png-Release.xcconfig */;
 			buildSettings = {
+				PRODUCT_INFO_HASH = 8ea7f60347a306c5faf70b977fa80e28;
+				PRODUCT_INFO_PATH = downloads.sourceforge.net/project/libpng/libpng15/1.5.12/;
+				PRODUCT_INFO_VERSION = 1.5.12;
 			};
 			name = Release;
 		};
@@ -338,6 +345,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002D2B12F27C2B00C31A83 /* Png-Debug.xcconfig */;
 			buildSettings = {
+				PRODUCT_INFO_HASH = 8ea7f60347a306c5faf70b977fa80e28;
+				PRODUCT_INFO_PATH = downloads.sourceforge.net/project/libpng/libpng15/1.5.12/;
+				PRODUCT_INFO_VERSION = 1.5.12;
 			};
 			name = Debug;
 		};
@@ -353,6 +363,9 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002D2B12F27C2B00C31A83 /* Png-Debug.xcconfig */;
 			buildSettings = {
+				PRODUCT_INFO_HASH = 8ea7f60347a306c5faf70b977fa80e28;
+				PRODUCT_INFO_PATH = downloads.sourceforge.net/project/libpng/libpng15/1.5.12/;
+				PRODUCT_INFO_VERSION = 1.5.12;
 			};
 			name = StaticAnalyzer;
 		};
