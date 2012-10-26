@@ -588,7 +588,6 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* oxidizer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = oxidizer_Prefix.pch; path = src/oxidizer_Prefix.pch; sourceTree = "<group>"; };
 		4300271A12F08DC200C31A83 /* Credits.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Credits.html; path = Resources/Credits.html; sourceTree = "<group>"; };
-		4300271B12F08DC200C31A83 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		4300271C12F08DC200C31A83 /* version.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = version.plist; path = Resources/version.plist; sourceTree = "<group>"; };
 		4300272112F08E1200C31A83 /* flam3-palettes.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "flam3-palettes.xml"; path = "ThirdParty/flam3/flam3-palettes.xml"; sourceTree = "<group>"; };
 		4300272812F08FAE00C31A83 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Clipboard.xib; sourceTree = "<group>"; };
@@ -613,6 +612,7 @@
 		4300279212F0973700C31A83 /* genepool.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = genepool.png; path = Resources/icons/genepool.png; sourceTree = "<group>"; };
 		4300279312F0973700C31A83 /* oxidizer_dna.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = oxidizer_dna.png; path = Resources/icons/oxidizer_dna.png; sourceTree = "<group>"; };
 		4300279412F0973700C31A83 /* oxidizer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = oxidizer.icns; path = Resources/icons/oxidizer.icns; sourceTree = "<group>"; };
+		43174AC6163A47F5009EF6E4 /* Oxidizer-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Oxidizer-Info.plist"; path = "Resources/Oxidizer-Info.plist"; sourceTree = "<group>"; };
 		435864A112F48F1900C4BFF6 /* flam3-animate */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "flam3-animate"; sourceTree = BUILT_PRODUCTS_DIR; };
 		438053FB12F4611100AC483E /* Oxidizer-10.5-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Oxidizer-10.5-All.xcconfig"; path = "Configs/Oxidizer-10.5-All.xcconfig"; sourceTree = "<group>"; };
 		438053FC12F4611100AC483E /* Oxidizer-10.6-All.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Oxidizer-10.6-All.xcconfig"; path = "Configs/Oxidizer-10.6-All.xcconfig"; sourceTree = "<group>"; };
@@ -668,7 +668,6 @@
 		43C6FB2512F4D1FF008356FC /* flam3-convert-Debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "flam3-convert-Debug.xcconfig"; path = "Configs/flam3-convert-Debug.xcconfig"; sourceTree = "<group>"; };
 		43C6FB2612F4D1FF008356FC /* flam3-convert-Release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "flam3-convert-Release.xcconfig"; path = "Configs/flam3-convert-Release.xcconfig"; sourceTree = "<group>"; };
 		43C6FBB212F4D2DA008356FC /* Oxidizer (10.5).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oxidizer (10.5).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		43C6FBB612F4D2DA008356FC /* Info copy.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Info copy.plist"; path = "Resources/Info copy.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Oxidizer (10.6).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Oxidizer (10.6).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A4011EE8137335D000BDA7D7 /* libxml2.2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.2.dylib; path = /usr/lib/libxml2.2.dylib; sourceTree = "<absolute>"; };
 		A4026A8D14126C03002CABF7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -931,9 +930,8 @@
 				4300277E12F096EA00C31A83 /* icons */,
 				4300272312F08E1A00C31A83 /* lproj */,
 				4300271A12F08DC200C31A83 /* Credits.html */,
-				4300271B12F08DC200C31A83 /* Info.plist */,
+				43174AC6163A47F5009EF6E4 /* Oxidizer-Info.plist */,
 				4300271C12F08DC200C31A83 /* version.plist */,
-				43C6FBB612F4D2DA008356FC /* Info copy.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1712,7 +1710,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=$PATH:/sw/bin:/opt/local/bin\n\n${SRCROOT}/Configs/autorevision.sh \"${OBJROOT}/autorevision.h\"\n\nexit \"${?}\"\n";
+			shellScript = "export PATH=$PATH:/sw/bin:/opt/local/bin\n\n\"${SRCROOT}/Configs/autorevision\" -t xcode -o \"${OBJROOT}/autorevision.tmp\" > \"${OBJROOT}/autorevision.h\"\n\nexit \"${?}\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
