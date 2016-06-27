@@ -15,7 +15,7 @@
 		43002D4912F27D5600C31A83 /* pngget.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3612F27D5600C31A83 /* pngget.c */; };
 		43002D4A12F27D5600C31A83 /* pngmem.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3712F27D5600C31A83 /* pngmem.c */; };
 		43002D4B12F27D5600C31A83 /* pngpread.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3812F27D5600C31A83 /* pngpread.c */; };
-		43002D4C12F27D5600C31A83 /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 43002D3912F27D5600C31A83 /* pngpriv.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43002D4C12F27D5600C31A83 /* pngpriv.h in Headers */ = {isa = PBXBuildFile; fileRef = 43002D3912F27D5600C31A83 /* pngpriv.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		43002D4D12F27D5600C31A83 /* pngread.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3A12F27D5600C31A83 /* pngread.c */; };
 		43002D4E12F27D5600C31A83 /* pngrio.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3B12F27D5600C31A83 /* pngrio.c */; };
 		43002D4F12F27D5600C31A83 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 43002D3C12F27D5600C31A83 /* pngrtran.c */; };
@@ -192,6 +192,7 @@
 			buildConfigurationList = 4300283B12F24CFD00C31A83 /* Build configuration list for PBXNativeTarget "Mac Framework" */;
 			buildPhases = (
 				4300284E12F24F2D00C31A83 /* Fetch Source */,
+				43DBCFFB1D21631F004D7DB3 /* ShellScript */,
 				4300283112F24CFC00C31A83 /* Headers */,
 				4300283212F24CFC00C31A83 /* Resources */,
 				4300283312F24CFC00C31A83 /* Sources */,
@@ -278,6 +279,21 @@
 			shellPath = /bin/sh;
 			shellScript = "OutDir=\"${PRODUCT_INFO_SHORTNAME}\"\nDirectorY=\"${OutDir}-${PRODUCT_INFO_VERSION}\"\nFileName=\"${OutDir}-${PRODUCT_INFO_VERSION}.tar.gz\"\nSourceDLP=\"http://${PRODUCT_INFO_PATH}${FileName}\"\nMD5Sum=\"${PRODUCT_INFO_HASH}\"\n\nconfigs/FetchSource.sh \"${DirectorY}\" \"${OutDir}\" \"${FileName}\" \"${SourceDLP}\" \"${MD5Sum}\"\nexit ${?}";
 		};
+		43DBCFFB1D21631F004D7DB3 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/external/$(PRODUCT_INFO_SHORTNAME)/scripts/pnglibconf.h.prebuilt",
+			);
+			outputPaths = (
+				"$(SRCROOT)/external/$(PRODUCT_INFO_SHORTNAME)/scripts/pnglibconf.h",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ ! -f \"${SRCROOT}/external/${PRODUCT_INFO_SHORTNAME}/pnglibconf.h\" ]; then\n\n    cp -a \"${SRCROOT}/external/${PRODUCT_INFO_SHORTNAME}/scripts/pnglibconf.h.prebuilt\" \"${SRCROOT}/external/${PRODUCT_INFO_SHORTNAME}/pnglibconf.h\"\nfi";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -319,7 +335,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
-				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -327,7 +342,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
-				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = Release;
 		};
@@ -335,9 +349,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002D2C12F27C2B00C31A83 /* Png-Release.xcconfig */;
 			buildSettings = {
-				PRODUCT_INFO_HASH = 8ea7f60347a306c5faf70b977fa80e28;
-				PRODUCT_INFO_PATH = downloads.sourceforge.net/project/libpng/libpng15/1.5.12/;
-				PRODUCT_INFO_VERSION = 1.5.12;
 			};
 			name = Release;
 		};
@@ -345,9 +356,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002D2B12F27C2B00C31A83 /* Png-Debug.xcconfig */;
 			buildSettings = {
-				PRODUCT_INFO_HASH = 8ea7f60347a306c5faf70b977fa80e28;
-				PRODUCT_INFO_PATH = downloads.sourceforge.net/project/libpng/libpng15/1.5.12/;
-				PRODUCT_INFO_VERSION = 1.5.12;
 			};
 			name = Debug;
 		};
@@ -355,7 +363,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
-				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = StaticAnalyzer;
 		};
@@ -363,9 +370,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002D2B12F27C2B00C31A83 /* Png-Debug.xcconfig */;
 			buildSettings = {
-				PRODUCT_INFO_HASH = 8ea7f60347a306c5faf70b977fa80e28;
-				PRODUCT_INFO_PATH = downloads.sourceforge.net/project/libpng/libpng15/1.5.12/;
-				PRODUCT_INFO_VERSION = 1.5.12;
 			};
 			name = StaticAnalyzer;
 		};

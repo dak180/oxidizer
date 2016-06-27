@@ -289,7 +289,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
-				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -297,7 +296,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
-				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = Release;
 		};
@@ -305,8 +303,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002B0A12F2748400C31A83 /* Zlib-Release.xcconfig */;
 			buildSettings = {
-				PRODUCT_INFO_HASH = 60df6a37c56e7c1366cca812414f7b85;
-				PRODUCT_INFO_VERSION = 1.2.7;
 			};
 			name = Release;
 		};
@@ -314,8 +310,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002B0912F2748400C31A83 /* Zlib-Debug.xcconfig */;
 			buildSettings = {
-				PRODUCT_INFO_HASH = 60df6a37c56e7c1366cca812414f7b85;
-				PRODUCT_INFO_VERSION = 1.2.7;
 			};
 			name = Debug;
 		};
@@ -323,7 +317,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4300283F12F24D6C00C31A83 /* Base.xcconfig */;
 			buildSettings = {
-				"SDKROOT[arch=x86_64]" = macosx10.5;
 			};
 			name = StaticAnalyzer;
 		};
@@ -331,8 +324,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 43002B0912F2748400C31A83 /* Zlib-Debug.xcconfig */;
 			buildSettings = {
-				PRODUCT_INFO_HASH = 60df6a37c56e7c1366cca812414f7b85;
-				PRODUCT_INFO_VERSION = 1.2.7;
 			};
 			name = StaticAnalyzer;
 		};

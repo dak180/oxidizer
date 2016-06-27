@@ -1,8 +1,8 @@
 // Global settings for all configurations
 
 
-ARCHS = ppc i386
-SDKROOT = macosx10.5
+ARCHS = i386
+SDKROOT = macosx
 DEBUG_INFORMATION_FORMAT = dwarf-with-dsym
 GCC_VERSION = com.apple.compilers.llvm.clang.1_0
 MACOSX_DEPLOYMENT_TARGET = 10.5
